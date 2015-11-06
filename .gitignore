@@ -10,5 +10,9 @@
 # or travis.yml files
 !.travis.yml
 
+# or Cargo
+!Cargo.toml
+!Cargo.lock
+
 # or this file itself
 !*.gitignore

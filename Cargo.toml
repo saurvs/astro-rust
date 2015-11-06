@@ -1,0 +1,5 @@
+[package]
+
+name = "rusty-astronomy"
+version = "0.0.1"
+authors = ["Saurav Sachidanand"]
