@@ -1,0 +1,11 @@
+# Ignore executables produced by rustc
+*
+
+# but not Rust code
+!*.rs
+
+# or markdown files
+!*.md
+
+# or this file itself
+!*.gitignore
