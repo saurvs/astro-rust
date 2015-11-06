@@ -23,7 +23,6 @@ fn julian_day(mut y: i32, mut m: i16, d: f64) -> f64 {
     1524.5
 
 }
-
 // returns the decimal day for a given (day, hour, minute, second)
 // currently assumes hour, minute and second are in UTC
 fn decimal_day(d: i32, h: i32, m: i32, s: f64) -> f64 {
