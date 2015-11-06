@@ -1,20 +1,12 @@
 fn main() {
-    let y = 2000;
-    let m = 1;
-    let d = 1.0;
-    println!("{}", julian_day(y, m, d)); // should be 2451179.5
-}
-
-// returns the decimal day for a given (day, hour, minute, second)
-fn decimal_day(d: i32, h: i32, m: i32, s: f64) -> f64 {
-    (d as f64) +
-    (h as f64) / 24.0 +
-    (m as f64) / 60.0 +
-    s / 60.0
+    let y = 1969;
+    let m = 7;
+    let d = decimal_day(20, 20, 18, 4.0);
+    println!("{}", julian_day(y, m, d)); // day when the Apollo 11 Lunar Lander landed on the moon
 }
 
 // returns the julian day for a given (year, month, decimal day)
-// assumes currently that the given date is from the Gregorian calendar
+// currently assumes that given date is from the Gregorian calendar
 fn julian_day(mut y: i32, mut m: i16, d: f64) -> f64 {
 
     if m == 1 || m == 2 {
@@ -30,6 +22,15 @@ fn julian_day(mut y: i32, mut m: i16, d: f64) -> f64 {
     (b as f64) -
     1524.5
 
+}
+
+// returns the decimal day for a given (day, hour, minute, second)
+// currently assumes hour, minute and second are in UTC
+fn decimal_day(d: i32, h: i32, m: i32, s: f64) -> f64 {
+    (d as f64) +
+    (h as f64) / 24.0 +
+    (m as f64) / 60.0 +
+    s / 60.0
 }
 
 // returns the largest integer less than or equal to (x)
