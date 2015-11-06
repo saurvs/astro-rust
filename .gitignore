@@ -1,18 +1,8 @@
-# Ignore executables produced by rustc
-*
+# executables
+*.exe
 
-# but not Rust code
-!*.rs
+# created by cargo
+/target/
 
-# or markdown files
-!*.md
-
-# or travis.yml files
-!.travis.yml
-
-# or Cargo
-!Cargo.toml
-!Cargo.lock
-
-# or this file itself
-!*.gitignore
+# OS X Spotlight files
+.DS_Store
