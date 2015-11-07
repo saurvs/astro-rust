@@ -19,14 +19,10 @@ pub fn pol_radius() -> f64 {
     eq_radius() / (1.0 - flattening())
 }
 
-// eccentricity the earth's meridian
+// eccentricity of the earth's meridian
 pub fn ecc() -> f64 {
     let f = flattening();
     ((2.0 - f) * f).sqrt()
-}
-
-pub fn pure_degrees(d: f64, m: f64, s: f64) -> f64 {
-    d + (m / 60.0) + (s / 3600.0)
 }
 
 // struct for representing a point on the surface of the earth using
