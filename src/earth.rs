@@ -1,6 +1,6 @@
-// flattening factor and equatorial radius of the earth
-// aren't those given in the book; they have been revised
-// since 2004 by the World Geodetic System.
+// flattening factor and equatorial radius of the earth used here
+// aren't those given in the book; they have been revised since 2004
+// by the World Geodetic System.
 // See: http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf
 // or https://confluence.qps.nl/pages/viewpage.action?pageId=29855173
 
