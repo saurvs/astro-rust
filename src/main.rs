@@ -1,14 +1,24 @@
 mod time;
 mod angle;
 mod earth;
+mod julian_day;
+mod sidereal;
 
 fn main() {
 
     /* Prints the Julian Day when the Apollo 11 Lunar Lander landed on the Moon */
-    let y = 1969;
-    let m = 7;
-    let d = time::decimal_day(20, 20, 18, 4.0);
-    println!("{}", time::julian_day::julian_day(y, m, d));
+    let moon_landing_day = time::usual_day {
+        d: 20,
+        h: 20,
+        m: 18,
+        s: 4.0
+    };
+    let moon_landing = time::greg_date {
+        y: 1969,
+        m: 7,
+        d: time::decimal_day(moon_landing_day)
+    };
+    println!("{}", julian_day::julian_day(moon_landing));
 
     /* Prints the geodesic distance between the Observatoire de Paris and the US
        Naval Observatory at Washington DC */
