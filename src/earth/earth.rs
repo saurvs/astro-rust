@@ -22,5 +22,5 @@ fn pol_radius() -> f64 {
 // eccentricity the earth's meridian
 fn ecc() -> f64 {
     let f = flattening();
-    (2.0 * f - f * f).sqrt()
+    ((2.0 - f) * f).sqrt()
 }
