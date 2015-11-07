@@ -3,3 +3,8 @@
 name = "rusty-astronomy"
 version = "0.0.1"
 authors = ["Saurav Sachidanand"]
+
+description = "Highly accurate and efficient astronomical algorithms, written in Rust, for calculating interesting things about bodies in our solar system."
+keywords = ["astronomy", "algorithms", "ephemeris"]
+readme = "README.md"
+repository = "https://github.com/qpid/rusty-astronomy"
