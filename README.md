@@ -7,4 +7,4 @@ This repository will contain highly accurate and efficient astronomical algorith
 
 ## References
 * *Astronomical Algorithms, Second Edition by Jean Meeus*
-* *WGS84 https://confluence.qps.nl/pages/viewpage.action?pageId=29855173*
+* *WGS84: https://confluence.qps.nl/pages/viewpage.action?pageId=29855173*
