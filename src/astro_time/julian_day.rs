@@ -1,13 +1,6 @@
-fn main() {
-    let y = 1969;
-    let m = 7;
-    let d = decimal_day(20, 20, 18, 4.0);
-    println!("{}", julian_day(y, m, d)); // day when the Apollo 11 Lunar Lander landed on the moon
-}
-
 // returns the julian day for a given (year, month, decimal day)
 // currently assumes that given date is from the Gregorian calendar
-fn julian_day(mut y: i32, mut m: i16, d: f64) -> f64 {
+pub fn julian_day(mut y: i32, mut m: i16, d: f64) -> f64 {
 
     if m == 1 || m == 2 {
         y = y - 1;
@@ -25,7 +18,7 @@ fn julian_day(mut y: i32, mut m: i16, d: f64) -> f64 {
 }
 // returns the decimal day for a given (day, hour, minute, second)
 // currently assumes hour, minute and second are in UTC
-fn decimal_day(d: i32, h: i32, m: i32, s: f64) -> f64 {
+pub fn decimal_day(d: i32, h: i32, m: i32, s: f64) -> f64 {
     (d as f64) +
     (h as f64) / 24.0 +
     (m as f64) / 60.0 +
