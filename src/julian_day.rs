@@ -1,6 +1,13 @@
 use time;
 
-// returns the julian day for a given Gregorian date (with a decimal day)
+/*
+
+    Returns the Julian day.
+    -----------------------------------------------------------------
+        date: Gregorian date (with a decimal day)
+
+*/
+
 pub fn julian_day(mut date: time::greg_date) -> f64 {
 
     if date.m == 1 || date.m == 2 {
@@ -18,7 +25,13 @@ pub fn julian_day(mut date: time::greg_date) -> f64 {
 
 }
 
-// returns the largest integer less than or equal to (x)
+/*
+
+    Returns the largest integer less than or equal to x.
+    -----------------------------------------------------------------
+
+*/
+
 fn int(x: f64) -> i64 {
     if x < 0_f64 {
         return -1 + x as i64;
