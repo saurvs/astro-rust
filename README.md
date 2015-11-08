@@ -5,7 +5,7 @@ This repository will contain highly accurate and efficient astronomical algorith
 ## Available things
 * Julian day
 * Sidereal time
-* Geodesics
+* Geodesics on Earth
 * Atmospheric refraction corrections
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
 * Semidiameters of solar system bodies
