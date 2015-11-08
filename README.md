@@ -1,4 +1,5 @@
-# Rusty Astronomy (work in progress) ![Build Status](https://travis-ci.org/qpid/rusty-astronomy.svg?branch=master)
+# Rusty Astronomy (work in progress) [![Build Status](https://travis-ci.org/qpid/rusty-astronomy.svg)](https://travis-ci.org/qpid/rusty-astronomy) [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/qpid/rusty-astronomy/blob/master/LICENSE.md)
+
 This repository will contain highly accurate and efficient astronomical algorithms, implemented in the Rust programming language, for calculating interesting things about bodies in our solar system.
 
 ## Available things
