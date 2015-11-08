@@ -1,13 +1,3 @@
-use angle;
-
-/*
-
-    NOTE: All angles passed as arguments, and those returned,
-          are assumed to be radians, even though the comments
-          describe them with degrees.
-
-*/
-
 /*
 
     Returns the combined magnitude of two stars
