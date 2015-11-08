@@ -1,3 +1,5 @@
+use coordinates;
+
 // flattening factor and equatorial radius of the earth used here
 // aren't those given in the book; they have been revised since 2004
 // by the World Geodetic System.
@@ -25,15 +27,8 @@ pub fn ecc() -> f64 {
     ((2.0 - f) * f).sqrt()
 }
 
-// struct for representing a point on the surface of the earth using
-// latitude and longitude (in radians)
-pub struct surf_point {
-    pub lat: f64,
-    pub long: f64,
-}
-
 // angular distance between two points on earth's surface (in radians)
-pub fn angular_dist(p1: surf_point, p2: surf_point) -> f64 {
+pub fn angular_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     (p1.lat.sin() * p2.lat.sin() +
      p1.lat.cos() * p2.lat.cos() * (p1.long - p2.long).cos()
     ).acos()
@@ -41,12 +36,12 @@ pub fn angular_dist(p1: surf_point, p2: surf_point) -> f64 {
 
 // low accuracy distance between two points on earth's surface (in meters)
 // assumes earth is spherical
-pub fn approx_dist(p1: surf_point, p2: surf_point) -> f64 {
+pub fn approx_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     6371.0 * angular_dist(p1, p2)
 }
 
 // high accuracy distance between two points on earth's surface (in meters)
-pub fn dist(p1: surf_point, p2: surf_point) -> f64 {
+pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
     let lam = (p1.long - p2.long) / 2.0;

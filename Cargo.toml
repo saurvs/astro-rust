@@ -7,4 +7,5 @@ authors = ["Saurav Sachidanand"]
 description = "Highly accurate and efficient astronomical algorithms, written in Rust, for calculating interesting things about bodies in our solar system."
 keywords = ["astronomy", "algorithms", "ephemeris"]
 readme = "README.md"
+license = "MIT"
 repository = "https://github.com/qpid/rusty-astronomy"

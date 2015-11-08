@@ -11,8 +11,8 @@ pub fn mean_sidereal_greenwhich_zero_ut(date: time::greg_date) -> f64 {
     let jd = julian_day::julian_day(date);
     let t = t(jd);
 
-    100.46061837 +
-    t * (36000.770053608 + t * (0.000387933 - t / 38710000.0))
+    (100.46061837 +
+    t * (36000.770053608 + t * (0.000387933 - t / 38710000.0))).to_radians()
 }
 
 // returns the sidereal time at the meridian of Greenwhich at the
