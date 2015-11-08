@@ -37,4 +37,6 @@ fn main() {
     println!("{}", coordinates::ecl_long(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
     println!("{}", coordinates::ecl_lat(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
 
+
+
 }
