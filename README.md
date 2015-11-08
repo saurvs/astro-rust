@@ -8,6 +8,9 @@ This repository will contain highly accurate and efficient astronomical algorith
 * Geodesics
 * Atmospheric refraction corrections
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
+* Semidiameters of solar system bodies
+* Stellar magnitude calculations
+* Binary star calculations
 
 ## References
 * *Astronomical Algorithms, Second Edition by Jean Meeus*
