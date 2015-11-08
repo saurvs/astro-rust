@@ -1,12 +1,13 @@
 mod time;
 mod coordinates;
-mod angular_separation;
+mod angular_sep;
 mod angle;
 mod earth;
 mod julian_day;
 mod sidereal;
 mod refraction;
 mod binary_star;
+mod stellar_mag;
 
 fn main() {
 
