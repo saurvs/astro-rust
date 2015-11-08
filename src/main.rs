@@ -5,6 +5,7 @@ mod angle;
 mod earth;
 mod julian_day;
 mod sidereal;
+mod refraction;
 
 fn main() {
 
@@ -20,7 +21,7 @@ fn main() {
         m: 7,
         d: time::decimal_day(moon_landing_day)
     };
-    //println!("{}", julian_day::julian_day(moon_landing));
+    println!("{}", julian_day::julian_day(moon_landing));
 
     /* Prints the geodesic distance between the Observatoire de Paris and the US
        Naval Observatory at Washington DC */
@@ -30,7 +31,7 @@ fn main() {
     let p2 = coordinates::surf_point{lat: angle::pure_degrees(38.0, 55.0, 17.0).to_radians(),
                                long: angle::pure_degrees(77.0, 3.0, 56.0).to_radians()
                               };
-    //println!("{}m", earth::dist(p1, p2));
+    println!("{}m", earth::dist(p1, p2));
 
     /* Prints the ecliptical coordinates of the star Pollux given its equatorial coordinates */
     println!("{}", coordinates::ecl_long(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
