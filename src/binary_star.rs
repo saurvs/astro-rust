@@ -103,8 +103,8 @@ pub fn angular_sep(radius_vec: f64, true_anomaly: f64, periastron_long: f64, inc
 
     Returns the eccentricity of the apparent orbit
     -----------------------------------------------------------------
-       ecc_true_orb: The eccentricity of the true orbit
-                inc: The inclination of the plane of the true orbit
+        ecc_true_orb: The eccentricity of the true orbit
+                 inc: The inclination of the plane of the true orbit
                      to the plane at right angles to the line of sight
      periastron_long: The longitude of the periastron
 
