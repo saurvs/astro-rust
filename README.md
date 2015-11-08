@@ -3,7 +3,10 @@ This repository will contain highly accurate and efficient astronomical algorith
 
 ## Available things
 * Julian Day
-* Geodesic distance on Earth
+* Sidereal Time
+* Geodesics
+* Atmospheric Refraction Corrections
+* Transformation between Ecliptic, Equatorial, Horizontal, and Galactic Coordinates
 
 ## References
 * *Astronomical Algorithms, Second Edition by Jean Meeus*

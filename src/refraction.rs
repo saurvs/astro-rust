@@ -78,7 +78,7 @@ pub fn refrc_from_app_alt(mut app_alt: f64, prss: f64, temp: f64) -> f64 {
     if close_to_90_degrees(app_alt) {
         return 0.0;
     }
-    (1.0 / (60.0 * ((app_alt + (7.31 / (app_alt + 4.4)))).to_radians().tan())) * pt_correction(prss, temp)
+    (1.0 / (60.0 * (app_alt + (7.31 / (app_alt + 4.4))).to_radians().tan())) * pt_correction(prss, temp)
 }
 
 pub fn refrc_from_true_alt(mut true_alt: f64, prss: f64, temp: f64) -> f64 {
@@ -86,5 +86,6 @@ pub fn refrc_from_true_alt(mut true_alt: f64, prss: f64, temp: f64) -> f64 {
     if close_to_90_degrees(true_alt) {
         return 0.0;
     }
-    (1.02 / (60.0 * ((true_alt + (10.3 / (true_alt + 5.11)))).to_radians().tan())) * pt_correction(prss, temp)
+    (1.02 / (60.0 * ((true_alt + (10.3 / (true_alt + 5.11)))).to_radians().tan())) *
+    pt_correction(prss, temp)
 }

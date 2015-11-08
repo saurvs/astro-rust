@@ -44,7 +44,7 @@ pub fn ecl_lat(right_asc: f64, dec: f64, oblq_ecl: f64) -> f64 {
 }
 
 //-------------------------------------------------------------------
-// ecliptical coordinates to equatorial coordinates
+// ecliptic coordinates to equatorial coordinates
 
 pub fn right_asc(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     ((ecl_long.sin() * oblq_ecl.cos() - ecl_lat.tan() * oblq_ecl.sin())).atan2(ecl_long.cos())
