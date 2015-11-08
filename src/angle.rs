@@ -6,3 +6,12 @@ pub fn pure_degrees(d: f64, mut m: f64, mut s: f64) -> f64 {
     }
     d + (m / 60.0) + (s / 3600.0)
 }
+
+pub fn limited_to_360(angle: f64) -> f64 {
+    let n = (angle / 360.0) as i64;
+    let mut limited_angle = angle - (360.0 * (n as f64));
+    if limited_angle < 0.0 {
+        limited_angle += 360.0;
+    }
+    limited_angle
+}

@@ -24,7 +24,7 @@ fn pt_correction(prss: f64, temp: f64) -> f64 {
 
     R, at altitudes very near 0 or 180 degrees, that is, very near to
     the horizon, fluctuates unpredictably by 0.3 degrees or more,
-    and so no sensible estimate can be made for it
+    and so no sensible estimate can be made for it.
 
 */
 
