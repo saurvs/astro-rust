@@ -37,11 +37,6 @@ pub fn geometric_position(body_helio_long: f64, body_helio_lat: f64, body_helio_
             earth_helio_long.sin() * earth_helio_lat.cos() * earth_helio_rad;
     let z = body_helio_lat.sin() * body_helio_rad - earth_helio_lat.sin() * earth_helio_rad;
 
-    println!("{}",x);
-    println!("{}",y);
-    println!("{}",z);
-    println!("{}",0.0057755183 * (x * x + y * y + z * z).sqrt());
-
     (y.atan2(x),
      z.atan2((x * x + y * y).sqrt()),
      0.0057755183 * (x * x + y * y + z * z).sqrt())
