@@ -3,6 +3,7 @@
 This repository will contain highly accurate and efficient astronomical algorithms, implemented in the Rust programming language, for calculating interesting things about bodies in our solar system.
 
 ## Available things
+* Pluto's position
 * Julian day
 * Sidereal time
 * Geodesics on Earth

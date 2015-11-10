@@ -105,16 +105,16 @@ pub fn angular_sep(radius_vec: f64, true_anomaly: f64, periastron_long: f64, inc
     -----------------------------------------------------------------
         ecc_true_orb: The eccentricity of the true orbit
                  inc: The inclination of the plane of the true orbit
-                     to the plane at right angles to the line of sight
+                      to the plane at right angles to the line of sight
      periastron_long: The longitude of the periastron
 
 */
 
 pub fn ecc_app_orb(ecc_true_orb: f64, true_anomaly: f64, periastron_long: f64, inc: f64) -> f64 {
-    let A = (1.0 - (ecc_true_orb * periastron_long.cos()).powi(2)) * inc.cos().powi(2);
-    let B = ecc_true_orb.powi(2) * periastron_long.sin() * periastron_long.cos() * inc.cos();
-    let C = 1.0 - (ecc_true_orb * periastron_long.sin()).powi(2);
-    let D = ((A - C).powi(2) + 4.0 * B.powi(2)).sqrt();
+    let a = (1.0 - (ecc_true_orb * periastron_long.cos()).powi(2)) * inc.cos().powi(2);
+    let b = ecc_true_orb.powi(2) * periastron_long.sin() * periastron_long.cos() * inc.cos();
+    let c = 1.0 - (ecc_true_orb * periastron_long.sin()).powi(2);
+    let d = ((a - c).powi(2) + 4.0 * b.powi(2)).sqrt();
 
-    ((2.0 * D) / (A + C + D)).sqrt()
+    ((2.0 * d) / (a + c + d)).sqrt()
 }
