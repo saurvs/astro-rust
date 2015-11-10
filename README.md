@@ -12,6 +12,7 @@ This repository will contain highly accurate and efficient astronomical algorith
 * Semidiameters of solar system bodies
 * Stellar magnitude calculations
 * Binary star calculations
+* Apparent position on Earth
 
 ## References
 * *Astronomical Algorithms, Second Edition by Jean Meeus*
