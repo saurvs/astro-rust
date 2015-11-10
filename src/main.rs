@@ -10,6 +10,7 @@ mod binary_star;
 mod stellar_mag;
 mod util;
 mod pluto;
+mod elliptic_motion;
 
 fn main() {
 
