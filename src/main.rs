@@ -38,8 +38,16 @@ fn main() {
                               };
     println!("{}m", earth::dist(p1, p2));
 
-    /* Prints the ecliptical coordinates of the star Pollux given its equatorial coordinates */
+    /* Prints the ecliptic coordinates of the star Pollux given its equatorial coordinates */
     println!("{}", coordinates::ecl_long(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
     println!("{}", coordinates::ecl_lat(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
+
+    pluto::position(-0.0721834360);
+    let (x,y, z) = elliptic_motion::geocentric_position(26.10588f64.to_radians(), -2.62102f64.to_radians(),
+                                 0.724604, 88.35704f64.to_radians(),
+                                 0.00014f64.to_radians(), 0.983824);
+    println!("{}",x.to_degrees());
+    println!("{}",y.to_degrees());
+    println!("{}",z);
 
 }
