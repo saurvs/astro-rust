@@ -10,6 +10,7 @@ This repository will contain highly accurate and efficient astronomical algorith
 * Atmospheric refraction corrections
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
 * Semidiameters of solar system bodies
+* Elliptic motion
 * Stellar magnitude calculations
 * Binary star calculations
 * Apparent position on Earth
