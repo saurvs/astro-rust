@@ -8,6 +8,7 @@ This repository will contain highly accurate and efficient astronomical algorith
 * Sidereal time
 * Geodesics on Earth
 * Atmospheric refraction corrections
+* Nutation corrections
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
 * Semidiameters of solar system bodies
 * Elliptic motion
