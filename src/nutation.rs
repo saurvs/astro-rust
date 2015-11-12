@@ -10,7 +10,10 @@ use angle;
 
 /*
 
-    Returns the nutation correction for longitude and obliquity.
+    Returns the nutation correction for longitude and obliquity,
+    that is, it returns the correction that needs to be added to
+    the longitude and the obliquity of the ecliptic to adjust for
+    the Earth's nutation. Nutation does not affect latitudes.
     -----------------------------------------------------------------
         jed: The Julian Emphemeris Day
 
@@ -20,7 +23,6 @@ pub fn nutation(jed: f64) -> (f64, f64) {
 
     let t = (jed - 2451545.0) / 36525.0;
 
-    // Mean anomaly of the moon
     let mut M1 = angle::limited_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/5620.0)))).to_radians();
     let mut M = angle::limited_to_360((357.52772 + t*(35999.050340 - t*(0.0001603 + t/300000.0)))).to_radians();
     let mut D = angle::limited_to_360((297.85036 + t*(445267.11148 - t*(0.0019142 + t/189474.0)))).to_radians();
@@ -29,7 +31,7 @@ pub fn nutation(jed: f64) -> (f64, f64) {
 
     struct terms(i8, i8, i8, i8, i8, f64, f64, f64, f64);
 
-    let tuple_terms_1 = [
+    let tuple_terms = [
         terms(0, 0, 0, 0, 1, -171996.0, -174.2, 92025.0, 8.9),
         terms(-2, 0, 0, 2, 2, -13187.0, -1.6, 5736.0, -3.1),
         terms(0, 0, 0, 2, 2, -2274.0, -0.2, 977.0, -0.5),
@@ -97,7 +99,7 @@ pub fn nutation(jed: f64) -> (f64, f64) {
     let mut nut_in_long = 0.0;
     let mut nut_in_obl = 0.0;
 
-    for x in tuple_terms_1.iter() {
+    for x in tuple_terms.iter() {
         let arg = (x.0 as f64) * D +
                    (x.1 as f64) * M +
                    (x.2 as f64) * M1 +
