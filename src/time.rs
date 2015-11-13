@@ -1,22 +1,46 @@
-// struct for representing a Gregorian date
-// note that d here means decimal day
+/*
+
+    A struct for representing a Gregorian date.
+    -----------------------------------------------------------------
+        y: The year
+        m: The month (1 - 12)
+        d: The decimal day
+
+*/
+
 pub struct greg_date {
     pub y: i32,
-    pub m: i16,
+    pub m: i8,
     pub d: f64,
 }
 
-// struct for representing a day in the usual sense
-// using hours, minutes and seconds
+/*
+
+    A struct for representing a day in the usual sense.
+    -----------------------------------------------------------------
+        d: The day of the month (1 - 31)
+        h: The hour of the day (0 - 24)
+        m: The minute of the hour (0 - 60)
+        s: The second of the minute (0.0 - 60.0)
+
+*/
+
 pub struct usual_day {
-    pub d: i16, // day of month
-    pub h: i16, // hours of day
-    pub m: i16, // minute of hour
-    pub s: f64 // second of minute
+    pub d: i16,
+    pub h: i16,
+    pub m: i16,
+    pub s: f64
 }
 
-// returns the decimal day for a given day expressed in the usual sense
-// currently assumes hour, minute and second are in UTC
+/*
+
+    Returns the decimal day for a given day expressed in the
+    usual sense.
+    -----------------------------------------------------------------
+        usual_day: The an instance of the struct usual_day
+
+*/
+
 pub fn decimal_day(day: usual_day) -> f64 {
     (day.d as f64) +
     (day.h as f64) / 24.0 +
@@ -34,5 +58,5 @@ pub fn decimal_day(day: usual_day) -> f64 {
 */
 
 pub fn julian_centuries(jed: f64) -> f64 {
-    (jed - 2451545.0) / 36525.0;
+    (jed - 2451545.0) / 36525.0
 }
