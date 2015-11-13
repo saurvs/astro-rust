@@ -1,19 +1,11 @@
-mod time;
-mod coordinates;
-mod angular_sep;
-mod angle;
-mod earth;
-mod julian_day;
-mod sidereal;
-mod refraction;
-mod binary_star;
-mod stellar_mag;
-mod util;
-mod pluto;
-mod elliptic_motion;
-mod nutation;
-mod ecliptic;
-mod rect_sun;
+extern crate rusty_astronomy;
+
+use rusty_astronomy::julian_day;
+use rusty_astronomy::time;
+use rusty_astronomy::angle;
+use rusty_astronomy::earth;
+use rusty_astronomy::coordinates;
+use rusty_astronomy::elliptic_motion;
 
 fn main() {
 
