@@ -17,6 +17,10 @@ fn pt_correction(prss: f64, temp: f64) -> f64 {
           are assumed to be radians, even though the comments
           describe them with degrees.
 
+*/
+
+/*
+
     The refraction correction angle R needs to be found to account
     for the effects of atmospheric refraction.
     We will only use the horizontal coordinate system for convenience
