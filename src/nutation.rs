@@ -102,10 +102,10 @@ pub fn nutation(jed: f64) -> (f64, f64) {
 
     for x in tuple_terms.iter() {
         let arg = (x.0 as f64) * D +
-                   (x.1 as f64) * M +
-                   (x.2 as f64) * M1 +
-                   (x.3 as f64) * F +
-                   (x.4 as f64) * om;
+                  (x.1 as f64) * M +
+                  (x.2 as f64) * M1 +
+                  (x.3 as f64) * F +
+                  (x.4 as f64) * om;
         nut_in_long += ((x.5 as f64) + t*(x.6 as f64)) * arg.sin() * (0.0001 / 3600.0);
         nut_in_obl += ((x.7 as f64) + t*(x.8 as f64)) * arg.cos() * (0.0001 / 3600.0);
     }
