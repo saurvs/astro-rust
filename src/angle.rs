@@ -15,3 +15,8 @@ pub fn limited_to_360(angle: f64) -> f64 {
     }
     limited_angle
 }
+
+pub fn small_angle(angle: f64) -> bool {
+    if angle < 0.003 { return true; }
+    false
+}
