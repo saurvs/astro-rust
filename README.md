@@ -16,7 +16,7 @@ This repository will contain highly accurate and efficient astronomical algorith
 * Elliptic motion
 * Stellar magnitude calculations
 * Binary star calculations
-* Apparent position on Earth
+* Apparent position of celestial bodies from Earth
 
 ## References
 * *Astronomical Algorithms, Second Edition by Jean Meeus*
