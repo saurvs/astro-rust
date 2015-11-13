@@ -1,5 +1,13 @@
 /*
 
+    NOTE: All angles passed as arguments, and those returned,
+          are assumed to be radians, even if the comments
+          describe them with degrees.
+
+*/
+
+/*
+
     Returns the geocentric rectangle coordinates of the sun.
     -----------------------------------------------------------------
         geo_long_sun: The geocentric longitude of the sun
