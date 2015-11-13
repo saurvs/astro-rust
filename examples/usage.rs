@@ -1,11 +1,6 @@
 extern crate rusty_astronomy;
 
-use rusty_astronomy::julian_day;
-use rusty_astronomy::time;
-use rusty_astronomy::angle;
-use rusty_astronomy::earth;
-use rusty_astronomy::coordinates;
-use rusty_astronomy::elliptic_motion;
+use rusty_astronomy::*;
 
 fn main() {
 
