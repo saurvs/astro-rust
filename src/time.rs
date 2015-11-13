@@ -23,3 +23,16 @@ pub fn decimal_day(day: usual_day) -> f64 {
     (day.m as f64) / 60.0 +
     day.s / 60.0
 }
+
+/*
+
+    Returns the time measured in Julian centuries from the
+    Epoch J2000.
+    -----------------------------------------------------------------
+        jed: The Julian Emphemeris Day
+
+*/
+
+pub fn julian_centuries(jed: f64) -> f64 {
+    (jed - 2451545.0) / 36525.0;
+}
