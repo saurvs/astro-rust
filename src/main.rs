@@ -12,6 +12,8 @@ mod util;
 mod pluto;
 mod elliptic_motion;
 mod nutation;
+mod ecliptic;
+mod rect_sun;
 
 fn main() {
 
