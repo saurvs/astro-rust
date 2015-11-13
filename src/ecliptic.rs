@@ -1,9 +1,25 @@
 use angle;
 use time;
 
+/*
+
+    NOTE: All angles passed as arguments, and those returned,
+          are assumed to be radians, even if the comments
+          describe them with degrees.
+
+*/
+
+/*
+
+    Returns the obliquity of the ecliptic.
+    -----------------------------------------------------------------
+        jed: The Julian Emphemeris Day
+
+*/
+
 pub fn obliquity(jed: f64) -> (f64) {
     let u = time::julian_centuries(jed) / 100.0;
-    
+
     (angle::pure_degrees(23.0, 26.0, 21.448) -
     u * (angle::pure_degrees(0.0, 0.0, 4680.93) +
         u * (angle::pure_degrees(0.0, 0.0, 1.55) +
