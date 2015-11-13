@@ -3,7 +3,7 @@
     Returns the geocentric rectangle coordinates of the sun.
     -----------------------------------------------------------------
         geo_long_sun: The geocentric longitude of the sun
-         rad_vec_sun: The geocentric latitude of the sun
+         geo_lat_sun: The geocentric latitude of the sun
          rad_vec_sun: The geocentric radius vector of the sun
             mean_obl: The mean obliquity of the ecliptic
 
