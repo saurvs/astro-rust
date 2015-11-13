@@ -1,4 +1,5 @@
 use angle;
+use time;
 
 /*
 
@@ -21,7 +22,7 @@ use angle;
 
 pub fn nutation(jed: f64) -> (f64, f64) {
 
-    let t = (jed - 2451545.0) / 36525.0;
+    let t = time::julian_centuries(jed);
 
     let mut M1 = angle::limited_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/5620.0)))).to_radians();
     let mut M = angle::limited_to_360((357.52772 + t*(35999.050340 - t*(0.0001603 + t/300000.0)))).to_radians();
