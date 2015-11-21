@@ -1,9 +1,8 @@
 use coordinates;
 
 /*
-    The flattening factor and equatorial radius of the earth used
-    here aren't those given in the book; they have been revised since
-    2004 by the World Geodetic System.
+    This code uses revised values for flattening factor and
+    equatorial radius of the earth.
     See: http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf
     or https://confluence.qps.nl/pages/viewpage.action?pageId=29855173
 */
@@ -71,7 +70,7 @@ pub fn angular_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) ->
 
 /*
 
-    Returns the low accuracy distance between two points on earth's
+    Returns a low accuracy distance between two points on earth's
     surface (in meters). Assumes the Earth is spherical.
     -----------------------------------------------------------------
         p1: Point 1 on Earth's surface
@@ -85,7 +84,7 @@ pub fn approx_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> 
 
 /*
 
-    Returns the high accuracy distance between two points on earth's
+    Returns a high accuracy distance between two points on earth's
     surface (in meters).
     -----------------------------------------------------------------
         p1: Point 1 on Earth's surface
