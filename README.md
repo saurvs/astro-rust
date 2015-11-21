@@ -1,6 +1,6 @@
 # Rusty Astronomy (work in progress) [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/qpid/rusty-astronomy/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/qpid/rusty-astronomy.svg)](https://travis-ci.org/qpid/rusty-astronomy)
 
-This repository will contain highly accurate and efficient astronomical algorithms, implemented in the Rust programming language, for calculating interesting things about bodies in our solar system.
+Astronomical algorithms, written in [Rust](https://www.rust-lang.org/), used for finding things that are of interest in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
 
 ## Available things
 * Pluto's position
@@ -19,5 +19,5 @@ This repository will contain highly accurate and efficient astronomical algorith
 * Apparent position of celestial bodies from Earth
 
 ## References
-* *Astronomical Algorithms, Second Edition by Jean Meeus*
-* *WGS84: https://confluence.qps.nl/pages/viewpage.action?pageId=29855173*
+* [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
+* [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
