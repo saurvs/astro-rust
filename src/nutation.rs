@@ -11,12 +11,13 @@ use time;
 
 /*
 
+    nutation(julian_emphemeris_day) -> (nutation_longitude,
+                                        nutation_obliquity)
+    -----------------------------------------------------------------
     Returns the nutation correction for longitude and obliquity,
     that is, it returns the correction that needs to be added to
     the longitude and the obliquity of the ecliptic to adjust for
     the Earth's nutation. Nutation does not affect latitudes.
-    -----------------------------------------------------------------
-        jed: The Julian Emphemeris Day
 
 */
 
