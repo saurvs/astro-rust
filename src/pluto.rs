@@ -1,9 +1,12 @@
 /*
 
-    Returns the heliocentric longitude, heliocentric latitude and
-    heliocentric radius vector of the dwarf planet Pluto.
+    position(t) -> (longitude, latitude, radius_vector)
     -----------------------------------------------------------------
-        t: time in Julian centuries
+    Returns the heliocentric longitude, heliocentric latitude and
+    heliocentric radius vector of the dwarf planet Pluto at an instant
+    of time. Valid only for the years 1885 - 2099.
+
+        t: The time in Julian Centuries
 
 */
 
