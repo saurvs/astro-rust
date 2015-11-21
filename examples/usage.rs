@@ -11,11 +11,11 @@ fn main() {
         m: 18,
         s: 4.0
     };
-    let moon_landing = time::greg_date {
+    let moon_landing = time::date {
         y: 1969,
         m: 7,
         d: time::decimal_day(moon_landing_day),
-        t: time::calendar_type::greogrian
+        t: time::calendar_type::gregorian
     };
     println!("{}", julian_day::julian_day(moon_landing));
 
