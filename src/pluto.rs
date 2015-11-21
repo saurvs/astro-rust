@@ -1,5 +1,13 @@
 /*
 
+    NOTE: All angles passed as arguments, and those returned,
+          are assumed to be radians, even if the comments
+          describe them with degrees.
+
+*/
+
+/*
+
     position(julian_centuries) -> (longitude, latitude, radius_vector)
     -----------------------------------------------------------------
     Returns the heliocentric longitude, heliocentric latitude and
