@@ -1,17 +1,33 @@
 /*
 
-    A struct for representing a Gregorian date.
+    An enum for representing different calendar types.
+    -----------------------------------------------------------------
+        gregorian: The Gregorian calendar
+           julian: The Julian calendar
+
+*/
+
+pub enum calendar_type {
+    gregorian,
+    julian
+}
+
+/*
+
+    A struct for representing a date.
     -----------------------------------------------------------------
         y: The year
         m: The month (1 - 12)
         d: The decimal day
+        t: The calenday type
 
 */
 
-pub struct greg_date {
+pub struct date {
     pub y: i32,
     pub m: i8,
     pub d: f64,
+    pub t: calendar_type,
 }
 
 /*

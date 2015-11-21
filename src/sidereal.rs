@@ -6,8 +6,8 @@ fn t(jd: f64) -> f64 {
 }
 
 // returns the sidereal time at the meridian of Greenwhich at the
-// zero-th hour of Universal Time of a given Gregorian date
-pub fn mean_sidereal_greenwhich_zero_ut(date: time::greg_date) -> f64 {
+// zero-th hour of Universal Time of a given date
+pub fn mean_sidereal_greenwhich_zero_ut(date: time::date) -> f64 {
     let jd = julian_day::julian_day(date);
     let t = t(jd);
 
@@ -16,8 +16,8 @@ pub fn mean_sidereal_greenwhich_zero_ut(date: time::greg_date) -> f64 {
 }
 
 // returns the sidereal time at the meridian of Greenwhich at the
-// any instant of Universal Time of a given Gregorian date
-pub fn mean_sidereal_greenwhich(date: time::greg_date) -> f64 {
+// any instant of Universal Time of a given date
+pub fn mean_sidereal_greenwhich(date: time::date) -> f64 {
     let jd = julian_day::julian_day(date);
     let t = t(jd);
 
