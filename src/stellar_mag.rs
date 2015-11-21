@@ -2,6 +2,8 @@
 
     Returns the combined magnitude of two stars
     -----------------------------------------------------------------
+    comb_mag(m1, m2)
+
         m1: Magnitude of star 1
         m2: Magnitude of star 2
 
@@ -15,6 +17,8 @@ pub fn comb_mag(m1: f64, m2: f64) -> f64 {
 
     Returns the combined magnitude of more than two stars
     -----------------------------------------------------------------
+    comb_mag_from_many(m)
+
         m: An array of magnitudes of stars
 
 */
@@ -31,12 +35,14 @@ pub fn comb_mag_from_many(m: &[f64]) -> f64 {
 
     Returns the brightness ratio of two stars
     -----------------------------------------------------------------
+    bright_ratio(m1, m2)
+
         m1: Magnitude of star 1
         m2: Magnitude of star 2
 
 */
 
-pub fn bright_ratio(m1: f64, m2: f64) -> f64 {
+pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
     10.0_f64.powf(0.4 * (m2 - m1))
 }
 
@@ -44,6 +50,8 @@ pub fn bright_ratio(m1: f64, m2: f64) -> f64 {
 
     Returns the magnitude difference of two stars
     -----------------------------------------------------------------
+    mag_diff(br)
+
         br: The brightness ratio of two stars
 
 */
@@ -56,6 +64,8 @@ pub fn mag_diff(br: f64) -> f64 {
 
     Returns the absolute magnitude of a star
     -----------------------------------------------------------------
+    abs_mag_from_app_mag(par, m)
+
         par: The parallax of a star
           m: The apparent magnitude of a star
 
@@ -70,6 +80,8 @@ pub fn abs_mag_from_app_mag(mut par: f64, m: f64) -> f64 {
 
     Returns the absolute magnitude of a star
     -----------------------------------------------------------------
+    abs_mag_from_dist(d, m)
+    
         d: The distance of a star in parsecs
         m: The apparent magnitude of a star
 
