@@ -1,6 +1,6 @@
 /*
 
-    comb_mag(m1, m2)
+    combined_mag(m1, m2)
     -----------------------------------------------------------------
     Returns the combined magnitude of two stars
 
@@ -9,13 +9,13 @@
 
 */
 
-pub fn comb_mag(m1: f64, m2: f64) -> f64 {
-    m2 - 2.5 * (bright_ratio(m1, m2) + 1.0)
+pub fn combined_mag(m1: f64, m2: f64) -> f64 {
+    m2 - 2.5 * (brightness_ratio(m1, m2) + 1.0)
 }
 
 /*
 
-    comb_mag_from_many(m)
+    combined_mag_from_many(m)
     -----------------------------------------------------------------
     Returns the combined magnitude of more than two stars
 
@@ -23,7 +23,7 @@ pub fn comb_mag(m1: f64, m2: f64) -> f64 {
 
 */
 
-pub fn comb_mag_from_many(m: &[f64]) -> f64 {
+pub fn combined_mag_from_many(m: &[f64]) -> f64 {
     let mut sum = 0.0;
     for i in m.iter() {
         sum += 10_f64.powf(-0.4 * i);
@@ -33,7 +33,7 @@ pub fn comb_mag_from_many(m: &[f64]) -> f64 {
 
 /*
 
-    bright_ratio(m1, m2)
+    brightness_ratio(m1, m2)
     -----------------------------------------------------------------
     Returns the brightness ratio of two stars
 
@@ -62,31 +62,31 @@ pub fn mag_diff(br: f64) -> f64 {
 
 /*
 
-    abs_mag_from_app_mag(par, m)
+    absolute_mag_from_apparent_mag(par, am)
     -----------------------------------------------------------------
-    Returns the absolute magnitude of a star
+    Returns the absolute magnitude of a star from its parallax
 
         par: The parallax of a star
-          m: The apparent magnitude of a star
+         am: The apparent magnitude of a star
 
 */
 
-pub fn abs_mag_from_app_mag(mut par: f64, m: f64) -> f64 {
+pub fn absolute_mag_from_parallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
-    m + 5.0 + 5.0 * par.log(10.0)
+    am + 5.0 + 5.0 * par.log(10.0)
 }
 
 /*
 
-    abs_mag_from_dist(d, m)
+    absolute_mag_from_dist(d, am)
     -----------------------------------------------------------------
-    Returns the absolute magnitude of a star
+    Returns the absolute magnitude of a star from its distance
 
-        d: The distance of a star in parsecs
-        m: The apparent magnitude of a star
+         d: The distance of a star in parsecs
+        am: The apparent magnitude of a star
 
 */
 
-pub fn abs_mag_from_dist(d: f64, m: f64) -> f64 {
-    m + 5.0 - 5.0 * d.log(10.0)
+pub fn absolute_mag_from_dist(d: f64, am: f64) -> f64 {
+    am + 5.0 - 5.0 * d.log(10.0)
 }
