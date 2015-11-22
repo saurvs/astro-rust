@@ -84,11 +84,10 @@ pub fn approx_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> 
 
 /*
 
-    Returns a high accuracy distance between two points on earth's
-    surface (in meters).
+    dist(point_1, point_2) -> (distance)
     -----------------------------------------------------------------
-        p1: Point 1 on Earth's surface
-        p2: Point 2 on Earth's surface
+    Returns a high accuracy distance between two points on earth's
+    surface (in meters)
 
 */
 
