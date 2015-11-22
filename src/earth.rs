@@ -70,11 +70,10 @@ pub fn angular_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) ->
 
 /*
 
+    approx_dist(point_1, point_2) -> (distance)
+    -----------------------------------------------------------------
     Returns a low accuracy distance between two points on earth's
     surface (in meters). Assumes the Earth is spherical.
-    -----------------------------------------------------------------
-        p1: Point 1 on Earth's surface
-        p2: Point 2 on Earth's surface
 
 */
 
