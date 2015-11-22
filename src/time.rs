@@ -49,18 +49,19 @@ pub struct usual_day {
 }
 
 /*
-    decimal_day(usual_day) -> decimal_day
-    -----------------------------------------------------------------
+
     Returns the decimal day for a given day expressed in the
-    usual sense
+    usual sense.
+    -----------------------------------------------------------------
+        usual_day: The an instance of the struct usual_day
 
 */
 
-pub fn decimal_day(usual_day: usual_day) -> f64 {
-    (usual_day.d as f64) +
-    (usual_day.h as f64) / 24.0 +
-    (usual_day.m as f64) / 60.0 +
-    usual_day.s / 60.0
+pub fn decimal_day(day: usual_day) -> f64 {
+    (day.d as f64) +
+    (day.h as f64) / 24.0 +
+    (day.m as f64) / 60.0 +
+    day.s / 60.0
 }
 
 /*
