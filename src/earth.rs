@@ -112,3 +112,15 @@ pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
          flattening() * h2 * (f.cos() * g.sin()).powi(2))
 
 }
+
+/*
+
+    rho_sin_and_cos_phi(height) -> (rho_sin_phi, rho_cos_phi)
+    -----------------------------------------------------------------
+    Returns two quantities that are used elsewhere in the library.
+
+*/
+
+pub fn rho_sin_and_cos_phi(height: f64) -> (f64, f64) {
+
+}

@@ -108,7 +108,7 @@ pub fn app_polar_semidia_jupiter(distance_to_earth: f64) -> f64 {
     -----------------------------------------------------------------
     Returns the diameter of an asteroid in kilometers
 
-    abs_mag: The absolute magnitude of an asteroid
+    abs_mag: The absolute magnitude of the asteroid
     albedo: The albedo or reflective power of the asteroid
 
 */
@@ -124,7 +124,7 @@ pub fn astroid_diameter(abs_mag: f64, albedo: f64) -> f64 {
     -----------------------------------------------------------------
     Returns the apparent diameter of an asteroid in kilometers
 
-    true_diameter: The true diameter of an asteroid in kilometers
+    true_diameter: The true diameter of the asteroid in kilometers
     distance_to_earth: The asteroid's distance to Earth in AU
 
 */
