@@ -9,8 +9,9 @@ use coordinates;
 
 /*
 
-    Returns the flattening factor of the earth.
+    flattening() -> (flattening_factor_of_earth)
     -----------------------------------------------------------------
+    Returns the flattening factor of the earth
 
 */
 
@@ -20,8 +21,9 @@ pub fn flattening() -> f64 {
 
 /*
 
-    Returns the equatorial radius of the earth (in meters).
+    eq_radius() -> (equatorial_radius_of_earth)
     -----------------------------------------------------------------
+    Returns the equatorial radius of the earth (in meters)
 
 */
 
@@ -31,8 +33,9 @@ pub fn eq_radius() -> f64 {
 
 /*
 
-    Returns the polar radius of the earth (in meters).
+    pol_radius() -> (polar_radius_of_earth)
     -----------------------------------------------------------------
+    Returns the polar radius of the earth (in meters)
 
 */
 
@@ -42,8 +45,9 @@ pub fn pol_radius() -> f64 {
 
 /*
 
-    Returns the eccentricity of the earth's meridian.
+    ecc() -> (eccentricity_of_earth_meridian)
     -----------------------------------------------------------------
+    Returns the eccentricity of the earth's meridian
 
 */
 
