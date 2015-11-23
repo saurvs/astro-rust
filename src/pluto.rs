@@ -1,6 +1,5 @@
 /*
 
-<<<<<<< HEAD
     NOTE: All angles passed as arguments, and those returned,
           are assumed to be radians, even if the comments
           describe them with degrees.
@@ -10,19 +9,15 @@
 /*
 
     position(julian_centuries) -> (longitude, latitude, radius_vector)
-=======
-    position(t) -> (longitude, latitude, radius_vector)
->>>>>>> parent of ce43e2f... Updated comments in nutation.rs and pluto.rs.
     -----------------------------------------------------------------
     Returns the heliocentric longitude, heliocentric latitude and
     heliocentric radius vector of the dwarf planet Pluto at an instant
-    of time. Valid only for the years 1885 - 2099.
-
-        t: The time in Julian Centuries
+    of time (given in Julian centuries).
+    Valid only for the years 1885 - 2099.
 
 */
 
-pub fn position(t: f64) -> (f64, f64, f64) {
+pub fn position(julian_centuries: f64) -> (f64, f64, f64) {
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
 
@@ -71,11 +66,11 @@ pub fn position(t: f64) -> (f64, f64, f64) {
       	terms(3, 0, -1, 0.000005, -0.000003, 0.0, 0.0, 0.0000019, 0.0000035),
       	terms(3, 0, 0, 0.0, 0.0, 0.000001, 0.0, 0.000001, 0.0000003)];
 
-    let j = 34.35 + 3034.9057 * t;
-    let s = 50.08 + 1222.1138 * t;
-    let p = 238.96 + 144.9600 * t;
+    let j = 34.35 + 3034.9057 * julian_centuries;
+    let s = 50.08 + 1222.1138 * julian_centuries;
+    let p = 238.96 + 144.9600 * julian_centuries;
 
-    let mut long = (238.958116f64 + 144.96f64 * t).to_radians();
+    let mut long = (238.958116f64 + 144.96f64 * julian_centuries).to_radians();
     let mut lat = -3.908239f64.to_radians();
     let mut r = 40.7241346;
 
