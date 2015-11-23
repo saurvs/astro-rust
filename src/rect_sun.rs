@@ -12,7 +12,7 @@
                sun_radius_vector, mean_obliquity_of_ecliptic)
                -> (x, y z)
     -----------------------------------------------------------------
-    Returns the rectangle coordinates of the sun.
+    Returns rectangular coordinates of the sun.
 
     The origin of these coordinates is the center of the Earth.
 
