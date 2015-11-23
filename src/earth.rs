@@ -133,7 +133,7 @@ pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     Earth's surface.
 
     height: The observer's height above sea level (meters)
-    geograph_lat: The observer's geographical lattitude
+    geograph_lat: The observer's geographical latitude
 
 */
 
