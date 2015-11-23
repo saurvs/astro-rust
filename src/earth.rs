@@ -1,6 +1,14 @@
 use coordinates;
 
 /*
+
+    NOTE: All angles passed as arguments, and those returned,
+          are assumed to be radians, even if the comments
+          describe them with degrees.
+
+*/
+
+/*
     This code uses revised values for flattening factor and
     equatorial radius of the earth.
     See: http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf
@@ -28,19 +36,19 @@ pub fn flattening() -> f64 {
 */
 
 pub fn eq_radius() -> f64 {
-    6378137.0
+    polar_radius() / (1.0 - flattening())
 }
 
 /*
 
-    pol_radius() -> (polar_radius_of_earth)
+    polar_radius() -> (polar_radius_of_earth)
     -----------------------------------------------------------------
     Returns the polar radius of the earth (in meters)
 
 */
 
-pub fn pol_radius() -> f64 {
-    eq_radius() / (1.0 - flattening())
+pub fn polar_radius() -> f64 {
+    6378137.0
 }
 
 /*
@@ -115,12 +123,26 @@ pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
 
 /*
 
-    rho_sin_and_cos_phi(height) -> (rho_sin_phi, rho_cos_phi)
+    rho_sin_and_cos_phi(height, geograph_lat)
+                                        -> (rho_sin_phi, rho_cos_phi)
     -----------------------------------------------------------------
     Returns two quantities that are used elsewhere in the library.
 
+    'rho' here denotes the geocentric radius vector, and 'phi' here
+    denotes the geocentric latitude, of an observer on the Earth's
+    surface.
+
+    height: The observer's height above sea level (meters)
+    geograph_lat: The observer's geographical lattitude
+
 */
 
-pub fn rho_sin_and_cos_phi(height: f64) -> (f64, f64) {
+pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
+    let u = (geograph_lat.tan() * polar_radius() / eq_radius()).atan();
+    let x = height / eq_radius();
+    let rho_sin_phi = (u.sin() * polar_radius() / eq_radius()) +
+                      (geograph_lat.sin() * x);
+    let rho_cos_phi = u.cos() + (geograph_lat.cos() * x);
 
+    (rho_sin_phi, rho_cos_phi)
 }
