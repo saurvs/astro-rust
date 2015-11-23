@@ -25,7 +25,7 @@ pub enum calendar_type {
 
 pub struct date {
     pub y: i32,
-    pub m: i8,
+    pub m: u8,
     pub d: f64,
     pub t: calendar_type,
 }
@@ -43,8 +43,8 @@ pub struct date {
 
 pub struct usual_day {
     pub d: i16,
-    pub h: i16,
-    pub m: i16,
+    pub h: u8,
+    pub m: u8,
     pub s: f64
 }
 
