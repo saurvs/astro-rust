@@ -14,83 +14,91 @@ fn unit_semidia_jupiter_pol() -> f64 {
 
 /*
 
-    The following eleven functions return the angular semidiameters
-    at of various bodies in the solar system.
+    semidia_body(distance_to_earth) -> (angular_semidiameter)
+
+    distance_to_earth should be in AU
     -----------------------------------------------------------------
-        del: The body's distance to Earth in AU
+    The following eleven functions return the angular semidiameters
+    of various bodies in the solar system.
 
 */
 
-pub fn semidia_sun(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 959.63) / del
+pub fn semidia_sun(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 959.63) / distance_to_earth
 }
 
-pub fn semidia_mercury(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 3.36) / del
+pub fn semidia_mercury(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 3.36) / distance_to_earth
 }
 
-pub fn semidia_venus(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 8.41) / del
+pub fn semidia_venus(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 8.41) / distance_to_earth
 }
 
-pub fn semidia_mars(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 4.68) / del
+pub fn semidia_mars(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 4.68) / distance_to_earth
 }
 
-pub fn semidia_jupiter_eq(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 98.44) / del
+pub fn semidia_jupiter_eq(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 98.44) / distance_to_earth
 }
 
-pub fn semidia_jupiter_pol(del: f64) -> f64 {
-    unit_semidia_jupiter_pol() / del
+pub fn semidia_jupiter_pol(distance_to_earth: f64) -> f64 {
+    unit_semidia_jupiter_pol() / distance_to_earth
 }
 
-pub fn semidia_saturn_eq(del: f64) -> f64 {
-    unit_semidia_saturn_eq() / del
+pub fn semidia_saturn_eq(distance_to_earth: f64) -> f64 {
+    unit_semidia_saturn_eq() / distance_to_earth
 }
 
-pub fn semidia_saturn_pol(del: f64) -> f64 {
-    unit_semidia_saturn_pol() / del
+pub fn semidia_saturn_pol(distance_to_earth: f64) -> f64 {
+    unit_semidia_saturn_pol() / distance_to_earth
 }
 
-pub fn semidia_uranus(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 35.02) / del
+pub fn semidia_uranus(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 35.02) / distance_to_earth
 }
 
-pub fn semidia_neptune(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 33.5) / del
+pub fn semidia_neptune(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 33.5) / distance_to_earth
 }
 
-pub fn semidia_pluto(del: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 2.07) / del
+pub fn semidia_pluto(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 2.07) / distance_to_earth
 }
 
 /*
 
-    Returns the apparent polar semidiameter of Saturn
+    app_polar_semidia_saturn(distance_to_earth,
+                            saturnicentric_latitude_of_Earth)
+                            -> (apparent_polar_semidiameter_of_saturn)
+
+    distance_to_earth should be in AU
     -----------------------------------------------------------------
-            del: The body's distance to Earth in AU
-        sat_lat: The Saturnicentric latitude of Earth
+    Returns the apparent polar semidiameter of Saturn
 
 */
 
-pub fn app_pol_semidia_saturn(del: f64, sat_lat: f64) -> f64 {
+pub fn app_polar_semidia_saturn(distance_to_earth: f64, sat_lat: f64) -> f64 {
     let a = unit_semidia_saturn_eq();
     let b = unit_semidia_saturn_pol();
     let k = 1.0 - (b / a).powi(2);
-    (a / del) * (1.0 - k * sat_lat.cos().powi(2)).sqrt()
+    (a / distance_to_earth) * (1.0 - k * sat_lat.cos().powi(2)).sqrt()
 }
 
 /*
 
-    Returns the apparent polar semidiameter of Jupiter
+    app_polar_semidia_jupiter(distance_to_earth)
+                           -> (apparent_polar_semidiameter_of_jupiter)
+
+    distance_to_earth should be in AU
     -----------------------------------------------------------------
-            del: The body's distance to Earth in AU
+    Returns the apparent polar semidiameter of Jupiter
 
 */
 
-pub fn app_pol_semidia_jupiter(del: f64) -> f64 {
-    unit_semidia_jupiter_pol() / del
+pub fn app_polar_semidia_jupiter(distance_to_earth: f64) -> f64 {
+    unit_semidia_jupiter_pol() / distance_to_earth
 }
 
 /*
