@@ -129,8 +129,8 @@ pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     Returns two quantities that are used elsewhere in the library.
 
     'rho' here denotes the geocentric radius vector, and 'phi' here
-    denotes the geocentric latitude, of an observer on the Earth's
-    surface.
+    denotes the geocentric latitude, both of an observer on the
+    Earth's surface.
 
     height: The observer's height above sea level (meters)
     geograph_lat: The observer's geographical lattitude
