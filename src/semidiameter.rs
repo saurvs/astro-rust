@@ -15,11 +15,11 @@ fn unit_semidia_jupiter_pol() -> f64 {
 /*
 
     semidia_body(distance_to_earth) -> (angular_semidiameter)
-
-    distance_to_earth should be in AU
     -----------------------------------------------------------------
     The following eleven functions return the angular semidiameters
     of various bodies in the solar system.
+
+    distance_to_earth: The distance of the body from the Earth in AU
 
 */
 
@@ -72,10 +72,10 @@ pub fn semidia_pluto(distance_to_earth: f64) -> f64 {
     app_polar_semidia_saturn(distance_to_earth,
                             saturnicentric_latitude_of_Earth)
                             -> (apparent_polar_semidiameter_of_saturn)
-
-    distance_to_earth should be in AU
     -----------------------------------------------------------------
     Returns the apparent polar semidiameter of Saturn
+
+    distance_to_earth: The distance of Saturn from the Earth in AU
 
 */
 
@@ -90,10 +90,10 @@ pub fn app_polar_semidia_saturn(distance_to_earth: f64, sat_lat: f64) -> f64 {
 
     app_polar_semidia_jupiter(distance_to_earth)
                            -> (apparent_polar_semidiameter_of_jupiter)
-
-    distance_to_earth should be in AU
     -----------------------------------------------------------------
     Returns the apparent polar semidiameter of Jupiter
+
+    distance_to_earth: The distance of Jupiter from the Earth in AU
 
 */
 
@@ -103,10 +103,13 @@ pub fn app_polar_semidia_jupiter(distance_to_earth: f64) -> f64 {
 
 /*
 
-    Returns the diameter of an asteroid in kilometers
+    astroid_diameter(absolute_magnitude_of_asteroid, albedo)
+                                                -> (astroid_diameter)
     -----------------------------------------------------------------
-           abs_mag: The absolute magnitude of an asteroid
-            albedo: The albedo or reflective power
+    Returns the diameter of an asteroid in kilometers
+
+    abs_mag: The absolute magnitude of an asteroid
+    albedo: The albedo or reflective power of the asteroid
 
 */
 
@@ -116,13 +119,16 @@ pub fn astroid_diameter(abs_mag: f64, albedo: f64) -> f64 {
 
 /*
 
-    Returns the apparent diameter of an asteroid in kilometers
+    astroid_app_diameter(true_diameter_of_asteroid, distance_to_earth)
+                                   -> (apparent_diameter_of_asteroid)
     -----------------------------------------------------------------
-        diameter: The true diameter of an asteroid in kilometers
-             del: The asteroid's distance to Earth in AU
+    Returns the apparent diameter of an asteroid in kilometers
+
+    true_diameter: The true diameter of an asteroid in kilometers
+    distance_to_earth: The asteroid's distance to Earth in AU
 
 */
 
-pub fn astroid_app_diameter(diameter: f64, del: f64) -> f64 {
-    0.0013788 * (diameter / del)
+pub fn astroid_app_diameter(true_diameter: f64, distance_to_earth: f64) -> f64 {
+    0.0013788 * (true_diameter / distance_to_earth)
 }
