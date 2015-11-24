@@ -24,11 +24,11 @@ fn pt_correction(prss: f64, temp: f64) -> f64 {
     The refraction correction angle R needs to be found to account
     for the effects of atmospheric refraction.
     We will only use the horizontal coordinate system for convenience
-    (altitude and azimuth).
+    (that is, altitude and azimuth).
 
-    R, at altitudes very near 0 or 180 degrees, that is, very near to
-    the horizon, fluctuates unpredictably by 0.3 degrees or more,
-    and so no sensible estimate can be made for it.
+    R, at altitudes very near to 0 or to 180 degrees (that is, very
+    near to the horizon), fluctuates unpredictably by 0.3 degrees or
+    more, and so no sensible estimate can be made for R there.
 
 */
 
@@ -48,12 +48,12 @@ fn pt_correction(prss: f64, temp: f64) -> f64 {
 
 */
 
-pub fn approx_refrc_from_app_alt(app_alt: f64) -> f64 {
+pub fn approx_refraction_from_app_alt(app_alt: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 58.294).to_radians() * (90f64.to_radians() - app_alt).tan() -
     angle::pure_degrees(0.0, 0.0, 0.0668).to_radians() * (90f64.to_radians() - app_alt).tan().powi(3)
 }
 
-pub fn approx_refrc_from_true_alt(true_alt: f64) -> f64 {
+pub fn approx_refraction_from_true_alt(true_alt: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 58.276).to_radians() * (90f64.to_radians() - true_alt).tan() -
     angle::pure_degrees(0.0, 0.0, 0.0824).to_radians() * (90f64.to_radians() - true_alt).tan().powi(3)
 }
@@ -77,7 +77,7 @@ pub fn approx_refrc_from_true_alt(true_alt: f64) -> f64 {
 
 */
 
-pub fn refrc_from_app_alt(mut app_alt: f64, prss: f64, temp: f64) -> f64 {
+pub fn refraction_from_app_alt(mut app_alt: f64, prss: f64, temp: f64) -> f64 {
     app_alt = app_alt.to_degrees();
     if close_to_90_degrees(app_alt) {
         return 0.0;
@@ -85,7 +85,7 @@ pub fn refrc_from_app_alt(mut app_alt: f64, prss: f64, temp: f64) -> f64 {
     (1.0 / (60.0 * (app_alt + (7.31 / (app_alt + 4.4))).to_radians().tan())) * pt_correction(prss, temp)
 }
 
-pub fn refrc_from_true_alt(mut true_alt: f64, prss: f64, temp: f64) -> f64 {
+pub fn refraction_from_true_alt(mut true_alt: f64, prss: f64, temp: f64) -> f64 {
     true_alt = true_alt.to_degrees();
     if close_to_90_degrees(true_alt) {
         return 0.0;

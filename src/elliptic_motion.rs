@@ -14,8 +14,8 @@
 
     The time correction (t) is given in order to take into account
     the finite time it takes for light to travel to Earth. And so,
-    if a planet was at a given position P at time T, it will seen
-    from Earth at P at time T + t.
+    if a planet was at a given position P at time T, it will be seen
+    from Earth to be at position P at time T + t.
     -----------------------------------------------------------------
      body_helio_long: The heliocentric longitude of the celestial
                       body.

@@ -69,7 +69,7 @@ pub fn ecc() -> f64 {
     angular_dist(point_1, point_2) -> (angular_distance)
     -----------------------------------------------------------------
     Returns the angular distance between two points on Earth's
-    surface (in radians)
+    surface
 
 */
 

@@ -39,19 +39,19 @@ pub fn semidia_mars(distance_to_earth: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 4.68) / distance_to_earth
 }
 
-pub fn semidia_jupiter_eq(distance_to_earth: f64) -> f64 {
+pub fn semidia_jupiter_equatorial(distance_to_earth: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 98.44) / distance_to_earth
 }
 
-pub fn semidia_jupiter_pol(distance_to_earth: f64) -> f64 {
+pub fn semidia_jupiter_polar(distance_to_earth: f64) -> f64 {
     unit_semidia_jupiter_pol() / distance_to_earth
 }
 
-pub fn semidia_saturn_eq(distance_to_earth: f64) -> f64 {
+pub fn semidia_saturn_equatorial(distance_to_earth: f64) -> f64 {
     unit_semidia_saturn_eq() / distance_to_earth
 }
 
-pub fn semidia_saturn_pol(distance_to_earth: f64) -> f64 {
+pub fn semidia_saturn_polar(distance_to_earth: f64) -> f64 {
     unit_semidia_saturn_pol() / distance_to_earth
 }
 
@@ -119,7 +119,7 @@ pub fn astroid_diameter(abs_mag: f64, albedo: f64) -> f64 {
 
 /*
 
-    astroid_app_diameter(true_diameter_of_asteroid, distance_to_earth)
+    app_astroid_diameter(true_diameter_of_asteroid, distance_to_earth)
                                    -> (apparent_diameter_of_asteroid)
     -----------------------------------------------------------------
     Returns the apparent diameter of an asteroid in kilometers
@@ -129,6 +129,6 @@ pub fn astroid_diameter(abs_mag: f64, albedo: f64) -> f64 {
 
 */
 
-pub fn astroid_app_diameter(true_diameter: f64, distance_to_earth: f64) -> f64 {
+pub fn app_astroid_diameter(true_diameter: f64, distance_to_earth: f64) -> f64 {
     0.0013788 * (true_diameter / distance_to_earth)
 }

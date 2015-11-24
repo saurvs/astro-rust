@@ -11,7 +11,7 @@ use time;
 
 /*
 
-    nutation(julian_emphemeris_day) -> (nutation_longitude,
+    nutation(julian_ephemeris_day) -> (nutation_longitude,
                                         nutation_obliquity)
     -----------------------------------------------------------------
     Returns the nutation correction for longitude and obliquity,
@@ -21,9 +21,9 @@ use time;
 
 */
 
-pub fn nutation(jed: f64) -> (f64, f64) {
+pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
 
-    let t = time::julian_centuries(jed);
+    let t = time::julian_century(julian_ephemeris_day);
 
     let mut M1 = angle::limited_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/5620.0)))).to_radians();
     let mut M = angle::limited_to_360((357.52772 + t*(35999.050340 - t*(0.0001603 + t/300000.0)))).to_radians();

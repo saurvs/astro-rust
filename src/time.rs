@@ -50,10 +50,9 @@ pub struct usual_day {
 
 /*
 
-    Returns the decimal day for a given day expressed in the
-    usual sense.
+    Returns the decimal day for a day expressed in the usual sense.
     -----------------------------------------------------------------
-        usual_day: The an instance of the struct usual_day
+        usual_day: an instance of the struct usual_day
 
 */
 
@@ -73,6 +72,6 @@ pub fn decimal_day(day: usual_day) -> f64 {
 
 */
 
-pub fn julian_centuries(jed: f64) -> f64 {
+pub fn julian_century(jed: f64) -> f64 {
     (jed - 2451545.0) / 36525.0
 }
