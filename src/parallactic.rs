@@ -4,7 +4,7 @@ pub fn parallactic_angle(geograph_lat: f64, local_hour_angle: f64, dec_celes_bod
 
 }
 
-pub fn horizon_parallactic_angle(geograph_lat: f64, dec_celes_body: f64) -> f64 {
+pub fn parallactic_angle_on_horizon(geograph_lat: f64, dec_celes_body: f64) -> f64 {
     (geograph_lat.sin() / dec_celes_body.cos()).acos()
 }
 
