@@ -8,7 +8,7 @@ pub fn horizon_parallactic_angle(geograph_lat: f64, dec_celes_body: f64) -> f64 
     (geograph_lat.sin() / dec_celes_body.cos()).acos()
 }
 
-pub fn longitudes_of_ecp_on_horzion(obl_ecl: f64, observ_lat: f64, loc_sid: f64) -> (f64, f64) {
+pub fn longitudes_of_ecl_on_horzion(obl_ecl: f64, observ_lat: f64, loc_sid: f64) -> (f64, f64) {
     let lambda = (-1.0 * loc_sid.cos()).atan2(obl_ecl.sin()*observ_lat.tan() + obl_ecl.cos()*loc_sid.sin());
     (lambda, 180_f64.to_radians() + lambda)
 }
