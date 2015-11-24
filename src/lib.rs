@@ -14,4 +14,4 @@ pub mod elliptic_motion;
 pub mod nutation;
 pub mod ecliptic;
 pub mod rect_sun;
-mod parallactic;
+pub mod parallactic;
