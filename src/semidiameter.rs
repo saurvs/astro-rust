@@ -2,8 +2,16 @@ use angle;
 
 /*
 
+    NOTE: All angles passed as arguments, and those returned,
+          are assumed to be radians, even if the comments
+          describe them with degrees.
+
+*/
+
+/*
+
     Semidiameter: The apparent equatorial radius of a celestial
-    body when viewed as a disc from Earth, epressed as an angle.
+    body when viewed as a disc from Earth, expressed as an angle.
 
 */
 
