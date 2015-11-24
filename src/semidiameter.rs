@@ -1,5 +1,13 @@
 use angle;
 
+fn unit_semidia_saturn_eq() -> f64 {
+    angle::pure_degrees(0.0, 0.0, 82.73)
+}
+
+fn unit_semidia_saturn_pol() -> f64 {
+    angle::pure_degrees(0.0, 0.0, 73.82)
+}
+
 /*
 
     NOTE: All angles passed as arguments, and those returned,
@@ -10,22 +18,17 @@ use angle;
 
 /*
 
-    Semidiameter: The apparent equatorial radius of a celestial
-    body when viewed as a disc from Earth, expressed as an angle.
+    Semidiameter: The apparent equatorial or polar radius of a
+    celestial body when viewed as a disc from Earth, expressed
+    as an angle.
+
+    For Saturn and Jupiter, the apparent equatorial and polar
+    radii are available.
+
+    For the Sun, Pluto, and the rest of the planets, only the
+    apparent equatorial radius is available.
 
 */
-
-fn unit_semidia_saturn_eq() -> f64 {
-    angle::pure_degrees(0.0, 0.0, 82.73)
-}
-
-fn unit_semidia_saturn_pol() -> f64 {
-    angle::pure_degrees(0.0, 0.0, 73.82)
-}
-
-fn unit_semidia_jupiter_pol() -> f64 {
-    angle::pure_degrees(0.0, 0.0, 92.06)
-}
 
 /*
 
@@ -54,20 +57,23 @@ pub fn semidia_mars(distance_to_earth: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 4.68) / distance_to_earth
 }
 
-pub fn semidia_jupiter_equatorial(distance_to_earth: f64) -> f64 {
+pub fn equatorial_semidia_jupiter(distance_to_earth: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 98.44) / distance_to_earth
 }
 
-pub fn semidia_jupiter_polar(distance_to_earth: f64) -> f64 {
-    unit_semidia_jupiter_pol() / distance_to_earth
+pub fn polar_semidia_jupiter(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 92.06) / distance_to_earth
 }
 
-pub fn semidia_saturn_equatorial(distance_to_earth: f64) -> f64 {
+pub fn equatorial_semidia_saturn(distance_to_earth: f64) -> f64 {
     unit_semidia_saturn_eq() / distance_to_earth
 }
 
-pub fn semidia_saturn_polar(distance_to_earth: f64) -> f64 {
-    unit_semidia_saturn_pol() / distance_to_earth
+pub fn polar_semidia_saturn(distance_to_earth: f64) -> f64 {
+    let a = unit_semidia_saturn_eq();
+    let b = unit_semidia_saturn_pol();
+    let k = 1.0 - (b / a).powi(2);
+    (a / distance_to_earth) * (1.0 - k * sat_lat.cos().powi(2)).sqrt()
 }
 
 pub fn semidia_uranus(distance_to_earth: f64) -> f64 {
@@ -84,44 +90,10 @@ pub fn semidia_pluto(distance_to_earth: f64) -> f64 {
 
 /*
 
-    app_polar_semidia_saturn(distance_to_earth,
-                            saturnicentric_latitude_of_Earth)
-                            -> (apparent_polar_semidiameter_of_saturn)
+    Returns the diameter of an asteroid in kilometers.
     -----------------------------------------------------------------
-    Returns the apparent polar semidiameter of Saturn
-
-    distance_to_earth: The distance of Saturn from the Earth in AU
-
-*/
-
-pub fn app_polar_semidia_saturn(distance_to_earth: f64, sat_lat: f64) -> f64 {
-    let a = unit_semidia_saturn_eq();
-    let b = unit_semidia_saturn_pol();
-    let k = 1.0 - (b / a).powi(2);
-    (a / distance_to_earth) * (1.0 - k * sat_lat.cos().powi(2)).sqrt()
-}
-
-/*
-
-    app_polar_semidia_jupiter(distance_to_earth)
-                           -> (apparent_polar_semidiameter_of_jupiter)
-    -----------------------------------------------------------------
-    Returns the apparent polar semidiameter of Jupiter
-
-    distance_to_earth: The distance of Jupiter from the Earth in AU
-
-*/
-
-pub fn app_polar_semidia_jupiter(distance_to_earth: f64) -> f64 {
-    unit_semidia_jupiter_pol() / distance_to_earth
-}
-
-/*
-
     astroid_diameter(absolute_magnitude_of_asteroid, albedo)
-                                                -> (astroid_diameter)
-    -----------------------------------------------------------------
-    Returns the diameter of an asteroid in kilometers
+                                            -> (astroid_diameter)
 
     abs_mag: The absolute magnitude of the asteroid
     albedo: The albedo or reflective power of the asteroid
@@ -134,10 +106,10 @@ pub fn astroid_diameter(abs_mag: f64, albedo: f64) -> f64 {
 
 /*
 
-    app_astroid_diameter(true_diameter_of_asteroid, distance_to_earth)
-                                   -> (apparent_diameter_of_asteroid)
+    Returns the apparent diameter of an asteroid in kilometers.
     -----------------------------------------------------------------
-    Returns the apparent diameter of an asteroid in kilometers
+    app_astroid_diameter(true_diameter_of_asteroid, distance_to_earth)
+                                    -> (apparent_diameter_of_asteroid)
 
     true_diameter: The true diameter of the asteroid in kilometers
     distance_to_earth: The asteroid's distance to Earth in AU
