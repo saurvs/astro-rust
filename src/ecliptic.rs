@@ -18,7 +18,7 @@ use time;
 */
 
 pub fn obliquity(jed: f64) -> (f64) {
-    let u = time::julian_centuries(jed) / 100.0;
+    let u = time::julian_century(jed) / 100.0;
 
     (    angle::pure_degrees(23.0, 26.0, 21.448) -
     u * (angle::pure_degrees(0.0, 0.0, 4680.93) +
