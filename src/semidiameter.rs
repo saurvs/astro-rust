@@ -1,5 +1,12 @@
 use angle;
 
+/*
+
+    Semidiameter: The apparent equatorial radius of a celestial
+    body when viewed as a disc from Earth, epressed as an angle.
+
+*/
+
 fn unit_semidia_saturn_eq() -> f64 {
     angle::pure_degrees(0.0, 0.0, 82.73)
 }
