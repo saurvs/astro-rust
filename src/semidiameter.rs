@@ -22,7 +22,7 @@ fn unit_semidia_saturn_pol() -> f64 {
     celestial body when viewed as a disc from Earth, expressed
     as an angle.
 
-    For Saturn and Jupiter, the both apparent equatorial and
+    For Saturn and Jupiter, both the apparent equatorial and
     polar radii are available.
 
     For the Sun, Pluto, and the rest of the planets, only the
