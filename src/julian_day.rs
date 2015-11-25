@@ -3,9 +3,9 @@ use util;
 
 /*
 
-    Returns the Julian day.
+    julian_day(date) -> (julian_day)
     -----------------------------------------------------------------
-        date: A given date (with a decimal day)
+    Returns the Julian day.
 
 */
 
