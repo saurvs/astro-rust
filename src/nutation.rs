@@ -23,14 +23,6 @@ use time;
 
 pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
 
-    let t = time::julian_century(julian_ephemeris_day);
-
-    let mut M1 = angle::limited_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/5620.0)))).to_radians();
-    let mut M = angle::limited_to_360((357.52772 + t*(35999.050340 - t*(0.0001603 + t/300000.0)))).to_radians();
-    let mut D = angle::limited_to_360((297.85036 + t*(445267.11148 - t*(0.0019142 + t/189474.0)))).to_radians();
-    let mut F = angle::limited_to_360((93.27191 + t*(483202.017538 - t*(-0.0036825 - t/327270.0)))).to_radians();
-    let mut om = angle::limited_to_360((125.04452 - t*(1934.136261 - t*(0.0020708 + t/450000.0)))).to_radians();
-
     struct terms(i8, i8, i8, i8, i8, f64, f64, f64, f64);
 
     let tuple_terms = [
@@ -97,6 +89,14 @@ pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
         terms(0, 0, 3, 2, 2, -3.0, 0.0, 0.0, 0.0),
         terms(2, -1, 0, 2, 2, -3.0, 0.0, 0.0, 0.0),
     ];
+
+    let t = time::julian_century(julian_ephemeris_day);
+
+    let M1 = angle::limited_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/5620.0)))).to_radians();
+    let M = angle::limited_to_360((357.52772 + t*(35999.050340 - t*(0.0001603 + t/300000.0)))).to_radians();
+    let D = angle::limited_to_360((297.85036 + t*(445267.11148 - t*(0.0019142 + t/189474.0)))).to_radians();
+    let F = angle::limited_to_360((93.27191 + t*(483202.017538 - t*(-0.0036825 - t/327270.0)))).to_radians();
+    let om = angle::limited_to_360((125.04452 - t*(1934.136261 - t*(0.0020708 + t/450000.0)))).to_radians();
 
     let mut nut_in_long = 0.0;
     let mut nut_in_obl = 0.0;
