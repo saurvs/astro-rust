@@ -5,8 +5,16 @@ pub struct surf_point {
     pub long: f64,
 }
 
-// struct for representing a point on the celestial sphere using
-// ascension and declination (in radians)
+/*
+
+    A struct for representing a point on the celestial sphere using
+    in the equatorial coordinate system.
+    -----------------------------------------------------------------
+        asc: Right ascension
+        dec: Declination
+
+*/
+
 pub struct celes_point {
     pub asc: f64,
     pub dec: f64,
