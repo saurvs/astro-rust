@@ -8,7 +8,7 @@ pub struct surf_point {
 /*
 
     A struct for representing a point on the celestial sphere using
-    in the equatorial coordinate system.
+    the equatorial coordinate system.
     -----------------------------------------------------------------
         asc: Right ascension
         dec: Declination
@@ -20,7 +20,13 @@ pub struct celes_point {
     pub dec: f64,
 }
 
-// obliquity of the ecliptic for the 2000 epoch
+/*
+
+    Returns the obliquity of the ecliptic for the 2000 epoch.
+    -----------------------------------------------------------------
+    
+*/
+
 pub fn oblq_ecl_2000() -> f64 {
     23.4392911_f64.to_radians()
 }
