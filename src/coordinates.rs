@@ -42,7 +42,14 @@ pub fn oblq_ecl_1950() -> f64 {
     23.4457889_f64.to_radians()
 }
 
-// return the hour angle from Greenwhich sidereal time, observer longitude and right ascension
+/*
+
+    Returns the hour angle, given Greenwhich sidereal time, observer
+    longitude and right ascension.
+    -----------------------------------------------------------------
+
+*/
+
 pub fn hour_angle_from_greenwhich_sidereal(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
     green_sid - obv_long - right_asc
 }
