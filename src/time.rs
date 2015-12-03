@@ -12,7 +12,7 @@ pub struct date {
     pub y: i32,
     /// Month
     ///
-    ///     range: 1 - 12
+    /// range: *1 - 12*
     pub m: u8,
     /// Decimal day
     pub d: f64,
@@ -24,19 +24,19 @@ pub struct date {
 pub struct usual_day {
     /// Day of month
     ///
-    ///     range: 1 - 31
+    /// range: *1 - 31*
     pub d: i16,
     /// Hour of day
     ///
-    ///     range: 0 - 60
+    /// range: *0 - 60*
     pub h: u8,
     /// Minute of hour
     ///
-    ///     range: 0 - 60
+    /// range: *0 - 60*
     pub m: u8,
     /// Second of minute
     ///
-    ///     range: 0.0 - 60.0
+    /// range: *0.0 - 60.0*
     pub s: f64
 }
 
