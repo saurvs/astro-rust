@@ -2,6 +2,8 @@
 
 Algorithms written in [Rust](https://www.rust-lang.org/), for finding/calculating/estimating things that are of interest in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
 
+[API Docs](https://qpid.github.io/rusty-astronomy/)
+
 ## Available things
 * Pluto's position
 * Julian day
