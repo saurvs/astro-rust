@@ -1,61 +1,50 @@
-/*
-
-    An enum for representing different calendar types.
-    -----------------------------------------------------------------
-        gregorian: The Gregorian calendar
-           julian: The Julian calendar
-
-*/
-
+/// Represents different calendar types
 pub enum calendar_type {
+    /// Gregorian calendar
     gregorian,
+    /// Julian calendar
     julian
 }
 
-/*
-
-    A struct for representing a date.
-    -----------------------------------------------------------------
-        y: The year
-        m: The month (1 - 12)
-        d: The decimal day
-        t: The calenday type
-
-*/
-
+/// Represents a date
 pub struct date {
+    /// Year
     pub y: i32,
+    /// Month
+    ///
+    ///     range: 1 - 12
     pub m: u8,
+    /// Decimal day
     pub d: f64,
+    /// Calenday type
     pub t: calendar_type,
 }
 
-/*
-
-    A struct for representing a day in the usual sense.
-    -----------------------------------------------------------------
-        d: The day of the month (1 - 31)
-        h: The hour of the day (0 - 24)
-        m: The minute of the hour (0 - 60)
-        s: The second of the minute (0.0 - 60.0)
-
-*/
-
+/// Represents a day of month with hours, minutes and seconds
 pub struct usual_day {
+    /// Day of month
+    ///
+    ///     range: 1 - 31
     pub d: i16,
+    /// Hour of day
+    ///
+    ///     range: 0 - 60
     pub h: u8,
+    /// Minute of hour
+    ///
+    ///     range: 0 - 60
     pub m: u8,
+    /// Second of minute
+    ///
+    ///     range: 0.0 - 60.0
     pub s: f64
 }
 
-/*
+/**
+Returns the decimal day for a ```usual_day```
 
-    Returns the decimal day for a day expressed in the usual sense.
-    -----------------------------------------------------------------
-        usual_day: an instance of the struct usual_day
-
-*/
-
+* ```usual_day```: A ```usual_day``` struct
+**/
 pub fn decimal_day(day: usual_day) -> f64 {
     (day.d as f64) +
     (day.h as f64) / 24.0 +
@@ -63,15 +52,11 @@ pub fn decimal_day(day: usual_day) -> f64 {
     day.s / 60.0
 }
 
-/*
+/**
+Returns the time measured in Julian centuries from the Epoch J2000 for a Julian Emphemeris Day
 
-    Returns the time measured in Julian centuries from the
-    Epoch J2000.
-    -----------------------------------------------------------------
-        jed: The Julian Emphemeris Day
-
-*/
-
+* ```jed```: Julian Emphemeris Day
+**/
 pub fn julian_century(jed: f64) -> f64 {
     (jed - 2451545.0) / 36525.0
 }
