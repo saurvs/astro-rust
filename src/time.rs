@@ -53,7 +53,7 @@ pub fn decimal_day(day: usual_day) -> f64 {
 }
 
 /**
-Returns the time measured in Julian centuries from the Epoch J2000 for a Julian Emphemeris Day
+Returns time between the Epoch J2000 and a given Julian Emphemeris Day, measured in Julian centuries
 
 * ```jed```: Julian Emphemeris Day
 **/

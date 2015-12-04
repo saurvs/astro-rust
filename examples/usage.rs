@@ -1,4 +1,4 @@
-extern crate rusty_astronomy;
+extern crate astro_rust;
 
 use rusty_astronomy::*;
 
