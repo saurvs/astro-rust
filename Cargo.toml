@@ -1,11 +1,11 @@
 [package]
 
-name = "rusty_astronomy"
-version = "0.0.3"
+name = "astro_rust"
+version = "0.0.4"
 authors = ["Saurav Sachidanand"]
-description = "Highly accurate and efficient astronomical algorithms, written in Rust, for calculating interesting things about bodies in our solar system."
+description = "Algorithms written in Rust, for finding/calculating/estimating things that are of interest in astronomy."
 keywords = ["astronomy", "algorithms", "ephemeris", "planets", "solar"]
 readme = "README.md"
 license = "MIT"
-repository = "https://github.com/qpid/rusty-astronomy"
-homepage = "https://github.com/qpid/rusty-astronomy"
+repository = "https://github.com/qpid/astro-rust"
+homepage = "https://github.com/qpid/astro-rust"

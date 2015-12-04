@@ -1,4 +1,4 @@
 [root]
-name = "rusty_astronomy"
-version = "0.0.3"
+name = "astro_rust"
+version = "0.0.4"
 

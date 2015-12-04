@@ -1,4 +1,4 @@
-# Rusty Astronomy (work in progress) [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/qpid/rusty-astronomy/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/qpid/rusty-astronomy.svg)](https://travis-ci.org/qpid/rusty-astronomy)
+# Astro Rust (work in progress) [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/qpid/rusty-astronomy/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/qpid/rusty-astronomy.svg)](https://travis-ci.org/qpid/rusty-astronomy)
 
 Algorithms written in [Rust](https://www.rust-lang.org/), for finding/calculating/estimating things that are of interest in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
 
