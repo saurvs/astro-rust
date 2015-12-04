@@ -1,6 +1,6 @@
 extern crate astro_rust;
 
-use rusty_astronomy::*;
+use astro_rust::*;
 
 fn main() {
 
