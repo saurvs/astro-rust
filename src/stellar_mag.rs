@@ -43,8 +43,8 @@ pub fn mag_diff(br: f64) -> f64 {
 /**
 Returns the absolute magnitude of a star from its parallax
 
-* ```par```: Parallax of a star
-* ```am```: Apparent magnitude of a star
+* ```par```: Parallax of star
+* ```am```: Apparent magnitude of star
 **/
 pub fn absolute_mag_from_parallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
@@ -54,8 +54,8 @@ pub fn absolute_mag_from_parallax(mut par: f64, am: f64) -> f64 {
 /**
 Returns the absolute magnitude of a star from its distance
 
-* ```d```: Distance of a star in parsecs
-* ```am```: Apparent magnitude of a star
+* ```d```: Distance of star in parsecs
+* ```am```: Apparent magnitude of star
 **/
 pub fn absolute_mag_from_dist(d: f64, am: f64) -> f64 {
     am + 5.0 - 5.0 * d.log(10.0)
