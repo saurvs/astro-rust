@@ -3,11 +3,11 @@ Returns rectangular geocentric equatorial coordinates of the Sun
 
 # Return variables
 
-* The positive x-axis is directed towards the vernal equinox
+* The positive x-axis is directed towards Earth's vernal equinox
 (0 degrees longitude)
-* The positive y-axis lies in the plane of the equator and is directed
+* The positive y-axis lies in the plane of Earth's equator and is directed
 towards 90 degrees longitude
-* The positive z-axis is directed towards the northern celestial pole
+* The positive z-axis is directed towards Earth's northern celestial pole
 * The unit for all three axes is AU
 
 ```rect_coords() -> (x, y z)```
