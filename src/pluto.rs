@@ -12,7 +12,6 @@ pub fn semidiameter(distance_to_earth: f64) -> f64 {
 }
 
 /**
-
 Returns the heliocentric coordinates of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
 # Return variables
@@ -27,7 +26,6 @@ at an instant of time.
 # Arguments
 
 ```julian_centuries```: Time in Julian Centuries
-
 **/
 
 pub fn position(julian_centuries: f64) -> (f64, f64, f64) {
