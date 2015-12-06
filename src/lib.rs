@@ -12,3 +12,4 @@ pub mod pluto;
 pub mod elliptic_motion;
 pub mod sun;
 pub mod parallactic;
+pub mod semidiameter;
