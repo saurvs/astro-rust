@@ -2,13 +2,13 @@ use angle;
 use time;
 
 /**
-Returns the nutation correction for longitude and obliquity
+Returns the nutation correction (in radians) for longitude and obliquity
 
 # Return variables
 
-Returns the nutation correction that needs to be added to
-the longitude and the obliquity of the ecliptic to adjust for
-the Earth's nutation. Nutation does not affect latitudes.
+Returns the nutation correction (in radians) that needs to be added to
+the longitude and the obliquity of the ecliptic to adjust for the
+Earth's nutation. Nutation does not affect latitudes.
 
 ```nutation() -> (nutation_in_longitude, nutation_in_obliquity)```
 
