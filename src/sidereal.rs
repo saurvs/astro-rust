@@ -1,5 +1,4 @@
 use time;
-use julian_day;
 
 /*
 
@@ -28,7 +27,7 @@ fn t(jd: f64) -> f64 {
 */
 
 pub fn mean_sidereal_greenwhich_zero_ut(date: time::date) -> f64 {
-    let jd = julian_day::julian_day(date);
+    let jd = time::julian_day(date);
     let t = t(jd);
 
     (100.46061837 +
@@ -52,7 +51,7 @@ pub fn mean_sidereal_greenwhich_zero_ut(date: time::date) -> f64 {
 */
 
 pub fn mean_sidereal_greenwhich(date: time::date) -> f64 {
-    let jd = julian_day::julian_day(date);
+    let jd = time::julian_day(date);
     let t = t(jd);
 
     280.46061837 +

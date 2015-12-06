@@ -17,7 +17,7 @@ fn main() {
         d: time::decimal_day(moon_landing_day),
         t: time::calendar_type::gregorian
     };
-    println!("{}", julian_day::julian_day(moon_landing));
+    println!("{}", time::julian_day(moon_landing));
 
     /* Prints the geodesic distance between the Observatoire de Paris and the US
        Naval Observatory at Washington DC */

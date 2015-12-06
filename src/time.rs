@@ -1,3 +1,5 @@
+use util;
+
 /// Represents different calendar types
 pub enum calendar_type {
     /// Gregorian calendar
@@ -59,4 +61,86 @@ Returns time between the epoch J2000.0 and a given Julian Emphemeris Day, measur
 **/
 pub fn julian_century(jed: f64) -> f64 {
     (jed - 2451545.0) / 36525.0
+}
+
+/**
+Returns the Julian day equivalent to a given date
+
+# Arguments
+
+```date```: A ```date``` struct
+**/
+pub fn julian_day(mut date: date) -> f64 {
+
+    if date.m == 1 || date.m == 2 {
+        date.y = date.y - 1;
+        date.m = date.m + 12;
+    }
+
+    let a = util::int((date.y as f64) / 100.0) as f64;
+    let mut b;
+    match date.t {
+        calendar_type::gregorian => b = 2.0 - a + (util::int(a / 4.0) as f64),
+        calendar_type::julian => b = 0.0,
+    };
+
+    (util::int(365.25 * ((date.y as f64) + 4716.0)) as f64) +
+    (util::int(30.6001 * ((date.m as f64) + 1.0)) as f64) +
+    (date.d as f64) +
+    (b as f64) -
+    1524.5
+
+}
+
+/**
+Returns a date equivalent to a given Julian day
+
+# Return variables
+
+```date_from_julian_day() -> (year, month, decimal_day)```
+
+# Arguments
+
+```jd```: Julian Day. **Can't be a negative value.**
+**/
+pub fn date_from_julian_day(mut jd: f64) -> (i16, i8, f64) {
+    if jd < 0.0 {
+        // panic
+    }
+
+    jd += 0.5;
+    let Z = jd as i64;
+    let F = jd - (Z as f64);
+    let mut A;
+
+    if Z < 2299161 {
+        A = Z;
+    }
+    else {
+        let alpha = util::int(((Z as f64) - 1867216.25)/36524.25);
+        A = Z + 1 + alpha - util::int((alpha as f64)/4.0);
+    }
+
+    let B = A + 1524;
+    let C = util::int(((B as f64) - 122.1)/365.25);
+    let D = util::int(365.25 * (C as f64));
+    let E = util::int(((B - D) as f64)/30.6001);
+
+    let day = ((B - D) as f64) - (util::int(30.6001 * (E as f64)) as f64) + F;
+
+    let month = if E < 14 {
+                    E - 1
+                }
+                else if E == 14 || E == 15 { E - 13 }
+                else {// panic
+                0
+                };
+
+    let year = if month > 2 { C - 4716 }
+               else if month == 1 || month == 2 { C - 4715 }
+               else {// panic
+               0
+               };
+
+    (year as i16, month as i8, day)
 }
