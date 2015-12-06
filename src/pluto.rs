@@ -13,7 +13,7 @@ at an instant of time.
 
 # Arguments
 
-```julian_centuries```: Time in Julian Centuries.
+```julian_centuries```: Time in Julian Centuries
 
 **/
 
