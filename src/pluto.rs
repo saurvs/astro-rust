@@ -1,21 +1,21 @@
-/*
+/**
 
-    NOTE: All angles passed as arguments, and those returned,
-          are assumed to be radians, even if the comments
-          describe them with degrees.
+    Returns the heliocentric coordinates of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
-*/
+    # Return variables
 
-/*
+    Returns the heliocentric longitude (in radians), heliocentric
+    latitude (in radians) and heliocentric radius vector (in AU)
+    of the dwarf planet Pluto, with reference to the epoch J2000.0,
+    at an instant of time.
 
-    position(julian_centuries) -> (longitude, latitude, radius_vector)
-    -----------------------------------------------------------------
-    Returns the heliocentric longitude, heliocentric latitude and
-    heliocentric radius vector of the dwarf planet Pluto at an instant
-    of time (given in Julian centuries).
-    Valid only for the years 1885 - 2099.
+    ```position() -> (longitude, latitude, radius_vector)```
 
-*/
+    # Arguments
+
+    ```julian_centuries```: Time in Julian Centuries.
+
+**/
 
 pub fn position(julian_centuries: f64) -> (f64, f64, f64) {
 
