@@ -57,7 +57,7 @@ pub fn angular_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) ->
 
 /**
 Returns a low accuracy geodesic distance between two points on Earth's
-surface (in meters).
+surface (in meters)
 
 Assumes that the Earth is a sphere.
 
