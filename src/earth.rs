@@ -1,107 +1,93 @@
 use coordinates;
 
 /*
-
-    NOTE: All angles passed as arguments, and those returned,
-          are assumed to be radians, even if the comments
-          describe them with degrees.
-
-*/
-
-/*
     This code uses revised values for flattening factor and
     equatorial radius of the earth.
     See: http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf
     or https://confluence.qps.nl/pages/viewpage.action?pageId=29855173
-*/
-
-/*
-
-    flattening() -> (flattening_factor_of_earth)
-    -----------------------------------------------------------------
-    Returns the flattening factor of the earth
 
 */
 
+/**
+Returns the flattening factor of the Earth
+
+Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
+**/
 pub fn flattening() -> f64 {
     1.0 / 298.257223563
 }
 
-/*
+/**
+Returns the equatorial radius of the Earth (in meters)
 
-    eq_radius() -> (equatorial_radius_of_earth)
-    -----------------------------------------------------------------
-    Returns the equatorial radius of the earth (in meters)
-
-*/
-
+Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
+**/
 pub fn eq_radius() -> f64 {
     polar_radius() / (1.0 - flattening())
 }
 
-/*
+/**
 
-    polar_radius() -> (polar_radius_of_earth)
-    -----------------------------------------------------------------
-    Returns the polar radius of the earth (in meters)
+Returns the polar radius of the Earth (in meters)
 
-*/
-
+Calculated using [```flattening()```](./fn.flattening.html) and
+[```eq_radius()```](./fn.eq_radius.html)
+**/
 pub fn polar_radius() -> f64 {
     6378137.0
 }
 
-/*
+/**
+Returns the eccentricity of the Earth's meridian
 
-    ecc() -> (eccentricity_of_earth_meridian)
-    -----------------------------------------------------------------
-    Returns the eccentricity of the earth's meridian
-
-*/
-
-pub fn ecc() -> f64 {
-    let f = flattening();
-    ((2.0 - f) * f).sqrt()
+Calculated using [```flattening()```](./fn.flattening.html)
+**/
+pub fn ecc_mer() -> f64 {
+    ((2.0 - flattening()) * flattening()).sqrt()
 }
 
-/*
+/**
+Returns the angular distance between two points on Earth's
+surface
 
-    angular_dist(point_1, point_2) -> (angular_distance)
-    -----------------------------------------------------------------
-    Returns the angular distance between two points on Earth's
-    surface
+# Arguments
 
-*/
-
+* ```p1```: Point 1
+* ```p2```: Point 2
+**/
 pub fn angular_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     (p1.lat.sin() * p2.lat.sin() +
      p1.lat.cos() * p2.lat.cos() * (p1.long - p2.long).cos()
     ).acos()
 }
 
-/*
+/**
+Returns a low accuracy geodesic distance between two points on Earth's
+surface (in meters).
 
-    approx_dist(point_1, point_2) -> (distance)
-    -----------------------------------------------------------------
-    Returns a low accuracy distance between two points on earth's
-    surface (in meters). Assumes the Earth is spherical.
+Assumes that the Earth is a sphere.
 
-*/
+# Arguments
 
-pub fn approx_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
+* ```p1```: Point 1
+* ```p2```: Point 2
+**/
+
+pub fn geodesic_approx_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     6371.0 * angular_dist(p1, p2)
 }
 
-/*
+/**
+Returns a high accuracy geodesic distance between two points on Earth's
+surface (in meters)
 
-    dist(point_1, point_2) -> (distance)
-    -----------------------------------------------------------------
-    Returns a high accuracy distance between two points on earth's
-    surface (in meters)
+# Arguments
 
-*/
+* ```p1```: Point 1
+* ```p2```: Point 2
+**/
 
-pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
+pub fn geodesic_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
     let lam = (p1.long - p2.long) / 2.0;
@@ -121,21 +107,18 @@ pub fn dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
 
 }
 
-/*
+/**
+Returns two quantities that are used elsewhere in the library.
 
-    rho_sin_and_cos_phi(height, geograph_lat)
-                                        -> (rho_sin_phi, rho_cos_phi)
-    -----------------------------------------------------------------
-    Returns two quantities that are used elsewhere in the library.
+```rho``` here denotes the geocentric radius vector, and ```phi```
+here denotes the geocentric latitude, both of an observer on the
+Earth's surface.
 
-    'rho' here denotes the geocentric radius vector, and 'phi' here
-    denotes the geocentric latitude, both of an observer on the
-    Earth's surface.
+# Arguments
 
-    height: The observer's height above sea level (meters)
-    geograph_lat: The observer's geographical latitude
-
-*/
+* ```height```: Observer's height above sea level (in meters)
+* ```geograph_lat```: Observer's geographical latitude (in radians)
+**/
 
 pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
     let u = (geograph_lat.tan() * polar_radius() / eq_radius()).atan();
