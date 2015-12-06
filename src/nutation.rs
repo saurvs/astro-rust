@@ -1,15 +1,7 @@
 use angle;
 use time;
 
-/*
-
-    NOTE: All angles passed as arguments, and those returned,
-          are assumed to be radians, even if the comments
-          describe them with degrees.
-
-*/
-
-/*
+/**
 
     nutation(julian_ephemeris_day) -> (nutation_longitude,
                                         nutation_obliquity)
@@ -19,7 +11,7 @@ use time;
     the longitude and the obliquity of the ecliptic to adjust for
     the Earth's nutation. Nutation does not affect latitudes.
 
-*/
+**/
 
 pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
 

@@ -1,19 +1,19 @@
 /**
 
-    Returns the heliocentric coordinates of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
+Returns the heliocentric coordinates of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
-    # Return variables
+# Return variables
 
-    Returns the heliocentric longitude (in radians), heliocentric
-    latitude (in radians) and heliocentric radius vector (in AU)
-    of the dwarf planet Pluto, with reference to the epoch J2000.0,
-    at an instant of time.
+Returns the heliocentric longitude (in radians), heliocentric
+latitude (in radians) and heliocentric radius vector (in AU)
+of the dwarf planet Pluto, with reference to the epoch J2000.0,
+at an instant of time.
 
-    ```position() -> (longitude, latitude, radius_vector)```
+```position() -> (longitude, latitude, radius_vector)```
 
-    # Arguments
+# Arguments
 
-    ```julian_centuries```: Time in Julian Centuries.
+```julian_centuries```: Time in Julian Centuries.
 
 **/
 
