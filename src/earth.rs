@@ -108,7 +108,7 @@ pub fn geodesic_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -
 }
 
 /**
-Returns two quantities that are used elsewhere in the library.
+Returns two quantities that are used elsewhere in the library
 
 ```rho``` here denotes the geocentric radius vector, and ```phi```
 here denotes the geocentric latitude, both of an observer on the
