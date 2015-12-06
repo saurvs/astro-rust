@@ -138,7 +138,6 @@ Earth's nutation. Nutation does not affect latitudes.
 # Arguments
 
 ```julian_ephemeris_day```: Time in Julian Ephemeris Days
-
 **/
 
 pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
