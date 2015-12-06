@@ -11,7 +11,5 @@ pub mod stellar_mag;
 pub mod util;
 pub mod pluto;
 pub mod elliptic_motion;
-pub mod nutation;
-pub mod ecliptic;
 pub mod rect_sun;
 pub mod parallactic;
