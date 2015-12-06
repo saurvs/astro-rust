@@ -2,14 +2,6 @@ use coordinates;
 use angle;
 use time;
 
-/*
-    This code uses revised values for flattening factor and
-    equatorial radius of the earth.
-    See: http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf
-    or https://confluence.qps.nl/pages/viewpage.action?pageId=29855173
-
-*/
-
 /**
 Returns the flattening factor of the Earth
 
