@@ -1,3 +1,16 @@
+use angle;
+
+/**
+Returns the Sun's equatorial angular semidiameter
+
+# Arguments
+
+* ```distance_to_earth```: The Sun's distance from the Earth (in AU)
+**/
+pub fn semidiameter(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 959.63) / distance_to_earth
+}
+
 /**
 Returns rectangular geocentric equatorial coordinates of the Sun
 

@@ -64,7 +64,7 @@ pub fn julian_century(jed: f64) -> f64 {
 }
 
 /**
-Returns the Julian day equivalent to a given date
+Returns a Julian day
 
 # Arguments
 
@@ -143,4 +143,40 @@ pub fn date_from_julian_day(mut jd: f64) -> (i16, i8, f64) {
                };
 
     (year as i16, month as i8, day)
+}
+
+/**
+Returns mean sidereal time at any instant of Universal Time
+
+Mean sidereal time is at the Greenwhich meridian.
+
+# Arguments
+
+* ```date```: A ```date``` struct
+**/
+pub fn mean_sidereal(date: date) -> f64 {
+    let jd = julian_day(date);
+    let t = julian_century(jd);
+
+    280.46061837 +
+    360.98564736629 * (jd - 2451545.0) +
+    (t * t) * (0.000387933  - t / 38710000.0)
+}
+
+/**
+Returns mean sidereal time at 0th hour of Universal Time
+
+Mean sidereal time is at the Greenwhich meridian.
+
+# Arguments
+
+* ```date```: A ```date``` struct
+**/
+pub fn mean_sidereal_ut(date: date) -> f64 {
+    let t = julian_century(julian_day(date));
+
+    (100.46061837 +
+    t * (36000.770053608 +
+    t * (0.000387933 -
+    t / 38710000.0))).to_radians()
 }

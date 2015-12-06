@@ -1,3 +1,16 @@
+use angle;
+
+/**
+Returns Pluto's equatorial angular semidiameter
+
+# Arguments
+
+* ```distance_to_earth```: Pluto's distance from Earth (in AU)
+**/
+pub fn semidiameter(distance_to_earth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 2.07) / distance_to_earth
+}
+
 /**
 
 Returns the heliocentric coordinates of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
