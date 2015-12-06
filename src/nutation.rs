@@ -6,16 +6,15 @@ Returns the nutation correction for longitude and obliquity
 
 # Return variables
 
-Returns the nutation correction for longitude and obliquity,
-that is, it returns the correction that needs to be added to
+Returns the nutation correction that needs to be added to
 the longitude and the obliquity of the ecliptic to adjust for
 the Earth's nutation. Nutation does not affect latitudes.
 
-```nutation() -> (nutation_longitude, nutation_obliquity)```
+```nutation() -> (nutation_in_longitude, nutation_in_obliquity)```
 
 # Arguments
 
-```julian_centuries```: Time in Julian Centuries.
+```julian_ephemeris_day```: Time in Julian Ephemeris Days
 
 **/
 
