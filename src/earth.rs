@@ -234,7 +234,7 @@ pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
 }
 
 /**
-Returns the mean obliquity of the ecliptic (in radians)
+Returns the mean obliquity of the Earth's ecliptic (in radians)
 
 The obliquity of the ecliptic, or the inclination of the Earth's axis
 of rotation, is the angle between the equator and the ecliptic.
