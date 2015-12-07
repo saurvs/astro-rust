@@ -21,14 +21,14 @@ latitude (in radians) and heliocentric radius vector (in AU)
 of the dwarf planet Pluto, with reference to the epoch J2000.0,
 at an instant of time.
 
-```position() -> (longitude, latitude, radius_vector)```
+```heliocen_coords() -> (longitude, latitude, radius_vector)```
 
 # Arguments
 
 ```julian_centuries```: Time in Julian Centuries
 **/
 
-pub fn position(julian_centuries: f64) -> (f64, f64, f64) {
+pub fn heliocen_coords(julian_centuries: f64) -> (f64, f64, f64) {
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
 

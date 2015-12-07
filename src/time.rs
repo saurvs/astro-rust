@@ -172,7 +172,7 @@ Mean sidereal time is at the Greenwhich meridian.
 
 * ```date```: A ```date``` struct
 **/
-pub fn mean_sidereal_ut(date: date) -> f64 {
+pub fn mean_sidereal_0hr(date: date) -> f64 {
     let t = julian_century(julian_day(date));
 
     (100.46061837 +

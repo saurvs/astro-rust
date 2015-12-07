@@ -32,11 +32,11 @@ pub fn comp_mean_anomaly(mean_annual_motion: f64, periastron_pass: f64, time: f6
 }
 
 /**
-Returns the radius vector
+Returns the radius vector of the binary star
 
-* ```semimajor_axis```: Semimajor axis
+* ```semimajor_axis```: Semimajor axis of the binary star
 * ```ecc_true_orb```: Eccentricity of true orbit
-* ```ecc_anomaly```: Eccentric anomaly
+* ```ecc_anomaly```: Eccentric anomaly of the binary star
 **/
 
 pub fn radius_vec(semimajor_axis: f64, ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
@@ -44,10 +44,10 @@ pub fn radius_vec(semimajor_axis: f64, ecc_true_orb: f64, ecc_anomaly: f64) -> f
 }
 
 /**
-Returns the true anomaly
+Returns the true anomaly of the binary star
 
 * ```ecc_true_orb```: Eccentricity of true orbit
-* ```ecc_anomaly```: Eccentric anomaly
+* ```ecc_anomaly```: Eccentric anomaly of the binary star
 **/
 
 pub fn true_anomaly(ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
@@ -55,10 +55,10 @@ pub fn true_anomaly(ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
 }
 
 /**
-Returns the apparent position angle
+Returns the apparent position angle of the binary star
 
 * ```asc_node_pos```: Position angle of the ascending node
-* ```true_anomaly```: True anomaly
+* ```true_anomaly```: True anomaly of the binary star
 * ```periastron_long```: Longitude of periastron
 * ```inc```: Inclination of the plane of true orbit to the plane at
              right angles to the line of sight
@@ -70,10 +70,10 @@ pub fn app_pos(asc_node_pos: f64, true_anomaly: f64, periastron_long: f64, inc: 
 }
 
 /**
-Returns the angular separation
+Returns the angular separation of the binary star
 
-* ```radius_vec```: Radius vector
-* ```true_anomaly```: True anomaly
+* ```radius_vec```: Radius vector of the binary star
+* ```true_anomaly```: True anomaly of the binary star
 * ```periastron_long```: Longitude of periastron
 * ```inc```: Inclination of the plane of true orbit to the plane at
              right angles to the line of sight
@@ -91,7 +91,7 @@ pub fn angular_sep(radius_vec: f64, true_anomaly: f64, periastron_long: f64, inc
 Returns the eccentricity of the apparent orbit
 
 * ```ecc_true_orb```: Eccentricity of true orbit
-* ```true_anomaly```: True anomaly
+* ```true_anomaly```: True anomaly of the binary star
 * ```inc```: Inclination of the plane of true orbit to the plane at
              right angles to the line of sight
 * ```periastron_long```: Longitude of periastron
