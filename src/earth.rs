@@ -296,9 +296,9 @@ pub fn equation_of_time(t: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f6
 #[macro_export]
 macro_rules! equation_of_time {
     ($x: expr, $y: expr) => {{
-            let (nut_long, nut_obl) = earth::nutation($x);
-            println!("{}",time::julian_century($x));
+            let (nut_long, nut_obl) = earth::nutation(2446895.5);
             let true_obl = earth::mean_obliquity($x) + nut_obl;
+            println!("{}", nut_long.to_degrees());
             earth::equation_of_time(time::julian_century($x), $y, nut_long, true_obl)
     }};
 }
