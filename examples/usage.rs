@@ -34,7 +34,4 @@ fn main() {
     println!("{}", coordinates::ecl_long(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
     println!("{}", coordinates::ecl_lat(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
 
-    println!("{}", earth::equation_of_time(-0.0072183436, 198.378178f64.to_radians(), 0.004419f64.to_radians(), 23.4401442f64.to_radians()).to_degrees());
-    let x = equation_of_time!(2448908.5, 198.378178f64.to_radians());
-    println!("{}", x.to_degrees());
 }
