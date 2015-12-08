@@ -275,7 +275,6 @@ Returns the equation of time (in radians)
 * ```sun_asc```: Right ascension of the Sun (in radians)
 * ```nut_log```: Nutation correction for longitude (in radians)
 * ```tru_obl```: *True* obliquity of the ecliptic (in radians)
-                 (*mean* obliquity + nutation corection for obliquity)
 **/
 
 pub fn equation_of_time(t: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
@@ -287,7 +286,7 @@ pub fn equation_of_time(t: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f6
             t * (1.0/15300.0 +
             t * (1.0/2000000.0)
             ))))                 );
-            
+
     (L - 0.0057183 -
      sun_asc.to_degrees() +
      nut_long.to_degrees()*tru_obl.cos()
