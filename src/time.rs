@@ -57,7 +57,7 @@ pub fn decimal_day(day: usual_day) -> f64 {
 /**
 Returns time between the epoch J2000.0 and a given Julian Emphemeris Day, measured in Julian centuries
 
-* ```jed```: Julian Emphemeris Day
+* ```jed```: Julian Emphemeris day
 **/
 pub fn julian_century(jed: f64) -> f64 {
     (jed - 2451545.0) / 36525.0
