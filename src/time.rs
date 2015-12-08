@@ -60,7 +60,7 @@ Returns time between the epoch J2000.0 and a given Julian Emphemeris Day, measur
 * ```jed```: Julian Emphemeris Day
 **/
 pub fn julian_century(jed: f64) -> f64 {
-    (jed - 2451545.0) / 36525.0
+    (jed - 2451545.0) / 365250.0
 }
 
 /**
