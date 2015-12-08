@@ -265,3 +265,31 @@ pub fn mean_obliquity(jed: f64) -> (f64) {
     u * angle::pure_degrees(23.0, 26.0, 2.45)
     )))))))))).to_radians()
 }
+
+/**
+Returns the equation of time (in radians)
+
+# Arguments
+
+* ```t```: Time in Julian centuries
+* ```sun_asc```: Right ascension of the Sun (in radians)
+* ```nut_log```: Nutation correction for longitude (in radians)
+* ```tru_obl```: *True* obliquity of the ecliptic (in radians)
+                 (*mean* obliquity + nutation corection for obliquity)
+**/
+
+pub fn equation_of_time(t: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
+    let L = angle::limited_to_360(
+            280.4664567 +
+            t * (360007.6982779 +
+            t * (0.030328 +
+            t * (1.0/49931.0 -
+            t * (1.0/15300.0 +
+            t * (1.0/2000000.0)
+            ))))                 );
+    println!("{}", L);
+    (L - 0.0057183 -
+     sun_asc.to_degrees() +
+     nut_long.to_degrees()*tru_obl.cos()
+    ).to_radians()
+}

@@ -33,9 +33,5 @@ fn main() {
     println!("{}", coordinates::ecl_long(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
     println!("{}", coordinates::ecl_lat(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
 
-    let e = 23.44_f64.to_radians();
-    let phi = 51_f64.to_radians();
-    let theta = 75_f64.to_radians();
-    let a = parallactic::angle_between_ecl_and_horizon(e, phi, theta);
-    println!("{}", a.to_degrees());
+    println!("{}", earth::equation_of_time(-0.0072183436, 198.378178f64.to_radians(), 0.004419f64.to_radians(), 23.4401442f64.to_radians()).to_degrees());
 }
