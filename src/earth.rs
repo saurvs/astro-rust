@@ -246,7 +246,7 @@ and add it to the *mean* obliquity.
 
 # Arguments
 
-```julian_ephemeris_day```: Time in Julian Ephemeris Days
+```julian_ephemeris_day```: Time in Julian Ephemeris days
 **/
 
 pub fn mean_obliquity(jed: f64) -> (f64) {
@@ -271,13 +271,14 @@ Returns the equation of time (in radians)
 
 # Arguments
 
-* ```t```: Time in Julian centuries
+* ```jed```: Time in Julian Ephemeris days
 * ```sun_asc```: Right ascension of the Sun (in radians)
 * ```nut_log```: Nutation correction for longitude (in radians)
 * ```tru_obl```: *True* obliquity of the ecliptic (in radians)
 **/
 
-pub fn equation_of_time(t: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
+pub fn equation_of_time(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
+    let t = time::julian_century(jed) / 10.0;
     let L = angle::limited_to_360(
             280.4664567 +
             t * (360007.6982779 +
@@ -291,14 +292,4 @@ pub fn equation_of_time(t: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f6
      sun_asc.to_degrees() +
      nut_long.to_degrees()*tru_obl.cos()
     ).to_radians()
-}
-
-#[macro_export]
-macro_rules! equation_of_time {
-    ($x: expr, $y: expr) => {{
-            let (nut_long, nut_obl) = earth::nutation(2446895.5);
-            let true_obl = earth::mean_obliquity($x) + nut_obl;
-            println!("{}", nut_long.to_degrees());
-            earth::equation_of_time(time::julian_century($x), $y, nut_long, true_obl)
-    }};
 }
