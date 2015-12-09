@@ -262,7 +262,7 @@ pub fn mean_obliquity(jed: f64) -> (f64) {
     u * (angle::pure_degrees(0.0, 0.0, 7.12) -
     u * (angle::pure_degrees(0.0, 0.0, 27.87) +
     u * (angle::pure_degrees(0.0, 0.0, 5.79) +
-    u * angle::pure_degrees(23.0, 26.0, 2.45)
+    u * angle::pure_degrees(0.0, 0.0, 2.45)
     )))))))))).to_radians()
 }
 
