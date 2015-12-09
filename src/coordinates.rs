@@ -34,7 +34,7 @@ Returns hour angle from sidereal time at Greenwhich
 * ```obv_long```: Observer's longitude (in radians)
 * ```right_asc```: Right ascension (in radians)
 **/
-pub fn hour_angle_from_greenwhich_sidereal(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
+pub fn hour_angle_from_greenwhich_sid(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
     green_sid - obv_long - right_asc
 }
 
@@ -43,11 +43,11 @@ Returns hour angle from local sidereal time
 
 # Arguments
 
-* ```local_sid```: Local sidereal time
+* ```loc_sid```: Local sidereal time
 * ```right_asc```: Right ascension (in radians)
 **/
-pub fn hour_angle_from_local_sidereal(local_sid: f64, right_asc: f64) -> f64 {
-    local_sid - right_asc
+pub fn hour_angle_from_loc_sid(loc_sid: f64, right_asc: f64) -> f64 {
+    loc_sid - right_asc
 }
 
 /**
@@ -91,7 +91,7 @@ Returns right ascension (in radians) from ecliptical coordinates
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. (in radians)
 **/
-pub fn right_as_from_ecl(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
+pub fn right_asc_from_eclp(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     ((ecl_long.sin() * oblq_ecl.cos() - ecl_lat.tan() * oblq_ecl.sin())).atan2(ecl_long.cos())
 }
 
@@ -106,7 +106,7 @@ Returns declination (in radians) from ecliptical coordinates
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. (in radians)
 **/
-pub fn dec_from_ecl(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
+pub fn dec_from_eclp(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     (ecl_lat.sin() * oblq_ecl.cos() - ecl_lat.cos() * oblq_ecl.sin() * ecl_long.sin()).asin()
 }
 
