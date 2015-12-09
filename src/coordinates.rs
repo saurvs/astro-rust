@@ -1,83 +1,112 @@
-// struct for representing a point on the surface of the earth using
-// latitude and longitude (in radians)
+/// Represents a point on Earth's surface
 pub struct surf_point {
+    /// Latitude
     pub lat: f64,
+    /// Longitude
     pub long: f64,
 }
 
-/*
-
-    A struct for representing a point on the celestial sphere using
-    the equatorial coordinate system.
-    -----------------------------------------------------------------
-        asc: Right ascension
-        dec: Declination
-
-*/
-
+/// Represents a point on the celestial sphere, using the equatorial
+/// coordinate system
 pub struct celes_point {
+    /// Right ascension
     pub asc: f64,
+    /// Declination
     pub dec: f64,
 }
 
-/*
-
-    Returns the obliquity of the ecliptic for the 2000 epoch.
-    -----------------------------------------------------------------
-
-*/
-
+/// Returns the obliquity of the ecliptic for the epoch J2000.0
 pub fn oblq_ecl_2000() -> f64 {
     23.4392911_f64.to_radians()
 }
 
-/*
-
-    Returns the obliquity of the ecliptic for the 1950 epoch.
-    -----------------------------------------------------------------
-
-*/
-
+/// Returns the obliquity of the ecliptic for the epoch J1950.0
 pub fn oblq_ecl_1950() -> f64 {
     23.4457889_f64.to_radians()
 }
 
-/*
+/**
+Returns hour angle from sidereal time at Greenwhich
 
-    Returns the hour angle, given Greenwhich sidereal time, observer
-    longitude and right ascension.
-    -----------------------------------------------------------------
+# Arguments
 
-*/
-
+* ```green_sid```: Sidereal time at Greenwhich
+* ```obv_long```: Observer's longitude (in radians)
+* ```right_asc```: Right ascension (in radians)
+**/
 pub fn hour_angle_from_greenwhich_sidereal(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
     green_sid - obv_long - right_asc
 }
 
-// return the hour angle from local sidereal time and right ascension
+/**
+Returns hour angle from local sidereal time
+
+# Arguments
+
+* ```local_sid```: Local sidereal time
+* ```right_asc```: Right ascension (in radians)
+**/
 pub fn hour_angle_from_local_sidereal(local_sid: f64, right_asc: f64) -> f64 {
     local_sid - right_asc
 }
 
-//-------------------------------------------------------------------
-// equatorial coordinates to ecliptical coordinates
+/**
+Returns ecliptical longitude (in radians) from equatorial coordinates
 
-pub fn ecl_long(right_asc: f64, dec: f64, oblq_ecl: f64,) -> f64 {
+# Arguments
+
+* ```right_asc```: Right ascension (in radians)
+* ```dec```: Declination (in radians)
+* ```oblq_ecl```: If ```right_asc``` and ```dec``` are corrected for
+                  nutation, then *true* obliquity. If not, then
+                  *mean* obliquity. (in radians)
+**/
+pub fn ecl_long_from_equa(right_asc: f64, dec: f64, oblq_ecl: f64,) -> f64 {
     ((right_asc.sin() * oblq_ecl.cos() + dec.tan() * oblq_ecl.sin())).atan2(right_asc.cos())
 }
 
-pub fn ecl_lat(right_asc: f64, dec: f64, oblq_ecl: f64) -> f64 {
+/**
+Returns ecliptical latitude (in radians) from equatorial coordinates
+
+# Arguments
+
+* ```right_asc```: Right ascension (in radians)
+* ```dec```: Declination (in radians)
+* ```oblq_ecl```: If ```right_asc``` and ```dec``` are corrected for
+                  nutation, then *true* obliquity. If not, then
+                  *mean* obliquity. (in radians)
+**/
+pub fn ecl_lat_from_equa(right_asc: f64, dec: f64, oblq_ecl: f64) -> f64 {
     (dec.sin() * oblq_ecl.cos() - dec.cos() * oblq_ecl.sin() * right_asc.sin()).asin()
 }
 
-//-------------------------------------------------------------------
-// ecliptic coordinates to equatorial coordinates
+/**
+Returns right ascension (in radians) from ecliptical coordinates
 
-pub fn right_asc(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
+# Arguments
+
+* ```ecl_long```: Ecliptical longitude (in radians)
+* ```ecl_lat```: Ecliptical latitude (in radians)
+* ```oblq_ecl```: If ```ecl_long``` and ```ecl_lat``` are corrected for
+                  nutation, then *true* obliquity. If not, then
+                  *mean* obliquity. (in radians)
+**/
+pub fn right_as_from_ecl(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     ((ecl_long.sin() * oblq_ecl.cos() - ecl_lat.tan() * oblq_ecl.sin())).atan2(ecl_long.cos())
 }
 
-pub fn dec(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
+/**
+Returns declination (in radians) from ecliptical coordinates
+
+# Arguments
+
+* ```ecl_long```: Ecliptical longitude (in radians)
+* ```ecl_lat```: Ecliptical latitude (in radians)
+* ```oblq_ecl```: If ```ecl_long``` and ```ecl_lat``` are corrected for
+                  nutation, then *true* obliquity. If not, then
+                  *mean* obliquity. (in radians)
+**/
+pub fn dec_from_ecl(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     (ecl_lat.sin() * oblq_ecl.cos() - ecl_lat.cos() * oblq_ecl.sin() * ecl_long.sin()).asin()
 }
 
@@ -103,37 +132,57 @@ pub fn eq_dec(azimuth: f64, altitude: f64, obv_lat: f64) -> f64 {
     (obv_lat.sin() * altitude.sin() - obv_lat.cos() * azimuth.cos() * azimuth.cos()).asin()
 }
 
-//-------------------------------------------------------------------
-// equatorial coordinates to galactic coordinates
+/**
+Returns galactic longitude (in radians) from equatorial coordinates
 
-pub fn gal_long(right_asc: f64, dec: f64) -> f64 {
+# Arguments
 
-    let x = ((3.35539549 - right_asc).sin())
+* ```right_asc```: Right ascension (in radians)
+* ```dec```: Declination (in radians)
+**/
+pub fn gal_long_from_equa(right_asc: f64, dec: f64) -> f64 {
+    5.28835 - ((3.35539549 - right_asc).sin())
             .atan2(((3.35539549 - right_asc).cos() * (0.4782202_f64).sin() -
                      dec.tan() * (0.4782202_f64).cos()
-                   ));
-
-    5.28835 - x
+                   ))
 }
 
-pub fn gal_lat(right_asc: f64, dec: f64) -> f64 {
+/**
+Returns galactic latitude (in radians) from equatorial coordinates
+
+# Arguments
+
+* ```right_asc```: Right ascension (in radians)
+* ```dec```: Declination (in radians)
+**/
+pub fn gal_lat_from_equa(right_asc: f64, dec: f64) -> f64 {
     dec.sin() * (0.4782202_f64).sin() +
     dec.cos() * (0.4782202_f64).cos() * (3.35539549 - right_asc).asin()
 }
 
-//-------------------------------------------------------------------
-// galactic coordinates to equatorial coordinates
+/**
+Returns right ascension (in radians) from galactic coordinates
 
+# Arguments
+
+* ```gal_long```: Galactic longitude (in radians)
+* ```gal_lat```: Galactic latitude (in radians)
+**/
 pub fn right_asc_from_gal(gal_long: f64, gal_lat: f64) -> f64 {
-
-    let y = ((gal_long - 2.14675).sin())
+    0.21380283 + ((gal_long - 2.14675).sin())
             .atan2(((gal_long - 2.14675).cos() * (0.4782202_f64).sin() -
                      gal_lat.tan() * (0.4782202_f64).cos()
-                   ));
-
-    0.21380283 + y
+                   ))
 }
 
+/**
+Returns declination (in radians) from galactic coordinates
+
+# Arguments
+
+* ```gal_long```: Galactic longitude (in radians)
+* ```gal_lat```: Galactic latitude (in radians)
+**/
 pub fn dec_from_gal(gal_long: f64, gal_lat: f64) -> f64 {
     gal_lat.sin() * (0.4782202_f64).sin() +
     gal_lat.cos() * (0.4782202_f64).cos() * (gal_long - 2.14675).asin()
