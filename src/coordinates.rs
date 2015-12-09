@@ -16,12 +16,12 @@ pub struct celes_point {
 }
 
 /// Returns the obliquity of the ecliptic for the epoch J2000.0
-pub fn oblq_ecl_2000() -> f64 {
+pub fn oblq_2000() -> f64 {
     23.4392911_f64.to_radians()
 }
 
 /// Returns the obliquity of the ecliptic for the epoch J1950.0
-pub fn oblq_ecl_1950() -> f64 {
+pub fn oblq_1950() -> f64 {
     23.4457889_f64.to_radians()
 }
 

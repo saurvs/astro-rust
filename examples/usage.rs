@@ -31,7 +31,7 @@ fn main() {
     println!("{}m", earth::geodesic_dist(p1, p2));
 
     /* Prints the ecliptic coordinates of the star Pollux given its equatorial coordinates */
-    println!("{}", coordinates::ecl_long(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
-    println!("{}", coordinates::ecl_lat(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_ecl_2000()).to_degrees());
+    println!("{}", coordinates::ecl_long_from_equa(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_2000()).to_degrees());
+    println!("{}", coordinates::ecl_lat_from_equa(116.328942_f64.to_radians(), 28.026183_f64.to_radians(), coordinates::oblq_2000()).to_degrees());
 
 }
