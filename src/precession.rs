@@ -17,7 +17,6 @@ different equinox
 * ```jd_2```: Julian day corresponding to the new epoch
 * ```asc_old```: Right ascension for the old epoch (in radians)
 * ```dec_old```: Declination for the old epoch (in radians)
-
 **/
 
 pub fn change_epoch_for_equa(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -> (f64, f64) {
