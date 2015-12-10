@@ -14,6 +14,7 @@ Algorithms written in [Rust](https://www.rust-lang.org/), for finding/calculatin
 * Atmospheric refraction corrections
 * Nutation corrections
 * Obliquity of the ecliptic
+* Equation of time
 * Geocentric rectangular coordinates of the sun
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
 * Semidiameters of solar system bodies
