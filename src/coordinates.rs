@@ -61,7 +61,7 @@ Returns ecliptical longitude (in radians) from equatorial coordinates
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. (in radians)
 **/
-pub fn eclp_long_from_equa(right_asc: f64, dec: f64, oblq_ecl: f64,) -> f64 {
+pub fn eclip_long_from_equa(right_asc: f64, dec: f64, oblq_ecl: f64,) -> f64 {
     ((right_asc.sin() * oblq_ecl.cos() + dec.tan() * oblq_ecl.sin())).atan2(right_asc.cos())
 }
 
@@ -76,7 +76,7 @@ Returns ecliptical latitude (in radians) from equatorial coordinates
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. (in radians)
 **/
-pub fn eclp_lat_from_equa(right_asc: f64, dec: f64, oblq_ecl: f64) -> f64 {
+pub fn eclip_lat_from_equa(right_asc: f64, dec: f64, oblq_ecl: f64) -> f64 {
     (dec.sin() * oblq_ecl.cos() - dec.cos() * oblq_ecl.sin() * right_asc.sin()).asin()
 }
 
