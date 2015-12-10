@@ -5,7 +5,7 @@ mod util;
 
 pub mod star;
 pub mod binary_star;
-pub mod elliptic_motion;
+
 pub mod parallactic;
 pub mod refraction;
 
