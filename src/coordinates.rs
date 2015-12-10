@@ -91,7 +91,7 @@ Returns right ascension (in radians) from ecliptical coordinates
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. (in radians)
 **/
-pub fn right_asc_from_eclp(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
+pub fn right_asc_from_eclip(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     ((ecl_long.sin() * oblq_ecl.cos() - ecl_lat.tan() * oblq_ecl.sin())).atan2(ecl_long.cos())
 }
 
@@ -106,7 +106,7 @@ Returns declination (in radians) from ecliptical coordinates
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. (in radians)
 **/
-pub fn dec_from_eclp(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
+pub fn dec_from_eclip(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
     (ecl_lat.sin() * oblq_ecl.cos() - ecl_lat.cos() * oblq_ecl.sin() * ecl_long.sin()).asin()
 }
 
