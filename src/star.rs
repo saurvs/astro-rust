@@ -101,287 +101,250 @@ pub fn aberration(asc: f64, dec: f64, jed: f64) -> (f64, f64) {
 
     // ROW 1
     A = l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += (-1719914.0 - 2.0*t)*sinA - 25.0*cosA;
     y += (25.0 - 13.0*t)*sinA + (1578089.0 + 156.0*t)*cosA;
     z += (10.0 + 32.0*t)*sinA + (684185.0 - 358.0*t)*cosA;
 
     // ROW 2
     A = 2.0 * l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += (6434.0 + 141.0*t)*sinA + (28007.0 - 107.0*t)*cosA;
     y += (25697.0 - 95.0*t)*sinA + (-5904.0 - 130.0*t)*cosA;
     z += (11141.0 - 48.0*t)*sinA + (-2559.0 - 55.0*t)*cosA;
 
     // ROW 3
     A = l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 715.0*sinA;
     y += 6.0*sinA - 657.0*cosA;
     z += -15.0*sinA - 282.0*cosA;
 
     // ROW 4
     A = l1;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 715.0*sinA;
     y += -656.0*cosA;
     z += -285.0*cosA;
-
     // ROW 5
     A = 3.0 * l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += (486.0 - 5.0*t)*sinA + (-236.0 - 4.0*t)*cosA;
     y += (-216.0 - 4.0*t)*sinA + (-446.0 + 5.0*t)*cosA;
     z += -94.0*sinA - 193.0*cosA;
 
     // ROW 6
     A = l6;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 159.0*sinA;
     y += 2.0*sinA - 147.0*cosA;
     z += -6.0*sinA - 61.0*cosA;
 
     // ROW 7
     A = f;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     y += 26.0*cosA;
     z += -59.0*cosA;
 
     // ROW 8
     A = l1 + m1;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 39.0*sinA;
     y += -36.0*cosA;
     z += -16.0*cosA;
 
     // ROW 9
     A = 2.0 * l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 33.0*sinA - 10.0*cosA;
     y += -9.0*sinA - 30.0*cosA;
     z += -5.0*sinA - 13.0*cosA;
 
     // ROW 10
     A = 2.0*l3 - l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 31.0*sinA + cosA;
     y += sinA - 28.0*cosA;
     z += -12.0*cosA;
 
     // ROW 11
     A = 3.0*l3 - 8.0*l4 + 3.0*l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 8.0*sinA - 28.0*cosA;
     y += 25.0*sinA + 8.0*cosA;
     z += 11.0*sinA + 3.0*cosA;
 
     // ROW 12
     A = 5.0*l3 - 8.0*l4 + 3.0*l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 8.0*sinA - 28.0*cosA;
     y += -25.0*sinA - 8.0*cosA;
     z += -11.0*sinA - 3.0*cosA;
 
     // ROW 13
     A = 2.0*l2 - l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 21.0*sinA;
     y += -19.0*cosA;
     z += -8.0*cosA;
 
     // ROW 14
     A = l2;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -19.0*sinA;
     y += 17.0*cosA;
     z += 8.0*cosA;
 
     // ROW 15
     A = l7;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 17.0*sinA;
     y += -16.0*cosA;
     z += -7.0*cosA;
 
     // ROW 16
     A = l3 - 2.0*l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 16.0*sinA;
     y += 15.0*cosA;
     z += sinA + 7.0*cosA;
 
     // ROW 17
     A = l8;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 16.0*sinA;
     y += sinA - 15.0*cosA;
     z += -3.0*sinA - 6.0*cosA;
 
     // ROW 18
     A = l3 + l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 11.0*sinA - cosA;
     y += -1.0*sinA - 10.0*cosA;
     z += -1.0*sinA - 5.0*cosA;
 
     // ROW 19
     A = 2.0 * (l2 - l3);
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -11.0*cosA;
     y += -10.0*sinA;
     z += -4.0*sinA;
 
     // ROW 20
     A = l3 - l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -11.0*sinA - 2.0*cosA;
     y += -2.0*sinA + 9.0*cosA;
     z += -1.0*sinA + 4.0*cosA;
 
     // ROW 21
     A = 4.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -7.0*sinA - 8.0*cosA;
     y += -8.0*sinA + 6.0*cosA;
     z += 3.0 * (cosA - sinA);
 
     // ROW 22
     A = 3.0*l3 - 2.0*l5;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -10.0*sinA;
     y += 9.0*cosA;
     z += 4.0*cosA;
 
     // ROW 23
     A = l2 - 2.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -9.0*sinA;
     y += -9.0*cosA;
     z += -4.0*cosA;
 
     // ROW 24
     A = 2.0*l2 - 3.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -9.0*sinA;
     y += -8.0*cosA;
     z += -4.0*cosA;
 
     // ROW 25
     A = 2.0*l6;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -9.0*cosA;
     y += -8.0*sinA;
     z += -3.0*sinA;
 
     // ROW 26
     A = 2.0*l2 - 4.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -9.0*cosA;
     y += 8.0*sinA;
     z += 3.0*sinA;
 
     // ROW 27
     A = 3.0*l3 - 2.0*l4;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 8.0*sinA;
     y += -8.0*cosA;
     z += -3.0*cosA;
 
     // ROW 28
     A = l1 + 2.0*d - m1;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 8.0*sinA;
     y += -7.0*cosA;
     z += -3.0*cosA;
 
     // ROW 29
     A = 8.0*l2 - 12.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -4.0*sinA - 7.0*cosA;
     y += -6.0*sinA + 4.0*cosA;
     z += -3.0*sinA + 2.0*cosA;
 
     // ROW 30
     A = 8.0*l2 - 14.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -4.0*sinA - 7.0*cosA;
     y += 6.0*sinA - 4.0*cosA;
     z += 3.0*sinA - 2.0*cosA;
 
     // ROW 31
     A = 2.0*l4;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -6.0*sinA - 5.0*cosA;
     y += -4.0*sinA + 5.0*cosA;
     z += 2.0 * (cosA - sinA);
 
     // ROW 32
     A = 3.0*l2 - 4.0*l3;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -1.0 * (sinA + cosA);
     y += -2.0*sinA - 7.0*cosA;
     z += sinA - 4.0*cosA;
 
     // ROW 33
     A = 2.0 * (l3 - l5);
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 4.0*sinA - 6.0*cosA;
     y += -5.0*sinA - 4.0*cosA;
     z += -2.0 * (sinA + cosA);
 
     // ROW 34
     A = 3.0 * (l2 - l3);
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += -7.0*cosA;
     y += -6.0*sinA;
     z += -3.0*sinA;
 
     // ROW 35
     A = 2.0 * (l3 - l4);
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 5.0 * (sinA - cosA);
     y += -4.0*sinA - 5.0*cosA;
     z += -2.0 * (sinA + cosA);
 
     // ROW 36
     A = l1 - 2.0*d;
-    sinA = A.sin();
-    cosA = A.cos();
+    sinA = A.sin(); cosA = A.cos();
     x += 5.0*sinA;
     y += -5.0*cosA;
     z += -2.0*cosA;
