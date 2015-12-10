@@ -126,6 +126,7 @@ pub fn aberration(asc: f64, dec: f64, jed: f64) -> (f64, f64) {
     x += 715.0*sinA;
     y += -656.0*cosA;
     z += -285.0*cosA;
+    
     // ROW 5
     A = 3.0 * l3;
     sinA = A.sin(); cosA = A.cos();
