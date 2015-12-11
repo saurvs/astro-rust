@@ -52,3 +52,56 @@ pub fn change_epoch_for_equa(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -
 
     (A.atan2(B) + b, C.asin())
 }
+
+/**
+Returns the stellar ecliptical coordinates for a different equinox
+
+# Return variables
+
+Returns the ecliptical coordinates (in radians) of a star for a
+different equinox
+
+```change_epoch_for_eclip() -> (new_longitude, new_latitude)```
+
+# Arguments
+
+* ```jd_1```: Julian day corresponding to the old epoch
+* ```jd_2```: Julian day corresponding to the new epoch
+* ```long_old```: Longitude for the old epoch (in radians)
+* ```lat_old```: Latitude for the old epoch (in radians)
+**/
+
+pub fn change_epoch_for_eclip(jd_1: f64, jd_2: f64, long_old: f64, lat_old: f64) -> (f64, f64) {
+    let T = time::julian_century(jd_1);
+    let t = (jd_2 - jd_1) / 36525.0;
+
+    let x = T * angle::pure_degrees(0.0, 0.0, 0.000598);
+    let a = (t * (angle::pure_degrees(0.0, 0.0, 47.0029) -
+                   T * (angle::pure_degrees(0.0, 0.0, 0.06603) - x) +
+                  t * ((angle::pure_degrees(0.0, 0.0, -0.03302) + x) +
+                       t * angle::pure_degrees(0.0, 0.0, 0.00006)))).to_radians();
+
+    let b = (174.876384 + T * (angle::pure_degrees(0.0, 0.0, 3289.4789) +
+                              T * angle::pure_degrees(0.0, 0.0, 0.60622)) -
+             t * ((angle::pure_degrees(0.0, 0.0, 869.8089) +
+                   T * angle::pure_degrees(0.0, 0.0, 0.50491)) -
+                  t * angle::pure_degrees(0.0, 0.0, 0.03536))).to_radians();
+
+    let y = T * angle::pure_degrees(0.0, 0.0, 0.000042);
+    let c = (t * (angle::pure_degrees(0.0, 0.0, 5029.0966) +
+                  T * (angle::pure_degrees(0.0, 0.0, 2.22226) - y) +
+                 t * ((angle::pure_degrees(0.0, 0.0, 1.11113) - y) -
+                      t * angle::pure_degrees(0.0, 0.0, 0.000006)))).to_radians();
+
+    let sin_lat_old = lat_old.sin();
+    let cos_lat_old = lat_old.cos();
+    let sin_b_minus_long_old = (b - long_old).sin();
+    let cos_a = a.cos();
+    let sin_a = a.sin();
+
+    let A = cos_a*cos_lat_old*sin_b_minus_long_old - sin_a*sin_lat_old;
+    let B = cos_lat_old*(b - long_old).cos();
+    let C = cos_a*sin_lat_old + sin_a*cos_lat_old*(b - long_old).sin();
+
+    (c + b - A.atan2(B), C.asin())
+}
