@@ -13,6 +13,7 @@ Algorithms written in [Rust](https://www.rust-lang.org/), for finding/calculatin
 * Geodesics on Earth
 * Atmospheric refraction corrections
 * Nutation corrections
+* Effects of Precession
 * Obliquity of the ecliptic
 * Equation of time
 * Geocentric rectangular coordinates of the sun
