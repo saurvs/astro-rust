@@ -18,7 +18,6 @@ different equinox
 * ```asc_old```: Right ascension for the old epoch (in radians)
 * ```dec_old```: Declination for the old epoch (in radians)
 **/
-
 pub fn change_epoch_for_equa(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -> (f64, f64) {
     let T = time::julian_century(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
@@ -70,7 +69,6 @@ different equinox
 * ```long_old```: Longitude for the old epoch (in radians)
 * ```lat_old```: Latitude for the old epoch (in radians)
 **/
-
 pub fn change_epoch_for_eclip(jd_1: f64, jd_2: f64, long_old: f64, lat_old: f64) -> (f64, f64) {
     let T = time::julian_century(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
