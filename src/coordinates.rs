@@ -8,7 +8,7 @@ pub struct surf_point {
 
 /// Represents a point on the celestial sphere, using the equatorial
 /// coordinate system
-pub struct celes_point {
+pub struct equa_point {
     /// Right ascension
     pub asc: f64,
     /// Declination
