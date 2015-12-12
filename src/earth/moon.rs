@@ -1,6 +1,15 @@
 use angle;
 use coordinates;
 
+pub fn bright_limb_pos_angle(sun_equa_point: coordinates::equa_point,
+                             moon_equa_point: coordinates::equa_point) -> f64 {
+    let a = sun_equa_point.dec.cos();
+    let n = a * (sun_equa_point.asc - moon_equa_point.asc).cos();
+    let d = sun_equa_point.dec.sin()*moon_equa_point.dec.cos() -
+            a*moon_equa_point.dec.sin()*(sun_equa_point.asc - moon_equa_point.asc).cos();
+    n.atan2(d)
+}
+
 /**
 Returns the illuminated fraction of the moon from equatorial coordinates
 
