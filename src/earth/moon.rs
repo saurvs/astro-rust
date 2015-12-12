@@ -1,6 +1,18 @@
 use angle;
 use coordinates;
 
+/**
+Returns the illuminated fraction of the moon from equatorial coordinates
+
+# Arguments
+
+* ```sun_equa_point```: Equatorial coordinate of the Sun (in radians)
+* ```moon_equa_point```: Equatorial coordinate of the Moon (in radians)
+* ```earth_moon_dist```: Distance between the Earth and it's Moon
+                         (in any unit, but same as that of ```earth_sun_dist```)
+* ```earth_sun_dist```: Distance between the Earth and the Sun
+                        (in any unit, but same as that of ```earth_moon_dist```)
+**/
 pub fn illuminated_fraction_equa(sun_equa_point: coordinates::equa_point,
                                  moon_equa_point: coordinates::equa_point,
                                  earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
@@ -8,6 +20,19 @@ pub fn illuminated_fraction_equa(sun_equa_point: coordinates::equa_point,
                          earth_moon_dist, earth_sun_dist)
 }
 
+/**
+Returns the illuminated fraction of the moon from eclipctical coordinates
+
+# Arguments
+
+* ```moon_long```: Eclipctical longitude of the Moon (in radians)
+* ```moon_lat```: Eclipctical latitude of the Moon (in radians)
+* ```sun_long```: Eclipctical longitude of the Sun (in radians)
+* ```earth_moon_dist```: Distance between the Earth and it's Moon
+                         (in any unit, but same as that of ```earth_sun_dist```)
+* ```earth_sun_dist```: Distance between the Earth and the Sun
+                        (in any unit, but same as that of ```earth_moon_dist```)
+**/
 pub fn illuminated_fraction_eclip(moon_long: f64, moon_lat: f64, sun_long: f64,
                                   earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
     illuminated_fraction((moon_lat.cos()*(moon_long - sun_long).cos()).acos(),
