@@ -245,7 +245,6 @@ Returns the equation of time (in radians)
 * ```nut_log```: Nutation correction for longitude (in radians)
 * ```tru_obl```: *True* obliquity of the ecliptic (in radians)
 **/
-
 pub fn equation_of_time(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
     let t = time::julian_century(jed) / 10.0;
     let L = angle::limited_to_360(
