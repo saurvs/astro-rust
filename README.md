@@ -1,10 +1,10 @@
 # Astro Rust (work in progress)
 
-[![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/qpid/rusty-astronomy/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/qpid/astro-rust.svg)](https://travis-ci.org/qpid/rusty-astronomy)
+[![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/qpid/astro-rust.svg)](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)
 
 Algorithms written in [Rust](https://www.rust-lang.org/), for finding/calculating/estimating things that are of interest in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
 
-[API Documentation](https://qpid.github.io/astro-rust/)
+[API Documentation](https://saurvs.github.io/astro-rust/)
 
 ## Available things
 * Pluto's position
