@@ -22,7 +22,7 @@ Algorithms for finding/calculating/estimating interesting things in [astronomy](
 * Elliptic motion
 * Stellar magnitude calculations
 * Binary star calculations
-* Apparent position of celestial bodies from Earth
+* Apparent positions of celestial bodies from Earth
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
