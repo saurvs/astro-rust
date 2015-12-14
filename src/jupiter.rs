@@ -1,23 +1,23 @@
 use angle;
 
 /**
-Returns Jupiter's equatorial angular semidiameter
+Returns Jupiter's **equatorial semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance from Earth (in AU)
+* ```DistanceToEarth```: Jupiter's distance from Earth *(AU)*
 **/
-pub fn eq_semidiameter(distance_to_earth: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 98.44) / distance_to_earth
+pub fn equatorial_semidiameter(DistanceToEarth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 98.44) / DistanceToEarth
 }
 
 /**
-Returns Jupiter's polar angular semidiameter
+Returns Jupiter's **polar semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance from Earth (in AU)
+* ```DistanceToEarth```: Jupiter's distance from Earth *(AU)*
 **/
-pub fn pol_semidiameter(distance_to_earth: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 92.06) / distance_to_earth
+pub fn polar_semidiameter(DistanceToEarth: f64) -> f64 {
+    angle::pure_degrees(0.0, 0.0, 92.06) / DistanceToEarth
 }

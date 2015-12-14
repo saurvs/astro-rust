@@ -1,4 +1,4 @@
 [root]
-name = "astro_rust"
+name = "astro"
 version = "0.0.4"
 

@@ -2,23 +2,23 @@ use time;
 use angle;
 
 /**
-Returns the stellar equatorial coordinates for a different equinox
+Returns the stellar **equatorial coordinates** for a **different equinox**
 
 # Return variables
 
-Returns the equatorial coordinates (in radians) of a star for a
+Returns the equatorial coordinates *(radians)* of a star for a
 different equinox
 
-```change_epoch_for_equa() -> (new_right_ascension, new_declination)```
+```change_epoch_for_equatorial() -> (new_right_ascension, new_declination)```
 
 # Arguments
 
 * ```jd_1```: Julian day corresponding to the old epoch
 * ```jd_2```: Julian day corresponding to the new epoch
-* ```asc_old```: Right ascension for the old epoch (in radians)
-* ```dec_old```: Declination for the old epoch (in radians)
+* ```asc_old```: Right ascension for the old epoch *(radians)*
+* ```dec_old```: Declination for the old epoch *(radians)*
 **/
-pub fn change_epoch_for_equa(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -> (f64, f64) {
+pub fn change_epoch_for_equatorial(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -> (f64, f64) {
     let T = time::julian_century(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
 
@@ -53,11 +53,11 @@ pub fn change_epoch_for_equa(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -
 }
 
 /**
-Returns the stellar ecliptical coordinates for a different equinox
+Returns the stellar **ecliptical coordinates** for a **different equinox**
 
 # Return variables
 
-Returns the ecliptical coordinates (in radians) of a star for a
+Returns the ecliptical coordinates *(radians)* of a star for a
 different equinox
 
 ```change_epoch_for_eclip() -> (new_longitude, new_latitude)```
@@ -66,8 +66,8 @@ different equinox
 
 * ```jd_1```: Julian day corresponding to the old epoch
 * ```jd_2```: Julian day corresponding to the new epoch
-* ```long_old```: Longitude for the old epoch (in radians)
-* ```lat_old```: Latitude for the old epoch (in radians)
+* ```long_old```: Longitude for the old epoch *(radians)*
+* ```lat_old```: Latitude for the old epoch *(radians)*
 **/
 pub fn change_epoch_for_eclip(jd_1: f64, jd_2: f64, long_old: f64, lat_old: f64) -> (f64, f64) {
     let T = time::julian_century(jd_1);

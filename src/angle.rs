@@ -1,21 +1,21 @@
 use coordinates;
 
 /**
-Returns the angular separation between two equatorial points
+Returns **angular separation** between two equatorial points
 
 # Arguments
 
-* ```p1```: Equatorial point 1 (in radians)
-* ```p2```: Equatorial point 2 (in radians)
+* ```p1```: Equatorial point 1 *(radians)*
+* ```p2```: Equatorial point 2 *(radians)*
 **/
-pub fn angular_separation(p1: coordinates::equa_point, p2: coordinates::equa_point) -> f64 {
+pub fn angular_sep(p1: coordinates::equator_point, p2: coordinates::equator_point) -> f64 {
     (p1.dec.sin() * p2.dec.sin() +
      p1.dec.cos() * p2.dec.cos() * (p1.asc - p2.asc).cos()
     ).cos()
 }
 
 /**
-Returns an angle expressed in degrees only
+Returns an angle expressed in **degrees only**
 
 # Arguments
 
@@ -32,13 +32,12 @@ pub fn pure_degrees(d: f64, mut m: f64, mut s: f64) -> f64 {
 }
 
 /**
-Returns the equivalent angle in the range 0 - 360 degrees
+Returns the equivalent angle in **[0, 360] degree range**
 
 # Arguments
 
-* ```angle```: Angle (in degrees)
+* ```angle```: Angle *(degrees)*
 **/
-
 pub fn limited_to_360(angle: f64) -> f64 {
     let n = (angle / 360.0) as i64;
     let mut limited_angle = angle - (360.0 * (n as f64));
@@ -59,7 +58,7 @@ for this library.
 
 * ```angle```: Angle (in degrees)
 **/
-pub fn small_angle(angle: f64) -> bool {
+fn small_angle(angle: f64) -> bool {
     if angle < 0.003 { return true; }
     false
 }

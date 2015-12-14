@@ -9,12 +9,12 @@ fn polar_unit_semidiameter() -> f64 {
 }
 
 /**
-Returns Saturn's polar angular semidiameter
+Returns Saturn's **polar semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Saturn's distance from Earth (in AU)
-* ```earth_lat```: Earth's Saturnicentric latitude (in radians)
+* ```distance_to_earth```: Saturn's distance from Earth *(AU)*
+* ```earth_lat```: Earth's Saturnicentric latitude *(radians)*
 **/
 pub fn pol_semidiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
     let a = equatorial_unit_semidiameter();
@@ -24,11 +24,11 @@ pub fn pol_semidiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
 }
 
 /**
-Returns Saturn's equatorial angular semidiameter
+Returns Saturn's **equatorial semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Saturn's distance from Earth (in AU)
+* ```distance_to_earth```: Saturn's distance from Earth *(AU)*
 **/
 pub fn eq_semidiameter(distance_to_earth: f64) -> f64 {
     equatorial_unit_semidiameter() / distance_to_earth

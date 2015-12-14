@@ -1,23 +1,23 @@
 use angle;
 
 /**
-Returns Pluto's equatorial angular semidiameter
+Returns Pluto's **equatorial semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Pluto's distance from Earth (in AU)
+* ```distance_to_earth```: Pluto's distance from Earth *(AU)*
 **/
 pub fn semidiameter(distance_to_earth: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 2.07) / distance_to_earth
 }
 
 /**
-Returns the heliocentric coordinates of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
+Returns the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
 # Return variables
 
-Returns the heliocentric longitude (in radians), heliocentric
-latitude (in radians) and heliocentric radius vector (in AU)
+Returns the heliocentric longitude *(radians)*, heliocentric
+latitude *(radians)* and heliocentric radius vector *(AU)*
 of the dwarf planet Pluto, with reference to the epoch J2000.0,
 at an instant of time.
 
@@ -25,10 +25,10 @@ at an instant of time.
 
 # Arguments
 
-```julian_centuries```: Time in Julian Centuries
+```julian_centuries```: Julian Century
 **/
 
-pub fn heliocen_coords(julian_centuries: f64) -> (f64, f64, f64) {
+pub fn heliocen_coord(julian_centuries: f64) -> (f64, f64, f64) {
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
 

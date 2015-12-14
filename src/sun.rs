@@ -1,18 +1,18 @@
 use angle;
 
 /**
-Returns the Sun's equatorial angular semidiameter
+Returns the Sun's **equatorial semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: The Sun's distance from the Earth (in AU)
+* ```distance_to_earth```: The Sun's distance from the Earth *(AU)*
 **/
 pub fn semidiameter(distance_to_earth: f64) -> f64 {
     angle::pure_degrees(0.0, 0.0, 959.63) / distance_to_earth
 }
 
 /**
-Returns rectangular geocentric equatorial coordinates of the Sun
+Returns **rectangular geocentric equatorial coordinates** of the Sun
 
 # Return variables
 
@@ -27,9 +27,9 @@ towards 90 degrees longitude
 
 # Arguments
 
-* ```sun_geo_long```: Sun's geometric longitude (in radians), *without* corrections for nutation and abberation
-* ```sun_geo_lat```: Sun's geometric latitude (in radians), *without* corrections for nutation and abberation
-* ```sun_rad_vec```: Sun's geometric radius vector (in AU)
+* ```sun_geo_long```: Sun's geometric longitude *(radians)*, *without* corrections for nutation and abberation
+* ```sun_geo_lat```: Sun's geometric latitude *(radians)*, *without* corrections for nutation and abberation
+* ```sun_rad_vec```: Sun's geometric radius vector *(AU)*
 * ```mean_obl```: *Mean* obliquity of Earth's ecliptic; not *true* obliquity
 
 **/
@@ -41,7 +41,7 @@ pub fn rect_geocen_coords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64,
     (x, y, z)
 }
 
-pub fn solar_disk_ephemeris(jde: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
+pub fn disk_ephemeris(jde: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
     let theta = (jde - 2398220.0) * (360.0 / 25.38);
     let I: f64 = 7.25;
     let K = 73.6667 + 1.3958333*((jde - 2396758.0) / 36525.0);

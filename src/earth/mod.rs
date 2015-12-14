@@ -5,7 +5,7 @@ use angle;
 use time;
 
 /**
-Returns the flattening factor of the Earth
+Returns the **flattening factor** of the Earth
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -14,17 +14,17 @@ pub fn flattening() -> f64 {
 }
 
 /**
-Returns the equatorial radius of the Earth (in meters)
+Returns the **equatorial radius** of the Earth *(meters)*
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
-pub fn eq_radius() -> f64 {
+pub fn equatorial_radius() -> f64 {
     polar_radius() / (1.0 - flattening())
 }
 
 /**
 
-Returns the polar radius of the Earth (in meters)
+Returns the **polar radius** of the Earth *(meters)*
 
 Calculated using [```flattening()```](./fn.flattening.html) and
 [```eq_radius()```](./fn.eq_radius.html)
@@ -34,16 +34,16 @@ pub fn polar_radius() -> f64 {
 }
 
 /**
-Returns the eccentricity of the Earth's meridian
+Returns the **eccentricity** of the Earth's **meridian**
 
 Calculated using [```flattening()```](./fn.flattening.html)
 **/
-pub fn ecc_mer() -> f64 {
+pub fn eccen_of_meridian() -> f64 {
     ((2.0 - flattening()) * flattening()).sqrt()
 }
 
 /**
-Returns the angular distance between two points on Earth's
+returns **angular distance** between two points on Earth's
 surface
 
 # Arguments
@@ -51,15 +51,15 @@ surface
 * ```p1```: Point 1
 * ```p2```: Point 2
 **/
-pub fn angular_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
+pub fn angular_dist(p1: coordinates::surface_point, p2: coordinates::surface_point) -> f64 {
     (p1.lat.sin() * p2.lat.sin() +
      p1.lat.cos() * p2.lat.cos() * (p1.long - p2.long).cos()
     ).acos()
 }
 
 /**
-Returns a low accuracy geodesic distance between two points on Earth's
-surface (in meters)
+returns a **low accuracy geodesic** between two points on the Earth's
+surface *(meters)*
 
 Assumes that the Earth is a sphere.
 
@@ -68,22 +68,20 @@ Assumes that the Earth is a sphere.
 * ```p1```: Point 1
 * ```p2```: Point 2
 **/
-
-pub fn geodesic_approx_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
+pub fn approx_geodesic(p1: coordinates::surface_point, p2: coordinates::surface_point) -> f64 {
     6371.0 * angular_dist(p1, p2)
 }
 
 /**
-Returns a high accuracy geodesic distance between two points on Earth's
-surface (in meters)
+returns a **high accuracy geodesic** between two points on the Earth's
+surface *(meters)*
 
 # Arguments
 
 * ```p1```: Point 1
 * ```p2```: Point 2
 **/
-
-pub fn geodesic_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -> f64 {
+pub fn geodesic(p1: coordinates::surface_point, p2: coordinates::surface_point) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
     let lam = (p1.long - p2.long) / 2.0;
@@ -93,7 +91,7 @@ pub fn geodesic_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -
             (f.sin() * lam.sin()).powi(2);
     let om = ((s / c).sqrt()).atan();
     let r = (s * c).sqrt() / om;
-    let d = 2.0 * om * eq_radius();
+    let d = 2.0 * om * equatorial_radius();
     let h1 = (3.0 * r - 1.0) / (2.0 * c);
     let h2 = (3.0 * r + 1.0) / (2.0 * s);
 
@@ -104,7 +102,7 @@ pub fn geodesic_dist(p1: coordinates::surf_point, p2: coordinates::surf_point) -
 }
 
 /**
-Returns two quantities that are used elsewhere in the library
+returns two quantities that are used elsewhere in the library
 
 ```rho``` here denotes the geocentric radius vector, and ```phi```
 here denotes the geocentric latitude, both of an observer on the
@@ -113,13 +111,12 @@ Earth's surface.
 # Arguments
 
 * ```height```: Observer's height above sea level (in meters)
-* ```geograph_lat```: Observer's geographical latitude (in radians)
+* ```geograph_lat```: Observer's geographical latitude *(radians)*
 **/
-
 pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
-    let u = (geograph_lat.tan() * polar_radius() / eq_radius()).atan();
-    let x = height / eq_radius();
-    let rho_sin_phi = (u.sin() * polar_radius() / eq_radius()) +
+    let u = (geograph_lat.tan() * polar_radius() / equatorial_radius()).atan();
+    let x = height / equatorial_radius();
+    let rho_sin_phi = (u.sin() * polar_radius() / equatorial_radius()) +
                       (geograph_lat.sin() * x);
     let rho_cos_phi = u.cos() + (geograph_lat.cos() * x);
 
@@ -127,22 +124,21 @@ pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
 }
 
 /**
-Returns the nutation correction (in radians) for longitude and obliquity
+returns **nutation correction** *(radians)* for longitude and obliquity
 
 # Return variables
 
-Returns the nutation correction (in radians), that needs to be added to
+Returns the nutation correction *(radians)*, that needs to be added to
 the longitude and the obliquity of the ecliptic to adjust for the
 Earth's nutation. Nutation does not affect latitudes.
 
-```nutation() -> (nutation_in_longitude, nutation_in_obliquity)```
+```NutationCorrection() -> (nutation_in_longitude, nutation_in_obliquity)```
 
 # Arguments
 
-```julian_ephemeris_day```: Time in Julian Ephemeris Days
+```julian_ephemeris_day```: Julian Ephemeris Days
 **/
-
-pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
+pub fn nutation_correction(julian_ephemeris_day: f64) -> (f64, f64) {
 
     struct terms(i8, i8, i8, i8, i8, f64, f64, f64, f64);
 
@@ -236,14 +232,14 @@ pub fn nutation(julian_ephemeris_day: f64) -> (f64, f64) {
 }
 
 /**
-Returns the equation of time (in radians)
+returns **equation of time** *(radians)*
 
 # Arguments
 
-* ```jed```: Time in Julian Ephemeris days
-* ```sun_asc```: Right ascension of the Sun (in radians)
-* ```nut_log```: Nutation correction for longitude (in radians)
-* ```tru_obl```: *True* obliquity of the ecliptic (in radians)
+* ```jed```: Julian Ephemeris day
+* ```sun_asc```: Right ascension of the Sun *(radians)*
+* ```nut_log```: Nutation correction for longitude *(radians)*
+* ```tru_obl```: *True* obliquity of the ecliptic *(radians)*
 **/
 pub fn equation_of_time(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
     let t = time::julian_century(jed) / 10.0;
@@ -265,7 +261,7 @@ pub fn equation_of_time(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> 
 #[macro_export]
 macro_rules! equation_of_time {
     ($x: expr, $y: expr) => {{
-            let (nut_long, nut_obl) = earth::nutation($x);
+            let (nut_long, nut_obl) = earth::NutationCorrection($x);
             let true_obl = earth::mean_obliquity($x) + nut_obl;
             earth::equation_of_time($x, $y, nut_long, true_obl)
     }};
