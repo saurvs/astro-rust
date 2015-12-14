@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-Algorithms written in [Rust](https://www.rust-lang.org/), for finding/calculating/estimating things that are of interest in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
+Algorithms for finding/calculating/estimating things that are of interest in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
 
 [API Documentation](https://saurvs.github.io/astro-rust/)
 
