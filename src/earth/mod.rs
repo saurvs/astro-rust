@@ -24,7 +24,7 @@ pub fn equatorial_radius() -> f64 {
 
 /**
 
-Returns the **polar radius** of the Earth *(meters)*
+Computes the **polar radius** of the Earth *(meters)*
 
 Calculated using [```flattening()```](./fn.flattening.html) and
 [```eq_radius()```](./fn.eq_radius.html)
@@ -34,7 +34,7 @@ pub fn polar_radius() -> f64 {
 }
 
 /**
-Returns the **eccentricity** of the Earth's **meridian**
+Computes the **eccentricity** of the Earth's **meridian**
 
 Calculated using [```flattening()```](./fn.flattening.html)
 **/
@@ -43,7 +43,7 @@ pub fn eccen_of_meridian() -> f64 {
 }
 
 /**
-Returns **angular distance** between two points on Earth's
+Computes **angular distance** between two points on Earth's
 surface
 
 # Arguments
@@ -58,7 +58,7 @@ pub fn angular_dist(p1: coordinates::surface_point, p2: coordinates::surface_poi
 }
 
 /**
-Returns a **low accuracy geodesic** between two points on the Earth's
+Computes a **low accuracy geodesic** between two points on the Earth's
 surface *(meters)*
 
 Assumes that the Earth is a sphere.
@@ -73,7 +73,7 @@ pub fn approx_geodesic(p1: coordinates::surface_point, p2: coordinates::surface_
 }
 
 /**
-Returns a **high accuracy geodesic** between two points on the Earth's
+Computes a **high accuracy geodesic** between two points on the Earth's
 surface *(meters)*
 
 # Arguments
@@ -102,7 +102,7 @@ pub fn geodesic(p1: coordinates::surface_point, p2: coordinates::surface_point) 
 }
 
 /**
-Returns two quantities that are used elsewhere in the library
+Computes two quantities that are used elsewhere in the library
 
 ```rho``` here denotes the geocentric radius vector, and ```phi```
 here denotes the geocentric latitude, both of an observer on the
@@ -124,13 +124,14 @@ pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
 }
 
 /**
-Returns **nutation correction** *(radians)* for longitude and obliquity
+Computes **nutation correction** *(radians)* for ecliptical longitude
+and obliquity
 
 # Return variables
 
-Returns the nutation correction *(radians)*, that needs to be added to
-the longitude and the obliquity of the ecliptic to adjust for the
-Earth's nutation. Nutation does not affect latitudes.
+Computes the nutation correction *(radians)*, that needs to be added to
+the ecliptical longitude and the obliquity of the ecliptic to adjust for
+the Earth's nutation. Nutation does *not* affect ecliptical latitude.
 
 ```NutationCorrection() -> (nutation_in_longitude, nutation_in_obliquity)```
 
@@ -232,7 +233,7 @@ pub fn nutation_correction(julian_ephemeris_day: f64) -> (f64, f64) {
 }
 
 /**
-Returns **equation of time** *(radians)*
+Computes **equation of time** *(radians)*
 
 # Arguments
 

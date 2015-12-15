@@ -1,7 +1,7 @@
 use coordinates;
 
 /**
-Returns **angular separation** between two equatorial points
+Computes **angular separation** between two equatorial points
 
 # Arguments
 
@@ -32,7 +32,7 @@ pub fn pure_degrees(d: f64, mut m: f64, mut s: f64) -> f64 {
 }
 
 /**
-Returns the equivalent angle in **[0, 360] degree range**
+Computes the equivalent angle in **[0, 360] degree range**
 
 # Arguments
 

@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns Pluto's **equatorial semidiameter**
+Computes Pluto's **equatorial semidiameter**
 
 # Arguments
 
@@ -12,11 +12,11 @@ pub fn semidiameter(distance_to_earth: f64) -> f64 {
 }
 
 /**
-Returns the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
+Computes the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
 # Return variables
 
-Returns the heliocentric longitude *(radians)*, heliocentric
+Computes the heliocentric longitude *(radians)*, heliocentric
 latitude *(radians)* and heliocentric radius vector *(AU)*
 of the dwarf planet Pluto, with reference to the epoch J2000.0,
 at an instant of time.

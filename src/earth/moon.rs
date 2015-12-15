@@ -11,7 +11,7 @@ pub fn bright_limb_pos_angle(sun_equa_point: coordinates::equator_point,
 }
 
 /**
-Returns the illuminated fraction of the moon from equatorial coordinates
+Computes the **illuminated fraction** of the moon from **equatorial** coordinates
 
 # Arguments
 
@@ -30,7 +30,7 @@ pub fn illuminated_fraction_equa(sun_equa_point: coordinates::equator_point,
 }
 
 /**
-Returns the illuminated fraction of the moon from eclipctical coordinates
+Computes the **illuminated fraction** of the moon from **eclipctical** coordinates
 
 # Arguments
 

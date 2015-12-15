@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns Mars's **equatorial semidiameter**
+Computes Mars's **equatorial semidiameter**
 
 # Arguments
 

@@ -2,11 +2,11 @@ use time;
 use angle;
 
 /**
-Returns the stellar **equatorial coordinates** for a **different equinox**
+Computes the stellar **equatorial coordinates** for a **different equinox**
 
 # Return variables
 
-Returns the equatorial coordinates *(radians)* of a star for a
+Computes the equatorial coordinates *(radians)* of a star for a
 different equinox
 
 ```change_epoch_for_equatorial() -> (new_right_ascension, new_declination)```
@@ -53,11 +53,11 @@ pub fn change_epoch_for_equatorial(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: 
 }
 
 /**
-Returns the stellar **ecliptical coordinates** for a **different equinox**
+Computes the stellar **ecliptical coordinates** for a **different equinox**
 
 # Return variables
 
-Returns the ecliptical coordinates *(radians)* of a star for a
+Computes the ecliptical coordinates *(radians)* of a star for a
 different equinox
 
 ```change_epoch_for_eclip() -> (new_longitude, new_latitude)```

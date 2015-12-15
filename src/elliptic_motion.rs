@@ -1,5 +1,5 @@
 /**
-Returns instantaneous **velocity** *(meters per second)* of a body in an
+Computes instantaneous **velocity** *(meters per second)* of a body in an
 unperturbed elliptic orbit
 
 # Arguments
@@ -12,7 +12,7 @@ pub fn velocity(dist_to_sun: f64, semimaj_axis:f64) -> f64 {
 }
 
 /**
-Returns **velocity** *(meters per second)* of a body at **perihelion**
+Computes **velocity** *(meters per second)* of a body at **perihelion**
 in an unperturbed elliptic orbit
 
 # Arguments
@@ -25,7 +25,7 @@ pub fn perih_velocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 }
 
 /**
-Returns **velocity** *(meters per second)* of a body at **aphelion**
+Computes **velocity** *(meters per second)* of a body at **aphelion**
 in an unperturbed elliptic orbit
 
 # Arguments

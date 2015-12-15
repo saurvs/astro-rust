@@ -43,7 +43,7 @@ pub struct usual_day {
 }
 
 /**
-Returns the decimal day for a ```usual_day```
+Computes the decimal day for a ```usual_day```
 
 * ```usual_day```: A ```usual_day``` struct
 **/
@@ -55,7 +55,7 @@ pub fn decimal_day(day: usual_day) -> f64 {
 }
 
 /**
-Returns time between the epoch J2000.0 and a given Julian Emphemeris Day, measured in Julian centuries
+Computes time between the epoch J2000.0 and a given Julian Emphemeris Day, measured in Julian centuries
 
 * ```jed```: Julian Emphemeris day
 **/
@@ -64,7 +64,7 @@ pub fn julian_century(jed: f64) -> f64 {
 }
 
 /**
-Returns a Julian day
+Computes a Julian day
 
 # Arguments
 
@@ -146,7 +146,7 @@ pub fn date_from_julian_day(mut jd: f64) -> (i16, i8, f64) {
 }
 
 /**
-Returns mean sidereal time at any instant of Universal Time
+Computes mean sidereal time at any instant of Universal Time
 
 Mean sidereal time is at the Greenwhich meridian.
 
@@ -164,7 +164,7 @@ pub fn mean_sidereal(date: date) -> f64 {
 }
 
 /**
-Returns mean sidereal time at 0th hour of Universal Time
+Computes mean sidereal time at 0th hour of Universal Time
 
 Mean sidereal time is at the Greenwhich meridian.
 

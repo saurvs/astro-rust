@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns Venus's **equatorial semidiameter**
+Computes Venus's **equatorial semidiameter**
 
 # Arguments
 

@@ -1,5 +1,5 @@
 /**
-Returns **diameter** of an asteroid *(meters)*
+Computes **diameter** of asteroid *(meters)*
 
 # Arguments
 
@@ -11,7 +11,7 @@ pub fn diameter(abs_mag: f64, albedo: f64) -> f64 {
 }
 
 /**
-Returns **apparent diameter** of an asteroid *(meters)*
+Computes **apparent diameter** of asteroid *(meters)*
 
 # Arguments
 

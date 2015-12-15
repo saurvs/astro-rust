@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns Neptune's **equatorial semidiameter**
+Computes Neptune's **equatorial semidiameter**
 
 # Arguments
 

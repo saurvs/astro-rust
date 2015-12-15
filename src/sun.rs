@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns the Sun's **equatorial semidiameter**
+Computes the Sun's **equatorial semidiameter**
 
 # Arguments
 
@@ -12,7 +12,7 @@ pub fn semidiameter(distance_to_earth: f64) -> f64 {
 }
 
 /**
-Returns **rectangular geocentric equatorial coordinates** of the Sun
+Computes **rectangular geocentric equatorial coordinates** of the Sun
 
 # Return variables
 

@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns Uranus's **equatorial semidiameter**
+Computes Uranus's **equatorial semidiameter**
 
 # Arguments
 

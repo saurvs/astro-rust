@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns **mean annual motion** of the companion star
+Computes **mean annual motion** of companion star
 
 * ```period_rev```: Period of revolution expressed in mean solar years
 **/
@@ -10,11 +10,11 @@ pub fn compan_mean_annual_motion(period_rev: f64) -> f64 {
 }
 
 /**
-Returns **mean anomaly** of the companion star
+Computes **mean anomaly** of companion star
 
 # Arguments
 
-* ```mean_annual_motion```: Mean annual motion of the companion star
+* ```mean_annual_motion```: Mean annual motion of companion star
 * ```periastron_pass```: Time of periastron passage, given as a
                            year with decimals (eg: 1945.62)
 * ```time```: Current time, given as a year with decimals (eg: 1945.62)
@@ -24,37 +24,37 @@ pub fn compan_mean_anomaly(mean_annual_motion: f64, periastron_pass: f64, time: 
 }
 
 /**
-Returns **radius vector** of the binary star
+Computes **radius vector** of binary star
 
 # Arguments
 
-* ```semimajor_axis```: Semimajor axis of the binary star
+* ```semimajor_axis```: Semimajor axis of binary star
 * ```ecc_true_orb```: Eccentricity of true orbit
-* ```ecc_anomaly```: Eccentric anomaly of the binary star
+* ```ecc_anomaly```: Eccentric anomaly of binary star
 **/
 pub fn radius_vec(semimajor_axis: f64, ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
     semimajor_axis * (1.0 - ecc_true_orb * ecc_anomaly.cos())
 }
 
 /**
-Returns **true anomaly** of the binary star
+Computes **true anomaly** of binary star
 
 # Arguments
 
 * ```ecc_true_orb```: Eccentricity of true orbit
-* ```ecc_anomaly```: Eccentric anomaly of the binary star
+* ```ecc_anomaly```: Eccentric anomaly of binary star
 **/
 pub fn true_anomaly(ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
     2.0 * (((1.0 + ecc_true_orb) / (1.0 - ecc_true_orb)).sqrt() * (ecc_anomaly / 2.0).tan()).atan()
 }
 
 /**
-Returns **apparent position angle** of the binary star
+Computes **apparent position angle** of binary star
 
 # Arguments
 
-* ```asc_node_pos```: Position angle of the ascending node
-* ```true_anomaly```: True anomaly of the binary star
+* ```asc_node_pos```: Position angle of ascending node
+* ```true_anomaly```: True anomaly of binary star
 * ```periastron_long```: Longitude of periastron
 * ```inc```: Inclination of the plane of true orbit to the plane at
              right angles to the line of sight
@@ -65,12 +65,12 @@ pub fn appar_pos_angle(asc_node_pos: f64, true_anomaly: f64, periastron_long: f6
 }
 
 /**
-Returns **angular separation** of the binary star
+Computes **angular separation** of binary star
 
 # Arguments
 
-* ```radius_vec```: Radius vector of the binary star
-* ```true_anomaly```: True anomaly of the binary star
+* ```radius_vec```: Radius vector of binary star
+* ```true_anomaly```: True anomaly of binary star
 * ```periastron_long```: Longitude of periastron
 * ```inc```: Inclination of the plane of true orbit to the plane at
              right angles to the line of sight
@@ -84,12 +84,12 @@ pub fn angular_sep(radius_vec: f64, true_anomaly: f64, periastron_long: f64, inc
 }
 
 /**
-Returns **eccentricity** of the **apparent orbit**
+Computes **eccentricity** of the **apparent orbit**
 
 # Arguments
 
 * ```ecc_true_orb```: Eccentricity of true orbit
-* ```true_anomaly```: True anomaly of the binary star
+* ```true_anomaly```: True anomaly of binary star
 * ```inc```: Inclination of the plane of true orbit to the plane at
              right angles to the line of sight
 * ```periastron_long```: Longitude of periastron

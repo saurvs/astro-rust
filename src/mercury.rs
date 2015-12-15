@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Returns Mercury's **equatorial semidiameter**
+Computes Mercury's **equatorial semidiameter**
 
 # Arguments
 

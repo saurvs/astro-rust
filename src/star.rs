@@ -1,7 +1,7 @@
 use time;
 
 /**
-Returns the combined magnitude of two stars
+Computes the combined magnitude of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
@@ -11,7 +11,7 @@ pub fn combined_mag(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the combined magnitude of two or more stars
+Computes the combined magnitude of two or more stars
 
 * ```m```: Array of magnitudes of stars
 **/
@@ -24,7 +24,7 @@ pub fn combined_mag_from_many(m: &[f64]) -> f64 {
 }
 
 /**
-Returns the brightness ratio of two stars
+Computes the brightness ratio of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
@@ -34,7 +34,7 @@ pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the difference in magnitude of two stars
+Computes the difference in magnitude of two stars
 
 * ```br```: Brightness ratio of two stars
 **/
@@ -43,7 +43,7 @@ pub fn mag_diff(br: f64) -> f64 {
 }
 
 /**
-Returns the absolute magnitude of a star from its parallax
+Computes the absolute magnitude of a star from its parallax
 
 * ```par```: Parallax of star
 * ```am```: Apparent magnitude of star
@@ -54,7 +54,7 @@ pub fn absolute_mag_from_parallax(mut par: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the absolute magnitude of a star from its distance
+Computes the absolute magnitude of a star from its distance
 
 * ```d```: Distance of star in parsecs
 * ```am```: Apparent magnitude of star
@@ -64,7 +64,7 @@ pub fn absolute_mag_from_dist(d: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the abberation corrections for a star's equatorial coordinates
+Computes the abberation corrections for a star's equatorial coordinates
 
 # Returned values
 
@@ -126,7 +126,7 @@ pub fn aberration(asc: f64, dec: f64, jed: f64) -> (f64, f64) {
     x += 715.0*sinA;
     y += -656.0*cosA;
     z += -285.0*cosA;
-    
+
     // ROW 5
     A = 3.0 * l3;
     sinA = A.sin(); cosA = A.cos();

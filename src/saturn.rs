@@ -9,7 +9,7 @@ fn polar_unit_semidiameter() -> f64 {
 }
 
 /**
-Returns Saturn's **polar semidiameter**
+Computes Saturn's **polar semidiameter**
 
 # Arguments
 
@@ -24,7 +24,7 @@ pub fn pol_semidiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
 }
 
 /**
-Returns Saturn's **equatorial semidiameter**
+Computes Saturn's **equatorial semidiameter**
 
 # Arguments
 

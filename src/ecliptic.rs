@@ -2,7 +2,7 @@ use angle;
 use time;
 
 /**
-Returns **mean obliquity** *(radians)* of the Earth's **ecliptic**
+Computes **mean obliquity** *(radians)* of the Earth's **ecliptic**
 for a Julian Ephemeris day
 
 The obliquity of the ecliptic, or the inclination of the Earth's axis
