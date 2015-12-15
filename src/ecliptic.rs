@@ -6,7 +6,7 @@ Returns **mean obliquity** *(radians)* of the Earth's **ecliptic**
 for a Julian Ephemeris day
 
 The obliquity of the ecliptic, or the inclination of the Earth's axis
-of rotation, is the angle between the Earth's equator and the ecliptic.
+of rotation, is the angle between the Earth's equator and it's ecliptic.
 
 The **mean** obliquity isn't corrected for nutation.
 To obtain the **true** obliquity, use [```nutation()```]
