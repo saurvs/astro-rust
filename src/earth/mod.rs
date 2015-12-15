@@ -43,7 +43,7 @@ pub fn eccen_of_meridian() -> f64 {
 }
 
 /**
-returns **angular distance** between two points on Earth's
+Returns **angular distance** between two points on Earth's
 surface
 
 # Arguments
@@ -58,7 +58,7 @@ pub fn angular_dist(p1: coordinates::surface_point, p2: coordinates::surface_poi
 }
 
 /**
-returns a **low accuracy geodesic** between two points on the Earth's
+Returns a **low accuracy geodesic** between two points on the Earth's
 surface *(meters)*
 
 Assumes that the Earth is a sphere.
@@ -73,7 +73,7 @@ pub fn approx_geodesic(p1: coordinates::surface_point, p2: coordinates::surface_
 }
 
 /**
-returns a **high accuracy geodesic** between two points on the Earth's
+Returns a **high accuracy geodesic** between two points on the Earth's
 surface *(meters)*
 
 # Arguments
@@ -102,7 +102,7 @@ pub fn geodesic(p1: coordinates::surface_point, p2: coordinates::surface_point) 
 }
 
 /**
-returns two quantities that are used elsewhere in the library
+Returns two quantities that are used elsewhere in the library
 
 ```rho``` here denotes the geocentric radius vector, and ```phi```
 here denotes the geocentric latitude, both of an observer on the
@@ -124,7 +124,7 @@ pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
 }
 
 /**
-returns **nutation correction** *(radians)* for longitude and obliquity
+Returns **nutation correction** *(radians)* for longitude and obliquity
 
 # Return variables
 
@@ -232,7 +232,7 @@ pub fn nutation_correction(julian_ephemeris_day: f64) -> (f64, f64) {
 }
 
 /**
-returns **equation of time** *(radians)*
+Returns **equation of time** *(radians)*
 
 # Arguments
 

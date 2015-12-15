@@ -2,7 +2,8 @@ use angle;
 use time;
 
 /**
-returns **mean obliquity** of the Earth's ecliptic *(radians)*
+Returns **mean obliquity** *(radians)* of the Earth's **ecliptic**
+for a Julian Ephemeris day
 
 The obliquity of the ecliptic, or the inclination of the Earth's axis
 of rotation, is the angle between the Earth's equator and the ecliptic.
@@ -33,12 +34,14 @@ pub fn mean_obliq(jed: f64) -> (f64) {
     )))))))))).to_radians()
 }
 
-/// Returns **obliquity** of the **ecliptic** for the epoch **J2000.0**
+/// Returns **obliquity** *(radians)* of the Earth's **ecliptic**
+/// for the epoch **J2000.0**
 pub fn obliq_J2000() -> f64 {
     23.4392911_f64.to_radians()
 }
 
-/// Returns **obliquity** of the **ecliptic** for the epoch **J1950.0**
+/// Returns **obliquity** *(radians)* of the Earth's **ecliptic**
+/// for the epoch **J1950.0**
 pub fn obliq_J1950() -> f64 {
     23.4457889_f64.to_radians()
 }
