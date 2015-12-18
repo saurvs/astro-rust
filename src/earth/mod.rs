@@ -133,16 +133,15 @@ Computes the nutation correction *(radians)*, that needs to be added to
 the ecliptical longitude and the obliquity of the ecliptic to adjust for
 the Earth's nutation. Nutation does *not* affect ecliptical latitude.
 
-```NutationCorrection() -> (nutation_in_longitude, nutation_in_obliquity)```
+```NutationCorrections() -> (nutation_in_longitude, nutation_in_obliquity)```
 
 # Arguments
 
-```julian_ephemeris_day```: Julian Ephemeris Days
+```julian_ephemeris_day```: Julian Ephemeris day
 **/
-pub fn nutation_correction(julian_ephemeris_day: f64) -> (f64, f64) {
+pub fn NutationCorrections(julian_ephemeris_day: f64) -> (f64, f64) {
 
     struct terms(i8, i8, i8, i8, i8, f64, f64, f64, f64);
-
     let tuple_terms = [
         terms(0, 0, 0, 0, 1, -171996.0, -174.2, 92025.0, 8.9),
         terms(-2, 0, 0, 2, 2, -13187.0, -1.6, 5736.0, -3.1),
