@@ -55,8 +55,8 @@ The **error** is:
 
 # Arguments
 
-* ```a```: Semimajor axis of the ellipse (same unit as ```b```)
-* ```b```: Semiminor axis of the ellipse (same unit as ```a```)
+* ```a```: Semimajor axis of the ellipse (same unit as that of ```b```)
+* ```b```: Semiminor axis of the ellipse (same unit as that of ```a```)
 * ```e```: Eccentricity of the ellipse
 **/
 pub fn LengthOfEllipse_Ramanujan(a: f64, b: f64, e: f64) -> f64 {
@@ -80,8 +80,8 @@ The **error** is:
 
 # Arguments
 
-* ```a```: Semimajor axis of the ellipse (same unit as ```b```)
-* ```b```: Semiminor axis of the ellipse (same unit as ```a```)
+* ```a```: Semimajor axis of the ellipse (same unit as that of ```b```)
+* ```b```: Semiminor axis of the ellipse (same unit as that of ```a```)
 * ```e```: Eccentricity of the ellipse
 **/
 pub fn LengthOfEllipse(a: f64, b: f64, e: f64) -> f64 {
