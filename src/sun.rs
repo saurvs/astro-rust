@@ -31,9 +31,7 @@ towards 90 degrees longitude
 * ```sun_geo_lat```: Sun's geometric latitude *(radians)*, *without* corrections for nutation and abberation
 * ```sun_rad_vec```: Sun's geometric radius vector *(AU)*
 * ```mean_obl```: *Mean* obliquity of Earth's ecliptic; not *true* obliquity
-
 **/
-
 pub fn rect_geocen_coords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
     let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.cos() - sun_geo_lat.sin()*mean_obl.sin());
