@@ -17,7 +17,7 @@ and add it to the **mean** obliquity.
 
 ```jed```: Julian Ephemeris day
 **/
-pub fn mean_obliq(jed: f64) -> (f64) {
+pub fn MeanObliquity(jed: f64) -> (f64) {
     let u = time::julian_century(jed) / 100.0;
 
     (angle::pure_degrees(23.0, 26.0, 21.448) -
@@ -36,12 +36,12 @@ pub fn mean_obliq(jed: f64) -> (f64) {
 
 /// Returns **obliquity** *(radians)* of the Earth's **ecliptic**
 /// for the epoch **J2000.0**
-pub fn obliq_J2000() -> f64 {
+pub fn Obliquity_J2000() -> f64 {
     23.4392911_f64.to_radians()
 }
 
 /// Returns **obliquity** *(radians)* of the Earth's **ecliptic**
 /// for the epoch **J1950.0**
-pub fn obliq_J1950() -> f64 {
+pub fn Obliquity_J1950() -> f64 {
     23.4457889_f64.to_radians()
 }
