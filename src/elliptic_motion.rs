@@ -90,3 +90,26 @@ pub fn LengthOfEllipse(a: f64, b: f64, e: f64) -> f64 {
     let H = (2.0 * a * b)/(a + b);
     f64::consts::PI * (21.0*A - 2.0*G - 3.0*H) / 8.0
 }
+
+/**
+Computes the **semimajor axis**
+
+# Arguments
+
+* ```perih```: Perihelion of the orbit
+* ```ecc```: Eccentricity of the orbit
+**/
+pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
+    perih / (1.0 - ecc)
+}
+
+/**
+Computes the **mean motion** *(radians/day)*
+
+# Arguments
+
+* ```semimaj_ax```: Semimajor axis of the orbit
+**/
+pub fn MeanMotion(semimaj_ax: f64) -> f64 {
+    0.01720209895 / (semimaj_ax.powf(1.5))
+}
