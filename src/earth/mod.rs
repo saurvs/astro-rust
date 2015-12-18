@@ -104,7 +104,7 @@ pub fn geodesic(p1: coordinates::surface_point, p2: coordinates::surface_point) 
 /**
 Computes two quantities that are used elsewhere in the library
 
-```rho``` here denotes the geocentric radius vector, and ```phi```
+```Rho``` here denotes the geocentric radius vector, and ```Phi```
 here denotes the geocentric latitude, both of an observer on the
 Earth's surface.
 
@@ -113,7 +113,7 @@ Earth's surface.
 * ```height```: Observer's height above sea level (in meters)
 * ```geograph_lat```: Observer's geographical latitude *(radians)*
 **/
-pub fn rho_sin_and_cos_phi(height: f64, geograph_lat: f64) -> (f64, f64) {
+pub fn RhoSinAndCosPhi(height: f64, geograph_lat: f64) -> (f64, f64) {
     let u = (geograph_lat.tan() * polar_radius() / equatorial_radius()).atan();
     let x = height / equatorial_radius();
     let rho_sin_phi = (u.sin() * polar_radius() / equatorial_radius()) +
