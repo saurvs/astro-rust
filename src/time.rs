@@ -55,6 +55,79 @@ pub fn DecimalDay(day: UsualDay) -> f64 {
 }
 
 /**
+Computes the **decimal year** for a ```Date```
+
+* ```date```: A ```date``` struct
+**/
+pub fn DecimalYear(date: Date) -> f64 {
+    let mut y = 0;
+    let mut days = 365.0;
+
+    if date.m > 1 {
+        y += 31;
+    }
+    if date.m > 2 {
+        y += 28;
+        if IsLeapYear(date.y, date.t) {
+            y += 1;
+            days += 1.0;
+        }
+    }
+    if date.m > 3 {
+        y += 31;
+    }
+    if date.m > 4 {
+        y += 30;
+    }
+    if date.m > 5 {
+        y += 31;
+    }
+    if date.m > 6 {
+        y += 30;
+    }
+    if date.m > 7 {
+        y += 31;
+    }
+    if date.m > 8 {
+        y += 31;
+    }
+    if date.m > 9 {
+        y += 30;
+    }
+    if date.m > 10 {
+        y += 31;
+    }
+    if date.m > 11 {
+        y += 30;
+    }
+
+    (date.y as f64) + ((y as f64) + date.d)/days
+}
+
+/**
+Checks if a **year** is a **leap year**
+
+# Arguments
+
+* ```year```: Year
+* ```calendar_type```: ```CalendarType``` enum
+**/
+pub fn IsLeapYear(year: i32, calendar_type: CalendarType) -> (bool) {
+    match calendar_type {
+        CalendarType::Julian => year % 4 == 0,
+        CalendarType::Gregorian => {
+            if year%100 == 0 {
+                year%400 == 0
+            }
+            else {
+                year%4 == 0
+            }
+        },
+    };
+    false
+}
+
+/**
 Computes a **Julian century**, the time between the epoch J2000.0 and a given Julian Emphemeris Day
 
 * ```jed```: Julian Emphemeris day
