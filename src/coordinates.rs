@@ -43,6 +43,7 @@ pub fn HourAngleFromLocalSidereal(loc_sid: f64, right_asc: f64) -> f64 {
 }
 
 //-------------------------------------------------------------------
+// Ecliptical coordinates to equatorial coordinates
 
 /**
 Computes **ecliptical longitude** *(radians)* from **equatorial coordinates**
@@ -101,6 +102,7 @@ macro_rules! EclipticalCoordsFromEquatorialCoords {
 }
 
 //-------------------------------------------------------------------
+// Equatorial coordinates to ecliptical coordinates
 
 /**
 Computes **right ascension** *(radians)* from **ecliptical coordinates**
@@ -181,6 +183,7 @@ pub fn eq_dec_from_equatorialial(azimuth: f64, altitude: f64, obv_lat: f64) -> f
 }
 
 //-------------------------------------------------------------------
+// Equatorial coordinates to galactic coordinates
 
 /**
 Computes **galactic longitude** *(radians)* from **equatorial coordinates**
@@ -237,6 +240,7 @@ macro_rules! GalacticCoordsFromEquatorialCoords {
 }
 
 //-------------------------------------------------------------------
+// Galactic coordinates to equatorial coordinates
 
 /**
 Computes **right ascension** *(radians)* from **galactic coordinates**
