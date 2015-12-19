@@ -50,3 +50,18 @@ pub fn Position(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64, tim
 
     (v, r)
 }
+
+pub fn TimeOfPassageThroughAscendingNode(w: f64, q: f64, T: f64) -> (f64, f64) {
+    time_of_passage_through_node(-1.0 * w, q, T)
+}
+
+pub fn TimeOfPassageThroughDescendingNode(w: f64, q: f64, T: f64) -> (f64, f64) {
+    time_of_passage_through_node(180_f64.to_radians() * w, q, T)
+}
+
+fn time_of_passage_through_node(v: f64, q: f64, T: f64) -> (f64, f64) {
+    let s = (v / 2.0).tan();
+    let ss = s * s;
+    (T + 27.403895*(ss*(s + 3.0)) * q.powf(1.5),
+     q*(1.0 + ss))
+}

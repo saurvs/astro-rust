@@ -113,3 +113,19 @@ Computes the **mean motion** *(radians/day)*
 pub fn MeanMotion(semimaj_ax: f64) -> f64 {
     0.01720209895 / (semimaj_ax.powf(1.5))
 }
+
+pub fn TimeOfPassageThroughAscendingNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
+    time_of_passage_through_node(-1.0 * w, n, a, e, T)
+}
+
+pub fn TimeOfPassageThroughDescendingNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
+    time_of_passage_through_node(180_f64.to_radians() * w, n, a, e, T)
+}
+
+fn time_of_passage_through_node(v: f64, n: f64, a: f64, e: f64, T: f64)  -> (f64, f64) {
+    let E = 2.0 * ((1.0 - e).sqrt()*(v/2.0).tan()).atan2((1.0 + e).sqrt());
+    let M = E - e*E.sin();
+
+    (T + M/n,
+     a*(1.0 - e*E.cos()))
+}
