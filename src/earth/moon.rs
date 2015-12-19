@@ -1,7 +1,7 @@
 use angle;
 use coordinates;
 
-pub fn bright_limb_pos_angle(sun_equa_point: coordinates::EquatorialPoint,
+pub fn PositionAngleOfBrightLimb(sun_equa_point: coordinates::EquatorialPoint,
                              moon_equa_point: coordinates::EquatorialPoint) -> f64 {
     let a = sun_equa_point.dec.cos();
     let n = a * (sun_equa_point.asc - moon_equa_point.asc).cos();
@@ -22,7 +22,7 @@ Computes the **illuminated fraction** of the moon from **equatorial** coordinate
 * ```earth_sun_dist```: Distance between the Earth and the Sun
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
-pub fn illuminated_fraction_equa(sun_equa_point: coordinates::EquatorialPoint,
+pub fn IlluminatedFractionFromEquatorialCoords(sun_equa_point: coordinates::EquatorialPoint,
                                  moon_equa_point: coordinates::EquatorialPoint,
                                  earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
     illuminated_fraction(angle::AngularSep(sun_equa_point, moon_equa_point).acos(),
@@ -42,7 +42,7 @@ Computes the **illuminated fraction** of the moon from **eclipctical** coordinat
 * ```earth_sun_dist```: Distance between the Earth and the Sun
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
-pub fn illuminated_fraction_eclip(moon_long: f64, moon_lat: f64, sun_long: f64,
+pub fn IlluminatedFractionFromEclipticalCoords(moon_long: f64, moon_lat: f64, sun_long: f64,
                                   earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
     illuminated_fraction((moon_lat.cos()*(moon_long - sun_long).cos()).acos(),
                          earth_moon_dist, earth_sun_dist)
