@@ -7,28 +7,29 @@ Computes Pluto's **equatorial semidiameter**
 
 * ```distance_to_earth```: Pluto's distance from Earth *(AU)*
 **/
-pub fn semidiameter(distance_to_earth: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 2.07) / distance_to_earth
+pub fn Semidiameter(distance_to_earth: f64) -> f64 {
+    angle::PureDegrees(0.0, 0.0, 2.07) / distance_to_earth
 }
 
 /**
 Computes the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
+The coordinates are with reference to the epoch J2000.0.
+
 # Return variables
 
-Computes the heliocentric longitude *(radians)*, heliocentric
-latitude *(radians)* and heliocentric radius vector *(AU)*
-of the dwarf planet Pluto, with reference to the epoch J2000.0,
-at an instant of time.
+```(longitude, latitude, radius_vector)```
 
-```heliocen_coords() -> (longitude, latitude, radius_vector)```
+* ```longitude```: Heliocentric longitude *(radians)*
+* ```latitude```: Heliocentric latitude *(radians)*
+* ```radius_vector```: Heliocentric radius vector *(radians)*
 
 # Arguments
 
-```julian_centuries```: Julian Century
+```julian_century```: Julian century
 **/
 
-pub fn heliocen_coord(julian_centuries: f64) -> (f64, f64, f64) {
+pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
 
@@ -77,11 +78,11 @@ pub fn heliocen_coord(julian_centuries: f64) -> (f64, f64, f64) {
       	terms(3, 0, -1, 0.000005, -0.000003, 0.0, 0.0, 0.0000019, 0.0000035),
       	terms(3, 0, 0, 0.0, 0.0, 0.000001, 0.0, 0.000001, 0.0000003)];
 
-    let j = 34.35 + 3034.9057 * julian_centuries;
-    let s = 50.08 + 1222.1138 * julian_centuries;
-    let p = 238.96 + 144.9600 * julian_centuries;
+    let j = 34.35 + 3034.9057 * julian_century;
+    let s = 50.08 + 1222.1138 * julian_century;
+    let p = 238.96 + 144.9600 * julian_century;
 
-    let mut long = (238.958116f64 + 144.96f64 * julian_centuries).to_radians();
+    let mut long = (238.958116f64 + 144.96f64 * julian_century).to_radians();
     let mut lat = -3.908239f64.to_radians();
     let mut r = 40.7241346;
 
