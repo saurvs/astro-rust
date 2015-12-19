@@ -19,7 +19,7 @@ Essential Algorithms for finding/calculating/estimating *interesting* things in 
 * Geocentric rectangular coordinates of the sun
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
 * Semidiameters of solar system bodies
-* Elliptic motion
+* Motion in elliptic, parabolic, and near-parabolic orbits
 * Stellar magnitude calculations
 * Binary star calculations
 * Apparent positions of celestial bodies from Earth
