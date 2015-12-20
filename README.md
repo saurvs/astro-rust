@@ -14,6 +14,7 @@ Algorithms for finding/calculating/estimating interesting things in [astronomy](
 * Atmospheric refraction corrections
 * Nutation corrections
 * Effects of Precession
+* Change of Epoch and Equinox
 * Obliquity of the ecliptic
 * Equation of time
 * Geocentric rectangular coordinates of the sun
