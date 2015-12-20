@@ -1,21 +1,21 @@
 use time;
 
 /**
-Computes the combined magnitude of two stars
+Computes the **combined magnitude** of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
 **/
-pub fn combined_mag(m1: f64, m2: f64) -> f64 {
-    m2 - 2.5 * (brightness_ratio(m1, m2) + 1.0)
+pub fn CombinedMag(m1: f64, m2: f64) -> f64 {
+    m2 - 2.5 * (BrightnessRatio(m1, m2) + 1.0)
 }
 
 /**
-Computes the combined magnitude of two or more stars
+Computes the **combined magnitude** of two or more stars
 
 * ```m```: Array of magnitudes of stars
 **/
-pub fn combined_mag_from_many(m: &[f64]) -> f64 {
+pub fn CombinedMagOfMany(m: &[f64]) -> f64 {
     let mut sum = 0.0;
     for i in m.iter() {
         sum += 10_f64.powf(-0.4 * i);
@@ -24,60 +24,63 @@ pub fn combined_mag_from_many(m: &[f64]) -> f64 {
 }
 
 /**
-Computes the brightness ratio of two stars
+Computes the **brightness ratio** of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
 **/
-pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
+pub fn BrightnessRatio(m1: f64, m2: f64) -> f64 {
     10.0_f64.powf(0.4 * (m2 - m1))
 }
 
 /**
-Computes the difference in magnitude of two stars
+Computes the **difference in magnitude** of two stars
 
 * ```br```: Brightness ratio of two stars
 **/
-pub fn mag_diff(br: f64) -> f64 {
+pub fn MagDifference(br: f64) -> f64 {
     2.5 * br.log(10.0)
 }
 
 /**
-Computes the absolute magnitude of a star from its parallax
+Computes the **absolute magnitude** of a star from its parallax
 
 * ```par```: Parallax of star
 * ```am```: Apparent magnitude of star
 **/
-pub fn absolute_mag_from_parallax(mut par: f64, am: f64) -> f64 {
+pub fn AbsoluteMagFromParallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
     am + 5.0 + 5.0 * par.log(10.0)
 }
 
 /**
-Computes the absolute magnitude of a star from its distance
+Computes the **absolute magnitude** of a star from its distance from earth
 
-* ```d```: Distance of star in parsecs
+* ```d```: Distance of star from earth *(parsecs)*
 * ```am```: Apparent magnitude of star
 **/
-pub fn absolute_mag_from_dist(d: f64, am: f64) -> f64 {
+pub fn AbsoluteMagFromDistance(d: f64, am: f64) -> f64 {
     am + 5.0 - 5.0 * d.log(10.0)
 }
 
 /**
-Computes the abberation corrections for a star's equatorial coordinates
+Computes the **abberation** corrections *(radians)* for a star's equatorial coordinates
 
 # Returned values
 
-```aberration() -> (aberration_in_right_ascension, aberration_in_declination)```
+```(aberration_in_right_ascension, aberration_in_declination)```
+
+* ```aberration_in_right_ascension```: Abberation correction for right ascension *(radians)*
+* ```aberration_in_declination```: Abberation correction for declination *(radians)*
 
 # Arguments
 
-* ```asc```: Star's right ascension
-* ```dec```: Star's declination
-* ```jed```: Time in Julian Emphemeris day
+* ```asc```: Star's right ascension *(radians)*
+* ```dec```: Star's declination *(radians)*
+* ```jed```: Julian Emphemeris day
 **/
-pub fn aberration(asc: f64, dec: f64, jed: f64) -> (f64, f64) {
-    let t = time::julian_century(jed);
+pub fn AberrationCorrections(asc: f64, dec: f64, jed: f64) -> (f64, f64) {
+    let t = time::JulianCentury(jed);
 
     let l2 = 3.1761467 + 1021.3285546*t;
     let l3 = 1.7534703 + 628.3075849*t;

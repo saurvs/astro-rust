@@ -7,6 +7,6 @@ Computes Venus's **equatorial semidiameter**
 
 * ```distance_to_earth```: Venus's distance from  Earth *(AU)*
 **/
-pub fn semidiameter(distance_to_earth: f64) -> f64 {
-    angle::pure_degrees(0.0, 0.0, 8.41) / distance_to_earth
+pub fn Semidiameter(distance_to_earth: f64) -> f64 {
+    angle::PureDegrees(0.0, 0.0, 8.41) / distance_to_earth
 }
