@@ -24,6 +24,7 @@ Essential Algorithms for finding/calculating/estimating *interesting* things in 
 * Stellar magnitude calculations
 * Binary star calculations
 * Apparent positions of celestial bodies from Earth
+* Illuminated fraction of the Moon
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
