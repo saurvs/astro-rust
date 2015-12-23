@@ -8,7 +8,6 @@ pub mod binary_star;
 
 pub mod parallactic;
 pub mod refraction;
-pub mod ecliptic;
 pub mod orbit;
 
 pub mod sun;

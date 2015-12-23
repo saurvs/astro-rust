@@ -1,4 +1,5 @@
 pub mod moon;
+pub mod ecliptic;
 
 use coordinates;
 use angle;
