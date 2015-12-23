@@ -1,7 +1,91 @@
 use std::*;
 
 /**
-Computes instantaneous **velocity** *(meters per second)* of a body in an
+Returns the **true anomaly** of a body in an elliptic orbit
+
+# Returned value
+
+```(true_anomaly)```
+
+* ```(true_anomaly)```: The true anomaly of the body *(AU)*
+
+# Arguments
+
+* ```eccentric_anomaly```: The eccentric anomaly of the body *(radians)*
+* ```eccentricity```: The eccentricity of the orbit
+**/
+pub fn TrueAnomaly(eccentric_anomaly: f64, eccentricity: f64) -> f64 {
+    2.0 * ((1.0 + eccentric_anomaly).sqrt() * (eccentricity/2.0).tan()).atan2((1.0 - eccentric_anomaly).sqrt())
+}
+
+/**
+Returns the **radius vector** of a body in an elliptic orbit, using
+it's eccentric anomaly
+
+# Returned value
+
+```(radius_vector)```
+
+* ```(radius_vector)```: The radius vector of the body *(AU)*
+
+# Arguments
+
+* ```eccentric_anomaly```: The eccentric anomaly of the body *(radians)*
+* ```semimaj_ax```: The semimajor axis of the orbit *(AU)*
+* ```eccentricity```: The eccentricity of the orbit
+**/
+pub fn RadiusVectorFromEccenAnom(eccentric_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
+    semimaj_ax * (1.0 - eccentricity*eccentric_anomaly.cos())
+}
+
+/**
+Returns the **radius vector** of a body in an elliptic orbit, using
+it's true anomaly
+
+# Returned value
+
+```(radius_vector)```
+
+* ```(radius_vector)```: The radius vector of the body *(AU)*
+
+# Arguments
+
+* ```true_anomaly```: The true anomaly of the body *(radians)*
+* ```semimaj_ax```: The semimajor axis of the orbit *(AU)*
+* ```eccentricity```: The eccentricity of the orbit
+**/
+pub fn RadiusVectorFromTrueAnom(true_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
+    semimaj_ax * (1.0 - eccentricity*eccentricity) / (1.0 + eccentricity*true_anomaly.cos())
+}
+
+/**
+Returns the **eccentric anomaly** of a body in an elliptic orbit
+
+# Returned value
+
+```(eccentric_anomaly)```
+
+* ```(eccentric_anomaly)```: The eccentric anomaly of the body *(radians)*
+
+# Arguments
+
+* ```mean_anomaly```: The mean anomaly of the body *(radians)*
+* ```eccentricity```: The eccentricity of the orbit
+* ```accuracy```: The desired accuracy for the eccentric anomaly. *Eg: 0.000001 radians*
+**/
+pub fn EccentricAnomaly(mean_anomaly: f64, eccentricity: f64, accuracy: f64) -> f64 {
+    let mut prev_E = 0.0;
+    let mut current_E = mean_anomaly;
+    while (current_E - prev_E).abs() > accuracy {
+        prev_E = current_E;
+        current_E = mean_anomaly + eccentricity*current_E.sin();
+    }
+
+    (current_E)
+}
+
+/**
+Returns instantaneous **velocity** *(meters per second)* of a body in an
 unperturbed elliptic orbit
 
 # Arguments
@@ -14,8 +98,8 @@ pub fn Velocity(dist_to_sun: f64, semimaj_axis:f64) -> f64 {
 }
 
 /**
-Computes **velocity** *(meters per second)* of a body at **perihelion**
-in an unperturbed elliptic orbit
+Returns **velocity** *(meters per second)* of a body at **perihelion**
+in an elliptic orbit
 
 # Arguments
 
@@ -27,8 +111,8 @@ pub fn PerihelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 }
 
 /**
-Computes **velocity** *(meters per second)* of a body at **aphelion**
-in an unperturbed elliptic orbit
+Returns **velocity** *(meters per second)* of a body at **aphelion**
+in an elliptic orbit
 
 # Arguments
 
@@ -40,7 +124,7 @@ pub fn AphelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 }
 
 /**
-Computes the approximate **length** of an ellipse using the Ramanujan
+Returns the approximate **length** of an ellipse using the Ramanujan
 method
 
 # Return values
@@ -64,7 +148,7 @@ pub fn LengthOfEllipse_Ramanujan(a: f64, b: f64, e: f64) -> f64 {
 }
 
 /**
-Computes the approximate **length** of an ellipse
+Returns the approximate **length** of an ellipse
 
 # Return values
 
@@ -92,7 +176,7 @@ pub fn LengthOfEllipse(a: f64, b: f64, e: f64) -> f64 {
 }
 
 /**
-Computes the **semimajor axis**
+Returns the **semimajor axis**
 
 # Arguments
 
@@ -104,7 +188,7 @@ pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
 }
 
 /**
-Computes the **mean motion** *(radians/day)*
+Returns the **mean motion** *(radians/day)*
 
 # Arguments
 
