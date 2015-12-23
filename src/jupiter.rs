@@ -109,3 +109,44 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
 
     (D_e, D_s, w1, w2, P)
 }
+
+/**
+Returns Jupiter's **orbital elements**
+
+# Returned values
+
+```(L, a, e, i, omega, pi, M, w)```
+
+* ```L```: The mean longitude of Jupiter *(radians)*
+* ```a```: The semimajor axis of Jupiter's orbit *(AU)*
+* ```e```: The eccentricity of Jupiter's orbit
+* ```i```: The inclination on the plane of the ecliptic *(radians)*
+* ```omega```: The longitude of the ascending node *(radians)*
+* ```pi```: The longitude of the perihelion *(radians)*
+* ```M```: The mean anomaly of Jupiter *(radians)*
+* ```w```: The argument of the perihelion *(radians)*
+
+# Arguments
+
+* ```T```: Time in Julian century
+**/
+pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
+    let TT = T * T;
+    let TTT = TT * T;
+
+    let L = 34.351519 + 3036.3027748*T + 0.0002233*TT + 0.000000037*TTT;
+    let a = 5.202603209 + 0.0000001913*T;
+    let e = 0.04849793 + 0.000163225*T - 0.0000004714*TTT - 0.00000000201*TTT;
+    let i = 1.303267 - 0.0054965*T + 0.00000466*TT - 0.000000002*TTT;
+    let omega = 100.464407 + 1.0209774*T + 0.00040315*TT + 0.000000404*TTT;
+    let pi = 14.331207 + 1.6126352*T + 0.00103042*TT - 0.000004464*TTT;
+
+    (angle::LimitedTo360(L).to_radians(),
+     a, e,
+     angle::LimitedTo360(i).to_radians(),
+     angle::LimitedTo360(omega).to_radians(),
+     angle::LimitedTo360(pi).to_radians(),
+     angle::LimitedTo360(L - pi).to_radians(),
+     angle::LimitedTo360(pi - omega).to_radians()
+    )
+}

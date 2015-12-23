@@ -5,6 +5,39 @@ use angle;
 use time;
 
 /**
+Returns the Earth's **orbital elements**
+
+# Returned values
+
+```(L, a, e, pi, M)```
+
+* ```L```: The mean longitude of the Earth *(radians)*
+* ```a```: The semimajor axis of the Earth's orbit *(AU)*
+* ```e```: The eccentricity of the Earth's orbit
+* ```pi```: The longitude of the perihelion *(radians)*
+* ```M```: The mean anomaly of the Earth *(radians)*
+
+# Arguments
+
+* ```T```: Time in Julian century
+**/
+pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64) {
+    let TT = T * T;
+    let TTT = TT * T;
+
+    let L = 100.466457 + 36000.7698278*T + 0.00030322*TT + 0.00000002*TTT;
+    let a = 1.000001018;
+    let e = 0.01670863 - 0.000042037*T - 0.0000001267*TTT + 0.00000000014*TTT;
+    let pi = 102.937348 + 1.7195366*T + 0.00045688*TT - 0.000000018*TTT;
+
+    (angle::LimitedTo360(L).to_radians(),
+     a, e,
+     angle::LimitedTo360(pi).to_radians(),
+     angle::LimitedTo360(L - pi).to_radians()
+    )
+}
+
+/**
 Returns the **flattening factor** of the Earth
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
