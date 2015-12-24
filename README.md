@@ -2,8 +2,7 @@
 
 [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-Essential Algorithms for finding/calculating/estimating *interesting* things in [astronomy](https://en.wikipedia.org/wiki/Astronomy).
-
+Essential Algorithms for Fundamental Astronomy.
 [API Documentation](https://saurvs.github.io/astro-rust/)
 
 ## Available things
