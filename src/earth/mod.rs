@@ -300,3 +300,51 @@ macro_rules! EquationOfTime {
             earth::EquationOfTime($x, $y, nut_long, true_obl)
     }};
 }
+
+pub fn GeocentricCoordsOfPlanet(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
+    let x = R*B.cos()*L.cos() - R0*B0.cos()*L0.cos();
+    let y = R*B.cos()*L.sin() - R0*B0.cos()*L0.sin();
+    let z = R*B.sin() - R0*B0.sin();
+
+    (lambda = y.atan2(x),
+     beta = z/(x*x + y*y).sqrt(),
+     0.0057755183 * (x*x + y*y + z*z).sqrt())
+}
+
+pub fn what() {
+    let sin_obl_eclp = obl_eclp.sin();
+    let cos_obl_eclp = obl_eclp.cos();
+    let cos_long_asc_node = long_asc_node.cos();
+    let sin_long_asc_node = long_asc_node.sin();
+    let cos_inc = inc.cos();
+    let sin_inc = inc.sin();
+
+    let f = cos_long_asc_node;
+    let g = sin_long_asc_node*cos_obl_eclp;
+    let h = sin_long_asc_node*sin_obl_eclp;
+    let p = -1.0*sin_long_asc_node*sin_inc;
+    let q = cos_long_asc_node*cos_inc*cos_obl_eclp - sin_inc*sin_obl_eclp;
+    let r = cos_long_asc_node*cos_inc*sin_obl_eclp + sin_inc*cos_obl_eclp;
+
+    let A = f.atan2(p);
+    let B = g.atan2(q);
+    let C = h.atan2(r);
+    let a = (f*f + p*p).sqrt();
+    let b = (g*g + q*q).sqrt();
+    let c = (h*h + r*r).sqrt();
+
+    let x = r * a * (A + perih_arg + v);
+    let y = r * b * (B + perih_arg + v);
+    let z = r * c * (C + perih_arg + v);
+
+    let xi = X + x;
+    let nu = Y + y;
+    let et = Z + z;
+
+    let mut asc = nu.atan2(xi);
+    let dec = et.atan2((xi*xi + nu*nu).sqrt());
+
+    if asc < 0.0 {
+        asc += 360f64.to_radians();
+    }
+}

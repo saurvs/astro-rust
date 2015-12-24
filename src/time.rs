@@ -165,6 +165,15 @@ pub fn JulianDay(mut date: Date) -> f64 {
 
 }
 
+#[macro_export]
+macro_rules! JulianDay {
+    ($a: expr, $b: expr, $c: expr, $d: expr, $e: expr, $f: expr, $g: expr) => {{
+        let day = UsualDay{};
+        let date = Date{};
+        time::JulianDay()
+    }};
+}
+
 /**
 Returns a ```Date``` **equivalent** to a given **Julian day**
 

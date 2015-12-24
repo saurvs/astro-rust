@@ -85,8 +85,15 @@ pub fn EccentricAnomaly(mean_anomaly: f64, eccentricity: f64, accuracy: f64) -> 
 }
 
 /**
-Returns instantaneous **velocity** *(meters per second)* of a body in an
-unperturbed elliptic orbit
+Returns instantaneous **velocity** of a body in an
+elliptic orbit
+
+# Returned values
+
+```(velocity)```
+
+* ```(velocity)```: The instantaneous velocity of the body
+                    *(meters per second)*
 
 # Arguments
 
@@ -98,8 +105,15 @@ pub fn Velocity(dist_to_sun: f64, semimaj_axis:f64) -> f64 {
 }
 
 /**
-Returns **velocity** *(meters per second)* of a body at **perihelion**
+Returns **velocity** of a body at **perihelion**
 in an elliptic orbit
+
+# Returned values
+
+```(velocity)```
+
+* ```(velocity)```: The velocity of the body at perihelion
+                    *(meters per second)*
 
 # Arguments
 
@@ -111,8 +125,14 @@ pub fn PerihelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 }
 
 /**
-Returns **velocity** *(meters per second)* of a body at **aphelion**
-in an elliptic orbit
+Returns **velocity** of a body at **aphelion** in an elliptic orbit
+
+# Returned values
+
+```(velocity)```
+
+* ```(velocity)```: The velocity of the body at aphelion
+                    *(meters per second)*
 
 # Arguments
 
@@ -127,12 +147,17 @@ pub fn AphelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 Returns the approximate **length** of an ellipse using the Ramanujan
 method
 
-# Return values
+# Returned values
 
-This function returns an approximate value for the length of an
-ellipse, using a formula given by [Ramanujan](https://en.wikipedia.org/wiki/Srinivasa_Ramanujan) in 1914.
+```(approximate_length)```
 
-The **error** is:
+* ```(approximate_length)```: An approximate value for the length of
+                              the ellipse (same unit as that of ```a```
+                              and ```b```), using a formula given by
+                              [Ramanujan](https://en.wikipedia.org/wiki/Srinivasa_Ramanujan)
+                              in 1914.
+
+The **error** in ```(approximate_length)``` is:
 
 * 0% for a = b
 * 0.4155% for e = 1
@@ -150,12 +175,15 @@ pub fn LengthOfEllipse_Ramanujan(a: f64, b: f64, e: f64) -> f64 {
 /**
 Returns the approximate **length** of an ellipse
 
-# Return values
+# Returned values
 
-This function returns an approximate value for the length of an
-ellipse.
+```(approximate_length)```
 
-The **error** is:
+* ```(approximate_length)```: An approximate value for the length of
+                              the ellipse (same unit as that of ```a```
+                              and ```b```)
+
+The **error** in ```(approximate_length)``` is:
 
 * less than 0.001% if e < 0.88
 * less than 0.01% if e < 0.95
@@ -176,7 +204,7 @@ pub fn LengthOfEllipse(a: f64, b: f64, e: f64) -> f64 {
 }
 
 /**
-Returns the **semimajor axis**
+Returns the **semimajor axis** of an elliptic orbit
 
 # Arguments
 
@@ -188,7 +216,13 @@ pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
 }
 
 /**
-Returns the **mean motion** *(radians/day)*
+Returns the **mean motion** of an elliptic orbit
+
+# Returned values
+
+```(mean_motion)```
+
+* ```(mean_motion)```: The mean motion of the orbit *(radians/day)*
 
 # Arguments
 
