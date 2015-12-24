@@ -310,7 +310,7 @@ pub fn GeocentricCoordsOfPlanet(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f6
      z/(x*x + y*y).sqrt(),
      0.0057755183 * (x*x + y*y + z*z).sqrt())
 }
-
+/*
 pub fn what(obl_eclp: f64, long_asc_node: f64, inc: f64) {
     let sin_obl_eclp = obl_eclp.sin();
     let cos_obl_eclp = obl_eclp.cos();
@@ -348,3 +348,4 @@ pub fn what(obl_eclp: f64, long_asc_node: f64, inc: f64) {
         asc += 360f64.to_radians();
     }
 }
+*/
