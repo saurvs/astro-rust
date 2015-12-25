@@ -16,6 +16,7 @@ Essential Algorithms for Fundamental Astronomy.
 * Effects of Precession
 * Change of Epoch and Equinox
 * Obliquity of the ecliptic
+* Geocentric coordinates of planets
 * Equation of time
 * Geocentric rectangular coordinates of the sun
 * Transformation between ecliptic, equatorial, horizontal, and galactic coordinates
