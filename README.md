@@ -7,7 +7,7 @@ Essential Algorithms for Fundamental Astronomy.
 [API Documentation](https://saurvs.github.io/astro-rust/)
 
 ## Available things
-* Pluto's position
+* Heliocentric coordinates of Pluto
 * Julian day
 * Sidereal time
 * Geodesics on Earth
