@@ -9,6 +9,7 @@ pub mod binary_star;
 pub mod parallactic;
 pub mod refraction;
 pub mod orbit;
+pub mod precession;
 
 pub mod sun;
 pub mod mercury;

@@ -2,14 +2,14 @@ use time;
 use angle;
 
 /**
-Computes the stellar **equatorial coordinates** for a **different equinox**
+Returns stellar **equatorial coordinates** for a **different equinox**
 
-# Return variables
+# Returned values
 
-Computes the equatorial coordinates *(radians)* of a star for a
-different equinox
+```(new_right_ascension, new_declination)```
 
-```change_epoch_for_equatorial() -> (new_right_ascension, new_declination)```
+* ```new_right_ascension```: Right ascension for the new epoch *(radians)*
+* ```new_declination```: Declination for the new epoch *(radians)*
 
 # Arguments
 
@@ -19,7 +19,7 @@ different equinox
 * ```dec_old```: Declination for the old epoch *(radians)*
 **/
 pub fn ChangeEpochForEquatorialCoords(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -> (f64, f64) {
-    let T = time::julian_century(jd_1);
+    let T = time::JulianCentury(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
 
     let x = t * (angle::PureDegrees(0.0, 0.0, 2306.2181) +
@@ -53,14 +53,14 @@ pub fn ChangeEpochForEquatorialCoords(jd_1: f64, jd_2: f64, asc_old: f64, dec_ol
 }
 
 /**
-Computes the stellar **ecliptical coordinates** for a **different equinox**
+Returns stellar **ecliptical coordinates** for a **different equinox**
 
-# Return variables
+# Returned values
 
-Computes the ecliptical coordinates *(radians)* of a star for a
-different equinox
+```(new_longitude, new_latitude)```
 
-```change_epoch_for_eclip() -> (new_longitude, new_latitude)```
+* ```new_longitude```: Longitude for the new epoch *(radians)*
+* ```new_latitude```: Latitude for the new epoch *(radians)*
 
 # Arguments
 
@@ -70,7 +70,7 @@ different equinox
 * ```lat_old```: Latitude for the old epoch *(radians)*
 **/
 pub fn ChangeEpochForEclipticalCoords(jd_1: f64, jd_2: f64, long_old: f64, lat_old: f64) -> (f64, f64) {
-    let T = time::julian_century(jd_1);
+    let T = time::JulianCentury(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
 
     let x = T * angle::PureDegrees(0.0, 0.0, 0.000598);
