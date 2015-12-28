@@ -2,15 +2,20 @@ use angle;
 use time;
 
 /**
-Computes **mean obliquity** *(radians)* of the Earth's **ecliptic**
+Returns **mean obliquity** *(radians)* of the Earth's **ecliptic**
 for a Julian Ephemeris day
 
-The obliquity of the ecliptic, or the inclination of the Earth's axis
-of rotation, is the angle between the Earth's equator and it's ecliptic.
+# Returned values
+
+```(mean_obliquity)```
+
+* ```mean_obliquity```: The obliquity of the ecliptic *(radians)*;
+  			the angle between the Earth's equator and
+		        the ecliptic.    
 
 The **mean** obliquity isn't corrected for nutation.
-To obtain the **true** obliquity, use [```nutation()```]
-(./fn.nutation.html) *to get the nutation correction for obliquity*,
+To obtain the **true** obliquity, use [```NutationCorrections()```]
+(../fn.NutationCorrections.html) *to get the nutation correction for obliquity*,
 and add it to the **mean** obliquity.
 
 # Arguments

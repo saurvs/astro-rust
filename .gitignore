@@ -6,3 +6,6 @@
 
 # OS X Spotlight files
 .DS_Store
+
+# emacs files
+*~
