@@ -96,8 +96,8 @@ Computes **ecliptical coordinates** *(radians)* from **equatorial coordinates**
 #[macro_export]
 macro_rules! EclipticalCoordsFromEquatorialCoords {
     ($x: expr, $y: expr, $z: expr) => {{
-        (earth::eclip_long_from_equatorial($x, $y, $z),
-         earth::eclip_lat_from_equatorial($x, $y, $z))
+        (astro::earth::eclip_long_from_equatorial($x, $y, $z),
+         astro::earth::eclip_lat_from_equatorial($x, $y, $z))
     }};
 }
 
@@ -155,8 +155,8 @@ Computes **equatorial coordinates** *(radians)* from **ecliptical coordinates**
 #[macro_export]
 macro_rules! EquatorialCoordsFromEclipticalCoords {
     ($x: expr, $y: expr, $z: expr) => {{
-        (earth::right_ascen_from_eclip($x, $y, $z),
-         earth::declin_from_eclip($x, $y, $z))
+        (astro::earth::right_ascen_from_eclip($x, $y, $z),
+         astro::earth::declin_from_eclip($x, $y, $z))
     }};
 }
 
@@ -234,8 +234,8 @@ Computes **galactic coordinates** *(radians)* from **equatorial coordinates**
 #[macro_export]
 macro_rules! GalacticCoordsFromEquatorialCoords {
     ($x: expr, $y: expr) => {{
-        (earth::galac_long_from_equatorial($x, $y),
-         earth::galac_lat_from_equatorial($x, $y))
+        (astro::earth::galac_long_from_equatorial($x, $y),
+         astro::earth::galac_lat_from_equatorial($x, $y))
     }};
 }
 
@@ -273,7 +273,7 @@ pub fn DeclinationFromGalacticCoords(gal_long: f64, gal_lat: f64) -> f64 {
 /**
 Computes **equatorial coordinates** from **galactic coordinates**
 
-# Return values
+# Returned values
 
 ```(right_ascension, declination)```
 
@@ -288,7 +288,7 @@ Computes **equatorial coordinates** from **galactic coordinates**
 #[macro_export]
 macro_rules! EquatorialCoordsFromGalacticCoords {
     ($x: expr, $y: expr) => {{
-        (earth::right_ascen_from_galac($x, $y),
-         earth::declin_from_galac($x, $y))
+        (astro::earth::right_ascen_from_galac($x, $y),
+         astro::earth::declin_from_galac($x, $y))
     }};
 }

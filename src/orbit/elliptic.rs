@@ -15,7 +15,7 @@ Returns the **true anomaly** of a body in an elliptic orbit
 * ```eccentricity```: The eccentricity of the orbit
 **/
 pub fn TrueAnomaly(eccentric_anomaly: f64, eccentricity: f64) -> f64 {
-    2.0 * ((1.0 + eccentric_anomaly).sqrt() * (eccentricity/2.0).tan()).atan2((1.0 - eccentric_anomaly).sqrt())
+    2.0*((1.0 + eccentric_anomaly).sqrt() * (eccentricity/2.0).tan()).atan2((1.0 - eccentric_anomaly).sqrt())
 }
 
 /**
@@ -35,7 +35,7 @@ it's eccentric anomaly
 * ```eccentricity```: The eccentricity of the orbit
 **/
 pub fn RadiusVectorFromEccenAnom(eccentric_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
-    semimaj_ax * (1.0 - eccentricity*eccentric_anomaly.cos())
+    semimaj_ax*(1.0 - eccentricity*eccentric_anomaly.cos())
 }
 
 /**
@@ -55,7 +55,7 @@ it's true anomaly
 * ```eccentricity```: The eccentricity of the orbit
 **/
 pub fn RadiusVectorFromTrueAnom(true_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
-    semimaj_ax * (1.0 - eccentricity*eccentricity) / (1.0 + eccentricity*true_anomaly.cos())
+    semimaj_ax*(1.0 - eccentricity*eccentricity) / (1.0 + eccentricity*true_anomaly.cos())
 }
 
 /**
@@ -198,7 +198,7 @@ The **error** in ```(approximate_length)``` is:
 **/
 pub fn LengthOfEllipse(a: f64, b: f64, e: f64) -> f64 {
     let A = (a + b)/2.0;
-    let G = (a*b).sqrt();
+    let G = (a * b).sqrt();
     let H = (2.0 * a * b)/(a + b);
     f64::consts::PI * (21.0*A - 2.0*G - 3.0*H) / 8.0
 }
@@ -212,7 +212,7 @@ Returns the **semimajor axis** of an elliptic orbit
 * ```ecc```: Eccentricity of the orbit
 **/
 pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
-    perih / (1.0 - ecc)
+    perih/(1.0 - ecc)
 }
 
 /**
@@ -233,17 +233,16 @@ pub fn MeanMotion(semimaj_ax: f64) -> f64 {
 }
 
 pub fn TimeOfPassageThroughAscendingNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
-    time_of_passage_through_node(-1.0 * w, n, a, e, T)
+    time_of_passage_through_node(-w, n, a, e, T)
 }
 
 pub fn TimeOfPassageThroughDescendingNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
-    time_of_passage_through_node(180_f64.to_radians() * w, n, a, e, T)
+    time_of_passage_through_node(180_f64.to_radians()*w, n, a, e, T)
 }
 
 fn time_of_passage_through_node(v: f64, n: f64, a: f64, e: f64, T: f64)  -> (f64, f64) {
     let E = 2.0 * ((1.0 - e).sqrt()*(v/2.0).tan()).atan2((1.0 + e).sqrt());
     let M = E - e*E.sin();
 
-    (T + M/n,
-     a*(1.0 - e*E.cos()))
+    (T + M/n, a*(1.0 - e*E.cos()))
 }

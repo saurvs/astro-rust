@@ -297,7 +297,7 @@ macro_rules! EquationOfTime {
     ($x: expr, $y: expr) => {{
             let (nut_long, nut_obl) = earth::NutationCorrection($x);
             let true_obl = earth::MeanObliquity($x) + nut_obl;
-            earth::EquationOfTime($x, $y, nut_long, true_obl)
+            astro::earth::EquationOfTime($x, $y, nut_long, true_obl)
     }};
 }
 

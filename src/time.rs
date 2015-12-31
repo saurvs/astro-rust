@@ -63,9 +63,7 @@ pub fn DecimalYear(date: Date) -> f64 {
     let mut y = 0;
     let mut days = 365.0;
 
-    if date.m > 1 {
-        y += 31;
-    }
+    if date.m > 1 { y += 31; }
     if date.m > 2 {
         y += 28;
         if IsLeapYear(date.y, date.t) {
@@ -73,33 +71,15 @@ pub fn DecimalYear(date: Date) -> f64 {
             days += 1.0;
         }
     }
-    if date.m > 3 {
-        y += 31;
-    }
-    if date.m > 4 {
-        y += 30;
-    }
-    if date.m > 5 {
-        y += 31;
-    }
-    if date.m > 6 {
-        y += 30;
-    }
-    if date.m > 7 {
-        y += 31;
-    }
-    if date.m > 8 {
-        y += 31;
-    }
-    if date.m > 9 {
-        y += 30;
-    }
-    if date.m > 10 {
-        y += 31;
-    }
-    if date.m > 11 {
-        y += 30;
-    }
+    if date.m > 3 { y += 31; }
+    if date.m > 4 { y += 30; }
+    if date.m > 5 { y += 31; }
+    if date.m > 6 { y += 30; }
+    if date.m > 7 { y += 31; }
+    if date.m > 8 { y += 31; }
+    if date.m > 9 { y += 30; }
+    if date.m > 10 { y += 31; }
+    if date.m > 11 { y += 30; }
 
     (date.y as f64) + ((y as f64) + date.d)/days
 }
@@ -116,12 +96,8 @@ pub fn IsLeapYear(year: i32, calendar_type: CalendarType) -> (bool) {
     match calendar_type {
         CalendarType::Julian => year % 4 == 0,
         CalendarType::Gregorian => {
-            if year%100 == 0 {
-                year%400 == 0
-            }
-            else {
-                year%4 == 0
-            }
+            if year%100 == 0 { year%400 == 0 }
+            else { year%4 == 0 }
         },
     };
     false
@@ -133,7 +109,7 @@ Computes a **Julian century**, the time between the epoch J2000.0 and a given Ju
 * ```jed```: Julian Emphemeris day
 **/
 pub fn JulianCentury(jed: f64) -> f64 {
-    (jed - 2451545.0) / 36525.0
+    (jed-2451545.0) / 36525.0
 }
 
 /**
@@ -153,7 +129,7 @@ pub fn JulianDay(mut date: Date) -> f64 {
     let a = util::int((date.y as f64) / 100.0) as f64;
     let mut b;
     match date.t {
-        CalendarType::Gregorian => b = 2.0 - a + (util::int(a / 4.0) as f64),
+        CalendarType::Gregorian => b = 2.0 - a + (util::int(a/4.0) as f64),
         CalendarType::Julian => b = 0.0,
     };
 
@@ -166,11 +142,18 @@ pub fn JulianDay(mut date: Date) -> f64 {
 }
 
 #[macro_export]
+macro_rules! JulianCentury {
+    ($a: expr) => {
+        astro::time::JulianCentury($a)
+    };
+}
+
+#[macro_export]
 macro_rules! JulianDay {
     ($a: expr, $b: expr, $c: expr, $d: expr, $e: expr, $f: expr, $g: expr) => {{
         let day = UsualDay{};
         let date = Date{};
-        time::JulianDay()
+        astro::time::JulianDay()
     }};
 }
 
@@ -245,8 +228,8 @@ pub fn MeanSiderealTime(date: Date) -> f64 {
     let t = JulianCentury(jd);
 
     280.46061837 +
-    360.98564736629 * (jd - 2451545.0) +
-    (t * t) * (0.000387933  - t / 38710000.0)
+    360.98564736629 * (jd-2451545.0) +
+    t*t * (0.000387933 - t/38710000.0)
 }
 
 /**
@@ -284,11 +267,11 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
     let y = (year as f64) + ((month as f64) - 0.5)/12.0;
 
     if y < -500.0 {
-        let u = (y - 1820.0)/100.0;
+        let u = (y-1820.0) / 100.0;
         return -20.0 + 32.0*u*u;
     }
     else if y < 500.0 {
-        let u = y/100.0;
+        let u = y / 100.0;
         return 10583.6 -
                u * (1014.41 -
                u * (33.78311 -
@@ -299,7 +282,7 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
                    ))));
     }
     else if y < 1600.0 {
-        let u = (y - 1000.0)/100.0;
+        let u = (y-1000.0) / 100.0;
         return 1574.2 -
                u * (556.01 -
                u * (71.23472 +
@@ -314,7 +297,7 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
         return 120.0 -
                u * (0.9808 +
                u * (0.01532 -
-                    u * (1.0 / 7129.0)
+                    u / 7129.0
                    ));
     }
     else if y < 1800.0 {
@@ -323,7 +306,7 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
                u * (0.1603 -
                u * (0.0059285 -
                u * (0.00013336 -
-                    u * (1.0 / 1174000.0)
+                    u / 1174000.0
                    )));
     }
     else if y < 1860.0 {
@@ -345,7 +328,7 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
                u * (0.251754 -
                u * (0.01680668 -
                u * (0.0004473624 -
-                    u * (1.0 / 233174.0)
+                    u / 233174.0
                    ))));
     }
     else if y < 1920.0 {
@@ -362,23 +345,23 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
         return 21.20 +
                u * (0.84493 -
                u * (0.076100 -
-                    u * 0.0020936)
-                   );
+                    u * 0.0020936
+                   ));
     }
     else if y < 1961.0 {
         let u = y - 1950.0;
         return 29.07 +
                u * (0.407 -
                u * ((1.0 / 233.0) -
-                    u * (1.0 / 2547.0))
-                   );
+                    u / 2547.0
+                   ));
     }
     else if y < 1986.0 {
         let u = y - 1975.0;
         return 45.45 +
                u * (1.067 -
                u * ((1.0 / 260.0) +
-                    u * (1.0 / 718.0))
+                    u / 718.0)
                    );
     }
     else if y < 2005.0 {
@@ -398,11 +381,11 @@ pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
                     u * 0.005589);
     }
     else if y < 2150.0 {
-        let u = (y - 1820.0) / 100.0;
+        let u = (y-1820.0) / 100.0;
         return -20.0 + 32.0*u*u - 0.5628*(2150.0 - y);
     }
     else if y >= 2150.0 {
-        let u = (y - 1820.0) / 100.0;
+        let u = (y-1820.0) / 100.0;
         return -20.0 + 32.0*u*u;
     }
 

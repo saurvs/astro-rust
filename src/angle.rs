@@ -1,7 +1,7 @@
 use coordinates;
 
 /**
-Computes **angular separation** between two equatorial points
+Returns **angular separation** between two equatorial points
 
 # Arguments
 
@@ -10,7 +10,7 @@ Computes **angular separation** between two equatorial points
 **/
 pub fn AngularSep(p1: coordinates::EquatorialPoint, p2: coordinates::EquatorialPoint) -> f64 {
     (p1.dec.sin() * p2.dec.sin() +
-     p1.dec.cos() * p2.dec.cos() * (p1.asc - p2.asc).cos()
+     p1.dec.cos() * p2.dec.cos() * (p1.asc-p2.asc).cos()
     ).cos()
 }
 
@@ -23,28 +23,24 @@ Returns an angle expressed in **degrees only**
 * ```m```: Minute
 * ```s```: Second
 **/
-pub fn PureDegrees(d: f64, mut m: f64, mut s: f64) -> f64 {
-    if d < 0.0 {
-        m = -1.0 * m.abs();
-        s = -1.0 * s.abs();
-    }
-    d + (m / 60.0) + (s / 3600.0)
+pub fn PureDegrees(d: f64, m: f64, s: f64) -> f64 {
+    let (M, S) = if d < 0.0 { (-m.abs(), -s.abs()) }
+                 else       { (m, s) };
+    d + M/60.0 + S/3600.0
 }
 
 /**
-Computes the equivalent angle in **[0, 360] degree range**
+Returns the equivalent angle in **[0, 360] degree range**
 
 # Arguments
 
 * ```angle```: Angle *(degrees)*
 **/
 pub fn LimitedTo360(angle: f64) -> f64 {
-    let n = (angle / 360.0) as i64;
-    let mut limited_angle = angle - (360.0 * (n as f64));
-    if limited_angle < 0.0 {
-        limited_angle += 360.0;
-    }
-    limited_angle
+    let n = (angle/360.0) as i64;
+    let limited_angle = angle - (360.0 * (n as f64));
+    if limited_angle < 0.0 { limited_angle + 360.0 }
+    else                   { limited_angle }
 }
 
 /**
@@ -59,6 +55,6 @@ for this library.
 * ```angle```: Angle (in degrees)
 **/
 fn small_angle(angle: f64) -> bool {
-    if angle < 0.003 { return true; }
-    false
+    if angle < 0.003 { true }
+    else             { false }
 }

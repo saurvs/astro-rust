@@ -12,7 +12,7 @@ pub fn PositionAngleOfBrightLimb(sun_equa_point: coordinates::EquatorialPoint,
 }
 
 /**
-Computes the **illuminated fraction** of the moon from **equatorial** coordinates
+Returns the **illuminated fraction** of the moon using **equatorial** coordinates
 
 # Arguments
 
@@ -31,7 +31,7 @@ pub fn IlluminatedFractionFromEquatorialCoords(sun_equa_point: coordinates::Equa
 }
 
 /**
-Computes the **illuminated fraction** of the moon from **eclipctical** coordinates
+Return the **illuminated fraction** of the moon using **eclipctical** coordinates
 
 # Arguments
 
@@ -70,15 +70,15 @@ and **descending nodes**, close to a given date
 ```date```: A ```Date``` struct
 **/
 pub fn TimesOfPassageThroughNodes(date: time::Date) -> (f64, f64) {
-    let k = (time::DecimalYear(date) - 2000.05) * 13.4223;
+    let k = (time::DecimalYear(date) - 2000.05)*13.4223;
     let T = k / 1342.23;
     let k1 = (k as i32) as f64;
     let k2 = (k1 as f64) + 0.5;
 
-    (times_of_passage_through_nodes(k1, T), times_of_passage_through_nodes(k2, T))
+    (time_of_passage_through_node(k1, T), time_of_passage_through_node(k2, T))
 }
 
-fn times_of_passage_through_nodes(k: f64, T: f64) -> f64 {
+fn time_of_passage_through_node(k: f64, T: f64) -> f64 {
     let D = (183.638 + 331.73735682*k + T*T*(0.0014852 + T*(0.00000209 - T*0.00000001))).to_radians();
     let D_times_2 = 2.0 * D;
     let M = (17.4006 + 26.8203725*k + T*T*(0.0001186 + T*0.00000006)).to_radians();

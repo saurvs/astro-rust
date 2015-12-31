@@ -1,5 +1,5 @@
 /**
-Computes the **true anomaly** and **radius vector** *(AU)* of a body in a near-parabolic orbit
+Returns the **true anomaly** and **radius vector** of a body in a near-parabolic orbit
 
 # Return values
 

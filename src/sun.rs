@@ -75,21 +75,21 @@ of the Sun
                    *mean* obliquity
 **/
 pub fn DiskEphemeris(jde: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
-    let theta = angle::LimitedTo360((jde - 2398220.0) * (360.0 / 25.38)).to_radians();
+    let theta = angle::LimitedTo360((jde-2398220.0) * (360.0/5.38)).to_radians();
     let I = 7.25_f64.to_radians();
-    let K = (73.6667 + 1.3958333*((jde - 2396758.0)/36525.0)).to_radians();
+    let K = (73.6667 + 1.3958333*((jde-2396758.0) / 36525.0)).to_radians();
 
     let z = app_long - K;
     let sin_z = z.sin();
     let cos_z = z.cos();
 
-    let mut x = (-1.0 * app_long_with_nut.cos() * obl_eclip.tan()).atan();
-    let mut y = (-1.0 * cos_z * I.tan()).atan();
+    let mut x = (-app_long_with_nut.cos() * obl_eclip.tan()).atan();
+    let mut y = (-cos_z * I.tan()).atan();
     x = (magnitude_limited_to_less_than_90(x.to_degrees())).to_radians();
     y = (magnitude_limited_to_less_than_90(y.to_degrees())).to_radians();
 
     let B_0 = (sin_z * I.sin()).asin();
-    let nu = (-1.0 * sin_z * I.cos()).atan2(-1.0 * cos_z);
+    let nu = (-sin_z * I.cos()).atan2(-cos_z);
     let L_0 = angle::LimitedTo360((nu - theta).to_degrees()).to_radians();
 
     (x + y, B_0, L_0)
@@ -97,5 +97,5 @@ pub fn DiskEphemeris(jde: f64, app_long: f64, app_long_with_nut: f64, obl_eclip:
 
 fn magnitude_limited_to_less_than_90(a: f64) -> f64 {
     if a > 270.0 {a - 360.0}
-    else {a}
+    else         {a}
 }

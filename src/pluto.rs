@@ -32,7 +32,6 @@ The coordinates are with reference to the epoch J2000.0.
 pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
-
     let tuple_terms = [
         terms(0, 0, 1, -19.799805, 19.850055, -5.452852, -14.974862, 6.6865439, 6.8951812),
         terms(0, 0, 2, 0.897144, -4.954829, 3.527812, 1.672790, -1.1827535, -0.0332538),
@@ -78,21 +77,21 @@ pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
       	terms(3, 0, -1, 0.000005, -0.000003, 0.0, 0.0, 0.0000019, 0.0000035),
       	terms(3, 0, 0, 0.0, 0.0, 0.000001, 0.0, 0.000001, 0.0000003)];
 
-    let j = 34.35 + 3034.9057 * julian_century;
-    let s = 50.08 + 1222.1138 * julian_century;
-    let p = 238.96 + 144.9600 * julian_century;
+    let j = 34.35 + 3034.9057*julian_century;
+    let s = 50.08 + 1222.1138*julian_century;
+    let p = 238.96 + 144.9600*julian_century;
 
-    let mut long = (238.958116f64 + 144.96f64 * julian_century).to_radians();
-    let mut lat = -3.908239f64.to_radians();
+    let mut long = (238.958116f64 + 144.96*julian_century).to_radians();
+    let mut lat = -3.908239_f64.to_radians();
     let mut r = 40.7241346;
 
     for x in tuple_terms.iter() {
-        let alpha = ((x.0 as f64) * j + (x.1 as f64) * s + (x.2 as f64) * p).to_radians();
-        let alpha_sin = (alpha as f64).sin();
-        let alpha_cos = (alpha as f64).cos();
-        long += x.3.to_radians() * alpha_sin + x.4.to_radians() * alpha_cos;
-        lat += x.5.to_radians() * alpha_sin + x.6.to_radians() * alpha_cos;
-        r += x.7 * alpha_sin + x.8 * alpha_cos;
+        let alpha = ((x.0 as f64)*j + (x.1 as f64)*s + (x.2 as f64)*p).to_radians();
+        let alpha_sin = alpha.sin();
+        let alpha_cos = alpha.cos();
+        long += x.3.to_radians()*alpha_sin + x.4.to_radians()*alpha_cos;
+        lat += x.5.to_radians()*alpha_sin + x.6.to_radians()*alpha_cos;
+        r += x.7*alpha_sin + x.8*alpha_cos;
     }
 
     (long, lat, r)

@@ -1,17 +1,17 @@
 use time;
 
 /**
-Computes the **combined magnitude** of two stars
+Returns the **combined magnitude** of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
 **/
 pub fn CombinedMag(m1: f64, m2: f64) -> f64 {
-    m2 - 2.5 * (BrightnessRatio(m1, m2) + 1.0)
+    m2 - 2.5*(BrightnessRatio(m1, m2) + 1.0)
 }
 
 /**
-Computes the **combined magnitude** of two or more stars
+Returns the **combined magnitude** of two or more stars
 
 * ```m```: Array of magnitudes of stars
 **/
@@ -24,17 +24,17 @@ pub fn CombinedMagOfMany(m: &[f64]) -> f64 {
 }
 
 /**
-Computes the **brightness ratio** of two stars
+Returns the **brightness ratio** of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
 **/
 pub fn BrightnessRatio(m1: f64, m2: f64) -> f64 {
-    10.0_f64.powf(0.4 * (m2 - m1))
+    10.0_f64.powf(0.4 * (m2-m1))
 }
 
 /**
-Computes the **difference in magnitude** of two stars
+Returns the **difference in magnitude** of two stars
 
 * ```br```: Brightness ratio of two stars
 **/
@@ -43,28 +43,28 @@ pub fn MagDifference(br: f64) -> f64 {
 }
 
 /**
-Computes the **absolute magnitude** of a star from its parallax
+Returns the **absolute magnitude** of a star from its parallax
 
 * ```par```: Parallax of star
 * ```am```: Apparent magnitude of star
 **/
 pub fn AbsoluteMagFromParallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
-    am + 5.0 + 5.0 * par.log(10.0)
+    am + 5.0 + 5.0*par.log(10.0)
 }
 
 /**
-Computes the **absolute magnitude** of a star from its distance from earth
+Returns the **absolute magnitude** of a star from its distance from earth
 
 * ```d```: Distance of star from earth *(parsecs)*
 * ```am```: Apparent magnitude of star
 **/
 pub fn AbsoluteMagFromDistance(d: f64, am: f64) -> f64 {
-    am + 5.0 - 5.0 * d.log(10.0)
+    am + 5.0 - 5.0*d.log(10.0)
 }
 
 /**
-Computes the **abberation** corrections *(radians)* for a star's equatorial coordinates
+Returns the **abberation** corrections *(radians)* for a star's equatorial coordinates
 
 # Returned values
 
@@ -355,8 +355,8 @@ pub fn AberrationCorrections(asc: f64, dec: f64, jed: f64) -> (f64, f64) {
 
     let c = 17314463350.0;
 
-    let delta_asc = (y*asc.cos() - x*asc.sin()) / (c * dec.cos());
-    let delta_dec = -1.0 * (((x*asc.cos() + y*asc.sin())*dec.sin() - z*dec.cos())) / c;
+    let delta_asc = (y*asc.cos() - x*asc.sin()) / (c*dec.cos());
+    let delta_dec = -(((x*asc.cos() + y*asc.sin()) * dec.sin() - z*dec.cos())) / c;
 
     (delta_asc, delta_dec)
 }

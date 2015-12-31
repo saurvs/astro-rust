@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Computes **mean annual motion** of companion star
+Returns the **mean annual motion** of companion star
 
 * ```period_rev```: Period of revolution expressed in mean solar years
 **/
@@ -10,7 +10,7 @@ pub fn MeanAnnualMotionOfCompanion(period_rev: f64) -> f64 {
 }
 
 /**
-Computes **mean anomaly** of companion star
+Returns the **mean anomaly** of companion star
 
 # Arguments
 
@@ -20,11 +20,11 @@ Computes **mean anomaly** of companion star
 * ```time```: Current time, given as a year with decimals (eg: 1945.62)
 **/
 pub fn MeanAnomalyOfCompanion(mean_annual_motion: f64, periastron_pass: f64, time: f64) -> f64 {
-    mean_annual_motion * (time - periastron_pass)
+    mean_annual_motion * (time-periastron_pass)
 }
 
 /**
-Computes **radius vector** of binary star
+Returns the **radius vector** of binary star
 
 # Arguments
 
@@ -33,11 +33,11 @@ Computes **radius vector** of binary star
 * ```ecc_anomaly```: Eccentric anomaly of binary star
 **/
 pub fn RadiusVector(semimajor_axis: f64, ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
-    semimajor_axis * (1.0 - ecc_true_orb * ecc_anomaly.cos())
+    semimajor_axis * (1.0 - ecc_true_orb*ecc_anomaly.cos())
 }
 
 /**
-Computes **true anomaly** of binary star
+Returns the **true anomaly** of binary star
 
 # Arguments
 
@@ -45,11 +45,11 @@ Computes **true anomaly** of binary star
 * ```ecc_anomaly```: Eccentric anomaly of binary star
 **/
 pub fn TrueAnomaly(ecc_true_orb: f64, ecc_anomaly: f64) -> f64 {
-    2.0 * (((1.0 + ecc_true_orb) / (1.0 - ecc_true_orb)).sqrt() * (ecc_anomaly / 2.0).tan()).atan()
+    2.0 * (((1.0 + ecc_true_orb)/(1.0 - ecc_true_orb)).sqrt() * (ecc_anomaly / 2.0).tan()).atan()
 }
 
 /**
-Computes **apparent position angle** of binary star
+Returns the **apparent position angle** of binary star
 
 # Arguments
 
@@ -65,7 +65,7 @@ pub fn ApparentPositionAngle(asc_node_pos: f64, true_anomaly: f64, periastron_lo
 }
 
 /**
-Computes **angular separation** of binary star
+Returns the **angular separation** of binary star
 
 # Arguments
 
@@ -84,7 +84,7 @@ pub fn AngularSep(radius_vec: f64, true_anomaly: f64, periastron_long: f64, inc:
 }
 
 /**
-Computes **eccentricity** of the **apparent orbit**
+Returns the **eccentricity** of the **apparent orbit**
 
 # Arguments
 
@@ -95,10 +95,10 @@ Computes **eccentricity** of the **apparent orbit**
 * ```periastron_long```: Longitude of periastron
 **/
 pub fn EccentricityOfApparentOrbit(ecc_true_orb: f64, true_anomaly: f64, periastron_long: f64, inc: f64) -> f64 {
-    let a = (1.0 - (ecc_true_orb * periastron_long.cos()).powi(2)) * inc.cos().powi(2);
+    let a = (1.0 - (ecc_true_orb*periastron_long.cos()).powi(2)) * inc.cos().powi(2);
     let b = ecc_true_orb.powi(2) * periastron_long.sin() * periastron_long.cos() * inc.cos();
     let c = 1.0 - (ecc_true_orb * periastron_long.sin()).powi(2);
-    let d = ((a - c).powi(2) + 4.0 * b.powi(2)).sqrt();
+    let d = ((a - c).powi(2) + 4.0*b.powi(2)).sqrt();
 
-    ((2.0 * d) / (a + c + d)).sqrt()
+    ((2.0 * d)/(a + c + d)).sqrt()
 }

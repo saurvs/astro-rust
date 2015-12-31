@@ -1,5 +1,11 @@
 /**
-Computes **diameter** of asteroid *(meters)*
+Returns the **diameter** of an asteroid
+
+# Returned values
+
+```(diameter)```
+
+* ```diameter```: Diameter of the asteroid *(meters)*
 
 # Arguments
 
@@ -7,17 +13,23 @@ Computes **diameter** of asteroid *(meters)*
 * ```albedo```: Reflective power of asteroid
 **/
 pub fn Diameter(abs_mag: f64, albedo: f64) -> f64 {
-    10.0_f64.powf(3.12 - (abs_mag / 5.0) - (0.217147 * albedo.log(10.0)))  / 1000.0
+    0.001_f64.powf(3.12 - (abs_mag / 5.0) - (0.217147 * albedo.log(10.0)))
 }
 
 /**
-Computes **apparent diameter** of asteroid *(meters)*
+Returns the **apparent diameter** of an asteroid
+
+# Returned values
+
+```(apparent_diameter)```
+
+* ```apparent_diameter```: Apparent diameter of the asteroid *(meters)*
 
 # Arguments
 
-* ```true_diameter```: True diameter of asteroid (in kilometers)
-* ```distance_to_earth```: Asteroid's distance to Earth (in AU)
+* ```true_diameter```: True diameter of the asteroid *(kilometers)*
+* ```distance_to_earth```: Asteroid's distance to Earth *(AU)*
 **/
 pub fn ApparentDiameter(true_diameter: f64, distance_to_earth: f64) -> f64 {
-    0.0013788 * (true_diameter / distance_to_earth) / 1000.0
+    0001.3788 * (true_diameter/distance_to_earth)
 }

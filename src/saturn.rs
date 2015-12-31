@@ -19,8 +19,8 @@ Returns Saturn's **polar semidiameter**
 pub fn PolarSemidiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
     let a = equatorial_unit_semidiameter();
     let b = polar_unit_semidiameter();
-    let k = 1.0 - (b / a).powi(2);
-    (a / distance_to_earth) * (1.0 - k * earth_lat.cos().powi(2)).sqrt()
+    let k = 1.0 - (b/a).powi(2);
+    (a/distance_to_earth) * (1.0 - k*earth_lat.cos().powi(2)).sqrt()
 }
 
 /**

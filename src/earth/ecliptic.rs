@@ -2,16 +2,16 @@ use angle;
 use time;
 
 /**
-Returns **mean obliquity** *(radians)* of the Earth's **ecliptic**
-for a Julian Ephemeris day
+Returns **mean obliquity** of the Earth's **ecliptic** for a Julian
+Ephemeris day
 
 # Returned values
 
 ```(mean_obliquity)```
 
 * ```mean_obliquity```: The obliquity of the ecliptic *(radians)*;
-  			the angle between the Earth's equator and
-		        the ecliptic.    
+  			            the angle between the Earth's equator and
+		                the ecliptic.
 
 The **mean** obliquity isn't corrected for nutation.
 To obtain the **true** obliquity, use [```NutationCorrections()```]

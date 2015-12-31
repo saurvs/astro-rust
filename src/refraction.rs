@@ -1,14 +1,12 @@
 use angle;
 
 fn close_to_90_degrees(a: f64) -> bool {
-    if (90.0 - a).abs() < 0.0001 {
-        return true;
-    }
-    false
+    if (90.0 - a).abs() < 0.0001 { true }
+    else                         { false }
 }
 
 fn pt_correction(prss: f64, temp: f64) -> f64 {
-    (prss / 1010.0) * (283.0 / (273.0 + temp))
+    (prss/1010.0) * (283.0 / (273.0+temp))
 }
 
 /*
@@ -49,13 +47,13 @@ fn pt_correction(prss: f64, temp: f64) -> f64 {
 */
 
 pub fn approx_refraction_from_app_alt(app_alt: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 58.294).to_radians() * (90f64.to_radians() - app_alt).tan() -
-    angle::PureDegrees(0.0, 0.0, 0.0668).to_radians() * (90f64.to_radians() - app_alt).tan().powi(3)
+    angle::PureDegrees(0.0, 0.0, 58.294).to_radians() * (90_f64.to_radians()-app_alt).tan() -
+    angle::PureDegrees(0.0, 0.0, 0.0668).to_radians() * (90_f64.to_radians()-app_alt).tan().powi(3)
 }
 
 pub fn approx_refraction_from_true_alt(true_alt: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 58.276).to_radians() * (90f64.to_radians() - true_alt).tan() -
-    angle::PureDegrees(0.0, 0.0, 0.0824).to_radians() * (90f64.to_radians() - true_alt).tan().powi(3)
+    angle::PureDegrees(0.0, 0.0, 58.276).to_radians() * (90_f64.to_radians()-true_alt).tan() -
+    angle::PureDegrees(0.0, 0.0, 0.0824).to_radians() * (90_f64.to_radians()-true_alt).tan().powi(3)
 }
 
 /*
@@ -79,17 +77,13 @@ pub fn approx_refraction_from_true_alt(true_alt: f64) -> f64 {
 
 pub fn refraction_from_app_alt(mut app_alt: f64, prss: f64, temp: f64) -> f64 {
     app_alt = app_alt.to_degrees();
-    if close_to_90_degrees(app_alt) {
-        return 0.0;
-    }
+    if close_to_90_degrees(app_alt) { return 0.0; }
     (1.0 / (60.0 * (app_alt + (7.31 / (app_alt + 4.4))).to_radians().tan())) * pt_correction(prss, temp)
 }
 
 pub fn refraction_from_true_alt(mut true_alt: f64, prss: f64, temp: f64) -> f64 {
     true_alt = true_alt.to_degrees();
-    if close_to_90_degrees(true_alt) {
-        return 0.0;
-    }
+    if close_to_90_degrees(true_alt) { return 0.0; }
     (1.02 / (60.0 * ((true_alt + (10.3 / (true_alt + 5.11)))).to_radians().tan())) *
     pt_correction(prss, temp)
 }

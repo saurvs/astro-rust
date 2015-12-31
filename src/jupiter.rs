@@ -2,7 +2,7 @@ use angle;
 use earth;
 
 /**
-Computes Jupiter's **equatorial semidiameter**
+Returns Jupiter's **equatorial semidiameter**
 
 # Arguments
 
@@ -13,7 +13,7 @@ pub fn EquatorialSemidiameter(DistanceToEarth: f64) -> f64 {
 }
 
 /**
-Computes Jupiter's **polar semidiameter**
+Returns Jupiter's **polar semidiameter**
 
 # Arguments
 
@@ -24,7 +24,7 @@ pub fn PolarSemidiameter(DistanceToEarth: f64) -> f64 {
 }
 
 /**
-Computes Jupiter's
+Returns Jupiter's
 
 # Arguments
 
