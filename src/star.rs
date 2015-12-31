@@ -20,7 +20,7 @@ pub fn CombinedMagOfMany(m: &[f64]) -> f64 {
     for i in m.iter() {
         sum += 10_f64.powf(-0.4 * i);
     }
-    -2.5 * sum.log(10.0)
+    -2.5 * sum.log10()
 }
 
 /**
@@ -39,7 +39,7 @@ Returns the **difference in magnitude** of two stars
 * ```br```: Brightness ratio of two stars
 **/
 pub fn MagDifference(br: f64) -> f64 {
-    2.5 * br.log(10.0)
+    2.5 * br.log10()
 }
 
 /**
@@ -50,7 +50,7 @@ Returns the **absolute magnitude** of a star from its parallax
 **/
 pub fn AbsoluteMagFromParallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
-    am + 5.0 + 5.0*par.log(10.0)
+    am + 5.0 + 5.0*par.log10()
 }
 
 /**
@@ -60,7 +60,7 @@ Returns the **absolute magnitude** of a star from its distance from earth
 * ```am```: Apparent magnitude of star
 **/
 pub fn AbsoluteMagFromDistance(d: f64, am: f64) -> f64 {
-    am + 5.0 - 5.0*d.log(10.0)
+    am + 5.0 - 5.0*d.log10()
 }
 
 /**

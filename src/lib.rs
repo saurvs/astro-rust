@@ -12,14 +12,7 @@ pub mod orbit;
 pub mod precession;
 
 pub mod sun;
-pub mod mercury;
-pub mod venus;
+pub mod planet;
 pub mod earth;
-pub mod mars;
-pub mod jupiter;
-pub mod saturn;
-pub mod neptune;
-pub mod uranus;
-pub mod pluto;
 
 pub mod asteroid;

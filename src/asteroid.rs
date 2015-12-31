@@ -13,7 +13,7 @@ Returns the **diameter** of an asteroid
 * ```albedo```: Reflective power of asteroid
 **/
 pub fn Diameter(abs_mag: f64, albedo: f64) -> f64 {
-    0.001_f64.powf(3.12 - (abs_mag / 5.0) - (0.217147 * albedo.log(10.0)))
+    0.001_f64.powf(3.12 - abs_mag/5.0 - 0.217147*albedo.log10())
 }
 
 /**

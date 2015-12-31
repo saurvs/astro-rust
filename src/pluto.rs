@@ -1,7 +1,7 @@
 use angle;
 
 /**
-Computes Pluto's **equatorial semidiameter**
+Returns Pluto's **equatorial semidiameter**
 
 # Arguments
 
@@ -12,23 +12,22 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 }
 
 /**
-Computes the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
+Returns the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
 
 The coordinates are with reference to the epoch J2000.0.
 
-# Return variables
+# Returned values
 
-```(longitude, latitude, radius_vector)```
+```(longitude, latitude, radius_vec)```
 
 * ```longitude```: Heliocentric longitude *(radians)*
 * ```latitude```: Heliocentric latitude *(radians)*
-* ```radius_vector```: Heliocentric radius vector *(radians)*
+* ```radius_vec```: Heliocentric radius vector *(AU)*
 
 # Arguments
 
 ```julian_century```: Julian century
 **/
-
 pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);

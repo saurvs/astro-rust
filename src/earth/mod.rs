@@ -27,12 +27,12 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64) {
     let TTT = TT * T;
 
     let L = 100.466457 + 36000.7698278*T + 0.00030322*TT + 0.00000002*TTT;
-    let a = 1.000001018;
     let e = 0.01670863 - 0.000042037*T - 0.0000001267*TTT + 0.00000000014*TTT;
     let pi = 102.937348 + 1.7195366*T + 0.00045688*TT - 0.000000018*TTT;
 
     (angle::LimitedTo360(L).to_radians(),
-     a, e,
+     /*a*/1.000001018,
+     e,
      angle::LimitedTo360(pi).to_radians(),
      angle::LimitedTo360(L - pi).to_radians()
     )
@@ -58,7 +58,7 @@ pub fn EquatorialRadius() -> f64 {
 
 /**
 
-Computes the **polar radius** of the Earth *(meters)*
+Returns the **polar radius** of the Earth *(meters)*
 
 Calculated using [```flattening()```](./fn.flattening.html) and
 [```eq_radius()```](./fn.eq_radius.html)
@@ -68,7 +68,7 @@ pub fn PolarRadius() -> f64 {
 }
 
 /**
-Computes the **eccentricity** of the Earth's **meridian**
+Returns the **eccentricity** of the Earth's **meridian**
 
 Calculated using [```flattening()```](./fn.flattening.html)
 **/
@@ -77,7 +77,7 @@ pub fn EccentricityOfMeridian() -> f64 {
 }
 
 /**
-Computes **angular distance** between two points on Earth's
+Returns **angular distance** between two points on Earth's
 surface
 
 # Arguments
@@ -92,7 +92,7 @@ pub fn AngularDistance(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePo
 }
 
 /**
-Computes a **low accuracy geodesic** between two points on the Earth's
+Returns a **low accuracy geodesic** between two points on the Earth's
 surface *(meters)*
 
 Assumes that the Earth is a sphere.
@@ -107,7 +107,7 @@ pub fn ApproxGeodesic(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoi
 }
 
 /**
-Computes a **high accuracy geodesic** between two points on the Earth's
+Returns a **high accuracy geodesic** between two points on the Earth's
 surface *(meters)*
 
 # Arguments
@@ -130,13 +130,13 @@ pub fn Geodesic(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoint) ->
     let h2 = (3.0 * r + 1.0) / (2.0 * s);
 
     d * (1.0 +
-         Flattening() * h1 * (f.sin() * g.cos()).powi(2) -
-         Flattening() * h2 * (f.cos() * g.sin()).powi(2))
+         Flattening() * h1 * (f.sin()*g.cos()).powi(2) -
+         Flattening() * h2 * (f.cos()*g.sin()).powi(2))
 
 }
 
 /**
-Computes two quantities that are used elsewhere in the library
+Returns two quantities that are used elsewhere in the library
 
 ```Rho``` here denotes the geocentric radius vector, and ```Phi```
 here denotes the geocentric latitude, both of an observer on the
@@ -158,12 +158,12 @@ pub fn RhoSinAndCosPhi(height: f64, geograph_lat: f64) -> (f64, f64) {
 }
 
 /**
-Computes **nutation correction** *(radians)* for ecliptical longitude
+Returns the **nutation corrections** *(radians)* for ecliptical longitude
 and obliquity
 
 # Return variables
 
-Computes the nutation correction *(radians)*, that needs to be added to
+Returns the nutation correction *(radians)*, that needs to be added to
 the ecliptical longitude and the obliquity of the ecliptic to adjust for
 the Earth's nutation. Nutation does *not* affect ecliptical latitude.
 
@@ -174,73 +174,6 @@ the Earth's nutation. Nutation does *not* affect ecliptical latitude.
 ```julian_ephemeris_day```: Julian Ephemeris day
 **/
 pub fn NutationCorrections(julian_ephemeris_day: f64) -> (f64, f64) {
-
-    struct terms(i8, i8, i8, i8, i8, f64, f64, f64, f64);
-    let tuple_terms = [
-        terms(0, 0, 0, 0, 1, -171996.0, -174.2, 92025.0, 8.9),
-        terms(-2, 0, 0, 2, 2, -13187.0, -1.6, 5736.0, -3.1),
-        terms(0, 0, 0, 2, 2, -2274.0, -0.2, 977.0, -0.5),
-        terms(0, 0, 0, 0, 2, 2062.0, 0.2, -895.0, 0.5),
-        terms(0, 1, 0, 0, 0, 1426.0, -3.4, 54.0, -0.1),
-        terms(0, 0, 1, 0, 0, 712.0, 0.1, -7.0, 0.0),
-        terms(-2, 1, 0, 2, 2, -517.0, 1.2, 224.0, -0.6),
-        terms(0, 0, 0, 2, 1, -386.0, -0.4, 200.0, 0.0),
-        terms(0, 0, 1, 2, 2, -301.0, 0.0, 129.0, -0.1),
-        terms(-2, -1, 0, 2, 2, 217.0, -0.5, -95.0, 0.3),
-        terms(-2, 0, 1, 0, 0, -158.0, 0.0, 0.0, 0.0),
-        terms(-2, 0, 0, 2, 1, 129.0, 0.1, -70.0, 0.0),
-        terms(0, 0, -1, 2, 2, 123.0, 0.0, -53.0, 0.0),
-        terms(2, 0, 0, 0, 0, 63.0, 0.0, 0.0, 0.0),
-        terms(0, 0, 1, 0, 1, 63.0, 0.1, -33.0, 0.0),
-        terms(2, 0, -1, 2, 2, -59.0, 0.0, 26.0, 0.0),
-        terms(0, 0, -1, 0, 1, -58.0, -0.1, 32.0, 0.0),
-        terms(0, 0, 1, 2, 1, -51.0, 0.0, 27.0, 0.0),
-        terms(-2, 0, 2, 0, 0, 48.0, 0.0, 0.0, 0.0),
-        terms(0, 0, -2, 2, 1, 46.0, 0.0, -24.0, 0.0),
-        terms(2, 0, 0, 2, 2, -38.0, 0.0, 16.0, 0.0),
-        terms(0, 0, 2, 0, 0, 29.0, 0.0, 0.0, 0.0),
-        terms(-2, 0, 1, 2, 2, 29.0, 0.0, -12.0, 0.0),
-        terms(0, 0, 0, 2, 0, 26.0, 0.0, 0.0, 0.0),
-        terms(-2, 0, 0, 2, 0, -22.0, 0.0, 0.0, 0.0),
-        terms(0, 0, -1, 2, 1, 21.0, 0.0, -10.0, 0.0),
-        terms(0, 2, 0, 0, 0, 17.0, -0.1, 0.0, 0.0),
-        terms(2, 0, -1, 0, 1, 16.0, 0.0, -8.0, 0.0),
-        terms(-2, 2, 0, 2, 2, -16.0, 0.1, 7.0, 0.0),
-        terms(0, 1, 0, 0, 1, -15.0, 0.0, 9.0, 0.0),
-        terms(-2, 0, 1, 0, 1, -13.0, 0.0, 7.0, 0.0),
-        terms(0, -1, 0, 0, 1, -12.0, 0.0, 6.0, 0.0),
-        terms(0, 0, 2, -2, 0, 11.0, 0.0, 0.0, 0.0),
-        terms(2, 0, -1, 2, 1, -10.0, 0.0, 5.0, 0.0),
-        terms(2, 0, 1, 2, 2, -8.0, 0.0, 3.0, 0.0),
-        terms(0, 1, 0, 2, 2, 7.0, 0.0, -3.0, 0.0),
-        terms(-2, 1, 1, 0, 0, -7.0, 0.0, 0.0, 0.0),
-        terms(0, -1, 0, 2, 2, -7.0, 0.0, 3.0, 0.0),
-        terms(2, 0, 0, 2, 1, -7.0, 0.0, 3.0, 0.0),
-        terms(2, 0, 1, 0, 0, 6.0, 0.0, 0.0, 0.0),
-        terms(-2, 0, 2, 2, 2, 6.0, 0.0, -3.0, 0.0),
-        terms(-2, 0, 1, 2, 1, 6.0, 0.0, -3.0, 0.0),
-        terms(2, 0, -2, 0, 1, -6.0, 0.0, 3.0, 0.0),
-        terms(2, 0, 0, 0, 1, -6.0, 0.0, 3.0, 0.0),
-        terms(0, -1, 1, 0, 0, 5.0, 0.0, 0.0, 0.0),
-        terms(-2, -1, 0, 2, 1, -5.0, 0.0, 3.0, 0.0),
-        terms(-2, 0, 0, 0, 1, -5.0, 0.0, 3.0, 0.0),
-        terms(0, 0, 2, 2, 1, -5.0, 0.0, 3.0, 0.0),
-        terms(-2, 0, 2, 0, 1, 4.0, 0.0, 0.0, 0.0),
-        terms(-2, 1, 0, 2, 1, 4.0, 0.0, 0.0, 0.0),
-        terms(0, 0, 1, -2, 0, 4.0, 0.0, 0.0, 0.0),
-        terms(-1, 0, 1, 0, 0, -4.0, 0.0, 0.0, 0.0),
-        terms(-2, 1, 0, 0, 0, -4.0, 0.0, 0.0, 0.0),
-        terms(1, 0, 0, 0, 0, -4.0, 0.0, 0.0, 0.0),
-        terms(0, 0, 1, 2, 0, 3.0, 0.0, 0.0, 0.0),
-        terms(0, 0, -2, 2, 2, -3.0, 0.0, 0.0, 0.0),
-        terms(-1, -1, 1, 0, 0, -3.0, 0.0, 0.0, 0.0),
-        terms(0, 1, 1, 0, 0, -3.0, 0.0, 0.0, 0.0),
-        terms(0, -1, 1, 2, 2, -3.0, 0.0, 0.0, 0.0),
-        terms(2, -1, -1, 2, 2, -3.0, 0.0, 0.0, 0.0),
-        terms(0, 0, 3, 2, 2, -3.0, 0.0, 0.0, 0.0),
-        terms(2, -1, 0, 2, 2, -3.0, 0.0, 0.0, 0.0),
-    ];
-
     let t = time::JulianCentury(julian_ephemeris_day);
 
     let M1 = angle::LimitedTo360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/5620.0)))).to_radians();
@@ -252,21 +185,21 @@ pub fn NutationCorrections(julian_ephemeris_day: f64) -> (f64, f64) {
     let mut nut_in_long = 0.0;
     let mut nut_in_obl = 0.0;
 
-    for x in tuple_terms.iter() {
+    for x in terms_for_nutation().iter() {
         let arg = (x.0 as f64) * D +
                   (x.1 as f64) * M +
                   (x.2 as f64) * M1 +
                   (x.3 as f64) * F +
                   (x.4 as f64) * om;
-        nut_in_long += ((x.5 as f64) + t*(x.6 as f64)) * arg.sin() * (0.0001 / 3600.0);
-        nut_in_obl += ((x.7 as f64) + t*(x.8 as f64)) * arg.cos() * (0.0001 / 3600.0);
+        nut_in_long += ((x.5 as f64) + t*(x.6 as f64)) * arg.sin() * 0.0001/3600.0;
+        nut_in_obl += ((x.7 as f64) + t*(x.8 as f64)) * arg.cos() * 0.0001/3600.0;
     }
 
     (nut_in_long.to_radians(), nut_in_obl.to_radians())
 }
 
 /**
-Computes **equation of time** *(radians)*
+Returns the **equation of time** *(radians)*
 
 # Arguments
 
@@ -283,7 +216,7 @@ pub fn EquationOfTime(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f6
             t * (0.030328 +
             t * (1.0/49931.0 -
             t * (1.0/15300.0 +
-            t * (1.0/2000000.0)
+            t / 2000000.0
             ))))                 );
 
     (L - 0.0057183 -
@@ -292,12 +225,19 @@ pub fn EquationOfTime(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f6
     ).to_radians()
 }
 
+/**
+Returns the **equation of time** *(radians)*
+
+# Arguments
+
+* ```$x```: Julian Ephemeris day
+* ```$y```: Right ascension of the Sun *(radians)*
+**/
 #[macro_export]
 macro_rules! EquationOfTime {
     ($x: expr, $y: expr) => {{
-            let (nut_long, nut_obl) = earth::NutationCorrection($x);
-            let true_obl = earth::MeanObliquity($x) + nut_obl;
-            astro::earth::EquationOfTime($x, $y, nut_long, true_obl)
+            let (nut_long, nut_obl) = astro::earth::NutationCorrections($x);
+            astro::earth::EquationOfTime($x, $y, nut_long, astro::earth::MeanObliquity($x) + nut_obl)
     }};
 }
 
@@ -349,3 +289,71 @@ pub fn what(obl_eclp: f64, long_asc_node: f64, inc: f64) {
     }
 }
 */
+
+struct terms(i8, i8, i8, i8, i8, i16, f32, f32, f32);
+fn terms_for_nutation() -> ([terms; 62]) {
+    [
+        terms(0, 0, 0, 0, 1, -171996, -174.2, 92025.0, 8.9),
+        terms(-2, 0, 0, 2, 2, -13187, -1.6, 5736.0, -3.1),
+        terms(0, 0, 0, 2, 2, -2274, -0.2, 977.0, -0.5),
+        terms(0, 0, 0, 0, 2, 2062, 0.2, -895.0, 0.5),
+        terms(0, 1, 0, 0, 0, 1426, -3.4, 54.0, -0.1),
+        terms(0, 0, 1, 0, 0, 712, 0.1, -7.0, 0.0),
+        terms(-2, 1, 0, 2, 2, -517, 1.2, 224.0, -0.6),
+        terms(0, 0, 0, 2, 1, -386, -0.4, 200.0, 0.0),
+        terms(0, 0, 1, 2, 2, -301, 0.0, 129.0, -0.1),
+        terms(-2, -1, 0, 2, 2, 217, -0.5, -95.0, 0.3),
+        terms(-2, 0, 1, 0, 0, -158, 0.0, 0.0, 0.0),
+        terms(-2, 0, 0, 2, 1, 129, 0.1, -70.0, 0.0),
+        terms(0, 0, -1, 2, 2, 123, 0.0, -53.0, 0.0),
+        terms(2, 0, 0, 0, 0, 63, 0.0, 0.0, 0.0),
+        terms(0, 0, 1, 0, 1, 63, 0.1, -33.0, 0.0),
+        terms(2, 0, -1, 2, 2, -59, 0.0, 26.0, 0.0),
+        terms(0, 0, -1, 0, 1, -58, -0.1, 32.0, 0.0),
+        terms(0, 0, 1, 2, 1, -51, 0.0, 27.0, 0.0),
+        terms(-2, 0, 2, 0, 0, 48, 0.0, 0.0, 0.0),
+        terms(0, 0, -2, 2, 1, 46, 0.0, -24.0, 0.0),
+        terms(2, 0, 0, 2, 2, -38, 0.0, 16.0, 0.0),
+        terms(0, 0, 2, 0, 0, 29, 0.0, 0.0, 0.0),
+        terms(-2, 0, 1, 2, 2, 29, 0.0, -12.0, 0.0),
+        terms(0, 0, 0, 2, 0, 26, 0.0, 0.0, 0.0),
+        terms(-2, 0, 0, 2, 0, -22, 0.0, 0.0, 0.0),
+        terms(0, 0, -1, 2, 1, 21, 0.0, -10.0, 0.0),
+        terms(0, 2, 0, 0, 0, 17, -0.1, 0.0, 0.0),
+        terms(2, 0, -1, 0, 1, 16, 0.0, -8.0, 0.0),
+        terms(-2, 2, 0, 2, 2, -16, 0.1, 7.0, 0.0),
+        terms(0, 1, 0, 0, 1, -15, 0.0, 9.0, 0.0),
+        terms(-2, 0, 1, 0, 1, -13, 0.0, 7.0, 0.0),
+        terms(0, -1, 0, 0, 1, -12, 0.0, 6.0, 0.0),
+        terms(0, 0, 2, -2, 0, 11, 0.0, 0.0, 0.0),
+        terms(2, 0, -1, 2, 1, -10, 0.0, 5.0, 0.0),
+        terms(2, 0, 1, 2, 2, -8, 0.0, 3.0, 0.0),
+        terms(0, 1, 0, 2, 2, 7, 0.0, -3.0, 0.0),
+        terms(-2, 1, 1, 0, 0, -7, 0.0, 0.0, 0.0),
+        terms(0, -1, 0, 2, 2, -7, 0.0, 3.0, 0.0),
+        terms(2, 0, 0, 2, 1, -7, 0.0, 3.0, 0.0),
+        terms(2, 0, 1, 0, 0, 6, 0.0, 0.0, 0.0),
+        terms(-2, 0, 2, 2, 2, 6, 0.0, -3.0, 0.0),
+        terms(-2, 0, 1, 2, 1, 6, 0.0, -3.0, 0.0),
+        terms(2, 0, -2, 0, 1, -6, 0.0, 3.0, 0.0),
+        terms(2, 0, 0, 0, 1, -6, 0.0, 3.0, 0.0),
+        terms(0, -1, 1, 0, 0, 5, 0.0, 0.0, 0.0),
+        terms(-2, -1, 0, 2, 1, -5, 0.0, 3.0, 0.0),
+        terms(-2, 0, 0, 0, 1, -5, 0.0, 3.0, 0.0),
+        terms(0, 0, 2, 2, 1, -5, 0.0, 3.0, 0.0),
+        terms(-2, 0, 2, 0, 1, 4, 0.0, 0.0, 0.0),
+        terms(-2, 1, 0, 2, 1, 4, 0.0, 0.0, 0.0),
+        terms(0, 0, 1, -2, 0, 4, 0.0, 0.0, 0.0),
+        terms(-1, 0, 1, 0, 0, -4, 0.0, 0.0, 0.0),
+        terms(-2, 1, 0, 0, 0, -4, 0.0, 0.0, 0.0),
+        terms(1, 0, 0, 0, 0, -4, 0.0, 0.0, 0.0),
+        terms(0, 0, 1, 2, 0, 3, 0.0, 0.0, 0.0),
+        terms(0, 0, -2, 2, 2, -3, 0.0, 0.0, 0.0),
+        terms(-1, -1, 1, 0, 0, -3, 0.0, 0.0, 0.0),
+        terms(0, 1, 1, 0, 0, -3, 0.0, 0.0, 0.0),
+        terms(0, -1, 1, 2, 2, -3, 0.0, 0.0, 0.0),
+        terms(2, -1, -1, 2, 2, -3, 0.0, 0.0, 0.0),
+        terms(0, 0, 3, 2, 2, -3, 0.0, 0.0, 0.0),
+        terms(2, -1, 0, 2, 2, -3, 0.0, 0.0, 0.0),
+    ]
+}
