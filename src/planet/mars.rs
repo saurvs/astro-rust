@@ -1,5 +1,6 @@
 use angle;
 use planet;
+use time;
 
 /**
 Computes Mars's **equatorial semidiameter**
@@ -51,6 +52,31 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
      angle::LimitedTo360(L - pi).to_radians(),
      angle::LimitedTo360(pi - omega).to_radians()
     )
+}
+
+pub fn EquatorialCoordsOfNorthPole_J1950() -> (f64, f64) {
+    (317.342_f64.to_radians(), 52.711_f64.to_radians())
+}
+
+pub fn EquatorialCoordsOfNorthPole_J2000() -> (f64, f64) {
+    (317.681_f64.to_radians(), 52.886_f64.to_radians())
+}
+
+pub fn EclipticalCoordsOfNorthPole(julian_century: f64) -> (f64, f64) {
+    (317.9065_f64.to_radians() + 1.1733_f64.to_radians()*julian_century,
+     63.2818_f64.to_radians() - 0.00394_f64.to_radians()*julian_century)
+}
+
+/**
+Returns Mars's
+
+# Arguments
+
+* ```jed```: Julian Ephemeris day
+**/
+pub fn Ephemeris(jed: f64) {
+    let julian_century = time::JulianCentury(jed);
+    let (north_pole_long, north_pole_lat) = EclipticalCoordsOfNorthPole(julian_century);
 }
 
 /**

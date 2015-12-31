@@ -1,6 +1,6 @@
 use angle;
-use earth;
 use planet;
+use planet::earth;
 
 /**
 Returns Jupiter's **equatorial semidiameter**
@@ -149,6 +149,22 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
      angle::LimitedTo360(L - pi).to_radians(),
      angle::LimitedTo360(pi - omega).to_radians()
     )
+}
+
+pub fn Io() {
+
+}
+
+pub fn Europa() {
+
+}
+
+pub fn Ganymede() {
+
+}
+
+pub fn Callisto() {
+
 }
 
 /**

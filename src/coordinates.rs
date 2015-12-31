@@ -18,7 +18,7 @@ pub struct EquatorialPoint {
 //-------------------------------------------------------------------
 
 /**
-Computes hour angle from sidereal time at Greenwhich
+Returns hour angle from sidereal time at Greenwhich
 
 # Arguments
 
@@ -31,7 +31,7 @@ pub fn HourAngleFromGreenwhichSidereal(green_sid: f64, obv_long: f64, right_asc:
 }
 
 /**
-Computes hour angle from local sidereal time
+Returns hour angle from local sidereal time
 
 # Arguments
 
@@ -46,7 +46,7 @@ pub fn HourAngleFromLocalSidereal(loc_sid: f64, right_asc: f64) -> f64 {
 // Ecliptical coordinates to equatorial coordinates
 
 /**
-Computes **ecliptical longitude** *(radians)* from **equatorial coordinates**
+Returns **ecliptical longitude** *(radians)* from **equatorial coordinates**
 
 # Arguments
 
@@ -61,7 +61,7 @@ pub fn EclipticalLongitudeFromEquatorialCoords(right_asc: f64, dec: f64, oblq_ec
 }
 
 /**
-Computes **ecliptical latitude** *(radians)* from **equatorial coordinates**
+Returns **ecliptical latitude** *(radians)* from **equatorial coordinates**
 
 # Arguments
 
@@ -76,7 +76,7 @@ pub fn EclipticalLatitudeFromEquatorialCoords(right_asc: f64, dec: f64, oblq_ecl
 }
 
 /**
-Computes **ecliptical coordinates** *(radians)* from **equatorial coordinates**
+Returns **ecliptical coordinates** *(radians)* from **equatorial coordinates**
 
 # Return values
 
@@ -105,7 +105,7 @@ macro_rules! EclipticalCoordsFromEquatorialCoords {
 // Equatorial coordinates to ecliptical coordinates
 
 /**
-Computes **right ascension** *(radians)* from **ecliptical coordinates**
+Returns **right ascension** *(radians)* from **ecliptical coordinates**
 
 # Arguments
 
@@ -120,7 +120,7 @@ pub fn RightAscensionFromEclipticalCoords(ecl_long: f64, ecl_lat: f64, oblq_ecl:
 }
 
 /**
-Computes **declination** *(radians)* from **ecliptical coordinates**
+Returns **declination** *(radians)* from **ecliptical coordinates**
 
 # Arguments
 
@@ -135,7 +135,7 @@ pub fn DeclinationFromEclipticalCoords(ecl_long: f64, ecl_lat: f64, oblq_ecl: f6
 }
 
 /**
-Computes **equatorial coordinates** *(radians)* from **ecliptical coordinates**
+Returns **equatorial coordinates** *(radians)* from **ecliptical coordinates**
 
 # Return values
 
@@ -186,7 +186,7 @@ pub fn eq_dec_from_equatorialial(azimuth: f64, altitude: f64, obv_lat: f64) -> f
 // Equatorial coordinates to galactic coordinates
 
 /**
-Computes **galactic longitude** *(radians)* from **equatorial coordinates**
+Returns **galactic longitude** *(radians)* from **equatorial coordinates**
 
 # Arguments
 
@@ -201,7 +201,7 @@ pub fn GalacticLongitudeFromEquatorialCoords(right_asc: f64, dec: f64) -> f64 {
 }
 
 /**
-Computes **galactic latitude** *(radians)* from **equatorial coordinates**
+Returns **galactic latitude** *(radians)* from **equatorial coordinates**
 
 # Arguments
 
@@ -214,7 +214,7 @@ pub fn GalacticLatitudeFromEquatorialCoords(right_asc: f64, dec: f64) -> f64 {
 }
 
 /**
-Computes **galactic coordinates** *(radians)* from **equatorial coordinates**
+Returns **galactic coordinates** *(radians)* from **equatorial coordinates**
 
 # Return values
 
@@ -243,7 +243,7 @@ macro_rules! GalacticCoordsFromEquatorialCoords {
 // Galactic coordinates to equatorial coordinates
 
 /**
-Computes **right ascension** *(radians)* from **galactic coordinates**
+Returns **right ascension** *(radians)* from **galactic coordinates**
 
 # Arguments
 
@@ -258,7 +258,7 @@ pub fn RightAscensionFromGalacticCoords(gal_long: f64, gal_lat: f64) -> f64 {
 }
 
 /**
-Computes **declination** *(radians)* from **galactic coordinates**
+Returns **declination** *(radians)* from **galactic coordinates**
 
 # Arguments
 
@@ -271,7 +271,7 @@ pub fn DeclinationFromGalacticCoords(gal_long: f64, gal_lat: f64) -> f64 {
 }
 
 /**
-Computes **equatorial coordinates** from **galactic coordinates**
+Returns **equatorial coordinates** from **galactic coordinates**
 
 # Returned values
 

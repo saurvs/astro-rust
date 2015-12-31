@@ -13,6 +13,5 @@ pub mod precession;
 
 pub mod sun;
 pub mod planet;
-pub mod earth;
 
 pub mod asteroid;

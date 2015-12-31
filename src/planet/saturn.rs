@@ -76,6 +76,38 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
     )
 }
 
+pub fn Mimas() {
+
+}
+
+pub fn Enceladus() {
+
+}
+
+pub fn Tethys() {
+
+}
+
+pub fn Dione() {
+
+}
+
+pub fn Rhea() {
+
+}
+
+pub fn Titan() {
+
+}
+
+pub fn Hyperion() {
+
+}
+
+pub fn Iapetus() {
+
+}
+
 /**
 Returns Saturn's **heliocentric coordinates**
 
