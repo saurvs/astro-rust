@@ -5,7 +5,7 @@ use time;
 Returns the **nutation corrections** for ecliptical longitude
 and obliquity
 
-# Return variables
+# Returns
 
 Returns the nutation corrections that need to be added to the
 ecliptical longitude and the obliquity of the ecliptic to account for
