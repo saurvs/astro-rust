@@ -2,7 +2,7 @@ use angle;
 use planet;
 
 /**
-Computes Uranus's **equatorial semidiameter**
+Returns Uranus's **equatorial semidiameter**
 
 # Arguments
 
@@ -15,7 +15,7 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 /**
 Returns Uranus's **orbital elements**
 
-# Returned values
+# Returns
 
 ```(L, a, e, i, omega, pi, M, w)```
 
@@ -56,7 +56,7 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
 /**
 Returns Uranus's **heliocentric coordinates**
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 

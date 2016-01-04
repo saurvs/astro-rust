@@ -66,7 +66,7 @@ pub fn AbsoluteMagFromDistance(d: f64, am: f64) -> f64 {
 /**
 Returns the **abberation** corrections *(radians)* for a star's equatorial coordinates
 
-# Returned values
+# Returns
 
 ```(aberration_in_right_ascension, aberration_in_declination)```
 

@@ -38,7 +38,7 @@ pub fn EquatorialSemidiameter(distance_to_earth: f64) -> f64 {
 /**
 Returns Saturn's **orbital elements**
 
-# Returned values
+# Returns
 
 ```(L, a, e, i, omega, pi, M, w)```
 
@@ -111,7 +111,7 @@ pub fn Iapetus() {
 /**
 Returns Saturn's **heliocentric coordinates**
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 

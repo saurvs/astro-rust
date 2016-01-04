@@ -18,7 +18,7 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 /**
 Returns Mars's **orbital elements**
 
-# Returned values
+# Returns
 
 ```(L, a, e, i, omega, pi, M, w)```
 
@@ -127,7 +127,7 @@ pub fn Ephemeris(jed: f64, earth_heliocen_long: f64, earth_heliocen_lat: f64,
 /**
 Returns Mars's **heliocentric coordinates**
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 

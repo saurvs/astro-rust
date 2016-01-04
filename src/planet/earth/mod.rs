@@ -9,7 +9,7 @@ use planet;
 /**
 Returns the Earth's **orbital elements**
 
-# Returned values
+# Returns
 
 ```(L, a, e, pi, M)```
 
@@ -244,7 +244,7 @@ pub fn what(obl_eclp: f64, long_asc_node: f64, inc: f64) {
 /**
 Returns the Earth's **heliocentric coordinates**
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 
@@ -2735,5 +2735,7 @@ pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
     let (R0_terms, R1_terms, R2_terms, R3_terms, R4_terms, R5_terms) = terms.2;
     let R = planet::VSOP87Coordinate(julian_century, &R0_terms, &R1_terms, &R2_terms, &R3_terms, &R4_terms, &R5_terms);
 
-    (L, B, R)
+    (angle::LimitedTo360(L.to_degrees()).to_radians(),
+     B,
+     R)
 }

@@ -5,7 +5,7 @@ use time;
 Returns **mean obliquity** of the Earth's **ecliptic** for a Julian
 Ephemeris day
 
-# Returned values
+# Returns
 
 ```(mean_obliquity)```
 

@@ -88,7 +88,7 @@ pub fn EccentricAnomaly(mean_anomaly: f64, eccentricity: f64, accuracy: f64) -> 
 Returns instantaneous **velocity** of a body in an
 elliptic orbit
 
-# Returned values
+# Returns
 
 ```(velocity)```
 
@@ -108,7 +108,7 @@ pub fn Velocity(dist_to_sun: f64, semimaj_axis:f64) -> f64 {
 Returns **velocity** of a body at **perihelion**
 in an elliptic orbit
 
-# Returned values
+# Returns
 
 ```(velocity)```
 
@@ -127,7 +127,7 @@ pub fn PerihelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 /**
 Returns **velocity** of a body at **aphelion** in an elliptic orbit
 
-# Returned values
+# Returns
 
 ```(velocity)```
 
@@ -147,7 +147,7 @@ pub fn AphelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 Returns the approximate **length** of an ellipse using the Ramanujan
 method
 
-# Returned values
+# Returns
 
 ```(approximate_length)```
 
@@ -175,7 +175,7 @@ pub fn LengthOfEllipse_Ramanujan(a: f64, b: f64, e: f64) -> f64 {
 /**
 Returns the approximate **length** of an ellipse
 
-# Returned values
+# Returns
 
 ```(approximate_length)```
 
@@ -218,7 +218,7 @@ pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
 /**
 Returns the **mean motion** of an elliptic orbit
 
-# Returned values
+# Returns
 
 ```(mean_motion)```
 

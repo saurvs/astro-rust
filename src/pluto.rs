@@ -16,7 +16,7 @@ Returns the **heliocentric coordinates** of Pluto. **Valid only for the years 18
 
 The coordinates are with reference to the epoch J2000.0.
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 

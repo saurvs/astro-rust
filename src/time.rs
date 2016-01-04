@@ -160,7 +160,7 @@ macro_rules! JulianDay {
 /**
 Returns a ```Date``` **equivalent** to a given **Julian day**
 
-# Return variables
+# Returns
 
 ```(year, month, decimal_day)```
 

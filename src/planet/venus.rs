@@ -2,7 +2,7 @@ use angle;
 use planet;
 
 /**
-Computes Venus's **equatorial semidiameter**
+Returns Venus's **equatorial semidiameter**
 
 # Arguments
 
@@ -15,7 +15,7 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 /**
 Returns Venus's **orbital elements**
 
-# Returned values
+# Returns
 
 ```(L, a, e, i, omega, pi, M, w)```
 
@@ -56,7 +56,7 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
 /**
 Returns Venus's **heliocentric coordinates**
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 

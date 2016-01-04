@@ -87,7 +87,7 @@ fn rho_sig(D: f64, M: f64, M1: f64, F: f64) -> (f64, f64) {
 Returns the **optical librations** of the Moon in **longitude** and
 **latitude**
 
-# Returned values
+# Returns
 
 ```(optical_libration_in_longitude, optical_libration_in_longitude)```
 
@@ -129,7 +129,7 @@ pub fn OpticalLibrations(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
 Returns the **physical librations** of the Moon in **longitude** and
 **latitude**
 
-# Returned values
+# Returns
 
 ```(physical_libration_in_longitude, physical_libration_in_longitude)```
 
@@ -203,7 +203,7 @@ pub fn PhysicalLibrations(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
 Returns the **total librations** of the Moon in **longitude** and
 **latitude**
 
-# Returned values
+# Returns
 
 ```(total_libration_in_longitude, total_libration_in_longitude)```
 
@@ -272,7 +272,7 @@ pub fn PositionAngleOfAxisOfRotation(mean_ascen_node_long: f64, total_lib_lat: f
 /**
 Returns the **topocentric librations** of the Moon
 
-# Returned values
+# Returns
 
 ```(topocentric_libration_in_long, topocentric_libration_in_lat, topocentric_libration_in_P)```
 
@@ -308,7 +308,7 @@ pub fn TopocentricLibrationsByDifferentialCorrections(observer_lat: f64, geocen_
 /**
 Returns the **geocentric ecliptical coordinates** of the moon
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, distance)```
 
@@ -664,7 +664,7 @@ fn illuminated_fraction(moon_geocen_elong: f64, earth_moon_dist: f64, earth_sun_
 Returns the **times** of **passage** of the Moon through the **ascending**
 and **descending nodes**, close to a given date
 
-# Returned values
+# Returns
 
 ```(time_of_ascending_node, time_of_descending_node)```
 

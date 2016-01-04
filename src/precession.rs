@@ -4,7 +4,7 @@ use angle;
 /**
 Returns stellar **equatorial coordinates** for a **different equinox**
 
-# Returned values
+# Returns
 
 ```(new_right_ascension, new_declination)```
 
@@ -55,7 +55,7 @@ pub fn ChangeEpochForEquatorialCoords(jd_1: f64, jd_2: f64, asc_old: f64, dec_ol
 /**
 Returns stellar **ecliptical coordinates** for a **different equinox**
 
-# Returned values
+# Returns
 
 ```(new_longitude, new_latitude)```
 

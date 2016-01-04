@@ -273,7 +273,7 @@ pub fn DeclinationFromGalacticCoords(gal_long: f64, gal_lat: f64) -> f64 {
 /**
 Returns **equatorial coordinates** from **galactic coordinates**
 
-# Returned values
+# Returns
 
 ```(right_ascension, declination)```
 

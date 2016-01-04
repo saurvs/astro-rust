@@ -22,7 +22,7 @@ directed towards 90 degrees longitude
 celestial pole
 * The unit for all three axes is AU
 
-# Return variables
+# Returns
 
 ```(x, y z)```
 
@@ -51,7 +51,7 @@ pub fn RectangularGeocentricCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_
 Return quantites used in the **emphemeris** for physical observations
 of the Sun
 
-# Return variables
+# Returns
 
 ```(P, B0, L0)```
 

@@ -14,7 +14,7 @@ fn VSOP87Coordinate(t: f64, a: &[[f64; 3]], b: &[[f64; 3]], c: &[[f64; 3]], d: &
     let mut T3 = 0.0; for &i in d.iter() { T3 += VSOP87Term(t, &i); }
     let mut T4 = 0.0; for &i in e.iter() { T4 += VSOP87Term(t, &i); }
     let mut T5 = 0.0; for &i in f.iter() { T5 += VSOP87Term(t, &i); }
-println!("{:?}", T0);
+
     T0 +
     t * (T1 +
     t * (T2 +

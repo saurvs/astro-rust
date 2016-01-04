@@ -15,7 +15,7 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 /**
 Returns Mercury's **orbital elements**
 
-# Returned values
+# Returns
 
 ```(L, a, e, i, omega, pi, M, w)```
 
@@ -56,7 +56,7 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
 /**
 Returns Mercury's **heliocentric coordinates**
 
-# Returned values
+# Returns
 
 ```(longitude, latitude, radius_vec)```
 
