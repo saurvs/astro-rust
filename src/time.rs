@@ -43,7 +43,7 @@ pub struct UsualDay {
 }
 
 /**
-Computes the **decimal day** for a ```UsualDay```
+Returns the **decimal day** for a ```UsualDay```
 
 * ```usual_day```: A ```usual_day``` struct
 **/
@@ -55,7 +55,7 @@ pub fn DecimalDay(day: UsualDay) -> f64 {
 }
 
 /**
-Computes the **decimal year** for a ```Date```
+Returns the **decimal year** for a ```Date```
 
 * ```date```: A ```date``` struct
 **/
@@ -104,16 +104,16 @@ pub fn IsLeapYear(year: i32, calendar_type: CalendarType) -> (bool) {
 }
 
 /**
-Computes a **Julian century**, the time between the epoch J2000.0 and a given Julian Emphemeris Day
+Returns a **Julian century**, the time between the epoch J2000.0 and a given Julian Emphemeris Day
 
-* ```jed```: Julian Emphemeris day
+* ```JED```: Julian Emphemeris day
 **/
-pub fn JulianCentury(jed: f64) -> f64 {
-    (jed-2451545.0) / 36525.0
+pub fn JulianCentury(JED: f64) -> f64 {
+    (JED - 2451545.0) / 36525.0
 }
 
 /**
-Computes a **Julian day**
+Returns a **Julian day**
 
 # Arguments
 
@@ -215,7 +215,7 @@ pub fn DateFromJulianDay(mut jd: f64) -> (i16, i8, f64) {
 }
 
 /**
-Computes **mean sidereal time** at any instant of Universal Time
+Returns **mean sidereal time** at any instant of Universal Time
 
 Mean sidereal time is at the Greenwhich meridian.
 
@@ -233,7 +233,7 @@ pub fn MeanSiderealTime(date: Date) -> f64 {
 }
 
 /**
-Computes **mean sidereal time** at 0th hour of Universal Time
+Returns **mean sidereal time** at 0th hour of Universal Time
 
 Mean sidereal time is at the Greenwhich meridian.
 
@@ -251,7 +251,7 @@ pub fn MeanSiderealTimeAt0thHour(date: Date) -> f64 {
 }
 
 /**
-Computes an approximate value of **ΔT** for a given year and month
+Returns an approximate value of **ΔT** for a given year and month
 
 This function approximates **ΔT** from polynomial expressions using a
 method different from that given in the *Meeus* book. The method

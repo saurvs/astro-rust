@@ -1,6 +1,8 @@
 use angle;
 use planet;
+use planet::earth;
 use time;
+use nutation;
 
 /**
 Computes Mars's **equatorial semidiameter**
@@ -63,8 +65,8 @@ pub fn EquatorialCoordsOfNorthPole_J2000() -> (f64, f64) {
 }
 
 pub fn EclipticalCoordsOfNorthPole(julian_century: f64) -> (f64, f64) {
-    (317.9065_f64.to_radians() + 1.1733_f64.to_radians()*julian_century,
-     63.2818_f64.to_radians() - 0.00394_f64.to_radians()*julian_century)
+    ((317.9065 + 1.1733*julian_century).to_radians(),
+     (63.2818 - 0.00394*julian_century).to_radians())
 }
 
 /**
@@ -73,11 +75,54 @@ Returns Mars's
 # Arguments
 
 * ```jed```: Julian Ephemeris day
-**/
-pub fn Ephemeris(jed: f64) {
+**//*
+pub fn Ephemeris(jed: f64, earth_heliocen_long: f64, earth_heliocen_lat: f64,
+                earth_heliocen_rad_vec: f64, mars_heliocen_long: f64,
+                mars_heliocen_lat: f64, mars_heliocen_rad_vec: f64) {
     let julian_century = time::JulianCentury(jed);
-    let (north_pole_long, north_pole_lat) = EclipticalCoordsOfNorthPole(julian_century);
-}
+    let (eclip_north_pole_long, eclip_north_pole_lat) =
+                                   EclipticalCoordsOfNorthPole(julian_century);
+
+    let tau = 0.0;
+    let mut mars_earth_dist = 0.0;
+    let x = 0.0;
+    let y = 0.0;
+    let z = 0.0;
+    mars_earth_dist = (x*x + y*y + z*z).sqrt();
+
+    let mars_geocen_long = y.atan2(x);
+    let mars_geocen_lat = z.atan2((x*x + y*y).sqrt());
+    //let marsocen_earth_declin = -angle::AngularSep();
+
+    let N = (49.5581 + 0.7721*julian_century).to_radians();
+
+    let corrected_mars_heliocen_long = mars_heliocen_long -
+                                       0.00697_f64.to_radians()/mars_heliocen_rad_vec;
+    let corrected_mars_heliocen_lat = mars_heliocen_lat -
+                                      0.000225_f64.to_radians()*(
+                                          mars_heliocen_long - N
+                                      ).cos()/mars_heliocen_rad_vec;
+    //let marsocen_sun_declin = -angle::AngularSep();
+
+    let W = (11.504 + 350.89200025*(jed - tau - 2433282.5)).to_radians();
+    let mean_oblq_ecliptic = earth::ecliptic::MeanObliquity(jed);
+    let mean_oblq_ecliptic_cos = mean_oblq_ecliptic.cos();
+    let mean_oblq_ecliptic_sin = mean_oblq_ecliptic.sin();
+
+    let u = y*mean_oblq_ecliptic_cos - z*mean_oblq_ecliptic_sin;
+    let v = y*mean_oblq_ecliptic_sin + z*mean_oblq_ecliptic_cos;
+
+    let alpha = u.atan2(x);
+    let beta = v.atan2((x*x + u*u).sqrt());
+    let zeta = 0.0;
+    let w = W - zeta;
+
+    let (nut_in_long, nut_in_oblq) = nutation::Corrections(jed);
+    let true_oblq_ecliptic = mean_oblq_ecliptic + nut_in_oblq;
+    let P = 0.0;
+
+    let mars_app_diameter = angle::PureDegrees(0.0, 0.0, 9.36) / mars_earth_dist;
+}*/
 
 /**
 Returns Mars's **heliocentric coordinates**

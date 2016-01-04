@@ -1,6 +1,7 @@
 use angle;
 use planet;
 use planet::earth;
+use nutation;
 
 /**
 Returns Jupiter's **equatorial semidiameter**
@@ -91,7 +92,7 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
     w1 += C;
     w2 += C;
 
-    let (nut_long, nut_obl) = earth::NutationCorrections(jed);
+    let (nut_long, nut_obl) = nutation::Corrections(jed);
     let e = e0 + nut_obl;
 
     let q = 0.005693_f64.to_radians();

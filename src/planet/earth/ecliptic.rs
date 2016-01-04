@@ -20,10 +20,10 @@ and add it to the **mean** obliquity.
 
 # Arguments
 
-```jed```: Julian Ephemeris day
+```JED```: Julian Ephemeris day
 **/
-pub fn MeanObliquity(jed: f64) -> (f64) {
-    let u = time::JulianCentury(jed) / 100.0;
+pub fn MeanObliquity(JED: f64) -> (f64) {
+    let u = time::JulianCentury(JED) / 100.0;
 
     (angle::PureDegrees(23.0, 26.0, 21.448) -
      u * (angle::PureDegrees(0.0, 0.0, 4680.93) +

@@ -1,12 +1,13 @@
 [package]
 
 name = "astro"
-version = "0.0.4"
+version = "0.0.6"
 authors = ["Saurav Sachidanand"]
+
 license = "MIT"
+
 repository = "https://www.github.com/saurvs/astro-rust"
 homepage = "https://saurvs.github.io/astro-rust"
 
-description = "Essential Algorithms for Fundamental Astronomy."
+description = "Essential algorithms for fundamental astronomy."
 keywords = ["astro", "astronomy", "algorithms", "ephemeris", "planets", "solar", "star", "moon"]
-readme = "README.md"

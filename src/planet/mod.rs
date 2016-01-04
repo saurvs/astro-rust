@@ -14,7 +14,7 @@ fn VSOP87Coordinate(t: f64, a: &[[f64; 3]], b: &[[f64; 3]], c: &[[f64; 3]], d: &
     let mut T3 = 0.0; for &i in d.iter() { T3 += VSOP87Term(t, &i); }
     let mut T4 = 0.0; for &i in e.iter() { T4 += VSOP87Term(t, &i); }
     let mut T5 = 0.0; for &i in f.iter() { T5 += VSOP87Term(t, &i); }
-
+println!("{:?}", T0);
     T0 +
     t * (T1 +
     t * (T2 +
@@ -25,4 +25,14 @@ fn VSOP87Coordinate(t: f64, a: &[[f64; 3]], b: &[[f64; 3]], c: &[[f64; 3]], d: &
 
 fn VSOP87Term(t: f64, array: &[f64]) -> f64 {
     array[0] * (array[1] + t*array[2]).cos()
+}
+
+pub fn GeocentricCoordsOfPlanet(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
+    let x = R*B.cos()*L.cos() - R0*B0.cos()*L0.cos();
+    let y = R*B.cos()*L.sin() - R0*B0.cos()*L0.sin();
+    let z = R*B.sin() - R0*B0.sin();
+
+    (y.atan2(x),
+     z/(x*x + y*y).sqrt(),
+     0.0057755183 * (x*x + y*y + z*z).sqrt())
 }
