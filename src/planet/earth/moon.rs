@@ -283,11 +283,11 @@ Returns the **topocentric librations** of the Moon
 
 # Arguments
 
-* ```observer_lat```: Longitude of the mean ascending node of the Moon *(radians)*
-* ```geocen_declin_moon```: The geocentric declination of the Moon *(radians)*
-* ```local_hour_angle```: The local hour angle of the Moon *(radians)*
-* ```geocen_horizontal_parallax_moon```: The geocentric equatorial horizontal parallax of the Moon *(radians)*
-* ```pos_angle_axis_of_rot```: The position angle of the axis of rotation of the Moon *(radians)*
+* ```observer_lat```: Latitude of the observer *(radians)*
+* ```geocen_declin_moon```: Geocentric declination of the Moon *(radians)*
+* ```local_hour_angle```: Local hour angle of the Moon *(radians)*
+* ```geocen_horizontal_parallax_moon```: Geocentric equatorial horizontal parallax of the Moon *(radians)*
+* ```pos_angle_axis_of_rot```: Position angle of the axis of rotation of the Moon *(radians)*
 * ```total_lib_lat```: Total libration of the Moon in latitude *(radians)*
 **/
 pub fn TopocentricLibrationsByDifferentialCorrections(observer_lat: f64, geocen_declin_moon: f64,
