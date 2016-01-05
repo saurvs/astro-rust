@@ -7,12 +7,12 @@ Returns the **true anomaly** of a body in an elliptic orbit
 
 ```(true_anomaly)```
 
-* ```(true_anomaly)```: The true anomaly of the body *(AU)*
+* ```(true_anomaly)```: True anomaly of the body *(AU)*
 
 # Arguments
 
-* ```eccentric_anomaly```: The eccentric anomaly of the body *(radians)*
-* ```eccentricity```: The eccentricity of the orbit
+* ```eccentric_anomaly```: Eccentric anomaly of the body *(radians)*
+* ```eccentricity```: Eccentricity of the orbit
 **/
 pub fn TrueAnomaly(eccentric_anomaly: f64, eccentricity: f64) -> f64 {
     2.0*((1.0 + eccentric_anomaly).sqrt() * (eccentricity/2.0).tan()).atan2((1.0 - eccentric_anomaly).sqrt())
@@ -26,13 +26,13 @@ it's eccentric anomaly
 
 ```(radius_vector)```
 
-* ```(radius_vector)```: The radius vector of the body *(AU)*
+* ```(radius_vector)```: Radius vector of the body *(AU)*
 
 # Arguments
 
-* ```eccentric_anomaly```: The eccentric anomaly of the body *(radians)*
-* ```semimaj_ax```: The semimajor axis of the orbit *(AU)*
-* ```eccentricity```: The eccentricity of the orbit
+* ```eccentric_anomaly```: Eccentric anomaly of the body *(radians)*
+* ```semimaj_ax```: Semimajor axis of the orbit *(AU)*
+* ```eccentricity```: Eccentricity of the orbit
 **/
 pub fn RadiusVectorFromEccenAnom(eccentric_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
     semimaj_ax*(1.0 - eccentricity*eccentric_anomaly.cos())
@@ -46,13 +46,13 @@ it's true anomaly
 
 ```(radius_vector)```
 
-* ```(radius_vector)```: The radius vector of the body *(AU)*
+* ```(radius_vector)```: Radius vector of the body *(AU)*
 
 # Arguments
 
-* ```true_anomaly```: The true anomaly of the body *(radians)*
-* ```semimaj_ax```: The semimajor axis of the orbit *(AU)*
-* ```eccentricity```: The eccentricity of the orbit
+* ```true_anomaly```: True anomaly of the body *(radians)*
+* ```semimaj_ax```: Semimajor axis of the orbit *(AU)*
+* ```eccentricity```: Rccentricity of the orbit
 **/
 pub fn RadiusVectorFromTrueAnom(true_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
     semimaj_ax*(1.0 - eccentricity*eccentricity) / (1.0 + eccentricity*true_anomaly.cos())
@@ -65,13 +65,13 @@ Returns the **eccentric anomaly** of a body in an elliptic orbit
 
 ```(eccentric_anomaly)```
 
-* ```(eccentric_anomaly)```: The eccentric anomaly of the body *(radians)*
+* ```(eccentric_anomaly)```: Eccentric anomaly of the body *(radians)*
 
 # Arguments
 
-* ```mean_anomaly```: The mean anomaly of the body *(radians)*
-* ```eccentricity```: The eccentricity of the orbit
-* ```accuracy```: The desired accuracy for the eccentric anomaly. *Eg: 0.000001 radians*
+* ```mean_anomaly```: Mean anomaly of the body *(radians)*
+* ```eccentricity```: Eccentricity of the orbit
+* ```accuracy```: Desired accuracy for eccentric anomaly. *Eg: 0.000001 radians*
 **/
 pub fn EccentricAnomaly(mean_anomaly: f64, eccentricity: f64, accuracy: f64) -> f64 {
     let mut prev_E = 0.0;
@@ -85,14 +85,14 @@ pub fn EccentricAnomaly(mean_anomaly: f64, eccentricity: f64, accuracy: f64) -> 
 }
 
 /**
-Returns instantaneous **velocity** of a body in an
+Returns the instantaneous **velocity** of a body in an
 elliptic orbit
 
 # Returns
 
 ```(velocity)```
 
-* ```(velocity)```: The instantaneous velocity of the body
+* ```(velocity)```: Instantaneous velocity of the body
                     *(meters per second)*
 
 # Arguments
@@ -105,14 +105,14 @@ pub fn Velocity(dist_to_sun: f64, semimaj_axis:f64) -> f64 {
 }
 
 /**
-Returns **velocity** of a body at **perihelion**
+Returns the **velocity** of a body at **perihelion**
 in an elliptic orbit
 
 # Returns
 
 ```(velocity)```
 
-* ```(velocity)```: The velocity of the body at perihelion
+* ```(velocity)```: Velocity of the body at perihelion
                     *(meters per second)*
 
 # Arguments
@@ -125,13 +125,13 @@ pub fn PerihelionVelocity(semimaj_axis:f64, orb_eccen:f64) -> f64 {
 }
 
 /**
-Returns **velocity** of a body at **aphelion** in an elliptic orbit
+Returns the **velocity** of a body at **aphelion** in an elliptic orbit
 
 # Returns
 
 ```(velocity)```
 
-* ```(velocity)```: The velocity of the body at aphelion
+* ```(velocity)```: Velocity of the body at aphelion
                     *(meters per second)*
 
 # Arguments
@@ -212,7 +212,7 @@ Returns the **semimajor axis** of an elliptic orbit
 * ```ecc```: Eccentricity of the orbit
 **/
 pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
-    perih/(1.0 - ecc)
+    perih / (1.0 - ecc)
 }
 
 /**
@@ -222,7 +222,7 @@ Returns the **mean motion** of an elliptic orbit
 
 ```(mean_motion)```
 
-* ```(mean_motion)```: The mean motion of the orbit *(radians/day)*
+* ```(mean_motion)```: Mean motion of the orbit *(radians/day)*
 
 # Arguments
 

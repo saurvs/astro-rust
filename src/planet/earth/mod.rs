@@ -201,46 +201,6 @@ macro_rules! EquationOfTime {
     }};
 }
 
-/*
-pub fn what(obl_eclp: f64, long_asc_node: f64, inc: f64) {
-    let sin_obl_eclp = obl_eclp.sin();
-    let cos_obl_eclp = obl_eclp.cos();
-    let cos_long_asc_node = long_asc_node.cos();
-    let sin_long_asc_node = long_asc_node.sin();
-    let cos_inc = inc.cos();
-    let sin_inc = inc.sin();
-
-    let f = cos_long_asc_node;
-    let g = sin_long_asc_node*cos_obl_eclp;
-    let h = sin_long_asc_node*sin_obl_eclp;
-    let p = -1.0*sin_long_asc_node*sin_inc;
-    let q = cos_long_asc_node*cos_inc*cos_obl_eclp - sin_inc*sin_obl_eclp;
-    let r = cos_long_asc_node*cos_inc*sin_obl_eclp + sin_inc*cos_obl_eclp;
-
-    let A = f.atan2(p);
-    let B = g.atan2(q);
-    let C = h.atan2(r);
-    let a = (f*f + p*p).sqrt();
-    let b = (g*g + q*q).sqrt();
-    let c = (h*h + r*r).sqrt();
-
-    let x = r * a * (A + perih_arg + v);
-    let y = r * b * (B + perih_arg + v);
-    let z = r * c * (C + perih_arg + v);
-
-    let xi = X + x;
-    let nu = Y + y;
-    let et = Z + z;
-
-    let mut asc = nu.atan2(xi);
-    let dec = et.atan2((xi*xi + nu*nu).sqrt());
-
-    if asc < 0.0 {
-        asc += 360f64.to_radians();
-    }
-}
-*/
-
 /**
 Returns the Earth's **heliocentric coordinates**
 
