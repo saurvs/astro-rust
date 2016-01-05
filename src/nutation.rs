@@ -20,9 +20,9 @@ the Earth's nutation. Nutation does *not* affect ecliptical latitude.
 
 # Arguments
 
-```julian_ephemeris_day```: Julian Ephemeris day
+```JD```: Julian Ephemeris day
 **/
-pub fn Corrections(julian_ephemeris_day: f64) -> (f64, f64) {
+pub fn Corrections(JD: f64) -> (f64, f64) {
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
     let terms_for_nutation = [
         terms( 0,  0,  0,  0,  1, -171996, -1742, 92025,  89),
@@ -90,7 +90,7 @@ pub fn Corrections(julian_ephemeris_day: f64) -> (f64, f64) {
         terms( 2, -1,  0,  2,  2,      -3,     0,     0,   0),
     ];
 
-    let t = time::JulianCentury(julian_ephemeris_day);
+    let t = time::JulianCentury(JD);
 
     let M1 = angle::LimitedTo360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/56250.0)))).to_radians();
     let M = angle::LimitedTo360((357.52772 + t*(35999.05034 - t*(0.0001603 + t/300000.0)))).to_radians();

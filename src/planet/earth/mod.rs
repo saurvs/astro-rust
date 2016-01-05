@@ -127,12 +127,13 @@ pub fn Geodesic(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoint) ->
     let om = ((s / c).sqrt()).atan();
     let r = (s * c).sqrt() / om;
     let d = 2.0 * om * EquatorialRadius();
-    let h1 = (3.0 * r - 1.0) / (2.0 * c);
-    let h2 = (3.0 * r + 1.0) / (2.0 * s);
+    let h1 = (3.0*r - 1.0) / (2.0 * c);
+    let h2 = (3.0*r + 1.0) / (2.0 * s);
 
-    d * (1.0 +
-         Flattening() * h1 * (f.sin()*g.cos()).powi(2) -
-         Flattening() * h2 * (f.cos()*g.sin()).powi(2))
+    d * (  1.0
+         + Flattening() * h1 * (f.sin()*g.cos()).powi(2)
+         - Flattening() * h2 * (f.cos()*g.sin()).powi(2)
+        )
 
 }
 
@@ -156,6 +157,32 @@ pub fn RhoSinAndCosPhi(height: f64, geograph_lat: f64) -> (f64, f64) {
     let rho_cos_phi = u.cos() + (geograph_lat.cos() * x);
 
     (rho_sin_phi, rho_cos_phi)
+}
+
+pub fn RadiusOfParallelLatitude(a: f64, e: f64, geograph_lat: f64) -> f64 {
+    a*geograph_lat.cos() / (1.0 - e*e*(geograph_lat.sin().powi(2))).sqrt()
+}
+
+// for sea level
+pub fn Rho(geograph_lat: f64) -> f64 {
+      0.9983271
+    + 0.0016764 * (2.0*geograph_lat).cos()
+    - 0.0000035 * (4.0*geograph_lat).cos()
+}
+
+pub fn RotationalAngularVelocity() -> f64 {
+    729211.4992 //radians/sec
+}
+
+//lat - geograph
+pub fn RadiusOfCurvatureOfMerdidian(a: f64, e: f64, lat: f64) -> f64 {
+    a*(1.0 - e*e) / (1.0 - e*e*lat.sin().powi(2)).powf(1.5)
+}
+
+pub fn GeocentricLatFromGeographicLat(geograph_lat: f64) -> f64 {
+      geograph_lat
+    - angle::PureDegrees(0.0, 0.0, 692.73) * (2.0*geograph_lat).sin()
+    + angle::PureDegrees(0.0, 0.0, 1.16)   * (4.0*geograph_lat).sin()
 }
 
 /**

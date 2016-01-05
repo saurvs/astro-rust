@@ -1,4 +1,7 @@
+use angle;
 use util;
+use nutation;
+use planet;
 
 /// Represents different **calendar types**
 pub enum CalendarType {
@@ -11,47 +14,47 @@ pub enum CalendarType {
 /// Represents a **date** with **year, month, decimal day** and **calendar type**
 pub struct Date {
     /// Year
-    pub y: i32,
+    pub year: i32,
     /// Month
     ///
     /// range: *1 - 12*
-    pub m: u8,
+    pub month: u8,
     /// Decimal day
-    pub d: f64,
+    pub decimal_day: f64,
     /// Calenday type
-    pub t: CalendarType,
+    pub calendar_type: CalendarType,
 }
 
 /// Represents a **day of month** with **hours, minutes and seconds**
-pub struct UsualDay {
+pub struct DayOfMonth {
     /// Day of month
     ///
     /// range: *1 - 31*
-    pub d: i16,
+    pub day: i16,
     /// Hour of day
     ///
     /// range: *0 - 60*
-    pub h: u8,
+    pub hour: u8,
     /// Minute of hour
     ///
     /// range: *0 - 60*
-    pub m: u8,
+    pub minute: u8,
     /// Second of minute
     ///
     /// range: *0.0 - 60.0*
-    pub s: f64
+    pub second: f64
 }
 
 /**
-Returns the **decimal day** for a ```UsualDay```
+Returns the **decimal day** for a ```DayOfMonth```
 
-* ```usual_day```: A ```usual_day``` struct
+* ```day_of_month```: A ```day_of_month``` struct
 **/
-pub fn DecimalDay(day: UsualDay) -> f64 {
-    (day.d as f64) +
-    (day.h as f64) / 24.0 +
-    (day.m as f64) / 60.0 +
-    day.s / 60.0
+pub fn DecimalDay(day: DayOfMonth) -> f64 {
+      (day.day as f64)
+    + (day.hour as f64) / 24.0
+    + (day.minute as f64) / 60.0
+    +  day.second / 60.0
 }
 
 /**
@@ -63,25 +66,25 @@ pub fn DecimalYear(date: Date) -> f64 {
     let mut y = 0;
     let mut days = 365.0;
 
-    if date.m > 1 { y += 31; }
-    if date.m > 2 {
+    if date.month > 1 { y += 31; }
+    if date.month > 2 {
         y += 28;
-        if IsLeapYear(date.y, date.t) {
+        if IsLeapYear(date.year, date.calendar_type) {
             y += 1;
             days += 1.0;
         }
     }
-    if date.m > 3 { y += 31; }
-    if date.m > 4 { y += 30; }
-    if date.m > 5 { y += 31; }
-    if date.m > 6 { y += 30; }
-    if date.m > 7 { y += 31; }
-    if date.m > 8 { y += 31; }
-    if date.m > 9 { y += 30; }
-    if date.m > 10 { y += 31; }
-    if date.m > 11 { y += 30; }
+    if date.month > 3 { y += 31; }
+    if date.month > 4 { y += 30; }
+    if date.month > 5 { y += 31; }
+    if date.month > 6 { y += 30; }
+    if date.month > 7 { y += 31; }
+    if date.month > 8 { y += 31; }
+    if date.month > 9 { y += 30; }
+    if date.month > 10 { y += 31; }
+    if date.month > 11 { y += 30; }
 
-    (date.y as f64) + ((y as f64) + date.d)/days
+    (date.year as f64) + ((y as f64) + date.decimal_day)/days
 }
 
 /**
@@ -104,7 +107,9 @@ pub fn IsLeapYear(year: i32, calendar_type: CalendarType) -> (bool) {
 }
 
 /**
-Returns a **Julian century**, the time between the epoch J2000.0 and a given Julian Emphemeris Day
+Returns **Julian century**
+
+# Arguments
 
 * ```JED```: Julian Emphemeris day
 **/
@@ -113,7 +118,18 @@ pub fn JulianCentury(JED: f64) -> f64 {
 }
 
 /**
-Returns a **Julian day**
+Returns **Julian millenium**
+
+# Arguments
+
+* ```JED```: Julian Emphemeris day
+**/
+pub fn JulianMillenium(JED: f64) -> f64 {
+    (JED - 2451545.0) / 365250.0
+}
+
+/**
+Returns **Julian day**
 
 # Arguments
 
@@ -121,24 +137,35 @@ Returns a **Julian day**
 **/
 pub fn JulianDay(mut date: Date) -> f64 {
 
-    if date.m == 1 || date.m == 2 {
-        date.y = date.y - 1;
-        date.m = date.m + 12;
+    if date.month == 1 || date.month == 2 {
+        date.year = date.year - 1;
+        date.month = date.month + 12;
     }
 
-    let a = util::int((date.y as f64) / 100.0) as f64;
+    let a = util::int((date.year as f64) / 100.0) as f64;
     let mut b;
-    match date.t {
+    match date.calendar_type {
         CalendarType::Gregorian => b = 2.0 - a + (util::int(a/4.0) as f64),
         CalendarType::Julian => b = 0.0,
     };
 
-    (util::int(365.25 * ((date.y as f64) + 4716.0)) as f64) +
-    (util::int(30.6001 * ((date.m as f64) + 1.0)) as f64) +
-    (date.d as f64) +
-    (b as f64) -
-    1524.5
+      (util::int(365.25 * ((date.year as f64) + 4716.0)) as f64)
+    + (util::int(30.6001 * ((date.month as f64) + 1.0)) as f64)
+    + (date.decimal_day as f64)
+    + (b as f64)
+    - 1524.5
 
+}
+
+/**
+Returns **Julian Emphemeris day**
+
+# Arguments
+
+```date```: A ```date``` struct
+**/
+pub fn JulianEmphemerisDay(mut date: Date) -> f64 {
+    ApproximateDeltaT(date.year, date.month) + JulianDay(date)
 }
 
 #[macro_export]
@@ -151,7 +178,7 @@ macro_rules! JulianCentury {
 #[macro_export]
 macro_rules! JulianDay {
     ($a: expr, $b: expr, $c: expr, $d: expr, $e: expr, $f: expr, $g: expr) => {{
-        let day = UsualDay{};
+        let day = DayOfMonth{};
         let date = Date{};
         astro::time::JulianDay()
     }};
@@ -215,21 +242,37 @@ pub fn DateFromJulianDay(mut jd: f64) -> (i16, i8, f64) {
 }
 
 /**
+Returns **apparent sidereal time** at any instant of Universal Time
+
+# Arguments
+
+* ```JD```: Julian day
+**/
+pub fn ApparentSiderealTime(JD: f64) -> f64 {
+    let (nut_in_long, nut_in_oblq) = nutation::Corrections(JD);
+    let eclip_oblq = planet::earth::ecliptic::MeanObliquity(JD);
+
+       (nut_in_long * (eclip_oblq+nut_in_oblq).cos()) / 15_f64.to_radians()
+     + MeanSiderealTime(JD)
+}
+
+/**
 Returns **mean sidereal time** at any instant of Universal Time
 
 Mean sidereal time is at the Greenwhich meridian.
 
 # Arguments
 
-* ```date```: A ```date``` struct
+* ```JD```: Julian day
 **/
-pub fn MeanSiderealTime(date: Date) -> f64 {
-    let jd = JulianDay(date);
-    let t = JulianCentury(jd);
+pub fn MeanSiderealTime(JD: f64) -> f64 {
+    let JC = JulianCentury(JD);
 
-    280.46061837 +
-    360.98564736629 * (jd-2451545.0) +
-    t*t * (0.000387933 - t/38710000.0)
+    (angle::LimitedTo360(  280.46061837
+                         + 360.98564736629 * (JD - 2451545.0)
+                         + JC*JC * (0.000387933 - JC/38710000.0)
+                        )
+    ).to_radians()
 }
 
 /**
@@ -239,15 +282,20 @@ Mean sidereal time is at the Greenwhich meridian.
 
 # Arguments
 
-* ```date```: A ```date``` struct
+* ```JD```: Julian day
 **/
-pub fn MeanSiderealTimeAt0thHour(date: Date) -> f64 {
-    let t = JulianCentury(JulianDay(date));
+pub fn MeanSiderealTimeAt0thUTHour(JD: f64) -> (i64, i64) {
+    let JC = JulianCentury(JD);
 
-    (100.46061837 +
-    t * (36000.770053608 +
-    t * (0.000387933 -
-    t / 38710000.0))).to_radians()
+    let a = angle::LimitedTo360(  100.46061837
+                                + JC * (36000.770053608
+                                + JC * (0.000387933
+                                - JC / 38710000.0))
+                               );
+                             println!("{:?}", a);
+    let f = (a/15.0) as i64;
+    (f, ((a - 15.0*(f as f64))/60.0) as i64)
+
 }
 
 /**
@@ -263,7 +311,7 @@ it covers a far wider time range.
 * ```year```: Year
 * ```month```: Month *(range: 1 - 12)*
 **/
-pub fn ApproximateDeltaT(year: i32, month: i8) -> f64 {
+pub fn ApproximateDeltaT(year: i32, month: u8) -> f64 {
     let y = (year as f64) + ((month as f64) - 0.5)/12.0;
 
     if y < -500.0 {

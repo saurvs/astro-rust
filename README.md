@@ -11,7 +11,7 @@ Essential algorithms for fundamental astronomy.
    aberration, precession and atmospheric refraction.
 * Convert points between different coordinate systems and epochs.
 * And more related to asteroids, stars, binary stars, elliptic, parabolic and near-parabolic orbits, satellites.
-  
+
 See full list of algorithms below.
 
 Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
@@ -33,14 +33,14 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
 * Find the Julian day (the most important step for almost everything)
   ```rust
-  let day_of_month = time::DayOfMonth{ day: 17,
+  let DOM = time::DayOfMonth{ day: 17,
 				 					   hour: 12,
-                                       minute: 0, 
+                                       minute: 0,
                                        second: 0.0 };
 
   let date = time::Date{ year: 2016,
                          month: 1,
-                         day_of_month: day_of_month,
+                         decimal_day: time::DecimalDay(DOM),
                          calendar_type: time::Gregorian };
 
   let JD = time::JulianDay(date);
