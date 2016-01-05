@@ -33,7 +33,10 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
 * Find the Julian day (the most important step for almost everything)
   ```rust
-  let day_of_month = time::UsualDay{d: 17, h: 12, m: 0, s: 0.0};
+  let day_of_month = time::DayOfMonth{day: 17,
+									  hour: 12,
+                                      minute: 0, 
+                                      second: 0.0};
 
   let date = time::Date{y: 2016, m: 1, d: day_of_month, t: time::Gregorian};
 
