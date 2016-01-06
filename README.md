@@ -55,6 +55,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   ```rust
   let (longitude, latitude, radius_vector) = planet::earth::moon::EclipticalGeocentricCoords(JD);
   ```
+  
 * Find the heliocentric coordinates of Mars
   ```rust
   let (longitude, latitude, radius_vector) = planet::mars::HeliocentricCoords(JD);
@@ -97,3 +98,4 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
 * [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
+* [Five Millennium Canon of Solar Eclipses [Espenak and Meeus]](http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html)
