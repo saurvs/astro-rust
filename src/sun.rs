@@ -16,7 +16,7 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 pub fn EclipticalGeocentricCoords(JD: f64) -> (f64, f64, f64) {
     let (L, B, R) = planet::earth::HeliocentricCoords(JD);
 
-    (L + std::f64::PI, -B, R)
+    (L + std::f64::consts::PI, -B, R)
 }
 
 /**
