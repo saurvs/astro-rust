@@ -165,7 +165,7 @@ Returns **Julian Emphemeris day**
 ```date```: A ```date``` struct
 **/
 pub fn JulianEmphemerisDay(mut date: Date) -> f64 {
-    ApproximateDeltaT(date.year, date.month) + JulianDay(date)
+    ApproximateDeltaT(date.year, date.month)/86400.0 + JulianDay(date)
 }
 
 #[macro_export]

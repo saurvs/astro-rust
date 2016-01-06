@@ -41,7 +41,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let date = time::Date{year: 2016,
                         month: 1,
                         decimal_day: time::DecimalDay(day_of_month),
-                        calendar_type: time::Gregorian};
+                        calendar_type: time::CalendarType::Gregorian};
 
   let JD = time::JulianDay(date);
   ```
