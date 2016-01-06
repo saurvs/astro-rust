@@ -319,7 +319,7 @@ Returns the **geocentric ecliptical coordinates** of the moon
 
 * ```JED```: Julian Emphemeris day
 **/
-pub fn GeocentricCoords(JED: f64) -> (f64, f64, f64) {
+pub fn EclipticalGeocentricCoords(JED: f64) -> (f64, f64, f64) {
     let JC = time::JulianCentury(JED);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);

@@ -33,35 +33,37 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
 * Find the Julian day (the most important step for almost everything)
   ```rust
-  let DOM = time::DayOfMonth{ day: 17,
-				 					   hour: 12,
-                                       minute: 0,
-                                       second: 0.0 };
+  let day_of_month = time::DayOfMonth{day: 17,
+				 			          hour: 12,
+                                      minute: 0,
+                                      second: 0.0};
 
-  let date = time::Date{ year: 2016,
-                         month: 1,
-                         decimal_day: time::DecimalDay(DOM),
-                         calendar_type: time::Gregorian };
+  let date = time::Date{year: 2016,
+                        month: 1,
+                        decimal_day: time::DecimalDay(day_of_month),
+                        calendar_type: time::Gregorian};
 
   let JD = time::JulianDay(date);
   ```
 
-* Find the equatorial coordinates of the Sun
+* Find the ecliptical geocentric coordinates of the Sun
+  ```rust
+  let (longitude, latitude, radius_vector) = sun::EclipticalGeocentricCoords(JD);
+  ```
 * Find the topocentric coordinates (for viewing on the sky from Earth) of the Sun
 * Similarly, for the Moon
+  ```rust
+  let (longitude, latitude, radius_vector) = planet::earth::moon::EclipticalGeocentricCoords(JD);
+  ```
 * Find the heliocentric coordinates of Mars
   ```rust
-  let JC = time::JulianCentury(JD);
-
-  let (longitude, latitude, radius_vector) = planet::mars::HeliocentricCoords(JC);
+  let (longitude, latitude, radius_vector) = planet::mars::HeliocentricCoords(JD);
   ```
 
 * Find the topocentric coordinates (for viewing on the sky from Earth) of Mars
 * Find the corrections for nutation
   ```rust
-  let JED = time::JulianEphemerisDay(JD);
-
-  let (nutation_in_longitude, nutation_in_obliquity) = nutation::Corrections(JC);
+  let (nutation_in_longitude, nutation_in_obliquity) = nutation::Corrections(JD);
   ```
 
 * Find the corrections for aberration

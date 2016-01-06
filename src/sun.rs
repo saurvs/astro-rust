@@ -1,4 +1,6 @@
 use angle;
+use planet;
+use std;
 
 /**
 Returns the Sun's **equatorial semidiameter**
@@ -9,6 +11,12 @@ Returns the Sun's **equatorial semidiameter**
 **/
 pub fn Semidiameter(distance_to_earth: f64) -> f64 {
     angle::PureDegrees(0, 0, 959.63) / distance_to_earth
+}
+
+pub fn EclipticalGeocentricCoords(JD: f64) -> (f64, f64, f64) {
+    let (L, B, R) = planet::earth::HeliocentricCoords(JD);
+
+    (L + std::f64::PI, -B, R)
 }
 
 /**
