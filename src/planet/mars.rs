@@ -12,7 +12,7 @@ Computes Mars's **equatorial semidiameter**
 * ```distance_to_earth```: Mars's distance from Earth *(AU)*
 **/
 pub fn Semidiameter(distance_to_earth: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 4.68) / distance_to_earth
+    angle::PureDegrees(0, 0, 4.68) / distance_to_earth
 }
 
 /**
@@ -121,7 +121,7 @@ pub fn Ephemeris(jed: f64, earth_heliocen_long: f64, earth_heliocen_lat: f64,
     let true_oblq_ecliptic = mean_oblq_ecliptic + nut_in_oblq;
     let P = 0.0;
 
-    let mars_app_diameter = angle::PureDegrees(0.0, 0.0, 9.36) / mars_earth_dist;
+    let mars_app_diameter = angle::PureDegrees(0, 0, 9.36) / mars_earth_dist;
 }*/
 
 /**

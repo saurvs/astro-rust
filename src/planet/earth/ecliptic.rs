@@ -25,17 +25,17 @@ and add it to the **mean** obliquity.
 pub fn MeanObliquity(JED: f64) -> (f64) {
     let u = time::JulianCentury(JED) / 100.0;
 
-    (angle::PureDegrees(23.0, 26.0, 21.448) -
-     u * (angle::PureDegrees(0.0, 0.0, 4680.93) +
-     u * (angle::PureDegrees(0.0, 0.0, 1.55) +
-     u * (angle::PureDegrees(0.0, 0.0, 1999.25) -
-     u * (angle::PureDegrees(0.0, 0.0, 51.38) -
-     u * (angle::PureDegrees(0.0, 0.0, 249.67) +
-     u * (angle::PureDegrees(0.0, 0.0, 39.05) +
-     u * (angle::PureDegrees(0.0, 0.0, 7.12) -
-     u * (angle::PureDegrees(0.0, 0.0, 27.87) +
-     u * (angle::PureDegrees(0.0, 0.0, 5.79) +
-     u * angle::PureDegrees(0.0, 0.0, 2.45))))))))))).to_radians()
+    (angle::PureDegrees(23, 26, 21.448) -
+     u * (angle::PureDegrees(0, 0, 4680.93) +
+     u * (angle::PureDegrees(0, 0, 1.55) +
+     u * (angle::PureDegrees(0, 0, 1999.25) -
+     u * (angle::PureDegrees(0, 0, 51.38) -
+     u * (angle::PureDegrees(0, 0, 249.67) +
+     u * (angle::PureDegrees(0, 0, 39.05) +
+     u * (angle::PureDegrees(0, 0, 7.12) -
+     u * (angle::PureDegrees(0, 0, 27.87) +
+     u * (angle::PureDegrees(0, 0, 5.79) +
+     u * angle::PureDegrees(0, 0, 2.45))))))))))).to_radians()
 }
 
 /// Returns **obliquity** *(radians)* of the Earth's **ecliptic**

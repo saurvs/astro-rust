@@ -23,10 +23,19 @@ Returns an angle expressed in **degrees only**
 * ```m```: Minute
 * ```s```: Second
 **/
-pub fn PureDegrees(d: f64, m: f64, s: f64) -> f64 {
-    let (M, S) = if d < 0.0 { (-m.abs(), -s.abs()) }
-                 else       { (m, s) };
-    d + M/60.0 + S/3600.0
+pub fn PureDegrees(d: i64, m: i64, s: f64) -> f64 {
+    let (M, S) = if d < 0 { (-m.abs(), -s.abs()) }
+                 else     { (m, s) };
+    (d as f64) + (M as f64)/60.0 + S/3600.0
+}
+
+pub fn PureDegreesToDegreesMinutesSeconds(degrees: f64) -> (i64, i64, f64) {
+    let degree = degrees as i64;
+    let minutes = (degrees - (degree as f64)) * 60.0;
+    let minute = minutes as i64;
+    let seconds = (minutes - (minute as f64)) * 60.0;
+
+    (degree, minute, seconds)
 }
 
 /**

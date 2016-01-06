@@ -14,7 +14,7 @@ Returns the **inclination** of the **mean lunar equator** with the
 of the mean lunar equator with the ecliptic *(radians)*
 **/
 pub fn InclinationOfMeanLunarEquatorWithEcliptic() -> f64 {
-    angle::PureDegrees(1.0, 32.0, 32.7).to_radians()
+    angle::PureDegrees(1, 32, 32.7).to_radians()
 }
 
 fn A(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
@@ -189,7 +189,6 @@ pub fn PhysicalLibrations(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
     let I = InclinationOfMeanLunarEquatorWithEcliptic();
     let I_sin = I.sin(); let I_cos = I.cos();
     let W = mean_geocen_moon_long - longitude_of_mean_ascen_node;
-    let app_geocen_moon_lat_cos = app_geocen_moon_lat.cos();
     let A = A(mean_geocen_moon_long, app_geocen_moon_lat,
               longitude_of_mean_ascen_node, I_cos, I_sin);
     let A_sin = A.sin();

@@ -8,7 +8,7 @@ Returns the Sun's **equatorial semidiameter**
 * ```distance_to_earth```: The Sun's distance from the Earth *(AU)*
 **/
 pub fn Semidiameter(distance_to_earth: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 959.63) / distance_to_earth
+    angle::PureDegrees(0, 0, 959.63) / distance_to_earth
 }
 
 /**

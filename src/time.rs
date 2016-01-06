@@ -169,13 +169,6 @@ pub fn JulianEmphemerisDay(mut date: Date) -> f64 {
 }
 
 #[macro_export]
-macro_rules! JulianCentury {
-    ($a: expr) => {
-        astro::time::JulianCentury($a)
-    };
-}
-
-#[macro_export]
 macro_rules! JulianDay {
     ($a: expr, $b: expr, $c: expr, $d: expr, $e: expr, $f: expr, $g: expr) => {{
         let day = DayOfMonth{};
@@ -248,12 +241,17 @@ Returns **apparent sidereal time** at any instant of Universal Time
 
 * ```JD```: Julian day
 **/
-pub fn ApparentSiderealTime(JD: f64) -> f64 {
+pub fn ApparentSiderealTime(JD: f64) -> (i8, i8, f64) {
+    let (hour, minute, seconds) = MeanSiderealTime(JD);
+
     let (nut_in_long, nut_in_oblq) = nutation::Corrections(JD);
     let eclip_oblq = planet::earth::ecliptic::MeanObliquity(JD);
 
-       (nut_in_long * (eclip_oblq+nut_in_oblq).cos()) / 15_f64.to_radians()
-     + MeanSiderealTime(JD)
+    let seconds_correction =   nut_in_long.to_degrees()*3600.0
+                             * (eclip_oblq + nut_in_oblq).cos()
+                             / 15.0;
+
+    (hour, minute, seconds + seconds_correction)
 }
 
 /**
@@ -261,41 +259,42 @@ Returns **mean sidereal time** at any instant of Universal Time
 
 Mean sidereal time is at the Greenwhich meridian.
 
+# Returns
+
+```(hour, minute, seconds)```
+
+* ```hour```: Hour *(range: 0 - 24)*
+* ```minute```: Minute *(range: 0 - 60)*
+* ```seconds```: Seconds *(range: 0.0 - 60.0)*
+
 # Arguments
 
 * ```JD```: Julian day
 **/
-pub fn MeanSiderealTime(JD: f64) -> f64 {
+pub fn MeanSiderealTime(JD: f64) -> (i8, i8, f64) {
     let JC = JulianCentury(JD);
+    let angle = angle::LimitedTo360(  280.46061837
+                                    + 360.98564736629 * (JD - 2451545.0)
+                                    + JC*JC * (0.000387933 - JC/38710000.0)
+                                   );
 
-    (angle::LimitedTo360(  280.46061837
-                         + 360.98564736629 * (JD - 2451545.0)
-                         + JC*JC * (0.000387933 - JC/38710000.0)
-                        )
-    ).to_radians()
+    HoursMinutesSecondsFromDegrees(angle)
 }
 
-/**
-Returns **mean sidereal time** at 0th hour of Universal Time
+pub fn HoursMinutesSecondsFromDegrees(angle: f64) -> (i8, i8, f64) {
+    let hours = angle / 15.0;
+    let hour = hours as i8;
 
-Mean sidereal time is at the Greenwhich meridian.
+    let minutes = (hours - (hour as f64)) * 60.0;
+    let minute = minutes as i8;
 
-# Arguments
+    let seconds = (minutes - (minute as f64)) * 60.0;
 
-* ```JD```: Julian day
-**/
-pub fn MeanSiderealTimeAt0thUTHour(JD: f64) -> (i64, i64) {
-    let JC = JulianCentury(JD);
+    (hour, minute, seconds)
+}
 
-    let a = angle::LimitedTo360(  100.46061837
-                                + JC * (36000.770053608
-                                + JC * (0.000387933
-                                - JC / 38710000.0))
-                               );
-                             println!("{:?}", a);
-    let f = (a/15.0) as i64;
-    (f, ((a - 15.0*(f as f64))/60.0) as i64)
-
+pub fn DegreesFromHoursMinutesSeconds(hour: i8, minute: i8, seconds: f64) -> f64 {
+    (hour as f64)*15.0 + (minute as f64)/60.0 + seconds/3600.0
 }
 
 /**

@@ -47,13 +47,13 @@ fn pt_correction(prss: f64, temp: f64) -> f64 {
 */
 
 pub fn approx_refraction_from_app_alt(app_alt: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 58.294).to_radians() * (90_f64.to_radians()-app_alt).tan() -
-    angle::PureDegrees(0.0, 0.0, 0.0668).to_radians() * (90_f64.to_radians()-app_alt).tan().powi(3)
+    angle::PureDegrees(0, 0, 58.294).to_radians() * (90_f64.to_radians()-app_alt).tan() -
+    angle::PureDegrees(0, 0, 0.0668).to_radians() * (90_f64.to_radians()-app_alt).tan().powi(3)
 }
 
 pub fn approx_refraction_from_true_alt(true_alt: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 58.276).to_radians() * (90_f64.to_radians()-true_alt).tan() -
-    angle::PureDegrees(0.0, 0.0, 0.0824).to_radians() * (90_f64.to_radians()-true_alt).tan().powi(3)
+    angle::PureDegrees(0, 0, 58.276).to_radians() * (90_f64.to_radians()-true_alt).tan() -
+    angle::PureDegrees(0, 0, 0.0824).to_radians() * (90_f64.to_radians()-true_alt).tan().powi(3)
 }
 
 /*

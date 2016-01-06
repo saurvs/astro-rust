@@ -181,8 +181,8 @@ pub fn RadiusOfCurvatureOfMerdidian(a: f64, e: f64, lat: f64) -> f64 {
 
 pub fn GeocentricLatFromGeographicLat(geograph_lat: f64) -> f64 {
       geograph_lat
-    - angle::PureDegrees(0.0, 0.0, 692.73) * (2.0*geograph_lat).sin()
-    + angle::PureDegrees(0.0, 0.0, 1.16)   * (4.0*geograph_lat).sin()
+    - angle::PureDegrees(0, 0, 692.73) * (2.0*geograph_lat).sin()
+    + angle::PureDegrees(0, 0, 1.16)   * (4.0*geograph_lat).sin()
 }
 
 /**

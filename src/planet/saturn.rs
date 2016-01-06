@@ -2,11 +2,11 @@ use angle;
 use planet;
 
 fn equatorial_unit_semidiameter() -> f64 {
-    angle::PureDegrees(0.0, 0.0, 82.73)
+    angle::PureDegrees(0, 0, 82.73)
 }
 
 fn polar_unit_semidiameter() -> f64 {
-    angle::PureDegrees(0.0, 0.0, 73.82)
+    angle::PureDegrees(0, 0, 73.82)
 }
 
 /**

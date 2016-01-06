@@ -11,7 +11,7 @@ Returns Jupiter's **equatorial semidiameter**
 * ```DistanceToEarth```: Jupiter's distance from Earth *(AU)*
 **/
 pub fn EquatorialSemidiameter(DistanceToEarth: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 98.44) / DistanceToEarth
+    angle::PureDegrees(0, 0, 98.44) / DistanceToEarth
 }
 
 /**
@@ -22,7 +22,7 @@ Returns Jupiter's **polar semidiameter**
 * ```DistanceToEarth```: Jupiter's distance from Earth *(AU)*
 **/
 pub fn PolarSemidiameter(DistanceToEarth: f64) -> f64 {
-    angle::PureDegrees(0.0, 0.0, 92.06) / DistanceToEarth
+    angle::PureDegrees(0, 0, 92.06) / DistanceToEarth
 }
 
 /**
