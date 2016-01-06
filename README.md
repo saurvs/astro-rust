@@ -55,6 +55,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   ```rust
   let (longitude, latitude, radius_vector) = planet::earth::moon::EclipticalGeocentricCoords(JD);
   ```
+  
 * Find the heliocentric coordinates of Mars
   ```rust
   let (longitude, latitude, radius_vector) = planet::mars::HeliocentricCoords(JD);
