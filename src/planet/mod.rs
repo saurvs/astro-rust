@@ -1,13 +1,75 @@
-use angle;
-
+#[macro_use]
 pub mod mercury;
+
+#[macro_use]
 pub mod venus;
+
+#[macro_use]
 pub mod earth;
+
+#[macro_use]
 pub mod mars;
+
+#[macro_use]
 pub mod jupiter;
+
+#[macro_use]
 pub mod saturn;
+
+#[macro_use]
 pub mod uranus;
+
+#[macro_use]
 pub mod neptune;
+
+use angle;
+use time;
+
+/// Represents different planets
+pub enum Planet {
+    /// Mercury
+    Mercury,
+    /// Venus
+    Venus,
+    /// Earth
+    Earth,
+    /// Mars
+    Mars,
+    /// Jupiter
+    Jupiter,
+    /// Saturn
+    Saturn,
+    /// Uranus
+    Uranus,
+    /// Neptune
+    Neptune,
+}
+
+pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {/*
+    let terms = match planet {
+        Planet::Mercury => VSOP87_Mercury_Terms!(),
+        Planet::Venus => VSOP87_Mercury_Terms!(),
+        Planet::Earth => VSOP87_Mercury_Terms!(),
+        Planet::Mars => VSOP87_Mercury_Terms!(),
+        Planet::Jupiter => VSOP87_Mercury_Terms!(),
+        Planet::Saturn => VSOP87_Mercury_Terms!(),
+        Planet::Uranus => VSOP87_Mercury_Terms!(),
+        Planet::Neptune => VSOP87_Mercury_Terms!(),
+    };
+
+    let JM = time::JulianMillenium(JD);
+
+    let (L0_terms, L1_terms, L2_terms, L3_terms, L4_terms, L5_terms) = terms.0;
+    let L = VSOP87Coordinate(JM, &L0_terms, &L1_terms, &L2_terms, &L3_terms, &L4_terms, &L5_terms);
+
+    let (B0_terms, B1_terms, B2_terms, B3_terms, B4_terms, B5_terms) = terms.1;
+    let B = VSOP87Coordinate(JM, &B0_terms, &B1_terms, &B2_terms, &B3_terms, &B4_terms, &B5_terms);
+
+    let (R0_terms, R1_terms, R2_terms, R3_terms, R4_terms, R5_terms) = terms.2;
+    let R = VSOP87Coordinate(JM, &R0_terms, &R1_terms, &R2_terms, &R3_terms, &R4_terms, &R5_terms);
+
+    (L, B, R)*/(0.0, 0.0, 0.0)
+}
 
 fn VSOP87Coordinate(t: f64, a: &[[f64; 3]], b: &[[f64; 3]], c: &[[f64; 3]], d: &[[f64; 3]], e: &[[f64; 3]], f: &[[f64; 3]]) -> f64 {
     let mut T0 = 0.0; for &i in a.iter() { T0 += VSOP87Term(t, &i); }
@@ -77,7 +139,7 @@ pub fn GeocentricEquatorialCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: 
     (asc, dec, EffectOfLightTime(x, y, z))
 }
 
-pub fn HeliocentricEclipticalCoordsFromOrbitalElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {
+pub fn HeliocentricCoordsFromOrbitalElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {
     let u = w + v;
     let x = r * (sigma.cos()*u.cos() - sigma.sin()*u.sin()*i.cos());
     let y = r * (sigma.sin()*u.cos() + sigma.cos()*u.sin()*i.cos());

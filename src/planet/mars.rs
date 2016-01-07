@@ -139,8 +139,10 @@ Returns Mars's **heliocentric coordinates**
 
 ```julian_century```: Julian century
 **/
-pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
-    let terms = (
+#[macro_export]
+macro_rules! VSOP87_Mars_Terms {
+    () => {{
+    (
         (
             [
                 [6.20347711583, 0.0, 0.0],
@@ -5666,16 +5668,5 @@ pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
                 [1.2e-10, 3.14159265359, 0.0],
             ]
         )
-    );
-
-    let (L0_terms, L1_terms, L2_terms, L3_terms, L4_terms, L5_terms) = terms.0;
-    let L = planet::VSOP87Coordinate(julian_century, &L0_terms, &L1_terms, &L2_terms, &L3_terms, &L4_terms, &L5_terms);
-
-    let (B0_terms, B1_terms, B2_terms, B3_terms, B4_terms, B5_terms) = terms.1;
-    let B = planet::VSOP87Coordinate(julian_century, &B0_terms, &B1_terms, &B2_terms, &B3_terms, &B4_terms, &B5_terms);
-
-    let (R0_terms, R1_terms, R2_terms, R3_terms, R4_terms, R5_terms) = terms.2;
-    let R = planet::VSOP87Coordinate(julian_century, &R0_terms, &R1_terms, &R2_terms, &R3_terms, &R4_terms, &R5_terms);
-
-    (L, B, R)
+    )}};
 }

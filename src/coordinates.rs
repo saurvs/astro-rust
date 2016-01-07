@@ -22,8 +22,8 @@ Returns hour angle from sidereal time at Greenwhich
 
 # Arguments
 
-* ```green_sid```: Sidereal time at Greenwhich
-* ```obv_long```: Observer's longitude *(radians)*
+* ```green_sid```: Sidereal time at Greenwhich *(radians)*
+* ```obv_long```: Observer's geographical longitude *(radians)*
 * ```right_asc```: Right ascension *(radians)*
 **/
 pub fn HourAngleFromGreenwhichSidereal(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
@@ -35,7 +35,7 @@ Returns hour angle from local sidereal time
 
 # Arguments
 
-* ```loc_sid```: Local sidereal time
+* ```loc_sid```: Local sidereal time *(radians)*
 * ```right_asc```: Right ascension *(radians)*
 **/
 pub fn HourAngleFromLocalSidereal(loc_sid: f64, right_asc: f64) -> f64 {
@@ -96,8 +96,6 @@ Returns **ecliptical coordinates** *(radians)* from **equatorial coordinates**
 #[macro_export]
 macro_rules! EclipticalCoordsFromEquatorialCoords {
     ($x: expr, $y: expr, $z: expr) => {{
-        (astro::earth::eclip_long_from_equatorial($x, $y, $z),
-         astro::earth::eclip_lat_from_equatorial($x, $y, $z))
     }};
 }
 

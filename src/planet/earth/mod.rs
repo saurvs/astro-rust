@@ -40,28 +40,28 @@ pub fn OrbitalElements(T: f64) -> (f64, f64, f64, f64, f64) {
 }
 
 /**
-Returns the **flattening factor** of the Earth
+Returns the flattening factor factor of the Earth
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
-pub fn Flattening() -> f64 {
+pub fn FlatteningFactor() -> f64 {
     1.0 / 298.257223563
 }
 
 /**
-Returns the **equatorial radius** of the Earth *(meters)*
+Returns the equatorial radius of the Earth *(meters)*
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
-pub fn EquatorialRadius() -> f64 {
-    PolarRadius() / (1.0 - Flattening())
+pub fn EquatorRadius() -> f64 {
+    PolarRadius() / (1.0 - FlatteningFactor())
 }
 
 /**
 
 Returns the **polar radius** of the Earth *(meters)*
 
-Calculated using [```flattening()```](./fn.flattening.html) and
+Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html) and
 [```eq_radius()```](./fn.eq_radius.html)
 **/
 pub fn PolarRadius() -> f64 {
@@ -69,16 +69,16 @@ pub fn PolarRadius() -> f64 {
 }
 
 /**
-Returns the **eccentricity** of the Earth's **meridian**
+Returns the eccentricity of the Earth's meridian
 
-Calculated using [```flattening()```](./fn.flattening.html)
+Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html)
 **/
 pub fn EccentricityOfMeridian() -> f64 {
-    ((2.0 - Flattening()) * Flattening()).sqrt()
+    ((2.0 - FlatteningFactor()) * FlatteningFactor()).sqrt()
 }
 
 /**
-Returns **angular distance** between two points on Earth's
+Returns angular distance between two points on Earth's
 surface
 
 # Arguments
@@ -126,13 +126,13 @@ pub fn Geodesic(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoint) ->
             (f.sin() * lam.sin()).powi(2);
     let om = ((s / c).sqrt()).atan();
     let r = (s * c).sqrt() / om;
-    let d = 2.0 * om * EquatorialRadius();
+    let d = 2.0 * om * EquatorRadius();
     let h1 = (3.0*r - 1.0) / (2.0 * c);
     let h2 = (3.0*r + 1.0) / (2.0 * s);
 
     d * (  1.0
-         + Flattening() * h1 * (f.sin()*g.cos()).powi(2)
-         - Flattening() * h2 * (f.cos()*g.sin()).powi(2)
+         + FlatteningFactor() * h1 * (f.sin()*g.cos()).powi(2)
+         - FlatteningFactor() * h2 * (f.cos()*g.sin()).powi(2)
         )
 
 }
@@ -150,9 +150,9 @@ Earth's surface.
 * ```geograph_lat```: Observer's geographical latitude *(radians)*
 **/
 pub fn RhoSinAndCosPhi(height: f64, geograph_lat: f64) -> (f64, f64) {
-    let u = (geograph_lat.tan() * PolarRadius() / EquatorialRadius()).atan();
-    let x = height / EquatorialRadius();
-    let rho_sin_phi = (u.sin() * PolarRadius() / EquatorialRadius()) +
+    let u = (geograph_lat.tan() * PolarRadius() / EquatorRadius()).atan();
+    let x = height / EquatorRadius();
+    let rho_sin_phi = (u.sin() * PolarRadius() / EquatorRadius()) +
                       (geograph_lat.sin() * x);
     let rho_cos_phi = u.cos() + (geograph_lat.cos() * x);
 
@@ -243,8 +243,10 @@ Returns the Earth's **heliocentric coordinates**
 
 ```julian_century```: Julian century
 **/
-pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
-    let terms = (
+#[macro_export]
+macro_rules! VSOP87_Earth_Terms {
+    () => {{
+    (
         (
             [
                 [1.75347045673, 0.0, 0.0],
@@ -2710,19 +2712,5 @@ pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
                 [1e-11, 0.38068797142, 18849.2275499742],
             ]
         )
-    );
-
-    let (L0_terms, L1_terms, L2_terms, L3_terms, L4_terms, L5_terms) = terms.0;
-    let L = planet::VSOP87Coordinate(julian_century, &L0_terms, &L1_terms, &L2_terms, &L3_terms, &L4_terms, &L5_terms);
-
-    let (B0_terms, B1_terms, B2_terms, B3_terms, B4_terms) = terms.1;
-    let B5_terms = [[0.0, 0.0, 0.0]];
-    let B = planet::VSOP87Coordinate(julian_century, &B0_terms, &B1_terms, &B2_terms, &B3_terms, &B4_terms, &B5_terms);
-
-    let (R0_terms, R1_terms, R2_terms, R3_terms, R4_terms, R5_terms) = terms.2;
-    let R = planet::VSOP87Coordinate(julian_century, &R0_terms, &R1_terms, &R2_terms, &R3_terms, &R4_terms, &R5_terms);
-
-    (angle::LimitedTo360(L.to_degrees()).to_radians(),
-     B,
-     R)
+    )}};
 }
