@@ -1,7 +1,7 @@
 use time;
 
 /**
-Returns the **combined magnitude** of two stars
+Returns the combined magnitude of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
@@ -11,7 +11,7 @@ pub fn CombinedMag(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the **combined magnitude** of two or more stars
+Returns the combined magnitude of two or more stars
 
 * ```m```: Array of magnitudes of stars
 **/
@@ -24,7 +24,7 @@ pub fn CombinedMagOfMany(m: &[f64]) -> f64 {
 }
 
 /**
-Returns the **brightness ratio** of two stars
+Returns the brightness ratio of two stars
 
 * ```m1```: Magnitude of star 1
 * ```m2```: Magnitude of star 2
@@ -34,7 +34,7 @@ pub fn BrightnessRatio(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the **difference in magnitude** of two stars
+Returns the difference in magnitude of two stars
 
 * ```br```: Brightness ratio of two stars
 **/
@@ -43,7 +43,7 @@ pub fn MagDifference(br: f64) -> f64 {
 }
 
 /**
-Returns the **absolute magnitude** of a star from its parallax
+Returns the absolute magnitude of a star from its parallax
 
 * ```par```: Parallax of star
 * ```am```: Apparent magnitude of star
@@ -54,7 +54,7 @@ pub fn AbsoluteMagFromParallax(mut par: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the **absolute magnitude** of a star from its distance from earth
+Returns the absolute magnitude of a star from its distance from earth
 
 * ```d```: Distance of star from earth *(parsecs)*
 * ```am```: Apparent magnitude of star
@@ -64,7 +64,7 @@ pub fn AbsoluteMagFromDistance(d: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the **abberation** corrections *(radians)* for a star's equatorial coordinates
+Returns the abberation corrections *(radians)* for a star's equatorial coordinates
 
 # Returns
 

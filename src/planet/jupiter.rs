@@ -4,25 +4,33 @@ use planet::earth;
 use nutation;
 
 /**
-Returns Jupiter's **equatorial semidiameter**
+Returns Jupiter's geocentric equatorial semidiameter
+
+# Returns
+
+* ```equatorial_semidiameter```: Equatorial semidiameter *(radians per AU)*
 
 # Arguments
 
-* ```DistanceToEarth```: Jupiter's distance from Earth *(AU)*
+* ```distance_to_earth```: Jupiter's distance to Earth *(AU)*
 **/
-pub fn EquatorialSemidiameter(DistanceToEarth: f64) -> f64 {
-    angle::PureDegrees(0, 0, 98.44) / DistanceToEarth
+pub fn EquatorSemidiameter(distance_to_earth: f64) -> f64 {
+    angle::PureDegrees(0, 0, 98.44) / distance_to_earth
 }
 
 /**
-Returns Jupiter's **polar semidiameter**
+Returns Jupiter's geocentric polar semidiameter
+
+# Returns
+
+* ```polar_semidiameter```: Polar semidiameter *(radians per AU)*
 
 # Arguments
 
-* ```DistanceToEarth```: Jupiter's distance from Earth *(AU)*
+* ```distance_to_earth```: Jupiter's distance to Earth *(AU)*
 **/
-pub fn PolarSemidiameter(DistanceToEarth: f64) -> f64 {
-    angle::PureDegrees(0, 0, 92.06) / DistanceToEarth
+pub fn PolarSemidiameter(distance_to_earth: f64) -> f64 {
+    angle::PureDegrees(0, 0, 92.06) / distance_to_earth
 }
 
 /**

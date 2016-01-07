@@ -1,8 +1,8 @@
 #[macro_use]
-pub mod mercury;
+mod mercury;
 
 #[macro_use]
-pub mod venus;
+mod venus;
 
 #[macro_use]
 pub mod earth;
@@ -17,32 +17,61 @@ pub mod jupiter;
 pub mod saturn;
 
 #[macro_use]
-pub mod uranus;
+mod uranus;
 
 #[macro_use]
-pub mod neptune;
+mod neptune;
 
 use angle;
 use time;
 
 /// Represents different planets
 pub enum Planet {
-    /// Mercury
+    /// Mercury *Thanks for help proving General Relativity*
     Mercury,
-    /// Venus
+    /// Venus **Climate change was here**
     Venus,
-    /// Earth
+    /// Earth *Pale blue dot*
     Earth,
-    /// Mars
+    /// Mars *Panspermia sounds nice*
     Mars,
-    /// Jupiter
+    /// Jupiter *Oh, Europa*
     Jupiter,
-    /// Saturn
+    /// Saturn *62 moons and smaller moonlets*
     Saturn,
-    /// Uranus
+    /// Uranus *Remember King George?*
     Uranus,
-    /// Neptune
+    /// Neptune *Oceans of liquid diamond, maybe*
     Neptune,
+}
+
+/**
+Returns a planet's geocentric equatorial semidiameter
+
+# Returns
+
+* ```semidiameter```: Geocentric equatorial emidiameter *(radians per AU)*
+
+# Arguments
+
+* ```planet```: The [Planet](./enum.Planet.html). *Throws an error if Planet::Earth is passed.*
+* ```distance_to_earth```: Planet's distance to Earth *(AU)*
+**/
+pub fn Semidiameter(planet: Planet, distance_to_earth: f64) -> f64 {
+    let mut s: f64;
+
+    match planet {
+        Planet::Mercury => s = angle::PureDegrees(0, 0, 3.36),
+        Planet::Venus => s = angle::PureDegrees(0, 0, 8.41),
+        Planet::Earth => panic!("Planet::Earth was passed to function planet::Semidiameter(). This is highly illogical."),
+        Planet::Mars => s = angle::PureDegrees(0, 0, 4.68),
+        Planet::Jupiter => s = jupiter::EquatorSemidiameter(1.0),
+        Planet::Saturn => s = saturn::EquatorSemidiameter(1.0),
+        Planet::Uranus => s = angle::PureDegrees(0, 0, 35.02),
+        Planet::Neptune => s = angle::PureDegrees(0, 0, 33.5),
+    };
+
+    s / distance_to_earth
 }
 
 pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {/*

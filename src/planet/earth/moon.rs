@@ -3,6 +3,32 @@ use coordinates;
 use time;
 
 /**
+Returns the geocentric equatorial horizontal parallax of the Moon
+
+# Arguments
+
+* ```moon_earth_distance```: Distance between the Moon and Earth *(kilometers)*
+**/
+pub fn EquatorialHorizontalParallax(moon_earth_distance: f64) -> f64 {
+    (6378.14 / moon_earth_distance).asin()
+}
+
+/**
+Returns the Moon's geocentric equatorial semidiameter
+
+# Returns
+
+* ```equatorial_semidiameter```: Semidiameter *(radians per kilometers)*
+
+# Arguments
+
+* ```distance_to_earth```: The moon's distance to Earth *(kilometers)*
+**/
+pub fn GeocentricSemidiameter(distance_to_earth: f64) -> f64 {
+    0.272481 * EquatorialHorizontalParallax(distance_to_earth).sin()
+}
+
+/**
 Returns the **inclination** of the **mean lunar equator** with the
 **ecliptic**
 
@@ -510,17 +536,6 @@ pub fn EclipticalGeocentricCoords(JED: f64) -> (f64, f64, f64) {
     (L1 + l/1000000.0,
      b/1000000.0,
      385000.56 + r/1000.0)
-}
-
-/**
-Returns the geocentric equatorial horizontal parallax of the Moon
-
-# Arguments
-
-* ```moon_earth_distance```: Distance between the Moon and the Earth *(kilometers)*
-**/
-pub fn EquatorialHorizontalParallax(moon_earth_distance: f64) -> f64 {
-    (6378.14 / moon_earth_distance).asin()
 }
 
 /**

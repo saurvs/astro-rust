@@ -16,66 +16,7 @@ See full list of algorithms below.
 
 Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
 
-## Usage
-
-* Add the dependency to your ```Cargo.toml```
-   ```toml
-   [dependencies]
-   astro-rust = "1.0"
-   ```
-
-* Include the crate ```astro``` in your code
-  ```rust
-  extern crate astro;
-
-  use astro::*;
-  ```
-
-* Find the Julian day (the most important step for almost everything)
-  ```rust
-  let day_of_month = time::DayOfMonth{day: 17,
-				 			          hour: 12,
-                                      minute: 0,
-                                      second: 0.0};
-
-  let date = time::Date{year: 2016,
-                        month: 1,
-                        decimal_day: time::DecimalDay(day_of_month),
-                        calendar_type: time::CalendarType::Gregorian};
-
-  let JD = time::JulianDay(date);
-  ```
-
-* Find the ecliptical geocentric coordinates of the Sun
-  ```rust
-  let (longitude, latitude, radius_vector) = sun::EclipticalGeocentricCoords(JD);
-  ```
-* Find the topocentric coordinates (for viewing on the sky from Earth) of the Sun
-* Similarly, for the Moon
-  ```rust
-  let (longitude, latitude, radius_vector) = planet::earth::moon::EclipticalGeocentricCoords(JD);
-  ```
-  
-* Find the heliocentric coordinates of Mars
-  ```rust
-  let (longitude, latitude, radius_vector) = planet::mars::HeliocentricCoords(JD);
-  ```
-
-* Find the topocentric coordinates (for viewing on the sky from Earth) of Mars
-* Find the corrections for nutation
-  ```rust
-  let (nutation_in_longitude, nutation_in_obliquity) = nutation::Corrections(JD);
-  ```
-
-* Find the corrections for aberration
-* Find the corrections for precession
-* Find the corrections for atmospheric refraction
-* Find the orbital elements of Jupiter
-* Find the elements to describe the rings of Saturn
-* Find the positions of the satellites of Saturn
-* Find the time of solar and lunar eclipse close to a certain date
-
-## Detailed list of things you can find/do
+## Things you can find/do
 * Heliocentric coordinates of Mercury, Venus, Earth, Mars, Jupiter, Saturn, Neptune, and Uranus (and Pluto).
 * Geocentric coordinates of the Sun.
 * Transformation of heliocentric coordinates to geocentric coordinates, and to topocentric coordinates.
