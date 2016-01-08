@@ -1,22 +1,4 @@
-use angle;
-use planet;
 
-
-/**
-Returns Mercury's **heliocentric coordinates**
-
-# Returns
-
-```(longitude, latitude, radius_vec)```
-
-* ```longitude```: Heliocentric longitude *(radians)*
-* ```latitude```: Heliocentric latitude *(radians)*
-* ```radius_vec```: Heliocentric radius vector *(AU)*
-
-# Arguments
-
-```julian_century```: Julian century
-**/
 /*
 fn VSOP87_Mercury_Terms() -> Vec<Vec<Vec<Vec<f64>>>> {
     let terms = vec![
