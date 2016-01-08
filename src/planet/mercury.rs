@@ -17,11 +17,10 @@ Returns Mercury's **heliocentric coordinates**
 
 ```julian_century```: Julian century
 **/
-
-macro_rules! VSOP87_Mercury_Terms {
-    () => {{
-    (
-        (
+/*
+fn VSOP87_Mercury_Terms() -> Vec<Vec<Vec<Vec<f64>>>> {
+    let terms = vec![
+        vec![
             [
                 [4.40250710144, 0.0, 0.0],
                 [0.40989414976, 1.48302034194, 26087.9031415742],
@@ -6889,11 +6888,9 @@ macro_rules! VSOP87_Mercury_Terms {
                 [0.0, 0.99831133595, 208703.2251325936],
                 [0.0, 4.0026706421, 234791.12827416777],
             ]
-        )
-    )}};
-}
+        ]
+    ]]];
 /*
-fn VSOP87_Mercury_Terms() -> &[[f64; 3]] {
     let terms = VSOP87_Mercury_Terms!();
 
     let (L0_terms, L1_terms, L2_terms,
@@ -6903,6 +6900,10 @@ fn VSOP87_Mercury_Terms() -> &[[f64; 3]] {
     let (R0_terms, R1_terms, R2_terms,
         R3_terms, R4_terms, R5_terms) = terms.2;
 
-    &L0_terms
-}
-*/
+    let vec = vec![1.0, 2.0, 3.0];
+    let vec2 = vec![1.0, 2.0, 3.0, 4.5];
+    let V = vec![vec, vec2];
+
+    vec![1.0, 2.0, 3.0]*/
+    terms
+}*/
