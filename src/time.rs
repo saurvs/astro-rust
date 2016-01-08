@@ -3,7 +3,7 @@ use util;
 use nutation;
 use planet;
 
-/// Represents different **calendar types**
+/// Represents a **calendar type**
 pub enum CalendarType {
     /// Gregorian calendar
     Gregorian,

@@ -73,7 +73,7 @@ of the Sun
 
 # Arguments
 
-* ```jde```: Julian emphemeris day
+* ```JED```: Julian Emphemeris day
 * ```app_long```: The apparent longitude of the Sun *(radians)*,
                   including the effect of abberation and *not* that
                   of nutation
@@ -82,10 +82,10 @@ of the Sun
 * ```obl_eclip```: The *true* obliquity of the Earth's ecliptic *(radians)*; not
                    *mean* obliquity
 **/
-pub fn DiskEphemeris(jde: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
-    let theta = angle::LimitedTo360((jde-2398220.0) * (360.0/5.38)).to_radians();
+pub fn DiskEphemeris(JED: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
+    let theta = angle::LimitedTo360((JED - 2398220.0) * (360.0/5.38)).to_radians();
     let I = 7.25_f64.to_radians();
-    let K = (73.6667 + 1.3958333*((jde-2396758.0) / 36525.0)).to_radians();
+    let K = (73.6667 + 1.3958333*((JED - 2396758.0) / 36525.0)).to_radians();
 
     let z = app_long - K;
     let sin_z = z.sin();
