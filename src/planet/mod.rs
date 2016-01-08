@@ -174,28 +174,26 @@ pub fn OrbitalElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64
     )
 }
 
-pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {/*
-    let terms = match planet {
-        Planet::Mercury => VSOP87_Mercury_Terms!(),
-        Planet::Venus => VSOP87_Mercury_Terms!(),
-        Planet::Earth => VSOP87_Mercury_Terms!(),
-        Planet::Mars => VSOP87_Mercury_Terms!(),
-        Planet::Jupiter => VSOP87_Mercury_Terms!(),
-        Planet::Saturn => VSOP87_Mercury_Terms!(),
-        Planet::Uranus => VSOP87_Mercury_Terms!(),
-        Planet::Neptune => VSOP87_Mercury_Terms!(),
-    };*/
+pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
 
-    let JM = time::JulianMillenium(JD);
-
-    let VSOP87_Terms = venus::VSOP87_Terms();
+    let VSOP87_Terms = match planet {
+        Planet::Mercury => mercury::VSOP87_Terms(),
+        Planet::Venus => venus::VSOP87_Terms(),
+        Planet::Earth => earth::VSOP87_Terms(),
+        Planet::Mars => mars::VSOP87_Terms(),
+        Planet::Jupiter => jupiter::VSOP87_Terms(),
+        Planet::Saturn => saturn::VSOP87_Terms(),
+        Planet::Uranus => uranus::VSOP87_Terms(),
+        Planet::Neptune => neptune::VSOP87_Terms(),
+    };
 
     let mut L = 0.0;
     let mut B = 0.0;
     let mut R = 0.0;
 
-    let mut n: u8 = 1; // L, then B, then R
+    let JM = time::JulianMillenium(JD);
 
+    let mut n: u8 = 1; // L, then B, then R
     for i in VSOP87_Terms.iter() { // L or B or R
 
         let mut T = 1.0;
@@ -203,7 +201,7 @@ pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {/*
 
         for j in i.iter() { // T or T**2 or T**3 or ...
 
-            for k in j.iter() { // A * cos(B + C*T)
+            for k in j.iter() { // add [A * cos(B + C*T)]
                 y += k[0] * (k[1] + k[2]*JM).cos();
             }
 
