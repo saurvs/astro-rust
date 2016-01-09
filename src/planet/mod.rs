@@ -174,6 +174,22 @@ pub fn OrbitalElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64
     )
 }
 
+/**
+Returns a planet's **heliocentric coordinates**.
+
+# Returns
+
+```(longitude, latitude, radius_vec)```
+
+* ```longitude```: Heliocentric longitude *(radians)*
+* ```latitude```: Heliocentric latitude *(radians)*
+* ```radius_vec```: Heliocentric radius vector *(AU)*
+
+# Arguments
+
+* ```planet```: [Planet](./enum.Planet.html)
+* ```JD```: Julian day
+**/
 pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
 
     let VSOP87_Terms = match planet {

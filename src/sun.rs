@@ -13,10 +13,13 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
     angle::PureDegrees(0, 0, 959.63) / distance_to_earth
 }
 
-pub fn EclipticalGeocentricCoords(JD: f64) -> (f64, f64, f64) {
+pub fn GeocentricEclipticalCoords(JD: f64) -> (f64, f64, f64) {
     let (L, B, R) = planet::HeliocentricCoords(planet::Planet::Earth, JD);
 
-    (L + std::f64::consts::PI, -B, R)
+    let L_sun = angle::LimitedTo360((L + std::f64::consts::PI).to_degrees());
+    let B_sun = angle::LimitedTo360(-1.0 * B.to_degrees());
+
+    (L_sun.to_radians(), B_sun.to_radians(), R)
 }
 
 /**

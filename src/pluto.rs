@@ -12,9 +12,9 @@ pub fn Semidiameter(distance_to_earth: f64) -> f64 {
 }
 
 /**
-Returns the **heliocentric coordinates** of Pluto. **Valid only for the years 1885 AD - 2099 AD.**
+Returns Pluto's **heliocentric coordinates**.
 
-The coordinates are with reference to the epoch J2000.0.
+**Valid only for the years 1885 AD - 2099 AD.**
 
 # Returns
 
@@ -26,9 +26,11 @@ The coordinates are with reference to the epoch J2000.0.
 
 # Arguments
 
-```julian_century```: Julian century
+* ```JD```: Julian day
 **/
-pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
+pub fn HeliocentricCoords(JD: f64) -> (f64, f64, f64) {
+
+    let JC = time::JulianCentury(JD);
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
     let tuple_terms = [
@@ -74,13 +76,14 @@ pub fn HeliocentricCoords(julian_century: f64) -> (f64, f64, f64) {
       	terms(2, 0, 3, 0.000001, 0.000003, 0.0, 0.0, -0.0000008, 0.0000007),
       	terms(3, 0, -2, -0.000003, -0.000001, 0.0, 0.000001, 0.0000002, -0.000001),
       	terms(3, 0, -1, 0.000005, -0.000003, 0.0, 0.0, 0.0000019, 0.0000035),
-      	terms(3, 0, 0, 0.0, 0.0, 0.000001, 0.0, 0.000001, 0.0000003)];
+      	terms(3, 0, 0, 0.0, 0.0, 0.000001, 0.0, 0.000001, 0.0000003)
+    ];
 
-    let j = 34.35 + 3034.9057*julian_century;
-    let s = 50.08 + 1222.1138*julian_century;
-    let p = 238.96 + 144.9600*julian_century;
+    let j = 34.35  + 3034.9057*JC;
+    let s = 50.08  + 1222.1138*JC;
+    let p = 238.96 + 144.9600*JC;
 
-    let mut long = (238.958116f64 + 144.96*julian_century).to_radians();
+    let mut long = (238.958116f64 + 144.96*JC).to_radians();
     let mut lat = -3.908239_f64.to_radians();
     let mut r = 40.7241346;
 

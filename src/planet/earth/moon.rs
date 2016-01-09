@@ -45,6 +45,7 @@ pub fn InclinationOfMeanLunarEquatorWithEcliptic() -> f64 {
 
 fn A(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
      longitude_of_mean_ascen_node: f64) -> f64 {
+    let I = InclinationOfMeanLunarEquatorWithEcliptic();
     let W = mean_geocen_moon_long - longitude_of_mean_ascen_node;
 
     (   W.sin() * app_geocen_moon_lat.cos() * I.cos()
@@ -140,7 +141,7 @@ pub fn OpticalLibrations(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
     let W = mean_geocen_moon_long - longitude_of_mean_ascen_node;
 
     let A = A(mean_geocen_moon_long, app_geocen_moon_lat,
-              longitude_of_mean_ascen_node;
+              longitude_of_mean_ascen_node);
 
     let b1 = ( - W.sin() * app_geocen_moon_lat.cos() * I.sin()
                - app_geocen_moon_lat.sin() * I.cos()
@@ -211,16 +212,12 @@ pub fn PhysicalLibrations(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
                + 0.00011 * (2.0*(M1 - M - D)).sin()
               ).to_radians();
 
-    let I = InclinationOfMeanLunarEquatorWithEcliptic();
-    let I_sin = I.sin(); let I_cos = I.cos();
     let W = mean_geocen_moon_long - longitude_of_mean_ascen_node;
     let A = A(mean_geocen_moon_long, app_geocen_moon_lat,
-              longitude_of_mean_ascen_node, I_cos, I_sin);
-    let A_sin = A.sin();
-    let A_cos = A.cos();
+              longitude_of_mean_ascen_node);
 
-    (-tau + optical_lib_lat.tan()*(rho*A_cos + sig*A_sin),
-      sig*A_cos - rho*A_sin)
+    (-tau + optical_lib_lat.tan()*(rho*A.cos() + sig*A.sin()),
+      sig*A.cos() - rho*A.sin())
 }
 
 /**
