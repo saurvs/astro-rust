@@ -15,7 +15,7 @@ Angle 2 may be declination or latitude.
 pub fn AnglSepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
     (   p1a2.sin() * p2a2.sin()
       + p1a2.cos() * p2a2.cos() * (p1a1 - p2a1).cos()
-    ).cos()
+    ).acos()
 }
 
 /**

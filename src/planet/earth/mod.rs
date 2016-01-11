@@ -20,7 +20,7 @@ Returns the **equatorial radius** of the Earth *(meters)*
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
 pub fn EqRad() -> f64 {
-    PolRad() / (1.0 - FlatFac())
+    6378137.0
 }
 
 /**
@@ -31,7 +31,7 @@ Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html) and
 [```eq_radius()```](./fn.eq_radius.html)
 **/
 pub fn PolRad() -> f64 {
-    6378137.0
+    EqRad() * (1.0 - FlatFac())
 }
 
 /**
@@ -54,8 +54,8 @@ Assumes that the Earth is a sphere.
 * ```p1```: ```GeographPoint``` 1
 * ```p2```: ```GeographPoint``` 2
 **/
-pub fn ApproxDist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
-   6371.0 * p1.AnglSepr(p2)
+pub fn ApproxGeodesicDist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
+    6371.0 * p1.AnglSepr(p2)
 }
 
 /**
@@ -67,7 +67,7 @@ surface *(meters)*
 * ```p1```: ```GeographPoint``` 1
 * ```p2```: ```GeographPoint``` 2
 **/
-pub fn Dist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
+pub fn GeodesicDist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
     let lam = (p1.long - p2.long) / 2.0;
@@ -82,10 +82,9 @@ pub fn Dist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
     let h2 = (3.0*r + 1.0) / (2.0 * s);
 
     d * (  1.0
-         + FlatFac() * h1 * (f.sin()*g.cos()).powi(2)
-         - FlatFac() * h2 * (f.cos()*g.sin()).powi(2)
+         + FlatFac() * h1 * (f.sin() * g.cos()).powi(2)
+         - FlatFac() * h2 * (f.cos() * g.sin()).powi(2)
         )
-
 }
 
 /**

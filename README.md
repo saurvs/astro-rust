@@ -62,9 +62,26 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Saturn, julian_day);
   ```
 
-* Find the corrections for the nutation (of the Earth) in ecliptical longitude and obliquity of the ecliptic
+* Find the corrections for nutation (of the Earth) in ecliptical longitude and obliquity of the ecliptic
   ```rust
   let (nut_in_long, nut_in_oblq) = nutation::Corrections(julian_day);
+  ```
+
+* Find the geodesic distance between two point on the Earth
+  ```rust
+	// geodesic distance between the Observatoire de Paris and
+    // the US Naval Observatory at Washington DC
+
+    let paris = coords::GeographPoint{long: angle::DegFrmDMS(-2, 20, 14.0).to_radians(),
+                                      lat : angle::DegFrmDMS(48, 50, 11.0).to_radians()};
+
+    let washington = coords::GeographPoint{long: angle::DegFrmDMS(77,  3, 56.0).to_radians(),
+                                           lat : angle::DegFrmDMS(38, 55, 17.0).to_radians()};
+
+	// angle::DegFrmDMS() converts degrees expressed in degrees,
+	// minutes and seconds into degrees with decimals
+
+    let distance = planet::earth::GeodesicDist(paris, washington); // in meters
   ```
 
 ## Things you can find/do
