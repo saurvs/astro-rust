@@ -57,9 +57,14 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Mars, julian_day);
   ```
 
-* And for **Saturn**
+* And **Saturn**
   ```rust
   let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Saturn, julian_day);
+  ```
+
+* Find the *corrections* for the **nutation** (of the Earth) in ecliptical longitude and obliquity of the ecliptic
+  ```rust
+  let (nutation_in_longitude, nutation_in_obliquity) = nutation::Corrections(julian_day);
   ```
 
 ## Things you can find/do

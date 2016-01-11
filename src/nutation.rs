@@ -22,7 +22,7 @@ the Earth's nutation. Nutation does *not* affect ecliptical latitude.
 
 ```JD```: Julian Ephemeris day
 **/
-pub fn Nutation(JD: f64) -> (f64, f64) {
+pub fn Corrections(JD: f64) -> (f64, f64) {
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
     let terms_for_nutation = [
         terms( 0,  0,  0,  0,  1, -171996, -1742, 92025,  89),

@@ -235,7 +235,7 @@ Returns **apparent sidereal time** at any instant of Universal Time
 pub fn AppSidr(JD: f64) -> (i8, i8, f64) {
     let (hour, minute, seconds) = MnSidr(JD);
 
-    let (nut_in_long, nut_in_oblq) = nutation::Nutation(JD);
+    let (nut_in_long, nut_in_oblq) = nutation::Corrections(JD);
     let eclip_oblq = ecliptic::MnOblq(JD);
 
     let seconds_correction =   nut_in_long.to_degrees()*3600.0
