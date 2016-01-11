@@ -42,7 +42,6 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let julian_day = time::JulDay(&date);
 
   // to be super accurate, get the Julian Ephemeris day
-
   // first find delta T, or get an observed value of delta T from 
   // the Astronomical Almanac
   
