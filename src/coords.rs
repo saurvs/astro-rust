@@ -1,4 +1,5 @@
 use angle;
+use time;
 
 /// Represents a point on the **Earth's surface**
 pub struct GeographPoint {
@@ -253,6 +254,30 @@ pub fn Alt(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
     (   observer_lat.sin() * dec.sin()
       + observer_lat.cos() * dec.cos() * hour_angle.cos()
     ).asin()
+}
+
+/**
+Returns **local horizontal coordinates** from **equatorial coordinates**
+
+# Returns
+
+```(azimuth, altitude)```
+
+* ```azimuth```: Azimuth *(radians)*
+* ```altitude```: Altitude *(radians)*
+
+# Arguments
+
+* ```$x```: Hour angle *(radians)*
+* ```$y```: Declination *(radians)*
+* ```$z```: Observer's geographical latitude *(radians)*
+**/
+#[macro_export]
+macro_rules! LocHzFrmEq {
+    ($x: expr, $y: expr, $z: expr) => {{
+        (astro::coords::Az($x, $y, $z),
+         astro::coords::Alt($x, $y, $z))
+    }};
 }
 
 //-------------------------------------------------------------------

@@ -79,6 +79,41 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
     let distance = planet::earth::GeodesicDist(paris, washington); // in meters
   ```
 
+* Convert equatorial coordinates to ecliptical coordinates
+  ```rust
+	// equatorial coordinates of the star Pollux
+
+    let right_ascension = 116.328942_f64.to_radians();
+    let declination = 28.026183_f64.to_radians();
+
+    // mean obliquity of the ecliptic
+
+    let oblq_eclip = 23.4392911_f64.to_radians();
+
+    // you can also get oblq_eclip from ecliptic::MnOblq(julian_day)
+    // for the same Julian day when the coordinates of the star
+    // were observed
+
+    // also make sure to type #[macro_use] before including the crate
+    // to use macros
+
+    // now, convert equatorial coordinates to ecliptical coordinates
+
+    let (ecl_long, ecl_lat) = EclFrmEq!(right_ascension, declination, oblq_eclip);
+  ```
+
+* Convert equatorial coordinates to galactic coordinates
+  ```rust
+	// equatorial coordinates of the Nova Serpentis 1978
+
+    let right_ascension = angle::DegFrmHMS(17, 48, 59.74).to_radians();
+    let declination = angle::DegFrmDMS(-14, 43, 8.2).to_radians();
+
+    // and in galactic coordinates
+
+    let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
+  ```
+
 ## Things you can find/do
 * Heliocentric coordinates of Mercury, Venus, Earth, Mars, Jupiter, Saturn, Neptune, and Uranus (and Pluto).
 * Geocentric coordinates of the Sun.

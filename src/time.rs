@@ -269,23 +269,7 @@ pub fn MnSidr(JD: f64) -> (i8, i8, f64) {
                                     + JC*JC * (0.000387933 - JC/38710000.0)
                                    );
 
-    HMSFrmDeg(angle)
-}
-
-pub fn HMSFrmDeg(angle: f64) -> (i8, i8, f64) {
-    let hours = angle / 15.0;
-    let hour = hours as i8;
-
-    let minutes = (hours - (hour as f64)) * 60.0;
-    let minute = minutes as i8;
-
-    let seconds = (minutes - (minute as f64)) * 60.0;
-
-    (hour, minute, seconds)
-}
-
-pub fn DegFrmHMS(hour: i8, minute: i8, seconds: f64) -> f64 {
-    (hour as f64)*15.0 + (minute as f64)/60.0 + seconds/3600.0
+    angle::HMSFrmDeg(angle)
 }
 
 /**

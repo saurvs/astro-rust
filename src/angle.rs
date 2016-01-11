@@ -52,6 +52,22 @@ pub fn DMSFrmDeg(deg: f64) -> (i64, i64, f64) {
     (degree, minute, seconds)
 }
 
+pub fn HMSFrmDeg(angle: f64) -> (i8, i8, f64) {
+    let hours = angle / 15.0;
+    let hour = hours as i8;
+
+    let minutes = (hours - (hour as f64)) * 60.0;
+    let minute = minutes as i8;
+
+    let seconds = (minutes - (minute as f64)) * 60.0;
+
+    (hour, minute, seconds)
+}
+
+pub fn DegFrmHMS(hour: i8, minute: i8, seconds: f64) -> f64 {
+    15.0 * ((hour as f64) + (minute as f64)/60.0 + seconds/3600.0)
+}
+
 /**
 Returns the equivalent angle in **[0, 360] degree range**
 
