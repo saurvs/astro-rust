@@ -6,11 +6,12 @@ mod util;
 pub mod star;
 pub mod binary_star;
 
-pub mod parallactic;
+pub mod ecliptic;
+pub mod misc;
 pub mod orbit;
 
 pub mod nutation;
-pub mod refraction;
+pub mod atmos_refrac;
 pub mod precession;
 
 pub mod sun;

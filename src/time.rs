@@ -1,7 +1,7 @@
 use angle;
-use util;
+use ecliptic;
 use nutation;
-use planet;
+use util;
 
 /// Represents a **calendar type**
 pub enum CalendarType {
@@ -245,7 +245,7 @@ pub fn ApparentSiderealTime(JD: f64) -> (i8, i8, f64) {
     let (hour, minute, seconds) = MeanSiderealTime(JD);
 
     let (nut_in_long, nut_in_oblq) = nutation::Corrections(JD);
-    let eclip_oblq = planet::earth::ecliptic::MeanObliquity(JD);
+    let eclip_oblq = ecliptic::MeanObliquity(JD);
 
     let seconds_correction =   nut_in_long.to_degrees()*3600.0
                              * (eclip_oblq + nut_in_oblq).cos()

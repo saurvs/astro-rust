@@ -620,10 +620,10 @@ Returns the **position angle** of the **bright limb** of the Moon
 **/
 pub fn BrightLimb(sun_equa_point: coordinates::EquatorialPoint,
                                  moon_equa_point: coordinates::EquatorialPoint) -> f64 {
-    let a = sun_equa_point.dec.cos();
-    let n = a * (sun_equa_point.asc - moon_equa_point.asc).sin();
-    let d = sun_equa_point.dec.sin()*moon_equa_point.dec.cos() -
-            a*moon_equa_point.dec.sin()*(sun_equa_point.asc - moon_equa_point.asc).cos();
+    let a = sun_equa_point.declin.cos();
+    let n = a * (sun_equa_point.right_ascen - moon_equa_point.right_ascen).sin();
+    let d =   sun_equa_point.declin.sin()  * moon_equa_point.declin.cos()
+            - moon_equa_point.declin.sin() * (sun_equa_point.right_ascen - moon_equa_point.right_ascen).cos() * a;
     n.atan2(d)
 }
 
@@ -642,7 +642,7 @@ Returns the **illuminated fraction** of the Moon, using **equatorial coordinates
 pub fn IlluminatedFractionFromEquatorCoords(sun_equa_point: coordinates::EquatorialPoint,
                                                moon_equa_point: coordinates::EquatorialPoint,
                                                earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
-    illuminated_fraction(angle::AngularSep(sun_equa_point, moon_equa_point).acos(),
+    illuminated_fraction(sun_equa_point.AngularSeparation(moon_equa_point).acos(),
                          earth_moon_dist, earth_sun_dist)
 }
 

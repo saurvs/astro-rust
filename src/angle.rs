@@ -1,16 +1,22 @@
 use coordinates;
 
 /**
-Returns **angular separation** between two equatorial points
+Returns the **angular separation** between two angular points
 
 # Arguments
 
-* ```p1```: Equatorial point 1 *(radians)*
-* ```p2```: Equatorial point 2 *(radians)*
+* ```p1a1```: Angle 1 of point 1 *(radians)*
+* ```p1a2```: Angle 2 of point 1 *(radians)*
+* ```p2a1```: Angle 1 of point 2 *(radians)*
+* ```p2a2```: Angle 2 of point 2 *(radians)*
+
+Angle 1 may be right ascension or longitude.
+Angle 2 may be declination or latitude.
+
 **/
-pub fn AngularSep(p1: coordinates::EquatorialPoint, p2: coordinates::EquatorialPoint) -> f64 {
-    (p1.dec.sin() * p2.dec.sin() +
-     p1.dec.cos() * p2.dec.cos() * (p1.asc-p2.asc).cos()
+pub fn AngularSeparation(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
+    (   p1a2.sin() * p2a2.sin()
+      + p1a2.cos() * p2a2.cos() * (p1a1 - p2a1).cos()
     ).cos()
 }
 
@@ -29,6 +35,13 @@ pub fn PureDegrees(d: i64, m: i64, s: f64) -> f64 {
     (d as f64) + (M as f64)/60.0 + S/3600.0
 }
 
+/**
+Returns an angle expressed in **degrees**, **minutes** and **seconds**
+
+# Arguments
+
+* ```degrees```: Angle in degrees only
+**/
 pub fn DegreesMinutesSecondsFromPureDegrees(degrees: f64) -> (i64, i64, f64) {
     let degree = degrees as i64;
     let minutes = (degrees - (degree as f64)) * 60.0;
@@ -52,17 +65,6 @@ pub fn LimitedTo360(angle: f64) -> f64 {
     else                   { limited_angle }
 }
 
-/**
-Checks wether an angle is "small"
-
-Checks wether an angle in degrees is sufficiently "small", for an
-an arbritrary definition of "small", chosen for adequate purposes
-for this library.
-
-# Arguments
-
-* ```angle```: Angle (in degrees)
-**/
 fn small_angle(angle: f64) -> bool {
     if angle < 0.003 { true }
     else             { false }

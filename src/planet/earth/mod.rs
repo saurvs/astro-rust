@@ -1,5 +1,4 @@
 pub mod moon;
-pub mod ecliptic;
 
 use coordinates;
 use angle;
@@ -7,7 +6,7 @@ use time;
 use planet;
 
 /**
-Returns the flattening factor factor of the Earth
+Returns the **flattening factor** factor of the Earth
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -16,7 +15,7 @@ pub fn FlatteningFactor() -> f64 {
 }
 
 /**
-Returns the equatorial radius of the Earth *(meters)*
+Returns the **equatorial radius** of the Earth *(meters)*
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -36,27 +35,12 @@ pub fn PolarRadius() -> f64 {
 }
 
 /**
-Returns the eccentricity of the Earth's meridian
+Returns the **eccentricity** of the Earth's **meridian**
 
 Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html)
 **/
 pub fn EccentricityOfMeridian() -> f64 {
     ((2.0 - FlatteningFactor()) * FlatteningFactor()).sqrt()
-}
-
-/**
-Returns angular distance between two points on Earth's
-surface
-
-# Arguments
-
-* ```p1```: Point 1
-* ```p2```: Point 2
-**/
-pub fn AngularDistance(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoint) -> f64 {
-    (p1.lat.sin() * p2.lat.sin() +
-     p1.lat.cos() * p2.lat.cos() * (p1.long - p2.long).cos()
-    ).acos()
 }
 
 /**
@@ -67,11 +51,11 @@ Assumes that the Earth is a sphere.
 
 # Arguments
 
-* ```p1```: Point 1
-* ```p2```: Point 2
+* ```p1```: ```GeographicalPoint``` 1
+* ```p2```: ```GeographicalPoint``` 2
 **/
-pub fn ApproxGeodesic(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoint) -> f64 {
-    6371.0 * AngularDistance(p1, p2)
+pub fn ApproxGeodesic(p1: coordinates::GeographicalPoint, p2: coordinates::GeographicalPoint) -> f64 {
+   6371.0 * p1.AngularSeparation(p2)
 }
 
 /**
@@ -80,10 +64,10 @@ surface *(meters)*
 
 # Arguments
 
-* ```p1```: Point 1
-* ```p2```: Point 2
+* ```p1```: ```GeographicalPoint``` 1
+* ```p2```: ```GeographicalPoint``` 2
 **/
-pub fn Geodesic(p1: coordinates::SurfacePoint, p2: coordinates::SurfacePoint) -> f64 {
+pub fn Geodesic(p1: coordinates::GeographicalPoint, p2: coordinates::GeographicalPoint) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
     let lam = (p1.long - p2.long) / 2.0;
@@ -180,19 +164,22 @@ pub fn EquationOfTime(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f6
 }
 
 /**
-Returns the **equation of time** *(radians)*
+Returns the **angle** between **diurnal path** and the **horizon**
+
+# Returns
+
+* ```angle```: Angle between the diurnal path of a celestial body
+and the horizon *(radians)*
 
 # Arguments
 
-* ```$x```: Julian Ephemeris day
-* ```$y```: Right ascension of the Sun *(radians)*
+* ```declin```: Declination of the celestial body *(radians)*
+* ```observer_lat```: Observer's geographical latitude *(radians)*
 **/
-#[macro_export]
-macro_rules! EquationOfTime {
-    ($x: expr, $y: expr) => {{
-            let (nut_long, nut_obl) = astro::earth::NutationCorrections($x);
-            astro::earth::EquationOfTime($x, $y, nut_long, astro::earth::MeanObliquity($x) + nut_obl)
-    }};
+pub fn AngleBetweenDiurnalPathAndHorizon(declin: f64, observer_lat: f64) -> f64 {
+    let B = declin.tan() * observer_lat.tan();
+    let C = (1.0 - B*B).sqrt();
+    (C * declin.cos()).atan2(observer_lat.tan())
 }
 
 pub fn VSOP87_Terms() -> Vec<Vec<Vec<[f64; 3]>>> {

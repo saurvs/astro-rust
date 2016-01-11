@@ -1,24 +1,46 @@
-/// Represents a point on **Earth's surface**
-pub struct SurfacePoint {
-    /// Latitude
-    pub lat: f64,
-    /// Longitude
+use angle;
+
+/// Represents a point on the **Earth's surface**
+pub struct GeographicalPoint {
+    /// Right ascension
     pub long: f64,
+    /// Declination
+    pub lat: f64,
 }
 
-/// Represents a point on the celestial sphere, using the **equatorial
-/// coordinate system**
+impl GeographicalPoint {
+    pub fn AngularSeparation(&self, other_point: GeographicalPoint) -> f64 {
+        angle::AngularSeparation(self.long, self.lat,
+                                 other_point.long, other_point.lat)
+    }
+}
+
+/// Represents a point on the **equatorial coordinate system**
 pub struct EquatorialPoint {
     /// Right ascension
-    pub asc: f64,
+    pub right_ascen: f64,
     /// Declination
-    pub dec: f64,
+    pub declin: f64,
+}
+
+impl EquatorialPoint {
+    pub fn AngularSeparation(&self, other_point: EquatorialPoint) -> f64 {
+        angle::AngularSeparation(self.right_ascen, self.declin,
+                                 other_point.right_ascen, other_point.declin)
+    }
 }
 
 //-------------------------------------------------------------------
 
 /**
-Returns hour angle from sidereal time at Greenwhich
+Returns the **hour angle** from **local longitude** and **right ascension**
+
+If right ascension is corrected for nutation, then sidereal time
+too must be corrected for it.
+
+# Returns
+
+* ```hour_angle```: Hour angle *(radians)*
 
 # Arguments
 
@@ -26,12 +48,19 @@ Returns hour angle from sidereal time at Greenwhich
 * ```obv_long```: Observer's geographical longitude *(radians)*
 * ```right_asc```: Right ascension *(radians)*
 **/
-pub fn HourAngleFromGreenwhichSidereal(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
+pub fn HourAngleFromObserverLong(green_sid: f64, obv_long: f64, right_asc: f64) -> f64 {
     green_sid - obv_long - right_asc
 }
 
 /**
-Returns hour angle from local sidereal time
+Returns the **hour angle** from **local sidereal time** and **right ascension**
+
+If right ascension is corrected for nutation, then sidereal time
+too must be corrected for it.
+
+# Returns
+
+* ```hour_angle```: Hour angle *(radians)*
 
 # Arguments
 
@@ -46,33 +75,45 @@ pub fn HourAngleFromLocalSidereal(loc_sid: f64, right_asc: f64) -> f64 {
 // Ecliptical coordinates to equatorial coordinates
 
 /**
-Returns **ecliptical longitude** from **equatorial coordinates**
+Returns the **ecliptical longitude** from **equatorial coordinates**
+
+# Returns
+
+* ```eclip_long```: Ecliptical longitude *(radians)*
 
 # Arguments
 
-* ```right_asc```: Right ascension *(radians)*
-* ```dec```: Declination *(radians)*
-* ```oblq_ecl```: If ```right_asc``` and ```dec``` are corrected for
+* ```right_ascen```: Right ascension *(radians)*
+* ```declin```: Declination *(radians)*
+* ```oblq_eclip```: If ```right_asc``` and ```dec``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*
 **/
-pub fn EclipticalLongitudeFromEquatorialCoords(right_asc: f64, dec: f64, oblq_ecl: f64,) -> f64 {
-    ((right_asc.sin()*oblq_ecl.cos() + dec.tan()*oblq_ecl.sin())).atan2(right_asc.cos())
+pub fn EclipticalLongFromEquatorialCoords(right_ascen: f64, declin: f64, oblq_eclip: f64,) -> f64 {
+    (   right_ascen.sin()  * oblq_eclip.cos()
+      + declin.tan()       * oblq_eclip.sin()
+    ).atan2(right_ascen.cos())
 }
 
 /**
-Returns **ecliptical latitude** from **equatorial coordinates**
+Returns the **ecliptical latitude** from **equatorial coordinates**
+
+# Returns
+
+* ```ecliptical_latitude```: Ecliptical latitude *(radians)*
 
 # Arguments
 
-* ```right_asc```: Right ascension *(radians)*
-* ```dec```: Declination *(radians)*
-* ```oblq_ecl```: If ```right_asc``` and ```dec``` are corrected for
+* ```right_ascen```: Right ascension *(radians)*
+* ```declin```: Declination *(radians)*
+* ```oblq_eclip```: If ```right_asc``` and ```dec``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*
 **/
-pub fn EclipticalLatitudeFromEquatorialCoords(right_asc: f64, dec: f64, oblq_ecl: f64) -> f64 {
-    (dec.sin()*oblq_ecl.cos() - dec.cos()*oblq_ecl.sin()*right_asc.sin()).asin()
+pub fn EclipticalLatFromEquatorialCoords(right_ascen: f64, declin: f64, oblq_eclip: f64) -> f64 {
+    (   declin.sin() * oblq_eclip.cos()
+      - declin.cos() * oblq_eclip.sin() * right_ascen.sin()
+    ).asin()
 }
 
 /**
@@ -96,6 +137,8 @@ Returns **ecliptical coordinates** from **equatorial coordinates**
 #[macro_export]
 macro_rules! EclipticalCoordsFromEquatorialCoords {
     ($x: expr, $y: expr, $z: expr) => {{
+        (astro::coordinates::EclipticalLongFromEquatorialCoords($x, $y, $z),
+         astro::coordinates::EclipticalLatFromEquatorialCoords($x, $y, $z))
     }};
 }
 
@@ -103,33 +146,45 @@ macro_rules! EclipticalCoordsFromEquatorialCoords {
 // Equatorial coordinates to ecliptical coordinates
 
 /**
-Returns **right ascension** from **ecliptical coordinates**
+Returns the **right ascension** from **ecliptical coordinates**
+
+# Returns
+
+* ```right_ascension```: Right ascension *(radians)*
 
 # Arguments
 
-* ```ecl_long```: Ecliptical longitude *(radians)*
-* ```ecl_lat```: Ecliptical latitude *(radians)*
-* ```oblq_ecl```: If ```ecl_long``` and ```ecl_lat``` are corrected for
+* ```eclip_long```: Ecliptical longitude *(radians)*
+* ```eclip_lat```: Ecliptical latitude *(radians)*
+* ```oblq_eclip```: If ```ecl_long``` and ```ecl_lat``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*
 **/
-pub fn RightAscensionFromEclipticalCoords(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
-    ((ecl_long.sin()*oblq_ecl.cos() - ecl_lat.tan()*oblq_ecl.sin())).atan2(ecl_long.cos())
+pub fn RightAscensionFromEclipticalCoords(eclip_long: f64, eclip_lat: f64, oblq_eclip: f64) -> f64 {
+    (   eclip_long.sin() * oblq_eclip.cos()
+      - eclip_lat.tan()  * oblq_eclip.sin()
+    ).atan2(eclip_long.cos())
 }
 
 /**
-Returns **declination** from **ecliptical coordinates**
+Returns the **declination** from **ecliptical coordinates**
+
+# Returns
+
+* ```declination```: Declination *(radians)*
 
 # Arguments
 
-* ```ecl_long```: Ecliptical longitude *(radians)*
-* ```ecl_lat```: Ecliptical latitude *(radians)*
-* ```oblq_ecl```: If ```ecl_long``` and ```ecl_lat``` are corrected for
+* ```eclip_long```: Ecliptical longitude *(radians)*
+* ```eclip_lat```: Ecliptical latitude *(radians)*
+* ```oblq_eclip```: If ```ecl_long``` and ```ecl_lat``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*
 **/
-pub fn DeclinationFromEclipticalCoords(ecl_long: f64, ecl_lat: f64, oblq_ecl: f64) -> f64 {
-    (ecl_lat.sin()*oblq_ecl.cos() - ecl_lat.cos()*oblq_ecl.sin()*ecl_long.sin()).asin()
+pub fn DeclinationFromEclipticalCoords(eclip_long: f64, eclip_lat: f64, oblq_eclip: f64) -> f64 {
+    (   eclip_lat.sin() * oblq_eclip.cos()
+      + eclip_lat.cos() * oblq_eclip.sin() * eclip_long.sin()
+    ).asin()
 }
 
 /**
@@ -137,10 +192,10 @@ Returns **equatorial coordinates** from **ecliptical coordinates**
 
 # Returns
 
-```(equatorial_longitude, equatorial_latitude)```
+```(right_ascension, declination)```
 
-* ```equatorial_longitude```: Equatorial longitude *(radians)*
-* ```equatorial_latitude```: Equatorial latitude *(radians)*
+* ```right_ascension```: Right ascension *(radians)*
+* ```declination```: Declination *(radians)*
 
 # Arguments
 
@@ -153,63 +208,140 @@ Returns **equatorial coordinates** from **ecliptical coordinates**
 #[macro_export]
 macro_rules! EquatorialCoordsFromEclipticalCoords {
     ($x: expr, $y: expr, $z: expr) => {{
-        (astro::earth::right_ascen_from_eclip($x, $y, $z),
-         astro::earth::declin_from_eclip($x, $y, $z))
+        (astro::coordinates::RightAscensionFromEclipticalCoords($x, $y, $z),
+         astro::coordinates::DeclinationFromEclipticalCoords($x, $y, $z))
     }};
 }
 
 //-------------------------------------------------------------------
-// local horizontal coordinates from equatorial coordinates
+// Local horizontal coordinates from equatorial coordinates
 
-pub fn AzimuthFromEquatorialCoords(hour_angle: f64, declination: f64, observer_lat: f64) -> f64 {
-    hour_angle.sin().atan2(hour_angle.cos()*observer_lat.sin() - declination.tan()*observer_lat.cos())
+/**
+Returns the **azimuth**
+
+# Returns
+
+* ```azimuth```: Azimuth *(radians)*
+
+# Arguments
+
+* ```hour_angle```: Hour angle *(radians)*
+* ```declin```: Declination *(radians)*
+* ```observer_lat```: Observer's geographical latitude *(radians)*
+**/
+pub fn Azimuth(hour_angle: f64, declination: f64, observer_lat: f64) -> f64 {
+    hour_angle.sin()
+    .atan2(   hour_angle.cos()  * observer_lat.sin()
+            - declination.tan() * observer_lat.cos()
+          )
 }
 
-pub fn AltitudeFromEquatorialCoords(hour_angle: f64, declination: f64, observer_lat: f64) -> f64 {
-    (observer_lat.sin()*declination.sin() + observer_lat.cos()*declination.cos()*hour_angle.cos()).asin()
+/**
+Returns the **altitude**
+
+# Returns
+
+* ```altitude```: Altitude *(radians)*
+
+# Arguments
+
+* ```hour_angle```: Hour angle *(radians)*
+* ```declin```: Declination *(radians)*
+* ```observer_lat```: Observer's geographical latitude *(radians)*
+**/
+pub fn Altitude(hour_angle: f64, declination: f64, observer_lat: f64) -> f64 {
+    (   observer_lat.sin() * declination.sin()
+      + observer_lat.cos() * declination.cos() * hour_angle.cos()
+    ).asin()
 }
 
 //-------------------------------------------------------------------
-// horizontal coordinates to equatorial coordinates
+// Equatorial coordinates from local horizontal coordinates
 
-pub fn HourAngleFromEquatorialCoords(azimuth: f64, altitude: f64, obv_lat: f64) -> f64 {
-    azimuth.sin().atan2(azimuth.cos()*obv_lat.sin() + altitude.tan()*obv_lat.cos())
+/**
+Returns the **hour angle** from **horizontal coordinates**
+
+# Returns
+
+* ```hour_angle```: Hour angle *(radians)*
+
+# Arguments
+
+* ```azimuth```: Azimuth *(radians)*
+* ```altitude```: Altitude *(radians)*
+* ```observer_lat```: Observer's geographical latitude *(radians)*
+**/
+pub fn HourAngleFromHorizontalCoords(azimuth: f64, altitude: f64, observer_lat: f64) -> f64 {
+    azimuth.sin()
+    .atan2(   azimuth.cos()  * observer_lat.sin()
+            + altitude.tan() * observer_lat.cos()
+          )
 }
 
-pub fn eq_dec_from_equatorialial(azimuth: f64, altitude: f64, obv_lat: f64) -> f64 {
-    (obv_lat.sin()*altitude.sin() - obv_lat.cos()*azimuth.cos() * azimuth.cos()).asin()
+/**
+Returns the **declination** from **horizontal coordinates**
+
+# Returns
+
+* ```declination```: Declination *(radians)*
+
+# Arguments
+
+* ```azimuth```: Azimuth *(radians)*
+* ```altitude```: Altitude *(radians)*
+* ```observer_lat```: Observer's geographical latitude *(radians)*
+**/
+pub fn DeclinationFromHorizontalCoords(azimuth: f64, altitude: f64, observer_lat: f64) -> f64 {
+    (   observer_lat.sin() * altitude.sin()
+      - observer_lat.cos() * azimuth.cos() * azimuth.cos()
+    ).asin()
 }
 
 //-------------------------------------------------------------------
 // Equatorial coordinates to galactic coordinates
 
 /**
-Returns **galactic longitude** from **equatorial coordinates**
+Returns the **galactic longitude** from **equatorial coordinates**
+
+The equatorial coordinates must be referred to the standard equinox
+of B1950.0
+
+# Returns
+
+* ```galactic_longitude```: Galactic longitude *(radians)*
 
 # Arguments
 
-* ```right_asc```: Right ascension *(radians)*
-* ```dec```: Declination *(radians)*
+* ```right_ascen```: Right ascension *(radians)*
+* ```declin```: Declination *(radians)*
 **/
-pub fn GalacticLongitudeFromEquatorialCoords(right_asc: f64, dec: f64) -> f64 {
-      5.28835
-    - ((3.35539549 - right_asc).sin())
-      .atan2((  (3.35539549 - right_asc).cos() * 0.4782202_f64.sin()
-              - dec.tan()                      * 0.4782202_f64.cos()
-            ))
+pub fn GalacticLongFromEquatorialCoords(right_ascen: f64, declin: f64) -> f64 {
+      303_f64.to_radians()
+    - (192.25_f64.to_radians() - right_ascen).sin()
+      .atan2(   27.4_f64.to_radians().sin() * (192.25_f64.to_radians() - right_ascen).cos()
+              - 27.4_f64.to_radians().cos() * declin.tan()
+            )
 }
 
 /**
-Returns **galactic latitude** from **equatorial coordinates**
+Returns the **galactic latitude** from **equatorial coordinates**
+
+The equatorial coordinates must be referred to the standard equinox
+of B1950.0
+
+# Returns
+
+* ```galactic_latitude```: Galactic latitude *(radians)*
 
 # Arguments
 
-* ```right_asc```: Right ascension *(radians)*
-* ```dec```: Declination *(radians)*
+* ```right_ascen```: Right ascension *(radians)*
+* ```declin```: Declination *(radians)*
 **/
-pub fn GalacticLatitudeFromEquatorialCoords(right_asc: f64, dec: f64) -> f64 {
-      dec.sin() * 0.4782202_f64.sin()
-    + dec.cos() * 0.4782202_f64.cos() * (3.35539549 - right_asc).asin()
+pub fn GalacticLatFromEquatorialCoords(right_ascen: f64, declin: f64) -> f64 {
+    (   declin.sin() * 27.4_f64.to_radians().sin()
+      + declin.cos() * 27.4_f64.to_radians().cos() * (192.25_f64.to_radians() - right_ascen).cos()
+    ).asin()
 }
 
 /**
@@ -217,13 +349,10 @@ Returns **galactic coordinates** from **equatorial coordinates**
 
 # Returns
 
-```(galactic_longitude, galactic_latitude) = galactic_from_equatorial!()```
-# Returns
-
 ```(galactic_longitude, galactic_latitude)```
 
 * ```galactic_longitude```: Galactic longitude *(radians)*
-* ```galactic_latitude```: Declination *(radians)*
+* ```galactic_latitude```: Galactic latitude *(radians)*
 
 # Arguments
 
@@ -233,8 +362,8 @@ Returns **galactic coordinates** from **equatorial coordinates**
 #[macro_export]
 macro_rules! GalacticCoordsFromEquatorialCoords {
     ($x: expr, $y: expr) => {{
-        (astro::earth::galac_long_from_equatorial($x, $y),
-         astro::earth::galac_lat_from_equatorial($x, $y))
+        (astro::coordinates::GalacticLongFromEquatorialCoords($x, $y),
+         astro::coordinates::GalacticLatFromEquatorialCoords($x, $y))
     }};
 }
 
@@ -242,7 +371,14 @@ macro_rules! GalacticCoordsFromEquatorialCoords {
 // Galactic coordinates to equatorial coordinates
 
 /**
-Returns **right ascension** from **galactic coordinates**
+Returns the **right ascension** from **galactic coordinates**
+
+The right ascension is referred to the standard equinox
+of B1950.0
+
+# Returns
+
+* ```right_ascension```: Right ascension *(radians)*
 
 # Arguments
 
@@ -250,15 +386,22 @@ Returns **right ascension** from **galactic coordinates**
 * ```gal_lat```: Galactic latitude *(radians)*
 **/
 pub fn RightAscensionFromGalacticCoords(gal_long: f64, gal_lat: f64) -> f64 {
-      0.21380283
-    + ((gal_long - 2.14675).sin())
-      .atan2((   (gal_long - 2.14675).cos() * 0.4782202_f64.sin()
-               - gal_lat.tan()              * 0.4782202_f64.cos()
-            ))
+      12.25_f64.to_radians()
+    + (gal_long - 123_f64.to_radians()).sin()
+      .atan2(   27.4_f64.to_radians().sin() * (gal_long - 123_f64.to_radians()).cos()
+              - 27.4_f64.to_radians().cos() * gal_lat.tan()
+            )
 }
 
 /**
-Returns **declination** from **galactic coordinates**
+Returns the **declination** from **galactic coordinates**
+
+The declination is referred to the standard equinox
+of B1950.0
+
+# Returns
+
+* ```declination```: Declination *(radians)*
 
 # Arguments
 
@@ -266,8 +409,9 @@ Returns **declination** from **galactic coordinates**
 * ```gal_lat```: Galactic latitude *(radians)*
 **/
 pub fn DeclinationFromGalacticCoords(gal_long: f64, gal_lat: f64) -> f64 {
-      gal_lat.sin() * 0.4782202_f64.sin()
-    + gal_lat.cos() * 0.4782202_f64.cos() * (gal_long - 2.14675).asin()
+    (   gal_lat.sin() * 27.4_f64.to_radians().sin()
+      + gal_lat.cos() * 27.4_f64.to_radians().cos() * (gal_long - 123_f64.to_radians()).cos()
+    ).asin()
 }
 
 /**
@@ -288,7 +432,7 @@ Returns **equatorial coordinates** from **galactic coordinates**
 #[macro_export]
 macro_rules! EquatorialCoordsFromGalacticCoords {
     ($x: expr, $y: expr) => {{
-        (astro::earth::right_ascen_from_galac($x, $y),
-         astro::earth::declin_from_galac($x, $y))
+        (astro::coordinates::RightAscensionFromGalacticCoords($x, $y),
+         astro::coordinates::DeclinationFromGalacticCoords($x, $y))
     }};
 }

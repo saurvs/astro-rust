@@ -1,3 +1,4 @@
+use std;
 use time;
 
 /**
@@ -55,8 +56,8 @@ Returns the **absolute magnitude** of a star from its parallax
 
 # Arguments
 
-* ```par```: Parallax of star
-* ```am```: Apparent magnitude of star
+* ```par```: Parallax of the star
+* ```am```: Apparent magnitude of the star
 **/
 pub fn AbsoluteMagFromParallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
@@ -68,11 +69,32 @@ Returns the **absolute magnitude** of a star from its distance from earth
 
 # Arguments
 
-* ```d```: Distance of star from earth *(parsecs)*
-* ```am```: Apparent magnitude of star
+* ```d```: The star's to earth *(parsecs)*
+* ```am```: Apparent magnitude of the star
 **/
 pub fn AbsoluteMagFromDistance(d: f64, am: f64) -> f64 {
     am + 5.0 - 5.0*d.log10()
+}
+
+/**
+Returns the **angle** between the vector from a star to the
+**Earth's northern celestial pole** and vector from the same star to the
+**north pole** of the **ecliptic**
+
+# Returns
+
+* ```angle```: The desired angle *(radians)*
+
+# Arguments
+
+* ```eclip_long```: The star's ecliptical longitude *(radians)*
+* ```eclip_lat```: The star's ecliptical latitude *(radians)*
+* ```oblq_eclip```: Obliquity of the ecliptic *(radians)*
+**/
+pub fn AngleBetweenNorthCelesAndEclipticPole(eclip_long: f64, eclip_lat: f64, oblq_eclip: f64) -> f64 {
+    (eclip_long.cos() * oblq_eclip.tan())
+    .atan2(   eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan()
+            - eclip_lat.cos())
 }
 
 /**
@@ -87,8 +109,8 @@ Returns the **abberation** corrections for a star's equatorial coordinates
 
 # Arguments
 
-* ```asc```: Star's right ascension *(radians)*
-* ```dec```: Star's declination *(radians)*
+* ```asc```: The star's right ascension *(radians)*
+* ```dec```: The star's declination *(radians)*
 * ```jed```: Julian Emphemeris day
 **/
 pub fn AberrationCorrections(asc: f64, dec: f64, jed: f64) -> (f64, f64) {

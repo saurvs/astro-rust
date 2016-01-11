@@ -1,6 +1,5 @@
 use angle;
-use planet;
-use planet::earth;
+use ecliptic;
 use nutation;
 
 /**
@@ -70,7 +69,7 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
 
     // recalculate x y z delta
 
-    let e0 = earth::ecliptic::MeanObliquity(jed);
+    let e0 = ecliptic::MeanObliquity(jed);
     let cos_e0 = e0.cos();
     let sin_e0 = e0.sin();
     let sin_l = l.sin();
