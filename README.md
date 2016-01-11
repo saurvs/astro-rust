@@ -18,6 +18,13 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
 ## Usage
 
+* Include the crate ```astro``` in your code
+  ```rust
+  extern crate astro;
+
+  use astro::*;
+  ```
+
 * Find the Julian day (the most important step for almost everything)
   ```rust
   // time of the Apollo 11 moon landing
