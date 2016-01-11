@@ -20,32 +20,32 @@ and add it to the **mean** obliquity.
 
 ```JED```: Julian Ephemeris day
 **/
-pub fn MeanObliquity(JED: f64) -> (f64) {
-    let u = time::JulianCentury(JED) / 100.0;
+pub fn MnOblq(JED: f64) -> (f64) {
+    let u = time::JulCent(JED) / 100.0;
 
-    (      angle::PureDegrees(23, 26, 21.448)
-     - u * (angle::PureDegrees(0, 0, 4680.93)
-     + u * (angle::PureDegrees(0, 0, 1.55)
-     + u * (angle::PureDegrees(0, 0, 1999.25)
-     - u * (angle::PureDegrees(0, 0, 51.38)
-     - u * (angle::PureDegrees(0, 0, 249.67)
-     + u * (angle::PureDegrees(0, 0, 39.05)
-     + u * (angle::PureDegrees(0, 0, 7.12)
-     - u * (angle::PureDegrees(0, 0, 27.87)
-     + u * (angle::PureDegrees(0, 0, 5.79)
-     + u * angle::PureDegrees(0, 0, 2.45)
+    (      angle::DegFrmDMS(23, 26, 21.448)
+     - u * (angle::DegFrmDMS(0, 0, 4680.93)
+     + u * (angle::DegFrmDMS(0, 0, 1.55)
+     + u * (angle::DegFrmDMS(0, 0, 1999.25)
+     - u * (angle::DegFrmDMS(0, 0, 51.38)
+     - u * (angle::DegFrmDMS(0, 0, 249.67)
+     + u * (angle::DegFrmDMS(0, 0, 39.05)
+     + u * (angle::DegFrmDMS(0, 0, 7.12)
+     - u * (angle::DegFrmDMS(0, 0, 27.87)
+     + u * (angle::DegFrmDMS(0, 0, 5.79)
+     + u * angle::DegFrmDMS(0, 0, 2.45)
     )))))))))).to_radians()
 }
 
 /// Returns the **obliquity** *(radians)* of the ecliptic
 /// for the epoch **J2000.0**
-pub fn Obliquity_J2000() -> f64 {
+pub fn Oblq_J2000() -> f64 {
     23.4392911_f64.to_radians()
 }
 
 /// Returns the **obliquity** *(radians)* of the ecliptic
 /// for the epoch **J1950.0**
-pub fn Obliquity_J1950() -> f64 {
+pub fn Oblq_J1950() -> f64 {
     23.4457889_f64.to_radians()
 }
 
@@ -65,7 +65,7 @@ Returns the **longitudes** of the **ecliptic points** on the **horizon**
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 * ```loc_sidreal```: Local sidereal time *(radians)*
 **/
-pub fn LongitudeOfEclipticPointsOnHorzion(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
+pub fn LongOfEclipticPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
     let p = (-loc_sidreal.cos())
             .atan2(   oblq_eclip.sin() * observer_lat.tan()
                     + oblq_eclip.cos() * loc_sidreal.sin()
@@ -87,7 +87,7 @@ Returns the **angle** between the **ecliptic** and the **horizon**
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 * ```loc_sidreal```: Local sidereal time *(radians)*
 **/
-pub fn AngleBetweenEclipticAndHorzion(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
+pub fn AnglEclipticAndHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
     (   oblq_eclip.cos() * observer_lat.sin()
       - oblq_eclip.sin() * observer_lat.cos() * loc_sidreal.sin()
     ).acos()

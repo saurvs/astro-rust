@@ -19,25 +19,25 @@ Returns stellar **equatorial coordinates** for a **different equinox**
 * ```dec_old```: Declination for the old epoch *(radians)*
 **/
 pub fn ChangeEpochForEquatorialCoords(jd_1: f64, jd_2: f64, asc_old: f64, dec_old: f64) -> (f64, f64) {
-    let T = time::JulianCentury(jd_1);
+    let T = time::JulCent(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
 
-    let x = t * (angle::PureDegrees(0, 0, 2306.2181) +
-                  T * (angle::PureDegrees(0, 0, 1.39656) -
-                       T*angle::PureDegrees(0, 0, 0.000139)));
-    let a = (x + t*t*((angle::PureDegrees(0, 0, 0.30188) -
-                       T*angle::PureDegrees(0, 0, 0.000344)) +
-                      t*angle::PureDegrees(0, 0, 0.017998))).to_radians();
+    let x = t * (angle::DegFrmDMS(0, 0, 2306.2181) +
+                  T * (angle::DegFrmDMS(0, 0, 1.39656) -
+                       T*angle::DegFrmDMS(0, 0, 0.000139)));
+    let a = (x + t*t*((angle::DegFrmDMS(0, 0, 0.30188) -
+                       T*angle::DegFrmDMS(0, 0, 0.000344)) +
+                      t*angle::DegFrmDMS(0, 0, 0.017998))).to_radians();
 
-    let b = (x + t*t*((angle::PureDegrees(0, 0, 1.09468) -
-                       T*angle::PureDegrees(0, 0, 0.000066)) +
-                      t*angle::PureDegrees(0, 0, 0.018203))).to_radians();
+    let b = (x + t*t*((angle::DegFrmDMS(0, 0, 1.09468) -
+                       T*angle::DegFrmDMS(0, 0, 0.000066)) +
+                      t*angle::DegFrmDMS(0, 0, 0.018203))).to_radians();
 
-    let y = T * angle::PureDegrees(0, 0, 0.000217);
-    let c = (t * (angle::PureDegrees(0, 0, 2004.3109) +
-                   T * (angle::PureDegrees(0, 0, 0.8533) - y) -
-                  t * ((angle::PureDegrees(0, 0, 0.42665) + y) +
-                       t*angle::PureDegrees(0, 0, 0.041833)))).to_radians();
+    let y = T * angle::DegFrmDMS(0, 0, 0.000217);
+    let c = (t * (angle::DegFrmDMS(0, 0, 2004.3109) +
+                   T * (angle::DegFrmDMS(0, 0, 0.8533) - y) -
+                  t * ((angle::DegFrmDMS(0, 0, 0.42665) + y) +
+                       t*angle::DegFrmDMS(0, 0, 0.041833)))).to_radians();
 
     let sin_dec_old = dec_old.sin();
     let cos_dec_old = dec_old.cos();
@@ -70,26 +70,26 @@ Returns stellar **ecliptical coordinates** for a **different equinox**
 * ```lat_old```: Latitude for the old epoch *(radians)*
 **/
 pub fn ChangeEpochForEclipticalCoords(jd_1: f64, jd_2: f64, long_old: f64, lat_old: f64) -> (f64, f64) {
-    let T = time::JulianCentury(jd_1);
+    let T = time::JulCent(jd_1);
     let t = (jd_2 - jd_1) / 36525.0;
 
-    let x = T * angle::PureDegrees(0, 0, 0.000598);
-    let a = (t * (angle::PureDegrees(0, 0, 47.0029) -
-                   T * (angle::PureDegrees(0, 0, 0.06603) - x) +
-                  t * ((angle::PureDegrees(0, 0, -0.03302) + x) +
-                       t * angle::PureDegrees(0, 0, 0.00006)))).to_radians();
+    let x = T * angle::DegFrmDMS(0, 0, 0.000598);
+    let a = (t * (angle::DegFrmDMS(0, 0, 47.0029) -
+                   T * (angle::DegFrmDMS(0, 0, 0.06603) - x) +
+                  t * ((angle::DegFrmDMS(0, 0, -0.03302) + x) +
+                       t * angle::DegFrmDMS(0, 0, 0.00006)))).to_radians();
 
-    let b = (174.876384 + T * (angle::PureDegrees(0, 0, 3289.4789) +
-                              T * angle::PureDegrees(0, 0, 0.60622)) -
-             t * ((angle::PureDegrees(0, 0, 869.8089) +
-                   T * angle::PureDegrees(0, 0, 0.50491)) -
-                  t * angle::PureDegrees(0, 0, 0.03536))).to_radians();
+    let b = (174.876384 + T * (angle::DegFrmDMS(0, 0, 3289.4789) +
+                              T * angle::DegFrmDMS(0, 0, 0.60622)) -
+             t * ((angle::DegFrmDMS(0, 0, 869.8089) +
+                   T * angle::DegFrmDMS(0, 0, 0.50491)) -
+                  t * angle::DegFrmDMS(0, 0, 0.03536))).to_radians();
 
-    let y = T * angle::PureDegrees(0, 0, 0.000042);
-    let c = (t * (angle::PureDegrees(0, 0, 5029.0966) +
-                  T * (angle::PureDegrees(0, 0, 2.22226) - y) +
-                 t * ((angle::PureDegrees(0, 0, 1.11113) - y) -
-                      t * angle::PureDegrees(0, 0, 0.000006)))).to_radians();
+    let y = T * angle::DegFrmDMS(0, 0, 0.000042);
+    let c = (t * (angle::DegFrmDMS(0, 0, 5029.0966) +
+                  T * (angle::DegFrmDMS(0, 0, 2.22226) - y) +
+                 t * ((angle::DegFrmDMS(0, 0, 1.11113) - y) -
+                      t * angle::DegFrmDMS(0, 0, 0.000006)))).to_radians();
 
     let sin_lat_old = lat_old.sin();
     let cos_lat_old = lat_old.cos();

@@ -10,11 +10,11 @@ Returns the Sun's **equatorial semidiameter**
 * ```distance_to_earth```: The Sun's distance from the Earth *(AU)*
 **/
 pub fn Semidiameter(distance_to_earth: f64) -> f64 {
-    angle::PureDegrees(0, 0, 959.63) / distance_to_earth
+    angle::DegFrmDMS(0, 0, 959.63) / distance_to_earth
 }
 
-pub fn GeocentricEclipticalCoords(JD: f64) -> (f64, f64, f64) {
-    let (L, B, R) = planet::HeliocentricCoords(planet::Planet::Earth, JD);
+pub fn GeocenEclCoords(JD: f64) -> (f64, f64, f64) {
+    let (L, B, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
 
     let L_sun = angle::LimitedTo360((L + std::f64::consts::PI).to_degrees());
     let B_sun = angle::LimitedTo360(-1.0 * B.to_degrees());
@@ -51,7 +51,7 @@ celestial pole
 * ```mean_obl```: The *mean* obliquity of the Earth's ecliptic;
                   not *true* obliquity
 **/
-pub fn RectangularGeocentricCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
+pub fn GeocenRectCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
     let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.cos() - sun_geo_lat.sin()*mean_obl.sin());
     let z = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.sin() + sun_geo_lat.sin()*mean_obl.cos());

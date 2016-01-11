@@ -43,20 +43,20 @@ Returns a planet's **geocentric equatorial semidiameter**
                 *Throws an error if Planet::Earth is passed.*
 * ```distance_to_earth```: Planet's distance to Earth *(AU)*
 **/
-pub fn Semidiameter(planet: Planet, distance_to_earth: f64) -> f64 {
+pub fn Semdia(planet: Planet, distance_to_earth: f64) -> f64 {
     let mut s: f64;
 
     match planet {
-        Planet::Mercury => s = angle::PureDegrees(0, 0, 3.36),
-        Planet::Venus => s = angle::PureDegrees(0, 0, 8.41),
+        Planet::Mercury => s = angle::DegFrmDMS(0, 0, 3.36),
+        Planet::Venus => s = angle::DegFrmDMS(0, 0, 8.41),
         Planet::Earth => panic!("Planet::Earth was passed to the function
                                  planet::Semidiameter(). This does not
                                  make logical sense."),
-        Planet::Mars => s = angle::PureDegrees(0, 0, 4.68),
-        Planet::Jupiter => s = jupiter::EquatorSemidiameter(1.0),
-        Planet::Saturn => s = saturn::EquatorSemidiameter(1.0),
-        Planet::Uranus => s = angle::PureDegrees(0, 0, 35.02),
-        Planet::Neptune => s = angle::PureDegrees(0, 0, 33.5),
+        Planet::Mars => s = angle::DegFrmDMS(0, 0, 4.68),
+        Planet::Jupiter => s = jupiter::EqSemdia(1.0),
+        Planet::Saturn => s = saturn::EqSemdia(1.0),
+        Planet::Uranus => s = angle::DegFrmDMS(0, 0, 35.02),
+        Planet::Neptune => s = angle::DegFrmDMS(0, 0, 33.5),
     };
 
     s / distance_to_earth
@@ -85,8 +85,8 @@ Returns a planet's **orbital elements**
 * ```planet```: [Planet](./enum.Planet.html)
 * ```JD```: Julian day
 **/
-pub fn OrbitalElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
-    let T = time::JulianCentury(JD);
+pub fn OrbElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
+    let T = time::JulCent(JD);
     let TT = T * T;
     let TTT = TT * T;
 
@@ -190,7 +190,7 @@ Returns a planet's **heliocentric coordinates**.
 * ```planet```: [Planet](./enum.Planet.html)
 * ```JD```: Julian day
 **/
-pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
+pub fn HeliocenCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
 
     let VSOP87_Terms = match planet {
         Planet::Mercury => mercury::VSOP87_Terms(),
@@ -207,7 +207,7 @@ pub fn HeliocentricCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
     let mut B = 0.0;
     let mut R = 0.0;
 
-    let JM = time::JulianMillenium(JD);
+    let JM = time::JulMill(JD);
 
     let mut n: u8 = 1; // L, then B, then R
     for i in VSOP87_Terms.iter() { // L or B or R
@@ -244,7 +244,7 @@ fn EffectOfLightTime(x: f64, y: f64, z: f64) -> f64 {
     0.0057755183 * (x*x + y*y + z*z).sqrt()
 }
 
-pub fn GeocentricEclipticalCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
+pub fn GeocenEclCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
     let x = R*B.cos()*L.cos() - R0*B0.cos()*L0.cos();
     let y = R*B.cos()*L.sin() - R0*B0.cos()*L0.sin();
     let z = R*B.sin() - R0*B0.sin();
@@ -254,7 +254,7 @@ pub fn GeocentricEclipticalCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: 
      EffectOfLightTime(x, y, z))
 }
 
-pub fn GeocentricEquatorialCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, w: f64, sigma: f64, n: f64,
+pub fn GeocenEqCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, w: f64, sigma: f64, n: f64,
             oblq_eclip: f64, M: f64, E: f64, v: f64, r: f64) -> (f64, f64, f64) {
 
     let F = sigma.cos();
@@ -288,7 +288,7 @@ pub fn GeocentricEquatorialCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: 
     (asc, dec, EffectOfLightTime(x, y, z))
 }
 
-pub fn HeliocentricCoordsFromOrbitalElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {
+pub fn HeliocenCoordsFrmOrbElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {
     let u = w + v;
     let x = r * (sigma.cos()*u.cos() - sigma.sin()*u.sin()*i.cos());
     let y = r * (sigma.sin()*u.cos() + sigma.cos()*u.sin()*i.cos());

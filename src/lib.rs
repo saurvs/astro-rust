@@ -1,6 +1,6 @@
 pub mod angle;
 pub mod time;
-pub mod coordinates;
+pub mod coords;
 mod util;
 
 pub mod star;

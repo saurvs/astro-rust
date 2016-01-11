@@ -2,11 +2,11 @@ use angle;
 use planet;
 
 fn equatorial_unit_semidiameter() -> f64 {
-    angle::PureDegrees(0, 0, 82.73)
+    angle::DegFrmDMS(0, 0, 82.73)
 }
 
 fn polar_unit_semidiameter() -> f64 {
-    angle::PureDegrees(0, 0, 73.82)
+    angle::DegFrmDMS(0, 0, 73.82)
 }
 
 /**
@@ -21,7 +21,7 @@ Returns Saturn's geocentric polar semidiameter
 * ```distance_to_earth```: Saturn's distance to Earth *(AU)*
 * ```earth_lat```: Saturnicentric latitude of Earth *(radians)*
 **/
-pub fn PolarSemidiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
+pub fn PolSemdia(distance_to_earth: f64, earth_lat: f64) -> f64 {
     let a = equatorial_unit_semidiameter();
     let b = polar_unit_semidiameter();
     let k = 1.0 - (b/a).powi(2);
@@ -39,7 +39,7 @@ Returns Saturn's geocentric equatorial semidiameter
 
 * ```distance_to_earth```: Saturn's distance to Earth *(AU)*
 **/
-pub fn EquatorSemidiameter(distance_to_earth: f64) -> f64 {
+pub fn EqSemdia(distance_to_earth: f64) -> f64 {
     equatorial_unit_semidiameter() / distance_to_earth
 }
 

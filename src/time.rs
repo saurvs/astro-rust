@@ -4,7 +4,7 @@ use nutation;
 use util;
 
 /// Represents a **calendar type**
-pub enum CalendarType {
+pub enum CalType {
     /// Gregorian calendar
     Gregorian,
     /// Julian calendar
@@ -22,7 +22,7 @@ pub struct Date {
     /// Decimal day
     pub decimal_day: f64,
     /// Calenday type
-    pub calendar_type: CalendarType,
+    pub cal_type: CalType,
 }
 
 /// Represents a **day of month** with **hours, minutes and seconds**
@@ -34,15 +34,15 @@ pub struct DayOfMonth {
     /// Hour of day
     ///
     /// range: *0 - 60*
-    pub hour: u8,
+    pub hr: u8,
     /// Minute of hour
     ///
     /// range: *0 - 60*
-    pub minute: u8,
+    pub min: u8,
     /// Second of minute
     ///
     /// range: *0.0 - 60.0*
-    pub second: f64
+    pub sec: f64
 }
 
 /**
@@ -52,9 +52,9 @@ Returns the **decimal day** for a ```DayOfMonth```
 **/
 pub fn DecimalDay(day: DayOfMonth) -> f64 {
       (day.day as f64)
-    + (day.hour as f64) / 24.0
-    + (day.minute as f64) / 60.0
-    +  day.second / 60.0
+    + (day.hr as f64) / 24.0
+    + (day.min as f64) / 60.0
+    +  day.sec / 60.0
 }
 
 /**
@@ -69,7 +69,7 @@ pub fn DecimalYear(date: Date) -> f64 {
     if date.month > 1 { y += 31; }
     if date.month > 2 {
         y += 28;
-        if IsLeapYear(date.year, date.calendar_type) {
+        if IsLeapYear(date.year, date.cal_type) {
             y += 1;
             days += 1.0;
         }
@@ -93,14 +93,14 @@ Checks if a **year** is a **leap year**
 # Arguments
 
 * ```year```: Year
-* ```calendar_type```: ```CalendarType``` enum
+* ```cal_type```: ```CalType``` enum
 **/
-pub fn IsLeapYear(year: i32, calendar_type: CalendarType) -> (bool) {
-    match calendar_type {
-        CalendarType::Julian => year % 4 == 0,
-        CalendarType::Gregorian => {
-            if year%100 == 0 { year%400 == 0 }
-            else { year%4 == 0 }
+pub fn IsLeapYear(year: i32, cal_type: CalType) -> (bool) {
+    match cal_type {
+        CalType::Julian => year % 4 == 0,
+        CalType::Gregorian => {
+            if year % 100 == 0 { year % 400 == 0 }
+            else               { year % 4 == 0   }
         },
     };
     false
@@ -113,7 +113,7 @@ Returns **Julian century**
 
 * ```JED```: Julian Emphemeris day
 **/
-pub fn JulianCentury(JED: f64) -> f64 {
+pub fn JulCent(JED: f64) -> f64 {
     (JED - 2451545.0) / 36525.0
 }
 
@@ -124,7 +124,7 @@ Returns **Julian millenium**
 
 * ```JED```: Julian Emphemeris day
 **/
-pub fn JulianMillenium(JED: f64) -> f64 {
+pub fn JulMill(JED: f64) -> f64 {
     (JED - 2451545.0) / 365250.0
 }
 
@@ -135,7 +135,7 @@ Returns **Julian day**
 
 ```date```: A ```date``` struct
 **/
-pub fn JulianDay(mut date: Date) -> f64 {
+pub fn JulDay(mut date: Date) -> f64 {
 
     if date.month == 1 || date.month == 2 {
         date.year = date.year - 1;
@@ -144,9 +144,9 @@ pub fn JulianDay(mut date: Date) -> f64 {
 
     let a = util::int((date.year as f64) / 100.0) as f64;
     let mut b;
-    match date.calendar_type {
-        CalendarType::Gregorian => b = 2.0 - a + (util::int(a/4.0) as f64),
-        CalendarType::Julian => b = 0.0,
+    match date.cal_type {
+        CalType::Gregorian => b = 2.0 - a + (util::int(a/4.0) as f64),
+        CalType::Julian => b = 0.0,
     };
 
       (util::int(365.25 * ((date.year as f64) + 4716.0)) as f64)
@@ -164,17 +164,8 @@ Returns **Julian Emphemeris day**
 
 ```date```: A ```date``` struct
 **/
-pub fn JulianEmphemerisDay(mut date: Date) -> f64 {
-    ApproximateDeltaT(date.year, date.month)/86400.0 + JulianDay(date)
-}
-
-#[macro_export]
-macro_rules! JulianDay {
-    ($a: expr, $b: expr, $c: expr, $d: expr, $e: expr, $f: expr, $g: expr) => {{
-        let day = DayOfMonth{};
-        let date = Date{};
-        astro::time::JulianDay()
-    }};
+pub fn JulEmphDay(mut date: Date) -> f64 {
+    ApproxDelT(date.year, date.month)/86400.0 + JulDay(date)
 }
 
 /**
@@ -190,28 +181,28 @@ Returns a ```Date``` **equivalent** to a given **Julian day**
 
 # Arguments
 
-```jd```: Julian Day. **Can't be a negative value.**
+```JD```: Julian Day. **Can't be a negative value.**
 **/
-pub fn DateFromJulianDay(mut jd: f64) -> (i16, i8, f64) {
-    if jd < 0.0 {
+pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
+    if JD < 0.0 {
         // panic
     }
 
-    jd += 0.5;
-    let Z = jd as i64;
-    let F = jd - (Z as f64);
+    JD += 0.5;
+    let Z = JD as i64;
+    let F = JD - (Z as f64);
     let mut A;
 
     if Z < 2299161 {
         A = Z;
     }
     else {
-        let alpha = util::int(((Z as f64) - 1867216.25)/36524.25);
+        let alpha = util::int(((Z as f64) - 1867216.25) / 36524.25);
         A = Z + 1 + alpha - util::int((alpha as f64)/4.0);
     }
 
     let B = A + 1524;
-    let C = util::int(((B as f64) - 122.1)/365.25);
+    let C = util::int(((B as f64) - 122.1) / 365.25);
     let D = util::int(365.25 * (C as f64));
     let E = util::int(((B - D) as f64)/30.6001);
 
@@ -241,11 +232,11 @@ Returns **apparent sidereal time** at any instant of Universal Time
 
 * ```JD```: Julian day
 **/
-pub fn ApparentSiderealTime(JD: f64) -> (i8, i8, f64) {
-    let (hour, minute, seconds) = MeanSiderealTime(JD);
+pub fn AppSidr(JD: f64) -> (i8, i8, f64) {
+    let (hour, minute, seconds) = MnSidr(JD);
 
-    let (nut_in_long, nut_in_oblq) = nutation::Corrections(JD);
-    let eclip_oblq = ecliptic::MeanObliquity(JD);
+    let (nut_in_long, nut_in_oblq) = nutation::Nutation(JD);
+    let eclip_oblq = ecliptic::MnOblq(JD);
 
     let seconds_correction =   nut_in_long.to_degrees()*3600.0
                              * (eclip_oblq + nut_in_oblq).cos()
@@ -271,17 +262,17 @@ Mean sidereal time is at the Greenwhich meridian.
 
 * ```JD```: Julian day
 **/
-pub fn MeanSiderealTime(JD: f64) -> (i8, i8, f64) {
-    let JC = JulianCentury(JD);
+pub fn MnSidr(JD: f64) -> (i8, i8, f64) {
+    let JC = JulCent(JD);
     let angle = angle::LimitedTo360(  280.46061837
                                     + 360.98564736629 * (JD - 2451545.0)
                                     + JC*JC * (0.000387933 - JC/38710000.0)
                                    );
 
-    HoursMinutesSecondsFromDegrees(angle)
+    HMSFrmDeg(angle)
 }
 
-pub fn HoursMinutesSecondsFromDegrees(angle: f64) -> (i8, i8, f64) {
+pub fn HMSFrmDeg(angle: f64) -> (i8, i8, f64) {
     let hours = angle / 15.0;
     let hour = hours as i8;
 
@@ -293,7 +284,7 @@ pub fn HoursMinutesSecondsFromDegrees(angle: f64) -> (i8, i8, f64) {
     (hour, minute, seconds)
 }
 
-pub fn DegreesFromHoursMinutesSeconds(hour: i8, minute: i8, seconds: f64) -> f64 {
+pub fn DegFrmHMS(hour: i8, minute: i8, seconds: f64) -> f64 {
     (hour as f64)*15.0 + (minute as f64)/60.0 + seconds/3600.0
 }
 
@@ -310,7 +301,7 @@ it covers a far wider time range.
 * ```year```: Year
 * ```month```: Month *(range: 1 - 12)*
 **/
-pub fn ApproximateDeltaT(year: i32, month: u8) -> f64 {
+pub fn ApproxDelT(year: i32, month: u8) -> f64 {
     let y = (year as f64) + ((month as f64) - 0.5)/12.0;
 
     if y < -500.0 {

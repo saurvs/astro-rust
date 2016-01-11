@@ -4,15 +4,15 @@ use planet::earth;
 use time;
 use nutation;
 
-pub fn EquatorialCoordsOfNorthPole_J1950() -> (f64, f64) {
+pub fn EqCoordsOfNorthPol_J1950() -> (f64, f64) {
     (317.342_f64.to_radians(), 52.711_f64.to_radians())
 }
 
-pub fn EquatorialCoordsOfNorthPole_J2000() -> (f64, f64) {
+pub fn EqCoordsOfNorthPol_J2000() -> (f64, f64) {
     (317.681_f64.to_radians(), 52.886_f64.to_radians())
 }
 
-pub fn EclipticalCoordsOfNorthPole(julian_century: f64) -> (f64, f64) {
+pub fn EclCoordsOfNorthPol(julian_century: f64) -> (f64, f64) {
     ((317.9065 + 1.1733*julian_century).to_radians(),
      (63.2818 - 0.00394*julian_century).to_radians())
 }

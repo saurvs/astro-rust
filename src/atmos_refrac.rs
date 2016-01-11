@@ -15,11 +15,11 @@ is more than 15 degrees.
 
 # Arguments
 
-* ```apparent_alt```: Apparent altitude *(radians)*
+* ```apprnt_alt```: Apparent altitude *(radians)*
 **/
-pub fn RefracFromApparentAlt(apparent_alt: f64) -> f64 {
-      angle::PureDegrees(0, 0, 58.294).to_radians() * (90_f64.to_radians() - apparent_alt).tan()
-    - angle::PureDegrees(0, 0, 0.0668).to_radians() * (90_f64.to_radians() - apparent_alt).tan().powi(3)
+pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
+      angle::DegFrmDMS(0, 0, 58.294).to_radians() * (90_f64.to_radians() - apprnt_alt).tan()
+    - angle::DegFrmDMS(0, 0, 0.0668).to_radians() * (90_f64.to_radians() - apprnt_alt).tan().powi(3)
 }
 
 /**
@@ -38,9 +38,9 @@ is more than 15 degrees.
 
 * ```true_alt```: True altitude *(radians)*
 **/
-pub fn RefracFromTrueAlt(true_alt: f64) -> f64 {
-      angle::PureDegrees(0, 0, 58.276).to_radians() * (90_f64.to_radians() - true_alt).tan()
-    - angle::PureDegrees(0, 0, 0.0824).to_radians() * (90_f64.to_radians() - true_alt).tan().powi(3)
+pub fn RefracFrmTrueAlt(true_alt: f64) -> f64 {
+      angle::DegFrmDMS(0, 0, 58.276).to_radians() * (90_f64.to_radians() - true_alt).tan()
+    - angle::DegFrmDMS(0, 0, 0.0824).to_radians() * (90_f64.to_radians() - true_alt).tan().powi(3)
 }
 
 /**
@@ -59,13 +59,13 @@ altitude.
 
 # Arguments
 
-* ```apparent_alt```: Apparent altitude *(radians)*
+* ```apprnt_alt```: Apparent altitude *(radians)*
 **/
-pub fn ApproxRefracFromApparentAlt(apparent_alt: f64) -> f64 {
-    if (apparent_alt.to_degrees() == 90.0) { 0.0 }
+pub fn ApproxRefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
+    if (apprnt_alt.to_degrees() == 90.0) { 0.0 }
     else {
-        let a =   apparent_alt.to_degrees()
-                + 7.31 / (apparent_alt.to_degrees() + 4.4);
+        let a =   apprnt_alt.to_degrees()
+                + 7.31 / (apprnt_alt.to_degrees() + 4.4);
         let R = 1.0 / a.to_radians().tan();
 
         (R / 60.0).to_radians()
@@ -127,8 +127,8 @@ Returns the **refraction** term modifier for **temperature**
 
 # Arguments
 
-* ```temperature```: Local temperature *(kelvins)*
+* ```temp```: Local temperature *(kelvins)*
 **/
-pub fn RefracDueToTemp(temperature: f64) -> f64 {
-    283.0 / temperature
+pub fn RefracDueToTemp(temp: f64) -> f64 {
+    283.0 / temp
 }

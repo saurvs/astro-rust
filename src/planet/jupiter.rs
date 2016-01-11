@@ -13,8 +13,8 @@ Returns Jupiter's geocentric equatorial semidiameter
 
 * ```distance_to_earth```: Jupiter's distance to Earth *(AU)*
 **/
-pub fn EquatorSemidiameter(distance_to_earth: f64) -> f64 {
-    angle::PureDegrees(0, 0, 98.44) / distance_to_earth
+pub fn EqSemdia(distance_to_earth: f64) -> f64 {
+    angle::DegFrmDMS(0, 0, 98.44) / distance_to_earth
 }
 
 /**
@@ -28,8 +28,8 @@ Returns Jupiter's geocentric polar semidiameter
 
 * ```distance_to_earth```: Jupiter's distance to Earth *(AU)*
 **/
-pub fn PolarSemidiameter(distance_to_earth: f64) -> f64 {
-    angle::PureDegrees(0, 0, 92.06) / distance_to_earth
+pub fn PolSemdia(distance_to_earth: f64) -> f64 {
+    angle::DegFrmDMS(0, 0, 92.06) / distance_to_earth
 }
 
 /**
@@ -69,7 +69,7 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
 
     // recalculate x y z delta
 
-    let e0 = ecliptic::MeanObliquity(jed);
+    let e0 = ecliptic::MnOblq(jed);
     let cos_e0 = e0.cos();
     let sin_e0 = e0.sin();
     let sin_l = l.sin();
@@ -99,7 +99,7 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
     w1 += C;
     w2 += C;
 
-    let (nut_long, nut_obl) = nutation::Corrections(jed);
+    let (nut_long, nut_obl) = nutation::Nutation(jed);
     let e = e0 + nut_obl;
 
     let q = 0.005693_f64.to_radians();

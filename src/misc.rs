@@ -11,7 +11,7 @@ Returns the **parallactic angle** of a celestial body
 * ```hour_angle```: Local hour angle *(radians)*
 * ```declin```: Declination of the celestial body *(radians)*
 **/
-pub fn ParallacticAngle(observer_lat: f64, hour_angle: f64, declin: f64) -> f64 {
+pub fn ParallacticAngl(observer_lat: f64, hour_angle: f64, declin: f64) -> f64 {
     hour_angle.sin()
     .atan2(   observer_lat.tan()   * declin.cos()
             - declin.sin()         * hour_angle.cos()
@@ -31,7 +31,7 @@ Returns the **parallactic angle** of a celestial body on the horizon
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 * ```declin```: Declination of the celestial body *(radians)*
 **/
-pub fn ParallacticAngleOnHorizon(observer_lat: f64, declin: f64) -> f64 {
+pub fn ParallacticAnglOnHz(observer_lat: f64, declin: f64) -> f64 {
     (observer_lat.sin() / declin.cos()).acos()
 }
 /*
