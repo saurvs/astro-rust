@@ -16,5 +16,6 @@ pub mod precession;
 
 pub mod sun;
 pub mod planet;
+pub mod pluto;
 
 pub mod asteroid;

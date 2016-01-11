@@ -1,4 +1,5 @@
 use angle;
+use time;
 
 /**
 Returns Pluto's **equatorial semidiameter**
@@ -7,7 +8,7 @@ Returns Pluto's **equatorial semidiameter**
 
 * ```distance_to_earth```: Pluto's distance from Earth *(AU)*
 **/
-pub fn Semidiameter(distance_to_earth: f64) -> f64 {
+pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 2.07) / distance_to_earth
 }
 
@@ -28,9 +29,9 @@ Returns Pluto's **heliocentric coordinates**.
 
 * ```JD```: Julian day
 **/
-pub fn HeliocentCoords(JD: f64) -> (f64, f64, f64) {
+pub fn HeliocenCoords(JD: f64) -> (f64, f64, f64) {
 
-    let JC = time::JulianCentury(JD);
+    let JC = time::JulCent(JD);
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
     let tuple_terms = [

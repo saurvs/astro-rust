@@ -16,6 +16,24 @@ See full list of algorithms below.
 
 Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
 
+## Usage
+
+* Find the Julian day (the most important step for almost everything)
+  ```rust
+  // time of the Apollo 11 moon landing
+
+  let day_of_month = time::DayOfMonth{day: 20,
+				 			          hr : 20, // UTC
+                                      min: 18,
+                                      sec: 4.0};
+
+  let date = time::Date{year       : 1969,
+                        month      : 7, // July
+                        decimal_day: time::DecimalDay(day_of_month),
+                        cal_type   : time::CalType::Gregorian};
+
+  let julian_day = time::JulDay(date);
+  ```
 ## Things you can find/do
 * Heliocentric coordinates of Mercury, Venus, Earth, Mars, Jupiter, Saturn, Neptune, and Uranus (and Pluto).
 * Geocentric coordinates of the Sun.

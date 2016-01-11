@@ -21,7 +21,7 @@ pub fn func(celestial_body: CelestialBody,
     let mut H0 = ( (standard_alt.sin() - observer_lat.sin()*eq_pnt_2.declin.sin())
                    / (observer_lat.cos() * declin_2.cos())
                  ).acos();
-    H0 = angle::LimitedTo360(H0.to_degrees()).to_radians();
+    H0 = angle::LimitTo360(H0.to_degrees()).to_radians();
 
     let rad360 = 360.0_f64.to_radians();
 

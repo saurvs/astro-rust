@@ -59,7 +59,7 @@ Returns the equivalent angle in **[0, 360] degree range**
 
 * ```angl```: Angle *(degrees)*
 **/
-pub fn LimitedTo360(angl: f64) -> f64 {
+pub fn LimitTo360(angl: f64) -> f64 {
     let n = (angl / 360.0) as i64;
     let limited_angle = angl - (360.0 * (n as f64));
     if limited_angle < 0.0 { limited_angle + 360.0 }

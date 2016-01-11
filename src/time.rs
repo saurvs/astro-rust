@@ -264,7 +264,7 @@ Mean sidereal time is at the Greenwhich meridian.
 **/
 pub fn MnSidr(JD: f64) -> (i8, i8, f64) {
     let JC = JulCent(JD);
-    let angle = angle::LimitedTo360(  280.46061837
+    let angle = angle::LimitTo360(  280.46061837
                                     + 360.98564736629 * (JD - 2451545.0)
                                     + JC*JC * (0.000387933 - JC/38710000.0)
                                    );

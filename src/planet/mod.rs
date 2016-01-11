@@ -164,13 +164,13 @@ pub fn OrbElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f6
         },
     };
 
-    (angle::LimitedTo360(L).to_radians(),
+    (angle::LimitTo360(L).to_radians(),
      a, e,
-     angle::LimitedTo360(i).to_radians(),
-     angle::LimitedTo360(omega).to_radians(),
-     angle::LimitedTo360(pi).to_radians(),
-     angle::LimitedTo360(L - pi).to_radians(),
-     angle::LimitedTo360(pi - omega).to_radians()
+     angle::LimitTo360(i).to_radians(),
+     angle::LimitTo360(omega).to_radians(),
+     angle::LimitTo360(pi).to_radians(),
+     angle::LimitTo360(L - pi).to_radians(),
+     angle::LimitTo360(pi - omega).to_radians()
     )
 }
 
@@ -234,8 +234,8 @@ pub fn HeliocenCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
 
     }
 
-    L = angle::LimitedTo360(L.to_degrees()).to_radians();
-    B = angle::LimitedTo360(B.to_degrees()).to_radians();
+    L = angle::LimitTo360(L.to_degrees()).to_radians();
+    B = angle::LimitTo360(B.to_degrees()).to_radians();
 
     (L, B, R)
 }
@@ -282,7 +282,7 @@ pub fn GeocenEqCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64,
     let nu = Y + y;
     let et = Z + z;
 
-    let asc = angle::LimitedTo360(nu.atan2(xi).to_degrees()).to_radians();
+    let asc = angle::LimitTo360(nu.atan2(xi).to_degrees()).to_radians();
     let dec = et.atan2((xi*xi + nu*nu).sqrt());
 
     (asc, dec, EffectOfLightTime(x, y, z))

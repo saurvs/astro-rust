@@ -148,7 +148,7 @@ Returns the **equation of time** *(radians)*
 **/
 pub fn EquationOfTime(jed: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
     let t = time::JulCent(jed) / 10.0;
-    let L = angle::LimitedTo360(
+    let L = angle::LimitTo360(
             280.4664567 +
             t * (360007.6982779 +
             t * (0.030328 +

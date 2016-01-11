@@ -9,15 +9,15 @@ Returns the Sun's **equatorial semidiameter**
 
 * ```distance_to_earth```: The Sun's distance from the Earth *(AU)*
 **/
-pub fn Semidiameter(distance_to_earth: f64) -> f64 {
+pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 959.63) / distance_to_earth
 }
 
 pub fn GeocenEclCoords(JD: f64) -> (f64, f64, f64) {
     let (L, B, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
 
-    let L_sun = angle::LimitedTo360((L + std::f64::consts::PI).to_degrees());
-    let B_sun = angle::LimitedTo360(-1.0 * B.to_degrees());
+    let L_sun = angle::LimitTo360((L + std::f64::consts::PI).to_degrees());
+    let B_sun = angle::LimitTo360(-1.0 * B.to_degrees());
 
     (L_sun.to_radians(), B_sun.to_radians(), R)
 }
@@ -86,7 +86,7 @@ of the Sun
                    *mean* obliquity
 **/
 pub fn DiskEphemeris(JED: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
-    let theta = angle::LimitedTo360((JED - 2398220.0) * (360.0/5.38)).to_radians();
+    let theta = angle::LimitTo360((JED - 2398220.0) * (360.0/5.38)).to_radians();
     let I = 7.25_f64.to_radians();
     let K = (73.6667 + 1.3958333*((JED - 2396758.0) / 36525.0)).to_radians();
 
@@ -101,7 +101,7 @@ pub fn DiskEphemeris(JED: f64, app_long: f64, app_long_with_nut: f64, obl_eclip:
 
     let B_0 = (sin_z * I.sin()).asin();
     let nu = (-sin_z * I.cos()).atan2(-cos_z);
-    let L_0 = angle::LimitedTo360((nu - theta).to_degrees()).to_radians();
+    let L_0 = angle::LimitTo360((nu - theta).to_degrees()).to_radians();
 
     (x + y, B_0, L_0)
 }

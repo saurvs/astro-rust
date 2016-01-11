@@ -3,7 +3,7 @@ use time;
 use std;
 
 /**
-Returns **mean obliquity** of the ecliptic
+Returns the **mean obliquity** of the ecliptic
 
 # Returns
 
@@ -65,7 +65,7 @@ Returns the **longitudes** of the **ecliptic points** on the **horizon**
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 * ```loc_sidreal```: Local sidereal time *(radians)*
 **/
-pub fn LongOfEclipticPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
+pub fn LongOfEclipPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
     let p = (-loc_sidreal.cos())
             .atan2(   oblq_eclip.sin() * observer_lat.tan()
                     + oblq_eclip.cos() * loc_sidreal.sin()
@@ -87,7 +87,7 @@ Returns the **angle** between the **ecliptic** and the **horizon**
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 * ```loc_sidreal```: Local sidereal time *(radians)*
 **/
-pub fn AnglEclipticAndHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
+pub fn AnglBetwnEclipAndHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
     (   oblq_eclip.cos() * observer_lat.sin()
       - oblq_eclip.sin() * observer_lat.cos() * loc_sidreal.sin()
     ).acos()

@@ -54,7 +54,7 @@ fn A(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
 }
 
 fn F(JC: f64) -> f64 {
-    angle::LimitedTo360(93.272095 + JC*(483202.0175233 -
+    angle::LimitTo360(93.272095 + JC*(483202.0175233 -
                                         JC*(0.0036539 +
                                         JC*(1.0/3526000.0 -
                                         JC/863310000.0)))).to_radians()
@@ -65,14 +65,14 @@ fn E(JC: f64) -> f64 {
 }
 
 fn DMM1(JC: f64) -> (f64, f64, f64) {
-    (angle::LimitedTo360(297.8501921 + JC*(445267.1114034 -
+    (angle::LimitTo360(297.8501921 + JC*(445267.1114034 -
                                                   JC*(0.0018819 -
                                                   JC*(1.0/545868.0 +
                                                   JC/113065000.0)))).to_radians(),
-     angle::LimitedTo360(357.5291092 + JC*(35999.0502909 -
+     angle::LimitTo360(357.5291092 + JC*(35999.0502909 -
                                                   JC*(0.0001536 -
                                                   JC/24490000.0))).to_radians(),
-     angle::LimitedTo360(134.9633964 + JC*(477198.8675055 +
+     angle::LimitTo360(134.9633964 + JC*(477198.8675055 +
                                                    JC*(0.0087414 +
                                                    JC*(1.0/69699.0 -
                                                    JC/14712000.0)))).to_radians())
@@ -147,7 +147,7 @@ pub fn OptLibr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
                - app_geocen_moon_lat.sin() * I.cos()
              ).asin();
 
-    (angle::LimitedTo360((A - F).to_degrees()).to_radians(),
+    (angle::LimitTo360((A - F).to_degrees()).to_radians(),
      b1)
 }
 
@@ -346,14 +346,14 @@ pub fn EclGeocenCoords(JED: f64) -> (f64, f64, f64) {
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
     let E = E(JC);
-    let L1 = angle::LimitedTo360(218.3164477 + JC*(481267.88123421 -
+    let L1 = angle::LimitTo360(218.3164477 + JC*(481267.88123421 -
                                                    JC*(0.0015786 -
                                                    JC*(1.0/538841.0 +
                                                    JC/65194000.0)))).to_radians();
 
-    let A1 = angle::LimitedTo360(119.75 + 131.849*JC).to_radians();
-    let A2 = angle::LimitedTo360(53.09 + 479264.29*JC).to_radians();
-    let A3 = angle::LimitedTo360(313.45 + 481266.484*JC).to_radians();
+    let A1 = angle::LimitTo360(119.75 + 131.849*JC).to_radians();
+    let A2 = angle::LimitTo360(53.09 + 479264.29*JC).to_radians();
+    let A3 = angle::LimitTo360(313.45 + 481266.484*JC).to_radians();
 
     struct lrterms(i8, i8, i8, i8, i32, i32);
     let terms_for_lr = [
@@ -549,7 +549,7 @@ Returns the longitude of the **mean ascending node** of the Moon
 * ```JC```: Julian century
 **/
 pub fn MnAscendNode(JC: f64) -> f64 {
-    angle::LimitedTo360(125.0445479 - JC*(1934.1362891 -
+    angle::LimitTo360(125.0445479 - JC*(1934.1362891 -
                                           JC*(0.0020754 +
                                           JC*(1.0/467441.0 -
                                           JC/60616000.0)))).to_radians()
@@ -596,7 +596,7 @@ Returns the longitude of the **mean perigee** of the Moon
 * ```JC```: Julian century
 **/
 pub fn MnPerigee(JC: f64) -> f64 {
-    angle::LimitedTo360(83.3532465 + JC*(4069.0137287 -
+    angle::LimitTo360(83.3532465 + JC*(4069.0137287 -
                                          JC*(0.01032 +
                                          JC*(1.0/80053.0 -
                                          JC/18999000.0)))).to_radians()

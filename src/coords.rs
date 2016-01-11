@@ -48,7 +48,7 @@ too must be corrected for it.
 * ```observer_long```: Observer's geographical longitude *(radians)*
 * ```asc```: Right ascension *(radians)*
 **/
-pub fn HrAngFrmObserverLong(green_sidreal: f64, observer_long: f64, asc: f64) -> f64 {
+pub fn HrAnglFrmObserverLong(green_sidreal: f64, observer_long: f64, asc: f64) -> f64 {
     green_sidreal - observer_long - asc
 }
 
@@ -67,7 +67,7 @@ too must be corrected for it.
 * ```local_sidreal```: Local sidereal time *(radians)*
 * ```asc```: Right ascension *(radians)*
 **/
-pub fn HourAnglFrmLocSid(local_sidreal: f64, asc: f64) -> f64 {
+pub fn HrAnglFrmLocSidr(local_sidreal: f64, asc: f64) -> f64 {
     local_sidreal - asc
 }
 

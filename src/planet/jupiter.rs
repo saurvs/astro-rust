@@ -48,8 +48,8 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
     let sin_dec0 = dec0.sin();
     let cos_dec0 = dec0.cos();
 
-    let W1 = angle::LimitedTo360(17.710_f64.to_radians() + 877.90003539_f64.to_radians()*d);
-    let W2 = angle::LimitedTo360(16.838_f64.to_radians() + 870.27003539_f64.to_radians()*d);
+    let W1 = angle::LimitTo360(17.710_f64.to_radians() + 877.90003539_f64.to_radians()*d);
+    let W2 = angle::LimitTo360(16.838_f64.to_radians() + 870.27003539_f64.to_radians()*d);
 
     let l0: f64 = 0.0; // heliocentric longitude of the Earth
     let b0: f64 = 0.0; // heliocentric latitude of the Earth
@@ -89,8 +89,8 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
 
     let D_e = (-1.0*sin_dec0*sin_dec - cos_dec0*dec.sin()*(asc0 - asc).cos()).asin();
 
-    let mut w1 = angle::LimitedTo360(W1.to_degrees() - zeta.to_degrees() - 5.07033*delta);
-    let mut w2 = angle::LimitedTo360(W2.to_degrees() - zeta.to_degrees() - 5.02626*delta);
+    let mut w1 = angle::LimitTo360(W1.to_degrees() - zeta.to_degrees() - 5.07033*delta);
+    let mut w2 = angle::LimitTo360(W2.to_degrees() - zeta.to_degrees() - 5.02626*delta);
 
     let mut C = 57.2958 * (2.0*r*delta + R*R - r_squared - delta*delta) / (4.0*r*delta);
     if (l - l0).sin() < 0.0 {
