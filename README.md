@@ -48,8 +48,6 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   
   let deltaT = time::ApproxDelT(date.year, date.month);
 
-  // or get an observed value of delta T from the Astronomical Almanac
-
   let julian_ephm_day = time::JulEphmDay(&date, julian_day);
 
   ```
