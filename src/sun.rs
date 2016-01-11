@@ -13,7 +13,7 @@ pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 959.63) / distance_to_earth
 }
 
-pub fn GeocenEclCoords(JD: f64) -> (f64, f64, f64) {
+pub fn EclGeocenCoords(JD: f64) -> (f64, f64, f64) {
     let (L, B, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
 
     let L_sun = angle::LimitTo360((L + std::f64::consts::PI).to_degrees());

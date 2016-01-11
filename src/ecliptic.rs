@@ -39,13 +39,13 @@ pub fn MnOblq(JED: f64) -> (f64) {
 
 /// Returns the **obliquity** *(radians)* of the ecliptic
 /// for the epoch **J2000.0**
-pub fn Oblq_J2000() -> f64 {
+pub fn MnOblq_J2000() -> f64 {
     23.4392911_f64.to_radians()
 }
 
 /// Returns the **obliquity** *(radians)* of the ecliptic
 /// for the epoch **J1950.0**
-pub fn Oblq_J1950() -> f64 {
+pub fn MnOblq_J1950() -> f64 {
     23.4457889_f64.to_radians()
 }
 

@@ -14,7 +14,7 @@ Returns the **true anomaly** and **radius vector** of a body in a near-parabolic
 * ```time_passg_perih```: Time of passage in perihelion
 * ```perih_dist```: Perihelion distance *(AU)*
 **/
-pub fn Position(ecc: f64, t: f64, perih_dist: f64) -> (f64, f64) {
+pub fn Pos(ecc: f64, t: f64, perih_dist: f64) -> (f64, f64) {
     let k = 0.0;
     let Q = k/2.0 * perih_dist * ((1.0 + ecc)/perih_dist).sqrt();
     let y = (1.0 - ecc)/(1.0 + ecc);
