@@ -4,13 +4,13 @@
 
 Essential algorithms for fundamental astronomy.
 
-* Find the positions of the planets (and pluto), their moons (and the rings of Saturn), and the Sun.
+* Find the positions of all the planets (and pluto), their moons (and the rings of Saturn), and the Sun.
 * Calculate times of solar and lunar eclipses and passage through orbital nodes.
 * Calculate detailed ephemeris for observations from the Earth.
 * Correct for tiny effects in observation such as nutation,
    aberration, precession and atmospheric refraction.
 * Convert points between different coordinate systems and epochs.
-* And more related to asteroids, stars, binary stars, elliptic, parabolic and near-parabolic orbits, satellites.
+* And more related to asteroids, stars, binary stars, elliptic, parabolic and near-parabolic orbits, and satellites.
 
 See full list of algorithms below.
 
@@ -39,7 +39,16 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
                         decimal_day: time::DecimalDay(day_of_month),
                         cal_type   : time::CalType::Gregorian};
 
-  let julian_day = time::JulDay(date);
+  let julian_day = time::JulDay(&date);
+
+  // to be super accurate, get the Julian Ephemeris day
+  
+  let deltaT = time::ApproxDelT(date.year, date.month);
+
+  // or get an observed value of delta T from the Astronomical Almanac
+
+  let julian_ephm_day = time::JulEphmDay(&date, julian_day);
+
   ```
 
 * Find the ecliptical *geocentric* coordinates of the Sun

@@ -135,22 +135,24 @@ Returns **Julian day**
 
 ```date```: A ```date``` struct
 **/
-pub fn JulDay(mut date: Date) -> f64 {
+pub fn JulDay(date: &Date) -> f64 {
 
-    if date.month == 1 || date.month == 2 {
-        date.year = date.year - 1;
-        date.month = date.month + 12;
+    let mut Y = date.year;
+    let mut M = date.month;
+    if M == 1 || M == 2 {
+        Y -= 1;
+        M += 12;
     }
 
-    let a = util::int((date.year as f64) / 100.0) as f64;
+    let a = util::int((Y as f64) / 100.0) as f64;
     let mut b;
     match date.cal_type {
         CalType::Gregorian => b = 2.0 - a + (util::int(a/4.0) as f64),
         CalType::Julian => b = 0.0,
     };
 
-      (util::int(365.25 * ((date.year as f64) + 4716.0)) as f64)
-    + (util::int(30.6001 * ((date.month as f64) + 1.0)) as f64)
+      (util::int(365.25 * ((Y as f64) + 4716.0)) as f64)
+    + (util::int(30.6001 * ((M as f64) + 1.0)) as f64)
     + (date.decimal_day as f64)
     + (b as f64)
     - 1524.5
@@ -162,10 +164,11 @@ Returns **Julian Emphemeris day**
 
 # Arguments
 
-```date```: A ```date``` struct
+* ```date```: A ```date``` struct
+* ```delT```: Delta T
 **/
-pub fn JulEmphDay(mut date: Date) -> f64 {
-    ApproxDelT(date.year, date.month)/86400.0 + JulDay(date)
+pub fn JulEphmDay(date: &Date, delT: f64) -> f64 {
+    delT/86400.0 + JulDay(date)
 }
 
 /**
@@ -286,22 +289,23 @@ it covers a far wider time range.
 * ```month```: Month *(range: 1 - 12)*
 **/
 pub fn ApproxDelT(year: i32, month: u8) -> f64 {
-    let y = (year as f64) + ((month as f64) - 0.5)/12.0;
+    let y = (year as f64) + ((month as f64) - 0.5) / 12.0;
 
     if y < -500.0 {
         let u = (y-1820.0) / 100.0;
         return -20.0 + 32.0*u*u;
     }
     else if y < 500.0 {
+        println!("fdsiu");
         let u = y / 100.0;
         return 10583.6 -
-               u * (1014.41 -
-               u * (33.78311 -
-               u * (5.952053 +
+               u * (1014.41 +
+               u * (33.78311 +
+               u * (5.952053 -
 		       u * (0.1798452 -
                u * (0.022174192 -
                     u * 0.0090316521)
-                   ))));
+                ))));
     }
     else if y < 1600.0 {
         let u = (y-1000.0) / 100.0;
@@ -310,7 +314,7 @@ pub fn ApproxDelT(year: i32, month: u8) -> f64 {
                u * (71.23472 +
                u * (0.319781 -
 		       u * (0.8503463 +
-               u * (0.005050998 +
+               u * (0.005050998 -
                     u * 0.0083572073)
                    ))));
     }
@@ -327,7 +331,7 @@ pub fn ApproxDelT(year: i32, month: u8) -> f64 {
         return 8.83 +
                u * (0.1603 -
                u * (0.0059285 -
-               u * (0.00013336 -
+               u * (0.00013336 +
                     u / 1174000.0
                    )));
     }
@@ -338,7 +342,7 @@ pub fn ApproxDelT(year: i32, month: u8) -> f64 {
                u * (0.0068612 +
                u * (0.0041116 -
                u * (0.00037436 -
-               u * (0.0000121272 -
+               u * (0.0000121272 +
                u * (0.0000001699 -
                     u * 0.000000000875
                    ))))));
@@ -349,7 +353,7 @@ pub fn ApproxDelT(year: i32, month: u8) -> f64 {
                u * (0.5737 -
                u * (0.251754 -
                u * (0.01680668 -
-               u * (0.0004473624 -
+               u * (0.0004473624 +
                     u / 233174.0
                    ))));
     }
@@ -399,15 +403,15 @@ pub fn ApproxDelT(year: i32, month: u8) -> f64 {
     else if y < 2050.0 {
         let u = y - 2000.0;
         return 62.92 +
-               u * (0.32217 -
+               u * (0.32217 +
                     u * 0.005589);
     }
-    else if y < 2150.0 {
-        let u = (y-1820.0) / 100.0;
+    else if y <= 2150.0 {
+        let u = (y - 1820.0) / 100.0;
         return -20.0 + 32.0*u*u - 0.5628*(2150.0 - y);
     }
-    else if y >= 2150.0 {
-        let u = (y-1820.0) / 100.0;
+    else if y > 2150.0 {
+        let u = (y - 1820.0) / 100.0;
         return -20.0 + 32.0*u*u;
     }
 
