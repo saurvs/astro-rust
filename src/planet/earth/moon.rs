@@ -272,7 +272,7 @@ Returns the **position angle** of the **axis of rotation** of the Moon
 * ```app_moon_asc```: Apparent geocentric right ascension of the Moon *(radians)*
 * ```JED```: Julian Emphemeris day
 **/
-pub fn AxisOfRot(mean_ascen_node_long: f64, total_lib_lat: f64,
+pub fn PosAnglOfAxisOfRot(mean_ascen_node_long: f64, total_lib_lat: f64,
                                      nut_in_long: f64, true_oblq_eclip: f64,
                                      app_moon_asc: f64, JED: f64) -> f64 {
     let JC = time::JulCent(JED);

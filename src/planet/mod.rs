@@ -244,7 +244,7 @@ fn EffectOfLightTime(x: f64, y: f64, z: f64) -> f64 {
     0.0057755183 * (x*x + y*y + z*z).sqrt()
 }
 
-pub fn GeocenEclCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
+pub fn EclGeocenCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
     let x = R*B.cos()*L.cos() - R0*B0.cos()*L0.cos();
     let y = R*B.cos()*L.sin() - R0*B0.cos()*L0.sin();
     let z = R*B.sin() - R0*B0.sin();
@@ -254,7 +254,7 @@ pub fn GeocenEclCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f6
      EffectOfLightTime(x, y, z))
 }
 
-pub fn GeocenEqCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, w: f64, sigma: f64, n: f64,
+pub fn EqGeocenCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, w: f64, sigma: f64, n: f64,
             oblq_eclip: f64, M: f64, E: f64, v: f64, r: f64) -> (f64, f64, f64) {
 
     let F = sigma.cos();
