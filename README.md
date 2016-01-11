@@ -67,7 +67,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let (nut_in_long, nut_in_oblq) = nutation::Corrections(julian_day);
   ```
 
-* Find the geodesic distance between two point on the Earth
+* Find the geodesic distance between two locations on the Earth
   ```rust
 	// geodesic distance between the Observatoire de Paris and
     // the US Naval Observatory at Washington DC
