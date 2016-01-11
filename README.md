@@ -25,7 +25,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   use astro::*;
   ```
 
-* Find the **Julian day** (the most important step for almost everything)
+* Find the Julian day (the most important step for almost everything)
   ```rust
   // time of the Apollo 11 moon landing
 
@@ -42,29 +42,29 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let julian_day = time::JulDay(date);
   ```
 
-* Find the *ecliptical* geocentric coordinates of the **Sun**
+* Find the ecliptical geocentric coordinates of the Sun
   ```rust
   let (long, lat, rad_vec) = sun::EclGeocenCoords(julian_day);
   ```
 
-* And the **Moon**
+* And the Moon
   ```rust
   let (long, lat, rad_vec) = planet::earth::moon::EclGeocenCoords(julian_day);
   ```
 
-* Find the *heliocentric* coordinates of **Mars**
+* Find the heliocentric coordinates of Mars
   ```rust
   let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Mars, julian_day);
   ```
 
-* And **Saturn**
+* And Saturn
   ```rust
   let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Saturn, julian_day);
   ```
 
-* Find the *corrections* for the **nutation** (of the Earth) in ecliptical longitude and obliquity of the ecliptic
+* Find the corrections for the nutation (of the Earth) in ecliptical longitude and obliquity of the ecliptic
   ```rust
-  let (nutation_in_longitude, nutation_in_obliquity) = nutation::Corrections(julian_day);
+  let (nut_in_long, nut_in_oblq) = nutation::Corrections(julian_day);
   ```
 
 ## Things you can find/do
