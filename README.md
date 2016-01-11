@@ -41,7 +41,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
   let julian_day = time::JulDay(&date);
 
-  // to be super accurate, get the Julian Ephemeris day
+  // to be super accurate, get the Julian Ephemeris day;
   // first find delta T, or get an observed value of delta T from 
   // the Astronomical Almanac
   
@@ -118,7 +118,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
     let right_ascension = angle::DegFrmHMS(17, 48, 59.74).to_radians();
     let declination = angle::DegFrmDMS(-14, 43, 8.2).to_radians();
 
-    // and in galactic coordinates
+    // and to galactic coordinates
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
