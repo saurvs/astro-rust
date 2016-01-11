@@ -52,14 +52,9 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let (long, lat, rad_vec) = planet::earth::moon::EclGeocenCoords(julian_day);
   ```
 
-* Find the heliocentric coordinates of Mars
+* Find the heliocentric coordinates of Saturn
   ```rust
   let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Mars, julian_day);
-  ```
-
-* And Saturn
-  ```rust
-  let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Saturn, julian_day);
   ```
 
 * Find the corrections for nutation (of the Earth) in ecliptical longitude and obliquity of the ecliptic
