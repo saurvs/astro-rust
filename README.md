@@ -42,19 +42,19 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let julian_day = time::JulDay(date);
   ```
 
-* Find the ecliptical geocentric coordinates of the Sun
+* Find the ecliptical *geocentric* coordinates of the Sun
   ```rust
   let (long, lat, rad_vec) = sun::EclGeocenCoords(julian_day);
   ```
 
-* And the Moon
+* Also for the Moon
   ```rust
   let (long, lat, rad_vec) = planet::earth::moon::EclGeocenCoords(julian_day);
   ```
 
-* Find the heliocentric coordinates of Saturn
+* Find the *heliocentric* coordinates of Saturn
   ```rust
-  let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Mars, julian_day);
+  let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Saturn, julian_day);
   ```
 
 * Find the corrections for nutation (of the Earth) in ecliptical longitude and obliquity of the ecliptic
