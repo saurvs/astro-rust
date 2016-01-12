@@ -12,6 +12,7 @@ pub mod orbit;
 
 pub mod nutation;
 pub mod atmos_refrac;
+pub mod parallax;
 pub mod precession;
 
 pub mod sun;
