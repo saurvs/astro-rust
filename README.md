@@ -4,12 +4,12 @@
 
 Essential algorithms for fundamental astronomy.
 
-* Find the positions of all the planets (and pluto), their moons (and the rings of Saturn), and the Sun.
+* Find the positions of all 8 planets (and pluto), their moons (and the rings of Saturn), and the Sun.
 * Calculate times of solar and lunar eclipses and passage through orbital nodes.
 * Calculate detailed ephemeris for observations from the Earth.
 * Correct for tiny effects in observation such as nutation,
    aberration, precession and atmospheric refraction.
-* Convert points between different coordinate systems and epochs.
+* Convert coordinates between different coordinate systems and epochs.
 * And more related to asteroids, stars, binary stars, elliptic, parabolic and near-parabolic orbits, and satellites.
 
 See full list of algorithms below.
