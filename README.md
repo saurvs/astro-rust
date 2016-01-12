@@ -47,13 +47,17 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
   let deltaT = time::ApproxDelT(date.year, date.month);
 
-  let julian_ephm_day = time::JulEphmDay(&date, deltaT);
+  let julian_ephm_day = time::JulEphmDay(julian_day, deltaT);
 
   ```
 
-* Find the ecliptical *geocentric* coordinates of the Sun
+* Find the ecliptic *geocentric* coordinates of the Sun
   ```rust
   let (long, lat, rad_vec) = sun::EclGeocenCoords(julian_day);
+
+  // long    - ecliptic longitude (radians)
+  // lat     - ecliptic latitude (radians)
+  // rad_vec - distance between the Sun and the Earth (AU)
   ```
 
 * Also for the Moon
@@ -61,12 +65,12 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
   let (long, lat, rad_vec) = planet::earth::moon::EclGeocenCoords(julian_day);
   ```
 
-* Find the *heliocentric* coordinates of Saturn
+* Find the *heliocentric* coordinates of Jupiter
   ```rust
-  let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Saturn, julian_day);
+  let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Jupiter, julian_day);
   ```
 
-* Find the corrections for nutation (of the Earth) in ecliptical longitude and obliquity of the ecliptic
+* Find the corrections for nutation in ecliptic longitude and obliquity of the ecliptic
   ```rust
   let (nut_in_long, nut_in_oblq) = nutation::Corrections(julian_day);
   ```
@@ -88,7 +92,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
     let distance = planet::earth::GeodesicDist(&paris, &washington); // in meters
   ```
 
-* Convert equatorial coordinates to ecliptical coordinates
+* Convert equatorial coordinates to ecliptic coordinates
   ```rust
 	// equatorial coordinates of the star Pollux
 
@@ -106,7 +110,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
     // also make sure to type #[macro_use] before including the crate
     // to use macros
 
-    // now, convert equatorial coordinates to ecliptical coordinates
+    // now, convert equatorial coordinates to ecliptic coordinates
 
     let (ecl_long, ecl_lat) = EclFrmEq!(right_ascension, declination, oblq_eclip);
   ```
@@ -118,30 +122,26 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
     let right_ascension = angle::DegFrmHMS(17, 48, 59.74).to_radians();
     let declination = angle::DegFrmDMS(-14, 43, 8.2).to_radians();
 
-    // and to galactic coordinates
+    // convert to galactic coordinates
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
 
-## Things you can find/do
-* Heliocentric coordinates of Mercury, Venus, Earth, Mars, Jupiter, Saturn, Neptune, and Uranus (and Pluto).
-* Geocentric coordinates of the Sun.
-* Transformation of heliocentric coordinates to geocentric coordinates, and to topocentric coordinates.
-* Correction in coordinates for nutation, precession, atmospheric refraction, and aberration.
-* Transformation between the ecliptic, equatorial, horizontal, and galactic coordinates systems.
-* Transformation of coordinates between different epochs and equinoxes.
-* Distances between points on the Earth and obliquity of the Earth's ecliptic.
-* Geocentric position, illuminated fraction and bright limb of the Moon.
-* Semidiameters of Solar System bodies.
-* Describing elliptic, parabolic, and near-parabolic orbits, and the motion of bodies in them.
-* Orbital elements of all eight planets.
-* Transformation of Gregorian and Julian dates to Julian day, and vice-versa.
-* Delta T, Julian Ephemeris day and Julian century.
-* Sidereal time.
-* Equation of time.
-* Stellar magnitudes.
-* Describe binary stars.
-* Asteroid diameters.
+## Algorithms
+* **All 8 Planets** orbital elements, semidiameters, heliocentric coordinates (using the complete VSOP87 model)
+* **Sun** rectangular and ecliptic geocentric coordinates, semidiameter
+* **Transform** between ecliptic, equatorial, topocentric, horizontal, and galactic coordinates systems, and between different epochs and equinoxes
+* **Earth** high accuracy geodesic distance, flattening factor, equatorial and polar radius, eccentricity and radius of curvature of the meridian
+* **Moon** geocentric coordinates, illuminated fraction, optical and physical librations, position angle of axis of rotation and bright limb, times of passage through nodes
+* **Pluto** orbital elements, semidiameter, heliocentric coordinates
+* **Ecliptic** obliquity
+* **Nutation** in longitude and obliquity
+* **Atmospheric Refraction** true and apparent altitude, effect of pressure and temperature
+* **Julian day** Julian day to Gregorian and Julian dates and vice-versa, Julian Ephemeris day, Julian century, an analytic approximation to delta T
+* **Sidereal time** apparent and mean time
+* **Star** combined magnitudes, absolute magnitudes, aberration
+* **Binary star** magnitudes, radius vector, true and mean anomaly, mean annual motion, eccentricity of apparent orbit, angular separation, apparent position angle
+* **Asteroid** true and apparent diameter
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

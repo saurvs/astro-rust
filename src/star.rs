@@ -98,14 +98,14 @@ pub fn AnglBetweenNorthCelesAndEclipticPole(eclip_long: f64, eclip_lat: f64, obl
 }
 
 /**
-Returns the **abberation** corrections for a star's equatorial coordinates
+Returns the **aberration** corrections for a star's equatorial coordinates
 
 # Returns
 
 ```(aberration_in_right_ascension, aberration_in_declination)```
 
-* ```aberration_in_right_ascension```: Abberation correction for right ascension *(radians)*
-* ```aberration_in_declination```: Abberation correction for declination *(radians)*
+* ```aberration_in_right_ascension```: Aberration correction for right ascension *(radians)*
+* ```aberration_in_declination```: Aberration correction for declination *(radians)*
 
 # Arguments
 

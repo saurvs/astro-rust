@@ -73,14 +73,14 @@ pub fn HrAnglFrmLocSidr(local_sidreal: f64, asc: f64) -> f64 {
 }
 
 //-------------------------------------------------------------------
-// Ecliptical coordinates to equatorial coordinates
+// Ecliptic coordinates to equatorial coordinates
 
 /**
-Returns the **ecliptical longitude** from **equatorial coordinates**
+Returns the **ecliptic longitude** from **equatorial coordinates**
 
 # Returns
 
-* ```ecliptical_longitude```: Ecliptical longitude *(radians)*
+* ```ecliptic_longitude```: Ecliptic longitude *(radians)*
 
 # Arguments
 
@@ -97,11 +97,11 @@ pub fn EclLongFrmEq(asc: f64, dec: f64, oblq_eclip: f64,) -> f64 {
 }
 
 /**
-Returns the **ecliptical latitude** from **equatorial coordinates**
+Returns the **ecliptic latitude** from **equatorial coordinates**
 
 # Returns
 
-* ```ecliptical_latitude```: Ecliptical latitude *(radians)*
+* ```ecliptic_latitude```: Ecliptic latitude *(radians)*
 
 # Arguments
 
@@ -118,14 +118,14 @@ pub fn EclLatFrmEq(asc: f64, dec: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns **ecliptical coordinates** from **equatorial coordinates**
+Returns **ecliptic coordinates** from **equatorial coordinates**
 
 # Returns
 
-```(ecliptical_longitude, ecliptical_latitude)```
+```(ecliptic_longitude, ecliptic_latitude)```
 
-* ```ecliptical_longitude```: Ecliptical longitude *(radians)*
-* ```ecliptical_latitude```: Ecliptical latitude *(radians)*
+* ```ecliptic_longitude```: Ecliptic longitude *(radians)*
+* ```ecliptic_latitude```: Ecliptic latitude *(radians)*
 
 # Arguments
 
@@ -144,10 +144,10 @@ macro_rules! EclFrmEq {
 }
 
 //-------------------------------------------------------------------
-// Equatorial coordinates to ecliptical coordinates
+// Equatorial coordinates to ecliptic coordinates
 
 /**
-Returns the **right ascension** from **ecliptical coordinates**
+Returns the **right ascension** from **ecliptic coordinates**
 
 # Returns
 
@@ -155,8 +155,8 @@ Returns the **right ascension** from **ecliptical coordinates**
 
 # Arguments
 
-* ```ecl_long```: Ecliptical longitude *(radians)*
-* ```ecl_lat```: Ecliptical latitude *(radians)*
+* ```ecl_long```: Ecliptic longitude *(radians)*
+* ```ecl_lat```: Ecliptic latitude *(radians)*
 * ```oblq_eclip```: If ```ecl_long``` and ```ecl_lat``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*
@@ -168,7 +168,7 @@ pub fn AscFrmEcl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns the **declination** from **ecliptical coordinates**
+Returns the **declination** from **ecliptic coordinates**
 
 # Returns
 
@@ -176,8 +176,8 @@ Returns the **declination** from **ecliptical coordinates**
 
 # Arguments
 
-* ```ecl_long```: Ecliptical longitude *(radians)*
-* ```ecl_lat```: Ecliptical latitude *(radians)*
+* ```ecl_long```: Ecliptic longitude *(radians)*
+* ```ecl_lat```: Ecliptic latitude *(radians)*
 * ```oblq_eclip```: If ```ecl_long``` and ```ecl_lat``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*
@@ -189,7 +189,7 @@ pub fn DecFrmEcl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns **equatorial coordinates** from **ecliptical coordinates**
+Returns **equatorial coordinates** from **ecliptic coordinates**
 
 # Returns
 
@@ -200,8 +200,8 @@ Returns **equatorial coordinates** from **ecliptical coordinates**
 
 # Arguments
 
-* ```$x```: Ecliptical longitude *(radians)*
-* ```$y```: Ecliptical latitude *(radians)*
+* ```$x```: Ecliptic longitude *(radians)*
+* ```$y```: Ecliptic latitude *(radians)*
 * ```$z```: If ```$x``` and ```$y``` are corrected for
                   nutation, then *true* obliquity. If not, then
                   *mean* obliquity. *(radians)*

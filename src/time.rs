@@ -108,7 +108,7 @@ pub fn IsLeapYear(year: i32, cal_type: &CalType) -> (bool) {
 }
 
 /**
-Returns **Julian century**
+Returns the **Julian century**
 
 # Arguments
 
@@ -119,7 +119,7 @@ pub fn JulCent(JED: f64) -> f64 {
 }
 
 /**
-Returns **Julian millenium**
+Returns the **Julian millenium**
 
 # Arguments
 
@@ -130,7 +130,7 @@ pub fn JulMill(JED: f64) -> f64 {
 }
 
 /**
-Returns **Julian day**
+Returns the **Julian day**
 
 # Arguments
 
@@ -160,15 +160,15 @@ pub fn JulDay(date: &Date) -> f64 {
 }
 
 /**
-Returns **Julian Emphemeris day**
+Returns the **Julian Emphemeris day**
 
 # Arguments
 
-* ```date```: A ```date``` struct
+* ```JD```: Julian day
 * ```delT```: Delta T
 **/
-pub fn JulEphmDay(date: &Date, delT: f64) -> f64 {
-    delT/86400.0 + JulDay(date)
+pub fn JulEphmDay(JD: f64, delT: f64) -> f64 {
+    delT/86400.0 + JD
 }
 
 /**
