@@ -54,8 +54,8 @@ Assumes that the Earth is a sphere.
 * ```p1```: ```GeographPoint``` 1
 * ```p2```: ```GeographPoint``` 2
 **/
-pub fn ApproxGeodesicDist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
-    6371.0 * p1.AnglSepr(p2)
+pub fn ApproxGeodesicDist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
+    6371.0 * p1.AnglSepr(&p2)
 }
 
 /**
@@ -67,7 +67,7 @@ surface *(meters)*
 * ```p1```: ```GeographPoint``` 1
 * ```p2```: ```GeographPoint``` 2
 **/
-pub fn GeodesicDist(p1: coords::GeographPoint, p2: coords::GeographPoint) -> f64 {
+pub fn GeodesicDist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
     let lam = (p1.long - p2.long) / 2.0;

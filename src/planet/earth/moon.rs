@@ -639,10 +639,10 @@ Returns the **illuminated fraction** of the Moon, using **equatorial coordinates
 * ```earth_sun_dist```: Distance between the Earth and the Sun
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
-pub fn IllmFracFrmEq(sun_eq_point: coords::EqPoint,
-                                               moon_eq_point: coords::EqPoint,
+pub fn IllmFracFrmEq(sun_eq_point: &coords::EqPoint,
+                                               moon_eq_point: &coords::EqPoint,
                                                earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
-    illuminated_fraction(sun_eq_point.AnglSepr(moon_eq_point).acos(),
+    illuminated_fraction(sun_eq_point.AnglSepr(&moon_eq_point).acos(),
                          earth_moon_dist, earth_sun_dist)
 }
 
@@ -685,8 +685,8 @@ and **descending nodes**, close to a given date
 
 ```date```: The Date
 **/
-pub fn TimesOfPassageThroughNodes(date: time::Date) -> (f64, f64) {
-    let k = (time::DecimalYear(date) - 2000.05)*13.4223;
+pub fn TimesOfPassageThroughNodes(date: &time::Date) -> (f64, f64) {
+    let k = (time::DecimalYear(&date) - 2000.05)*13.4223;
     let T = k / 1342.23;
     let k1 = (k as i32) as f64;
     let k2 = (k1 as f64) + 0.5;

@@ -50,7 +50,7 @@ pub fn TopocenEclCoords(ecl_long: f64, ecl_lat: f64, eq_hz_parllx: f64,
     let ecl_lat_1 = (ecl_long_1.cos()*(ecl_lat.sin() - eq_hz_parllx_sin*(  rho_sin*eclip_oblq.cos()
                                                                          - rho_cos*eclip_oblq.sin()*loc_sidr.sin())))
                     .atan2(N);
-    let geocen_semdia_1 = ecl_long_1.cos()*ecl_lat_1.cos()*geocen_semdia.sin() / N;
+    let geocen_semdia_1 = (ecl_long_1.cos()*ecl_lat_1.cos()*geocen_semdia.sin() / N).asin();
 
     (ecl_long_1, ecl_lat_1, geocen_semdia_1)
 }

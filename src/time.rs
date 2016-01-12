@@ -50,7 +50,7 @@ Returns the **decimal day** for a ```DayOfMonth```
 
 * ```day_of_month```: A ```day_of_month``` struct
 **/
-pub fn DecimalDay(day: DayOfMonth) -> f64 {
+pub fn DecimalDay(day: &DayOfMonth) -> f64 {
       (day.day as f64)
     + (day.hr as f64) / 24.0
     + (day.min as f64) / 60.0
@@ -62,14 +62,14 @@ Returns the **decimal year** for a ```Date```
 
 * ```date```: A ```date``` struct
 **/
-pub fn DecimalYear(date: Date) -> f64 {
+pub fn DecimalYear(date: &Date) -> f64 {
     let mut y = 0;
     let mut days = 365.0;
 
     if date.month > 1 { y += 31; }
     if date.month > 2 {
         y += 28;
-        if IsLeapYear(date.year, date.cal_type) {
+        if IsLeapYear(date.year, &date.cal_type) {
             y += 1;
             days += 1.0;
         }
@@ -95,14 +95,15 @@ Checks if a **year** is a **leap year**
 * ```year```: Year
 * ```cal_type```: ```CalType``` enum
 **/
-pub fn IsLeapYear(year: i32, cal_type: CalType) -> (bool) {
+pub fn IsLeapYear(year: i32, cal_type: &CalType) -> (bool) {
     match cal_type {
-        CalType::Julian => year % 4 == 0,
-        CalType::Gregorian => {
+        &CalType::Julian => year % 4 == 0,
+        &CalType::Gregorian => {
             if year % 100 == 0 { year % 400 == 0 }
             else               { year % 4 == 0   }
         },
     };
+
     false
 }
 
@@ -137,22 +138,21 @@ Returns **Julian day**
 **/
 pub fn JulDay(date: &Date) -> f64 {
 
-    let mut Y = date.year;
-    let mut M = date.month;
-    if M == 1 || M == 2 {
-        Y -= 1;
-        M += 12;
+    let mut y = date.year;
+    let mut m = date.month;
+    if m == 1 || m == 2 {
+        y -= 1;
+        m += 12;
     }
 
-    let a = util::int((Y as f64) / 100.0) as f64;
-    let mut b;
-    match date.cal_type {
-        CalType::Gregorian => b = 2.0 - a + (util::int(a/4.0) as f64),
-        CalType::Julian => b = 0.0,
+    let a = util::int((y as f64) / 100.0) as f64;
+    let b = match date.cal_type {
+        CalType::Gregorian => 2.0 - a + (util::int(a/4.0) as f64),
+        CalType::Julian    => 0.0,
     };
 
-      (util::int(365.25 * ((Y as f64) + 4716.0)) as f64)
-    + (util::int(30.6001 * ((M as f64) + 1.0)) as f64)
+      (util::int(365.25  * ((y as f64) + 4716.0)) as f64)
+    + (util::int(30.6001 * ((m as f64) + 1.0)) as f64)
     + (date.decimal_day as f64)
     + (b as f64)
     - 1524.5

@@ -10,7 +10,7 @@ pub struct GeographPoint {
 }
 
 impl GeographPoint {
-    pub fn AnglSepr(&self, other_point: GeographPoint) -> f64 {
+    pub fn AnglSepr(&self, other_point: &GeographPoint) -> f64 {
         angle::AnglSepr(self.long, self.lat,
                       other_point.long, other_point.lat)
     }
@@ -25,7 +25,7 @@ pub struct EqPoint {
 }
 
 impl EqPoint {
-    pub fn AnglSepr(&self, other_point: EqPoint) -> f64 {
+    pub fn AnglSepr(&self, other_point: &EqPoint) -> f64 {
         angle::AnglSepr(self.asc, self.dec,
                       other_point.asc, other_point.dec)
     }

@@ -36,7 +36,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
   let date = time::Date{year       : 1969,
                         month      : 7, // July
-                        decimal_day: time::DecimalDay(day_of_month),
+                        decimal_day: time::DecimalDay(&day_of_month),
                         cal_type   : time::CalType::Gregorian};
 
   let julian_day = time::JulDay(&date);
@@ -85,7 +85,7 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 	// angle::DegFrmDMS() converts degrees expressed in degrees,
 	// minutes and seconds into degrees with decimals
 
-    let distance = planet::earth::GeodesicDist(paris, washington); // in meters
+    let distance = planet::earth::GeodesicDist(&paris, &washington); // in meters
   ```
 
 * Convert equatorial coordinates to ecliptical coordinates
