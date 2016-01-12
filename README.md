@@ -4,17 +4,7 @@
 
 Essential algorithms for fundamental astronomy.
 
-* Find the positions of all 8 planets (and pluto), their moons (and the rings of Saturn), and the Sun.
-* Calculate times of solar and lunar eclipses and passage through orbital nodes.
-* Calculate detailed ephemeris for observations from the Earth.
-* Correct for tiny effects in observation such as nutation,
-   aberration, precession and atmospheric refraction.
-* Convert coordinates between different coordinate systems and epochs.
-* And more related to asteroids, stars, binary stars, elliptic, parabolic and near-parabolic orbits, and satellites.
-
-See full list of algorithms below.
-
-Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
+See the  [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
 
 ## Usage
 
@@ -126,22 +116,6 @@ Also, see [API Documentation](https://saurvs.github.io/astro-rust/) for this Car
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
-
-## Algorithms
-* **All 8 Planets** orbital elements, semidiameters, heliocentric coordinates (using the complete VSOP87 model)
-* **Sun** rectangular and ecliptic geocentric coordinates, semidiameter
-* **Transform** between ecliptic, equatorial, topocentric, horizontal, and galactic coordinates systems, and between different epochs and equinoxes
-* **Earth** high accuracy geodesic distance, flattening factor, equatorial and polar radius, eccentricity and radius of curvature of the meridian
-* **Moon** geocentric coordinates, illuminated fraction, optical and physical librations, position angle of axis of rotation and bright limb, times of passage through nodes
-* **Pluto** orbital elements, semidiameter, heliocentric coordinates
-* **Ecliptic** obliquity
-* **Nutation** in longitude and obliquity
-* **Atmospheric Refraction** true and apparent altitude, effect of pressure and temperature
-* **Julian day** Julian day to Gregorian and Julian dates and vice-versa, Julian Ephemeris day, Julian century, an analytic approximation to delta T
-* **Sidereal time** apparent and mean time
-* **Star** combined magnitudes, absolute magnitudes, aberration
-* **Binary star** magnitudes, radius vector, true and mean anomaly, mean annual motion, eccentricity of apparent orbit, angular separation, apparent position angle
-* **Asteroid** true and apparent diameter
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
