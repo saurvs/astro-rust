@@ -248,6 +248,13 @@ pub fn AppSidr(JD: f64) -> (i8, i8, f64) {
     (hour, minute, seconds + seconds_correction)
 }
 
+macro_rules! AppSidr {
+    ($x) => {
+        let (nut_in_long, nut_in_oblq) = astro::nutation::Corrections($x);
+        //AppSidr(astro::time::MnSidr($x), nut_in_long, nut_in_oblq);
+    };
+}
+
 /**
 Returns **mean sidereal time** at any instant of Universal Time
 

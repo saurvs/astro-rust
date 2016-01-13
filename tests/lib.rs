@@ -2,6 +2,37 @@ extern crate astro;
 
 use astro::*;
 
+fn RoundUptoDigits(number: f64, frac_digits: i32) -> f64 {
+    let d = 10_f64.powi(frac_digits);
+    (number * d).round() / d
+}
+
+#[test]
+fn SidrealTime() {
+    let (h1, m1, s1) = time::MnSidr(2446895.5);
+    assert_eq!((h1, m1, RoundUptoDigits(s1, 4)), (13, 10, 46.3668));
+
+    let (h2, m2, s2) = time::AppSidr(2446895.5);
+    assert_eq!((h2, m2, RoundUptoDigits(s2, 4)), (13, 10, 46.1351));
+}
+
+#[test]
+fn nutation() {
+    let (nut_in_long, nut_in_oblq) = nutation::Corrections(2446895.5);
+
+    let (d1, m1, s1) = angle::DMSFrmDeg(nut_in_long.to_degrees());
+    assert_eq!((d1, m1, RoundUptoDigits(s1, 3)), (0, 0, -3.788));
+
+    let (d2, m2, s2) = angle::DMSFrmDeg(nut_in_oblq.to_degrees());
+    assert_eq!((d2, m2, RoundUptoDigits(s2, 3)), (0, 0, 9.443));
+}
+
+#[test]
+fn MnOblq() {
+    let (d, m, s) = angle::DMSFrmDeg(ecliptic::MnOblq(2446895.5).to_degrees());
+    assert_eq!((d, m, RoundUptoDigits(s, 3)), (23, 26, 27.407));
+}
+
 #[test]
 fn JulDay() {
 
