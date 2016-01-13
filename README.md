@@ -4,6 +4,15 @@
 
 Essential algorithms for fundamental astronomy.
 
+* Find the geocentric coordinates of the Sun and the Moon, and the heliocentric coordinates the 8 planets and Pluto.
+* Transform coordinates between equatorial, ecliptic, topocentric, horizontal, and galactic coordinate systems.
+* Find obliquity of the ecliptic and nutation in longitude and obliquity.
+* Find the Julian day from Gregorian or Julian dates, and vice-versa. Also find a surprisingly [good approximation](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) of delta T in recent years.
+* Correct for atmospheric refraction in altitude.
+* Find physical quantities such as magnitudes, parallax, diameters, related to stars, binary stars, asteroids.
+* Find geometric quantities related to elliptic, parabolic, near-parabolic orbits and objects that travel in them.
+
+
 See the  [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
 
 ## Usage
