@@ -1,3 +1,4 @@
+#[macro_use]
 extern crate astro;
 
 use astro::*;
@@ -9,10 +10,10 @@ fn RoundUptoDigits(number: f64, frac_digits: i32) -> f64 {
 
 #[test]
 fn SidrealTime() {
-    let (h1, m1, s1) = time::MnSidr(2446895.5);
+    let (h1, m1, s1) = angle::HMSFrmDeg(time::MnSidr(2446895.5).to_degrees());
     assert_eq!((h1, m1, RoundUptoDigits(s1, 4)), (13, 10, 46.3668));
 
-    let (h2, m2, s2) = time::AppSidr(2446895.5);
+    let (h2, m2, s2) = angle::HMSFrmDeg(AppSidr!(2446895.5).to_degrees());
     assert_eq!((h2, m2, RoundUptoDigits(s2, 4)), (13, 10, 46.1351));
 }
 

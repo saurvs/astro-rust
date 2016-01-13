@@ -229,57 +229,50 @@ pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
 }
 
 /**
-Returns **apparent sidereal time** at any instant of Universal Time
-
-# Arguments
-
-* ```JD```: Julian day
-**/
-pub fn AppSidr(JD: f64) -> (i8, i8, f64) {
-    let (hour, minute, seconds) = MnSidr(JD);
-
-    let (nut_in_long, nut_in_oblq) = nutation::Corrections(JD);
-    let eclip_oblq = ecliptic::MnOblq(JD);
-
-    let seconds_correction =   nut_in_long.to_degrees()*3600.0
-                             * (eclip_oblq + nut_in_oblq).cos()
-                             / 15.0;
-
-    (hour, minute, seconds + seconds_correction)
-}
-
-macro_rules! AppSidr {
-    ($x) => {
-        let (nut_in_long, nut_in_oblq) = astro::nutation::Corrections($x);
-        //AppSidr(astro::time::MnSidr($x), nut_in_long, nut_in_oblq);
-    };
-}
-
-/**
-Returns **mean sidereal time** at any instant of Universal Time
-
-Mean sidereal time is at the Greenwhich meridian.
+Returns the **apparent sidereal time**
 
 # Returns
 
-```(hour, minute, seconds)```
+* ```apparent_sidereal_time```: Apparent sidereal time *(radians)*
 
-* ```hour```: Hour *(range: 0 - 24)*
-* ```minute```: Minute *(range: 0 - 60)*
-* ```seconds```: Seconds *(range: 0.0 - 60.0)*
+# Arguments
+
+* ```mean_sidreal  ```: Mean sidereal time *(radians)*
+* ```nut_in_long```: Nutatation in longitude *(radians)*
+* ```true_oblq```: True obliquity of the ecliptic *(radians)* (with correction for nutation)
+**/
+pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
+    mean_sidreal + nut_in_long*true_oblq.cos()
+}
+
+#[macro_export]
+macro_rules! AppSidr {
+    ($x: expr) => {{
+        let (nut_in_long, nut_in_oblq) = astro::nutation::Corrections($x);
+        let eclip_oblq = astro::ecliptic::MnOblq($x);
+        astro::time::AppSidr(astro::time::MnSidr($x), nut_in_long, eclip_oblq + nut_in_oblq)
+    }};
+}
+
+/**
+Returns the **mean sidereal time**
+
+# Returns
+
+* ```mean_sidereal_time```: Mean sidereal time at the Greenwhich meridian *(radians)*
 
 # Arguments
 
 * ```JD```: Julian day
 **/
-pub fn MnSidr(JD: f64) -> (i8, i8, f64) {
+pub fn MnSidr(JD: f64) -> f64 {
     let JC = JulCent(JD);
     let angle = angle::LimitTo360(  280.46061837
                                     + 360.98564736629 * (JD - 2451545.0)
                                     + JC*JC * (0.000387933 - JC/38710000.0)
                                    );
 
-    angle::HMSFrmDeg(angle)
+    angle.to_radians()
 }
 
 /**
