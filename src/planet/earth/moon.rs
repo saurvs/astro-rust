@@ -34,8 +34,6 @@ Returns the **inclination** of the **mean lunar equator** with the
 
 # Returns
 
-```(inclination_of_mean_lunar_equator_with_ecliptic)```
-
 * ```inclination_of_mean_lunar_equator_with_ecliptic```: Inclination
 of the mean lunar equator with the ecliptic *(radians)*
 **/
@@ -258,8 +256,6 @@ Returns the **position angle** of the **axis of rotation** of the Moon
 
 # Returns
 
-```position_angle_of_axis_of_rotation```
-
 * ```position_angle_of_axis_of_rotation```: The position angle of the axis
                                             of rotation of the Moon *(radians)*
 
@@ -327,14 +323,14 @@ pub fn TopocenLibrByDiffCorrections(observer_lat: f64, geocen_dec_moon: f64,
 }
 
 /**
-Returns the **geocentric ecliptical coordinates** of the moon
+Returns the **geocentric ecliptic coordinates** of the moon
 
 # Returns
 
 ```(longitude, latitude, distance)```
 
-* ```longitude```: Ecliptical longitude of the Moon *(radians)*
-* ```latitude```: Ecliptical latitude of the Moon *(radians)*
+* ```longitude```: Ecliptic longitude of the Moon *(radians)*
+* ```latitude```: Ecliptic latitude of the Moon *(radians)*
 * ```distance```: Distance between the Moon and the Earth *(kilometers)*
 
 # Arguments
@@ -539,8 +535,6 @@ Returns the longitude of the **mean ascending node** of the Moon
 
 # Returns
 
-```(longitude_mean_ascending_node)```
-
 * ```longitude_mean_ascending_node```: Longitude of the mean ascending
                                        node *(radians)*
 
@@ -559,8 +553,6 @@ pub fn MnAscendNode(JC: f64) -> f64 {
 Returns the longitude of the **true ascending node** of the Moon
 
 # Returns
-
-```(longitude_true_ascending_node)```
 
 * ```longitude_true_ascending_node```: Longitude of the true ascending
                                        node *(radians)*

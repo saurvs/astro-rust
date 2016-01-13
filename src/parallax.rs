@@ -1,22 +1,6 @@
 use angle;
 use planet;
 
-/*
-
-let par = parallax::EqHzParllx(0.37276);
-let asc = 339.530208_f64.to_radians();
-let dec = -15.771083_f64.to_radians();
-let hour_angle = coords::HrAnglFrmObserverLong(angle::DegFrmHMS(1, 40, 45.0).to_radians(),
-angle::DegFrmHMS(7, 47, 27.0).to_radians(), angle::DegFrmHMS(22, 38, 7.0).to_radians());
-let (a,b) = parallax::TopocenEqCoords(asc, dec, 1706.0, 33.35611_f64.to_radians(), par, hour_angle);
-//println!("{:?}", a.to_degrees());
-//println!("{:?}", b.to_degrees());
-
-let (x,y,z) = angle::DMSFrmDeg(b.to_degrees());
-println!("{:?} {:?} {:?}", x,y,z);
-
-*/
-
 pub fn EqHzParllx(dist_to_earth: f64) -> f64 {
     (angle::DegFrmDMS(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
 }
@@ -40,6 +24,7 @@ pub fn TopocenEclCoords(ecl_long: f64, ecl_lat: f64, eq_hz_parllx: f64,
                         observer_ht: f64, geograph_lat: f64,
                         loc_sidr: f64, eclip_oblq: f64,
                         geocen_semdia: f64) -> (f64, f64, f64) {
+                            
     let (rho_sin, rho_cos) = planet::earth::RhoSinAndCosPhi(observer_ht, geograph_lat);
 
     let eq_hz_parllx_sin = eq_hz_parllx.sin();

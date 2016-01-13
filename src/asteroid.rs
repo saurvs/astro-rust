@@ -19,7 +19,7 @@ Returns the **apparent diameter** of an asteroid
 
 # Returns
 
-* ```apparent_diameter```: Apparent diameter of the asteroid *(meters)*
+* ```apprnt_diameter```: Apparent diameter of the asteroid *(meters)*
 
 # Arguments
 

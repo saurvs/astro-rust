@@ -23,7 +23,7 @@ and add it to the **mean** obliquity.
 pub fn MnOblq(JED: f64) -> (f64) {
     let u = time::JulCent(JED) / 100.0;
 
-    (      angle::DegFrmDMS(23, 26, 21.448)
+    (       angle::DegFrmDMS(23, 26, 21.448)
      - u * (angle::DegFrmDMS(0, 0, 4680.93)
      + u * (angle::DegFrmDMS(0, 0, 1.55)
      + u * (angle::DegFrmDMS(0, 0, 1999.25)
@@ -33,8 +33,18 @@ pub fn MnOblq(JED: f64) -> (f64) {
      + u * (angle::DegFrmDMS(0, 0, 7.12)
      - u * (angle::DegFrmDMS(0, 0, 27.87)
      + u * (angle::DegFrmDMS(0, 0, 5.79)
-     + u * angle::DegFrmDMS(0, 0, 2.45)
+     + u *  angle::DegFrmDMS(0, 0, 2.45)
     )))))))))).to_radians()
+}
+
+pub fn MnOblq_IAU(JED: f64) -> (f64) {
+    let u = time::JulCent(JED) / 100.0;
+
+    (       angle::DegFrmDMS(23, 26, 21.448)
+     - u * (angle::DegFrmDMS(0, 0, 46.815)
+     + u * (angle::DegFrmDMS(0, 0, 0.00059)
+     - u *  angle::DegFrmDMS(0, 0, 0.001813)
+    ))).to_radians()
 }
 
 /// Returns the **obliquity** *(radians)* of the ecliptic

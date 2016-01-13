@@ -102,10 +102,10 @@ Returns the **aberration** corrections for a star's equatorial coordinates
 
 # Returns
 
-```(aberration_in_right_ascension, aberration_in_declination)```
+```(abrr_in_right_ascension, abrr_in_declination)```
 
-* ```aberration_in_right_ascension```: Aberration correction for right ascension *(radians)*
-* ```aberration_in_declination```: Aberration correction for declination *(radians)*
+* ```abrr_in_right_ascension```: Aberration correction for right ascension *(radians)*
+* ```abrr_in_declination```: Aberration correction for declination *(radians)*
 
 # Arguments
 
