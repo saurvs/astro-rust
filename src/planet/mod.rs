@@ -31,11 +31,11 @@ pub enum Planet {
 }
 
 /**
-Returns a planet's **geocentric equatorial semidiameter**
+Returns the **equatorial geocentric semidiameter** of a Planet
 
 # Returns
 
-* ```semidiameter```: Geocentric equatorial emidiameter *(radians per AU)*
+* ```semidiameter```: Equatorial geocentric semidiameter *(radians per AU)*
 
 # Arguments
 
@@ -63,7 +63,7 @@ pub fn Semdia(planet: Planet, distance_to_earth: f64) -> f64 {
 }
 
 /**
-Returns a planet's **orbital elements**
+Returns the **orbital elements** of a planet
 
 # Returns
 
@@ -83,7 +83,7 @@ Returns a planet's **orbital elements**
 # Arguments
 
 * ```planet```: [Planet](./enum.Planet.html)
-* ```JD```: Julian day
+* ```JD```: Julian (Emphemeris) day
 **/
 pub fn OrbElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
     let T = time::JulCent(JD);
@@ -188,7 +188,7 @@ Returns a planet's **heliocentric coordinates**.
 # Arguments
 
 * ```planet```: [Planet](./enum.Planet.html)
-* ```JD```: Julian day
+* ```JD```: Julian (Emphemeris) day
 **/
 pub fn HeliocenCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
 

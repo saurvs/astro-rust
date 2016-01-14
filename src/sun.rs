@@ -3,7 +3,7 @@ use planet;
 use std;
 
 /**
-Returns the Sun's **equatorial semidiameter**
+Returns the **equatorial semidiameter** of the Sun
 
 # Arguments
 
@@ -13,6 +13,21 @@ pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 959.63) / distance_to_earth
 }
 
+/**
+Returns the **ecliptic geocentric coordinates** of the Sun
+
+# Returns
+
+```(longitude, latitude, distance)```
+
+* ```longitude```: Ecliptic longitude of the Sun *(radians)*
+* ```latitude```: Ecliptic latitude of the Sun *(radians)*
+* ```distance```: Distance between the Sun and the Earth *(kilometers)*
+
+# Arguments
+
+* ```JD```: Julian (Emphemeris) day
+**/
 pub fn EclGeocenCoords(JD: f64) -> (f64, f64, f64) {
     let (L, B, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
 
@@ -23,7 +38,7 @@ pub fn EclGeocenCoords(JD: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns the **rectangular geocentric equatorial coordinates** of the Sun
+Returns the **rectangular geocentric coordinates** of the Sun
 
 * The positive x-axis is directed towards the Earth's vernal equinox
 (0 degrees longitude)
@@ -51,7 +66,7 @@ celestial pole
 * ```mean_obl```: The *mean* obliquity of the Earth's ecliptic;
                   not *true* obliquity
 **/
-pub fn GeocenRectCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
+pub fn RectGeocenCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
     let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.cos() - sun_geo_lat.sin()*mean_obl.sin());
     let z = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.sin() + sun_geo_lat.sin()*mean_obl.cos());
@@ -66,35 +81,36 @@ of the Sun
 
 ```(P, B0, L0)```
 
-* ```P```: The position angle of the northern extremity of the axis of
+* ```P```: Position angle of the northern extremity of the axis of
            rotation, measured eastwards from the North point of the
            solar disk *(radians)*
-* ```B0```: The heliographic latitude of the center of the solar
+* ```B0```: Heliographic latitude of the center of the solar
             disk *(radians)*
-* ```L0```: The heliographic longitude of the center of the solar
+* ```L0```: Heliographic longitude of the center of the solar
             disk *(radians)*
 
 # Arguments
 
-* ```JED```: Julian Emphemeris day
-* ```app_long```: The apparent longitude of the Sun *(radians)*,
+* ```JD```: Julian (Emphemeris) day
+* ```app_long```: Apparent longitude of the Sun *(radians)*,
                   including the effect of abberation and *not* that
                   of nutation
-* ```app_long_with_nut```: The apparent longitude of the Sun *(radians)*,
-                           including the effect of abberation *and* nutation
-* ```obl_eclip```: The *true* obliquity of the Earth's ecliptic *(radians)*; not
-                   *mean* obliquity
+* ```app_long_with_nut```: Apparent longitude of the Sun *(radians)*,
+                  including the effect of abberation *and* that
+                  of nutation
+* ```oblq_eclip```: *True* obliquity of the Earth's ecliptic *(radians)*,
+                    i.e, *with* correction for nutation
 **/
-pub fn DiskEphemeris(JED: f64, app_long: f64, app_long_with_nut: f64, obl_eclip: f64) -> (f64, f64, f64) {
-    let theta = angle::LimitTo360((JED - 2398220.0) * (360.0/5.38)).to_radians();
+pub fn Ephm(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
+    let theta = angle::LimitTo360((JD - 2398220.0) * (360.0/25.38)).to_radians();
     let I = 7.25_f64.to_radians();
-    let K = (73.6667 + 1.3958333*((JED - 2396758.0) / 36525.0)).to_radians();
+    let K = (73.6667 + 1.3958333*((JD - 2396758.0) / 36525.0)).to_radians();
 
     let z = app_long - K;
     let sin_z = z.sin();
     let cos_z = z.cos();
 
-    let mut x = (-app_long_with_nut.cos() * obl_eclip.tan()).atan();
+    let mut x = (-app_long_with_nut.cos() * oblq_eclip.tan()).atan();
     let mut y = (-cos_z * I.tan()).atan();
     x = (magnitude_limited_to_less_than_90(x.to_degrees())).to_radians();
     y = (magnitude_limited_to_less_than_90(y.to_degrees())).to_radians();
@@ -104,6 +120,15 @@ pub fn DiskEphemeris(JED: f64, app_long: f64, app_long_with_nut: f64, obl_eclip:
     let L_0 = angle::LimitTo360((nu - theta).to_degrees()).to_radians();
 
     (x + y, B_0, L_0)
+}
+
+pub fn CarringSyndRot(C: i64) -> f64 {
+    let M = (281.96 + 26.882476*(C as f64)).to_radians();
+
+      2398140.227 + 27.2752316*(C as f64)
+    + 0.1454 * M.sin()
+    - 0.0085 * (2.0*M).sin()
+    - 0.0141 * (2.0*M).cos()
 }
 
 fn magnitude_limited_to_less_than_90(a: f64) -> f64 {

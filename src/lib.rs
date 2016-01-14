@@ -1,7 +1,7 @@
 pub mod angle;
 pub mod time;
 pub mod coords;
-mod util;
+pub mod util;
 
 pub mod star;
 pub mod binary_star;

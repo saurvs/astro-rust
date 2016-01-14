@@ -18,29 +18,28 @@ pub fn EclCoordsOfNorthPol(julian_century: f64) -> (f64, f64) {
 }
 
 /**
-Returns Mars's
+Return quantites used in the **emphemeris** for physical observations
+of Mars
 
 # Arguments
 
-* ```jed```: Julian Ephemeris day
+* ```JD```: Julian (Ephemeris) day
 **//*
-pub fn Ephemeris(jed: f64, earth_heliocen_long: f64, earth_heliocen_lat: f64,
-                earth_heliocen_rad_vec: f64, mars_heliocen_long: f64,
-                mars_heliocen_lat: f64, mars_heliocen_rad_vec: f64) {
-    let julian_century = time::JulianCentury(jed);
-    let (eclip_north_pole_long, eclip_north_pole_lat) =
-                                   EclipticalCoordsOfNorthPole(julian_century);
+pub fn Ephm(JD: f64, l0: f64, b0: f64, R: f64,
+                     l: f64, b: f64, r: f64) {
+    let JC = time::JulianCentury(JD);
+    let (ecl_north_pole_long, ecl_north_pole_lat) = EclCoordsOfNorthPol(JC);
 
     let tau = 0.0;
     let mut mars_earth_dist = 0.0;
-    let x = 0.0;
-    let y = 0.0;
-    let z = 0.0;
+    let x = r*b.cos()*l.cos() - R*l0.cos();
+    let y = r*b.cos()*l.sin() - R*l0.sin();
+    let z = r*b.sin()         - R*b0.sin();
     mars_earth_dist = (x*x + y*y + z*z).sqrt();
 
-    let mars_geocen_long = y.atan2(x);
-    let mars_geocen_lat = z.atan2((x*x + y*y).sqrt());
-    //let marsocen_earth_declin = -angle::AngularSep();
+    let lambda = y.atan2(x);
+    let beta = z.atan2((x*x + y*y).sqrt());
+    let D_e = -angle::AnglSepr();
 
     let N = (49.5581 + 0.7721*julian_century).to_radians();
 

@@ -229,7 +229,7 @@ pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
 }
 
 /**
-Returns the **apparent sidereal time**
+Returns the **apparent sidereal time** from mean sidereal time
 
 # Returns
 
@@ -239,12 +239,24 @@ Returns the **apparent sidereal time**
 
 * ```mean_sidreal  ```: Mean sidereal time *(radians)*
 * ```nut_in_long```: Nutatation in longitude *(radians)*
-* ```true_oblq```: True obliquity of the ecliptic *(radians)* (with correction for nutation)
+* ```true_oblq```: True obliquity of the ecliptic *(radians)*,
+                   i.e, *with* correction for nutation
 **/
 pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
     mean_sidreal + nut_in_long*true_oblq.cos()
 }
 
+/**
+Returns the **apparent sidereal time** from a Julian day
+
+# Returns
+
+* ```apparent_sidereal_time```: Apparent sidereal time *(radians)*
+
+# Arguments
+
+* ```$x```: Julian day
+**/
 #[macro_export]
 macro_rules! AppSidr {
     ($x: expr) => {{
@@ -255,11 +267,11 @@ macro_rules! AppSidr {
 }
 
 /**
-Returns the **mean sidereal time**
+Returns the **mean sidereal time** from a Julian day
 
 # Returns
 
-* ```mean_sidereal_time```: Mean sidereal time at the Greenwhich meridian *(radians)*
+* ```mean_sidereal_time```: Mean sidereal time *(radians)*
 
 # Arguments
 

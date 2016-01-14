@@ -24,7 +24,7 @@ pub fn TopocenEclCoords(ecl_long: f64, ecl_lat: f64, eq_hz_parllx: f64,
                         observer_ht: f64, geograph_lat: f64,
                         loc_sidr: f64, eclip_oblq: f64,
                         geocen_semdia: f64) -> (f64, f64, f64) {
-                            
+
     let (rho_sin, rho_cos) = planet::earth::RhoSinAndCosPhi(observer_ht, geograph_lat);
 
     let eq_hz_parllx_sin = eq_hz_parllx.sin();
