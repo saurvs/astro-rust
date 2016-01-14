@@ -62,7 +62,7 @@ altitude.
 * ```apprnt_alt```: Apparent altitude *(radians)*
 **/
 pub fn ApproxRefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
-    if (apprnt_alt.to_degrees() == 90.0) { 0.0 }
+    if apprnt_alt.to_degrees() == 90.0 { 0.0 }
     else {
         let a =   apprnt_alt.to_degrees()
                 + 7.31 / (apprnt_alt.to_degrees() + 4.4);
@@ -90,7 +90,7 @@ is consistent with ApproxRefractionFromApparentAltitude() to within
 * ```true_alt```: True altitude *(radians)*
 **/
 pub fn ApproxRefracFromTrueAlt(true_alt: f64) -> f64 {
-    if (true_alt.to_degrees() == 90.0) { 0.0 }
+    if true_alt.to_degrees() == 90.0 { 0.0 }
     else {
         let a = (   true_alt.to_degrees()
                   + 10.3 / (true_alt.to_degrees() + 5.11)

@@ -11,6 +11,7 @@ pub mod misc;
 pub mod orbit;
 
 pub mod nutation;
+pub mod aberration;
 pub mod atmos_refrac;
 pub mod parallax;
 pub mod precession;

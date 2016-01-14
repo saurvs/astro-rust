@@ -2,25 +2,20 @@ use angle;
 use time;
 
 /**
-Returns the **nutation corrections** for ecliptical longitude
-and obliquity
+Returns the **nutation** in **ecliptical longitude** and **obliquity**
 
 # Returns
 
-Returns the nutation corrections that need to be added to the
-ecliptical longitude and the obliquity of the ecliptic to account for
-the Earth's nutation. Nutation does *not* affect ecliptical latitude.
+```(nut_in_long, nut_in_oblq)```
 
-```(nutation_in_longitude, nutation_in_obliquity)```
-
-* ```nutation_in_longitude```: Nutation correction for ecliptical
-                               longitude *(radians)*
-* ```nutation_in_obliquity```: Nutation correction for obliquity
-                               of the ecliptic *(radians)*
+* ```nut_in_long```: Nutation correction for ecliptic
+                     longitude *(radians)*
+* ```nut_in_oblq```: Nutation correction for obliquity
+                     of the ecliptic *(radians)*
 
 # Arguments
 
-```JD```: Julian Ephemeris day
+```JD```: Julian (Ephemeris) day
 **/
 pub fn Corrections(JD: f64) -> (f64, f64) {
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
@@ -112,4 +107,34 @@ pub fn Corrections(JD: f64) -> (f64, f64) {
     }
 
     (nut_in_long.to_radians(), nut_in_obl.to_radians())
+}
+
+/**
+Returns the **nutation** in **equatorial coordinates**
+
+The mean equatorial coordinates should not be close to one of the
+celestial poles. The returned values of nutation are only first-order
+corrections.
+
+# Returns
+
+```(nut_in_asc, nut_in_dec)```
+
+* ```nut_in_asc```: Nutation correction for right ascension *(radians)*
+* ```nut_in_dec```: Nutation correction for declination *(radians)*
+
+# Arguments
+
+```asc```: Right ascension *(radians)*
+```dec```: Declination *(radians)*
+```nut_in_long```: Nutation in longitude *(radians)*
+```nut_in_oblq```: Nutation in obliquity *(radians)*
+```tru_oblq```: True obliquity of the ecliptic *(radians)*
+**/
+pub fn CorrectionsInEqCoords(asc: f64, dec: f64, nut_in_long: f64, nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {
+    let nut_asc =   (tru_oblq.cos() + tru_oblq.sin()*asc.sin()*dec.tan()) * nut_in_long
+                  - asc.cos() * dec.tan() * nut_in_oblq;
+    let nut_dec = tru_oblq.sin()*asc.cos()*nut_in_long + asc.sin()*nut_in_oblq;
+
+    (nut_asc, nut_dec)
 }

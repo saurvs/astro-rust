@@ -4,15 +4,18 @@
 
 Essential algorithms for fundamental astronomy.
 
-* Find the geocentric coordinates of the Sun and the Moon, and the heliocentric coordinates the 8 planets and Pluto.
-* Transform coordinates between equatorial, ecliptic, topocentric, horizontal, and galactic coordinate systems.
+* Find the geocentric coordinates of the Sun and the Moon.
+* Find the heliocentric and geocentric coordinates of all the 8 planets (using the *full* VSOP87-D solution), and also Pluto.
+* Transform coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems.
 * Find the obliquity of the ecliptic and nutation in longitude and obliquity.
-* Find the Julian day from Gregorian or Julian dates, and vice-versa. Also find a surprisingly [good approximation](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) for delta T in recent years.
-* Correct for atmospheric refraction in altitude, including the effect of local pressure and temperature.
+* Find the Julian day from Gregorian or Julian dates, and vice-versa. And find a surprisingly [good approximation](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) for delta T in recent years.
+* Correct for atmospheric refraction in altitudes, including the effect of local pressure and temperature.
 * Find quantities related to stars, binary stars and asteroids such as magnitudes, parallax, diameters and so on.
 * Find geometric quantities related to elliptic, parabolic, near-parabolic orbits and bodies that travel in them.
 
-See the  [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
+See the full list of algorithms below.
+
+Also, see the [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
 
 ## Usage
 
@@ -124,6 +127,29 @@ See the  [API Documentation](https://saurvs.github.io/astro-rust/) for this Carg
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
+
+# Algorithms
+
+The algorithms implemented so far allow you to calculate or perform the following:
+
+* **Time** Julian to Gregorian and Julian dates, and vice-versa. Good approximations to delta T. Mean and apparent sidereal time.
+* **Transform** coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems
+* **Transform** heliocentric coordinates to ecliptic and equatorial geocentric coordinates
+* **All 8 Planets** heliocentric coordinates (full VSOP87-D solution), orbital elements, apparent magnitudes, equatorial semidiameters, times of passage through nodes, illuminated fraction of the disk
+* **Pluto** heliocentric coordinates, apparent magnitude, equatorial semidiameter
+* **Earth** high-accuracy geodesic distances
+* **Moon** ecliptic geocentric coordinates, optical, physical and topocentric librations, times of passage through nodes,
+illuminated fraction of the disk
+* **Sun** ecliptic geocentric coordinates, rectangular geocentric coordinates, ephemeris for physical observations, times of Carrington's synodic rotation
+* **Mars** ecliptic coordinates of the North pole, ephemeris for physical observations
+* **Jupiter**
+* **Saturn**
+* **Stars** combined magnitude of two or more stars, absolute magnitude from parallax
+* **Binary stars** radius vector, angular separation, eccentricity of the apparent orbit, apparent position angle, and mean annual motion and mean anomaly of the companion star
+* **Asteroids** true and apparent diameters
+* **Atmospheric refraction** true and apparent altitude, effect of local pressure and temperature
+* **Ecliptic** mean obliquity by IAU and Laskar
+* **Nutation** nutation in longitude and obliquity
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

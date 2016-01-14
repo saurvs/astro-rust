@@ -1,4 +1,5 @@
 use angle;
+use planet;
 use time;
 
 /**
@@ -10,6 +11,10 @@ Returns Pluto's **equatorial semidiameter**
 **/
 pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 2.07) / distance_to_earth
+}
+
+pub fn ApprntMag_84(planet: planet::Planet, i: f64, delta: f64, r: f64) -> f64 {
+    5.0*(r*delta).log10() - 1.0
 }
 
 /**

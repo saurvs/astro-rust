@@ -50,8 +50,7 @@ pub fn Semdia(planet: Planet, distance_to_earth: f64) -> f64 {
         Planet::Mercury => s = angle::DegFrmDMS(0, 0, 3.36),
         Planet::Venus => s = angle::DegFrmDMS(0, 0, 8.41),
         Planet::Earth => panic!("Planet::Earth was passed to the function
-                                 planet::Semidiameter(). This does not
-                                 make logical sense."),
+                                 planet::Semidiameter()."),
         Planet::Mars => s = angle::DegFrmDMS(0, 0, 4.68),
         Planet::Jupiter => s = jupiter::EqSemdia(1.0),
         Planet::Saturn => s = saturn::EqSemdia(1.0),
@@ -296,4 +295,38 @@ pub fn HeliocenCoordsFrmOrbElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) 
 
     (y.atan2(x),
      z.atan2((x*x + y*y).sqrt()))
+}
+
+pub fn ApprntMag_Muller(planet: Planet, i: f64, delta: f64, r: f64) -> f64 {
+    let x = 5.0*(r*delta).log10();
+    match planet {
+        Planet::Mercury => 1.16 + x + (i - 50.0)*(0.02838 + (i - 50.0)*0.000102),
+        Planet::Venus => -4.0 + x + i*(0.01322 + i*i*0.0000004247),
+        Planet::Earth => panic!("Planet::Earth was passed to the function
+                                 planet::ApprntMag_Muller()."),
+        Planet::Mars => -1.3 + x + i*0.01486,
+        Planet::Jupiter => -8.93 + x,
+        Planet::Saturn => panic!("Planet::Saturn was passed to the function
+                                 planet::ApprntMag_Muller(). Use the function
+                                 planet::Saturn::ApprntMag_Muller() instead."),
+        Planet::Uranus => -6.85 + x,
+        Planet::Neptune => -7.05 + x,
+    }
+}
+
+pub fn ApprntMag_84(planet: Planet, i: f64, delta: f64, r: f64) -> f64 {
+    let x = 5.0*(r*delta).log10();
+    match planet {
+        Planet::Mercury => -0.42 + x + i*(0.038 - i*(0.000273 - i*0.000002)),
+        Planet::Venus => -4.40 + x + i*(0.0009 + i*(0.000239 - i*0.00000065)),
+        Planet::Earth => panic!("Planet::Earth was passed to the function
+                                 planet::ApprntMag_84()."),
+        Planet::Mars => -1.52 + x + i*0.016,
+        Planet::Jupiter => -9.4 + x + i*0.005,
+        Planet::Saturn => panic!("Planet::Saturn was passed to the function
+                                 planet::ApprntMag_84(). Use the function
+                                 planet::Saturn::ApprntMag_84() instead."),
+        Planet::Uranus => -7.19 + x,
+        Planet::Neptune => -6.87 + x,
+    }
 }

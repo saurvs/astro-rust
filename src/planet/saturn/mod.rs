@@ -1,5 +1,15 @@
+pub mod ring;
+
 use angle;
 use planet;
+
+pub fn ApprntMag_Muller(planet: planet::Planet, i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
+    - 8.68
+    + 5.0*(r*delta).log10()
+    + 0.044*delU.abs()
+    - 2.6*B.abs().sin()
+    + 1.25*B.sin().powi(2)
+}
 
 fn equatorial_unit_semidiameter() -> f64 {
     angle::DegFrmDMS(0, 0, 82.73)
