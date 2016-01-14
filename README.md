@@ -5,7 +5,7 @@
 Essential algorithms for fundamental astronomy.
 
 * Find the geocentric coordinates of the Sun and the Moon.
-* Find the heliocentric and geocentric coordinates of all the 8 planets (using the *full* VSOP87-D solution), and also Pluto.
+* Find the heliocentric and geocentric coordinates of all the 8 planets (using the *full* VSOP87-D solution), and also of Pluto.
 * Transform coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems.
 * Find the obliquity of the ecliptic and nutation in longitude and obliquity.
 * Find the Julian day from Gregorian or Julian dates, and vice-versa. And find a surprisingly [good approximation](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) for delta T in recent years.
@@ -142,8 +142,6 @@ The algorithms implemented so far allow you to calculate or perform the followin
 illuminated fraction of the disk
 * **Sun** ecliptic geocentric coordinates, rectangular geocentric coordinates, ephemeris for physical observations, times of Carrington's synodic rotation
 * **Mars** ecliptic coordinates of the North pole, ephemeris for physical observations
-* **Jupiter**
-* **Saturn**
 * **Stars** combined magnitude of two or more stars, absolute magnitude from parallax
 * **Binary stars** radius vector, angular separation, eccentricity of the apparent orbit, apparent position angle, and mean annual motion and mean anomaly of the companion star
 * **Asteroids** true and apparent diameters
