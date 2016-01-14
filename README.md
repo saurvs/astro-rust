@@ -9,8 +9,8 @@ Essential algorithms for fundamental astronomy.
 * Transform coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems.
 * Find the obliquity of the ecliptic and nutation in longitude and obliquity.
 * Find the Julian day from Gregorian or Julian dates, and vice-versa. And find a surprisingly [good approximation](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) for delta T in recent years.
-* Correct for atmospheric refraction in altitudes, including the effect of local pressure and temperature.
-* Find quantities related to stars, binary stars and asteroids such as magnitudes, parallax, diameters and so on.
+* Correct for atmospheric refraction in local horizontal altitudes, including the effect of local pressure and temperature.
+* Find quantities related to stars, binary stars and asteroids such as magnitudes, brightness ratios, parallaxes, diameters, radius vectors and so on.
 * Find geometric quantities related to elliptic, parabolic, near-parabolic orbits and bodies that travel in them.
 
 See the full list of algorithms below.
