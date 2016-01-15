@@ -218,7 +218,7 @@ macro_rules! EqFrmEcl {
 // Local horizontal coordinates from equatorial coordinates
 
 /**
-Returns the **azimuth** from **declination**
+Returns the **azimuth** from **equatorial coordinates**
 
 # Returns
 
@@ -230,7 +230,7 @@ Returns the **azimuth** from **declination**
 * ```dec```: Declination *(radians)*
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 **/
-pub fn Az(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
+pub fn AzFrmEqCoords(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
     hour_angle.sin()
     .atan2(   hour_angle.cos()  * observer_lat.sin()
             - dec.tan() * observer_lat.cos()
@@ -238,7 +238,7 @@ pub fn Az(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
 }
 
 /**
-Returns the **altitude** from **declination**
+Returns the **altitude** from **equatorial coordinates**
 
 # Returns
 
@@ -250,7 +250,7 @@ Returns the **altitude** from **declination**
 * ```dec```: Declination *(radians)*
 * ```observer_lat```: Observer's geographical latitude *(radians)*
 **/
-pub fn Alt(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
+pub fn AltFrmEqCoords(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
     (   observer_lat.sin() * dec.sin()
       + observer_lat.cos() * dec.cos() * hour_angle.cos()
     ).asin()
@@ -275,8 +275,8 @@ Returns **local horizontal coordinates** from **equatorial coordinates**
 #[macro_export]
 macro_rules! LocHzFrmEq {
     ($x: expr, $y: expr, $z: expr) => {{
-        (astro::coords::Az($x, $y, $z),
-         astro::coords::Alt($x, $y, $z))
+        (astro::coords::AzFrmEqCoords($x, $y, $z),
+         astro::coords::AltFrmEqCoords($x, $y, $z))
     }};
 }
 

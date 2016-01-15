@@ -232,11 +232,11 @@ pub fn MnMotion(semimaj_ax: f64) -> f64 {
     0.01720209895 / (semimaj_ax.powf(1.5))
 }
 
-pub fn TimeOfPassageThroughAscendNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
+pub fn TimeOfPassThroughAscendNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
     time_of_passage_through_node(-w, n, a, e, T)
 }
 
-pub fn TimeOfPassageThroughDescendNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
+pub fn TimeOfPassThroughDescendNode(w: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
     time_of_passage_through_node(180_f64.to_radians()*w, n, a, e, T)
 }
 

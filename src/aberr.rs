@@ -1,14 +1,14 @@
 use time;
 
 /**
-Returns the **aberration** corrections in **equatorial coordinates**
+Returns the **aberration** in **equatorial coordinates**
 
 # Returns
 
 ```(abrr_in_asc, abrr_in_dec)```
 
-* ```abrr_in_asc```: Aberration correction for right ascension *(radians)*
-* ```abrr_in_dec```: Aberration correction for declination *(radians)*
+* ```abrr_in_asc```: Aberration in right ascension *(radians)*
+* ```abrr_in_dec```: Aberration in declination *(radians)*
 
 # Arguments
 
@@ -16,7 +16,7 @@ Returns the **aberration** corrections in **equatorial coordinates**
 * ```dec```: Declination *(radians)*
 * ```JD```: Julian (Emphemeris) day
 **/
-pub fn Aberr(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
+pub fn AberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     let t = time::JulCent(JD);
 
     let l2 = 3.1761467 + 1021.3285546*t;

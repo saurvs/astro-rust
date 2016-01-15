@@ -147,7 +147,7 @@ illuminated fraction of the disk
 * **Asteroids** true and apparent diameters
 * **Atmospheric refraction** true and apparent altitude, effect of local pressure and temperature
 * **Ecliptic** mean obliquity by IAU and Laskar
-* **Nutation** nutation in longitude and obliquity
+* **Nutation** nutation in ecliptic longitude, obliquity, and equatorial coordinates 
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

@@ -260,7 +260,7 @@ Returns the **apparent sidereal time** from a Julian day
 #[macro_export]
 macro_rules! AppSidr {
     ($x: expr) => {{
-        let (nut_in_long, nut_in_oblq) = astro::nutation::Corrections($x);
+        let (nut_in_long, nut_in_oblq) = astro::nutation::Nutation($x);
         let eclip_oblq = astro::ecliptic::MnOblq($x);
         astro::time::AppSidr(astro::time::MnSidr($x), nut_in_long, eclip_oblq + nut_in_oblq)
     }};

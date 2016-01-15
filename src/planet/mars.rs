@@ -67,7 +67,7 @@ pub fn Ephm(JD: f64, l0: f64, b0: f64, R: f64,
     lambda0 += nut_in_long;
     let true_oblq_eclip = mean_oblq_eclip + nut_in_oblq;
 
-    let (nut_in_long, nut_in_oblq) = nutation::Corrections(jed);
+    let (nut_in_long, nut_in_oblq) = nutation::Nutation(jed);
     let true_oblq_ecliptic = mean_oblq_ecliptic + nut_in_oblq;
 
     let (asc01, dec01) = EqFrmEcl!(lambda0, beta0, true_oblq_ecliptic);

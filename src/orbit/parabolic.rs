@@ -39,7 +39,7 @@ Returns the **true anomaly** and **radius vector** *(AU)* of a body in a parabol
 * ```time_passg_perih```: Time of passage in perihelion
 * ```perih_dist```: Perihelion distance *(AU)*
 **/
-pub fn Pos(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64, time_passg_perih: f64, t: f64, perih_dist: f64) -> (f64, f64) {
+pub fn TruAnomAndRadVec(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64, time_passg_perih: f64, t: f64, perih_dist: f64) -> (f64, f64) {
     let W = 0.03649116245 * (t - time_passg_perih) / perih_dist.powf(1.5);
 
     let G = W / 2.0;
@@ -51,11 +51,11 @@ pub fn Pos(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64, time_pas
     (v, r)
 }
 
-pub fn TimeOfPassageThroughAscendNode(w: f64, q: f64, T: f64) -> (f64, f64) {
+pub fn TimeOfPassThroughAscendNode(w: f64, q: f64, T: f64) -> (f64, f64) {
     time_of_passage_through_node(-1.0 * w, q, T)
 }
 
-pub fn TimeOfPassageThroughDescendNode(w: f64, q: f64, T: f64) -> (f64, f64) {
+pub fn TimeOfPassThroughDescendNode(w: f64, q: f64, T: f64) -> (f64, f64) {
     time_of_passage_through_node(180_f64.to_radians() * w, q, T)
 }
 
