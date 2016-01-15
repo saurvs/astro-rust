@@ -1,5 +1,5 @@
 /**
-Returns the **parallactic angle** of a celestial body
+Returns the parallactic angle of a celestial body
 
 # Returns
 
@@ -20,7 +20,7 @@ pub fn ParllcAngl(observer_lat: f64, hour_angle: f64, declin: f64) -> f64 {
 }
 
 /**
-Returns the **parallactic angle** of a celestial body on the horizon
+Returns the parallactic angle of a celestial body on the horizon
 
 # Returns
 

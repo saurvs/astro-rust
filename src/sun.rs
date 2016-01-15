@@ -3,7 +3,7 @@ use planet;
 use std;
 
 /**
-Returns the **equatorial semidiameter** of the Sun
+Returns the equatorial semidiameter of the Sun
 
 # Arguments
 
@@ -14,7 +14,7 @@ pub fn Semdia(distance_to_earth: f64) -> f64 {
 }
 
 /**
-Returns the **ecliptic geocentric coordinates** of the Sun
+Returns the ecliptic geocentric coordinates of the Sun
 
 # Returns
 
@@ -26,7 +26,7 @@ Returns the **ecliptic geocentric coordinates** of the Sun
 
 # Arguments
 
-* ```JD```: Julian (Emphemeris) day
+* ```JD```: Julian (Ephemeris) day
 **/
 pub fn EclGeocenCoords(JD: f64) -> (f64, f64, f64) {
     let (L, B, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
@@ -38,7 +38,7 @@ pub fn EclGeocenCoords(JD: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns the **rectangular geocentric coordinates** of the Sun
+Returns the rectangular geocentric coordinates of the Sun
 
 * The positive x-axis is directed towards the Earth's vernal equinox
 (0 degrees longitude)
@@ -63,8 +63,7 @@ celestial pole
 * ```sun_geo_lat```: The Sun's geometric latitude (*radians*),
                      *without* corrections for nutation and abberation
 * ```sun_rad_vec```: The Sun's geometric radius vector (*AU*)
-* ```mean_obl```: The *mean* obliquity of the Earth's ecliptic;
-                  not *true* obliquity
+* ```mean_obl```: Mean obliquity of the ecliptic
 **/
 pub fn RectGeocenCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
@@ -74,7 +73,7 @@ pub fn RectGeocenCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, m
 }
 
 /**
-Return quantites used in the **emphemeris** for physical observations
+Return quantites used in the emphemeris for physical observations
 of the Sun
 
 # Returns
@@ -91,15 +90,14 @@ of the Sun
 
 # Arguments
 
-* ```JD```: Julian (Emphemeris) day
+* ```JD```: Julian (Ephemeris) day
 * ```app_long```: Apparent longitude of the Sun (*radians*),
                   including the effect of abberation and *not* that
                   of nutation
 * ```app_long_with_nut```: Apparent longitude of the Sun (*radians*),
                   including the effect of abberation *and* that
                   of nutation
-* ```oblq_eclip```: *True* obliquity of the Earth's ecliptic (*radians*),
-                    i.e, *with* correction for nutation
+* ```oblq_eclip```: True obliquity of the ecliptic (*radians*)
 **/
 pub fn Ephm(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
     let theta = angle::LimitTo360((JD - 2398220.0) * (360.0/25.38)).to_radians();

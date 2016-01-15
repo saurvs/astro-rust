@@ -31,6 +31,50 @@ pub enum Planet {
 }
 
 /**
+Returns the illuminated fraction of a planet's disk from
+it's phase angle
+
+# Returns
+
+* ```illum_frac```: Illuminated fraction of the planet's
+                    disk
+
+# Arguments
+
+* ```i```: Phase angle of a planet (*radians*)
+**/
+pub fn IllumFracFrmPhaseAngl(i: f64) -> f64 {
+
+    (1.0 + i.cos()) / 2.0
+
+}
+
+/**
+Returns the illuminated fraction of a planet's disk from
+it's distance to the Sun and the Earth
+
+# Returns
+
+* ```illum_frac```: Illuminated fraction of the planet's
+                    disk
+
+# Arguments
+
+* ```dist_to_sun```: A planet's distance to the Sun (*AU*)
+* ```dist_to_earth```: A planet's distance to the Earth (*AU*)
+* ```earth_sun_dist```: Sun-Earth distance (*AU*)
+**/
+pub fn IllumFracFrmDist(dist_to_sun: f64, dist_to_earth: f64,
+                        earth_sun_dist: f64) -> f64 {
+
+    let x = dist_to_sun + dist_to_earth;
+
+      (x*x - earth_sun_dist*earth_sun_dist)
+    / 4.0 * dist_to_sun * dist_to_earth
+
+}
+
+/**
 Returns the **equatorial geocentric semidiameter** of a Planet
 
 # Returns

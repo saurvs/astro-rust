@@ -1,7 +1,7 @@
 use time;
 
 /**
-Returns the **combined magnitude** of two stars
+Returns the combined magnitude of two stars
 
 # Arguments
 
@@ -13,7 +13,7 @@ pub fn CombinedMag(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the **combined magnitude** of two or more stars
+Returns the combined magnitude of two or more stars
 
 # Arguments
 
@@ -28,7 +28,7 @@ pub fn CombinedMagOfMany(m: &[f64]) -> f64 {
 }
 
 /**
-Returns the **brightness ratio** of two stars
+Returns the brightness ratio of two stars
 
 # Arguments
 
@@ -40,7 +40,7 @@ pub fn BrightnessRatio(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the **difference in magnitude** of two stars
+Returns the difference in magnitude of two stars
 
 # Arguments
 
@@ -51,7 +51,7 @@ pub fn MagDiff(br: f64) -> f64 {
 }
 
 /**
-Returns the **absolute magnitude** of a star from its parallax
+Returns the absolute magnitude of a star from its parallax
 
 # Arguments
 
@@ -64,7 +64,7 @@ pub fn AbsMagFrmParallax(mut par: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the **absolute magnitude** of a star from its distance from earth
+Returns the absolute magnitude of a star from its distance from earth
 
 # Arguments
 
@@ -76,9 +76,9 @@ pub fn AbsMagFrmDist(d: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the **angle** between the vector from a star to the
-**Earth's northern celestial pole** and vector from the same star to the
-**north pole** of the **ecliptic**
+Returns the angle between the vector from a star to the
+Earth's northern celestial pole and vector from the same star to the
+north pole of the ecliptic
 
 # Returns
 

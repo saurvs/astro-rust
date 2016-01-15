@@ -631,7 +631,7 @@ Returns the **illuminated fraction** of the Moon, using **equatorial coordinates
 * ```earth_sun_dist```: Distance between the Earth and the Sun
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
-pub fn IllmFracFrmEq(sun_eq_point: &coords::EqPoint,
+pub fn IllmFracFrmEqCoords(sun_eq_point: &coords::EqPoint,
                                                moon_eq_point: &coords::EqPoint,
                                                earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
     illuminated_fraction(sun_eq_point.AnglSepr(&moon_eq_point).acos(),
@@ -651,7 +651,7 @@ Return the **illuminated fraction** of the Moon, using **eclipctical coordinates
 * ```earth_sun_dist```: Distance between the Earth and the Sun
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
-pub fn IllmFracFrmEcl(moon_long: f64, moon_lat: f64, sun_long: f64,
+pub fn IllmFracFrmEclCoords(moon_long: f64, moon_lat: f64, sun_long: f64,
                                                earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
     illuminated_fraction((moon_lat.cos()*(moon_long - sun_long).cos()).acos(),
                          earth_moon_dist, earth_sun_dist)

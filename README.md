@@ -1,21 +1,12 @@
-# astro-rust (work in progress)
+# astro-rust
 
 [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-Essential algorithms for fundamental astronomy.
+```astro-rust``` implements, in the rust programming language, essential algorithms used in astronomy for accurate calculations.
 
-* Find the geocentric coordinates of the Sun and the Moon.
-* Find the heliocentric and geocentric coordinates of all the 8 planets (using the *full* VSOP87-D solution), and also of Pluto.
-* Transform coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems.
-* Find the obliquity of the ecliptic and nutation in longitude and obliquity.
-* Find the Julian day from Gregorian or Julian dates, and vice-versa. And find a surprisingly [good approximation](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) for delta T in recent years.
-* Correct for atmospheric refraction in local horizontal altitudes, including the effect of local pressure and temperature.
-* Find quantities related to stars, binary stars and asteroids such as magnitudes, brightness ratios, parallaxes, diameters, radius vectors and so on.
-* Find geometric quantities related to elliptic, parabolic, near-parabolic orbits and bodies that travel in them.
+The main reference used for implementation is the comprehensive set of algorithms described in book *Astronomical Algorithms by Jean Meeus*, that includes methods for calculating the positions of the planets, the sun, the moon, converting between different celestial coordinates systems, finding corrections for nutation and atmospheric refraction, doing astrometry, and so on.
 
-See the full list of algorithms below.
-
-Also, see the [API Documentation](https://saurvs.github.io/astro-rust/) for this Cargo library.
+Detailed information about functions and modules available in this library is in the [Rust API Documentation](https://saurvs.github.io/astro-rust/), and the full listing of algorithms available is given below.
 
 ## Usage
 
@@ -128,11 +119,11 @@ Also, see the [API Documentation](https://saurvs.github.io/astro-rust/) for this
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
 
-# Algorithms
+## Algorithms
 
-The algorithms implemented so far allow you to calculate or perform the following:
+Algorithms implemented in this library so far allow you to calculate or perform the following:
 
-* **Time** Julian to Gregorian and Julian dates, and vice-versa. Good approximations to delta T. Mean and apparent sidereal time.
+* **Time** Julian day from Gregorian and Julian dates, and vice-versa. Analytic approximation to delta T. Mean and apparent sidereal time.
 * **Transform** coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems
 * **Transform** heliocentric coordinates to ecliptic and equatorial geocentric coordinates
 * **All 8 Planets** heliocentric coordinates (full VSOP87-D solution), orbital elements, apparent magnitudes, equatorial semidiameters, times of passage through nodes, illuminated fraction of the disk
@@ -145,9 +136,19 @@ illuminated fraction of the disk
 * **Stars** combined magnitude of two or more stars, absolute magnitude from parallax
 * **Binary stars** radius vector, angular separation, eccentricity of the apparent orbit, apparent position angle, and mean annual motion and mean anomaly of the companion star
 * **Asteroids** true and apparent diameters
-* **Atmospheric refraction** true and apparent altitude, effect of local pressure and temperature
+* **Atmospheric refraction** apparent altitude from true altitude and vice-versa, effect of local pressure and temperature
 * **Ecliptic** mean obliquity by IAU and Laskar
-* **Nutation** nutation in ecliptic longitude, obliquity, and equatorial coordinates 
+* **Nutation** nutation in ecliptic longitude, obliquity, and equatorial coordinates
+
+## Contributing 
+
+The goal of this project is to build a polished, production-quality library with a well-tested, comprehensive implementation of algorithms used in fundamental astronomy, a well-designed Rust API, and an excellent documentation of code and coverage.
+
+Anyone interested to contribute in any way possible is encouraged to do so. 
+
+A good start would be to go through Meeus's book and browse the API documentation, read the code, and submit a pull request if anything warrants an addition or a modification.
+
+Even refactoring of code and small optimisations here and there is much encouraged.
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

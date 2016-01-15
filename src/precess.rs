@@ -3,7 +3,7 @@ use std;
 use time;
 
 /**
-Returns the **annual precession** in **equatorial coordinates** for a new epoch
+Returns the annual precession in equatorial coordinates for a new epoch
 
 # Returns
 

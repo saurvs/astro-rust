@@ -3,7 +3,7 @@ use planet;
 use time;
 
 /**
-Returns Pluto's **equatorial semidiameter**
+Returns Pluto's equatorial semidiameter
 
 # Arguments
 
@@ -18,7 +18,7 @@ pub fn ApprntMag_84(planet: planet::Planet, i: f64, delta: f64, r: f64) -> f64 {
 }
 
 /**
-Returns Pluto's **heliocentric coordinates**.
+Returns Pluto's heliocentric coordinates
 
 **Valid only for the years 1885 AD - 2099 AD.**
 

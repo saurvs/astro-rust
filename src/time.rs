@@ -3,7 +3,7 @@ use ecliptic;
 use nutation;
 use util;
 
-/// Represents a **calendar type**
+/// Represents a calendar type
 pub enum CalType {
     /// Gregorian calendar
     Gregorian,
@@ -11,7 +11,7 @@ pub enum CalType {
     Julian
 }
 
-/// Represents a **date** with **year, month, decimal day** and **calendar type**
+/// Represents a date with year, month, decimal day and calendar type
 pub struct Date {
     /// Year
     pub year: i32,
@@ -25,7 +25,7 @@ pub struct Date {
     pub cal_type: CalType,
 }
 
-/// Represents a **day of month** with **hours, minutes and seconds**
+/// Represents a day of month with hours, minutes and seconds
 pub struct DayOfMonth {
     /// Day of month
     ///
@@ -46,7 +46,7 @@ pub struct DayOfMonth {
 }
 
 /**
-Returns the **decimal day** for a ```DayOfMonth```
+Returns the decimal day for a ```DayOfMonth```
 
 * ```day_of_month```: A ```day_of_month``` struct
 **/
@@ -58,7 +58,7 @@ pub fn DecimalDay(day: &DayOfMonth) -> f64 {
 }
 
 /**
-Returns the **decimal year** for a ```Date```
+Returns the decimal year for a ```Date```
 
 * ```date```: A ```date``` struct
 **/
@@ -88,7 +88,7 @@ pub fn DecimalYear(date: &Date) -> f64 {
 }
 
 /**
-Checks if a **year** is a **leap year**
+Checks if a year is a leap year
 
 # Arguments
 
@@ -108,25 +108,25 @@ pub fn IsLeapYear(year: i32, cal_type: &CalType) -> (bool) {
 }
 
 /**
-Returns the **Julian century**
+Returns the Julian century for a Julian day
 
 # Arguments
 
-* ```JED```: Julian Emphemeris day
+* ```JD```: Julian (Ephemeris) day
 **/
-pub fn JulCent(JED: f64) -> f64 {
-    (JED - 2451545.0) / 36525.0
+pub fn JulCent(JD: f64) -> f64 {
+    (JD - 2451545.0) / 36525.0
 }
 
 /**
-Returns the **Julian millenium**
+Returns the Julian millenium for a Julian day
 
 # Arguments
 
-* ```JED```: Julian Emphemeris day
+* ```JD```: Julian (Ephemeris) day
 **/
-pub fn JulMill(JED: f64) -> f64 {
-    (JED - 2451545.0) / 365250.0
+pub fn JulMill(JD: f64) -> f64 {
+    (JD - 2451545.0) / 365250.0
 }
 
 /**
@@ -160,7 +160,8 @@ pub fn JulDay(date: &Date) -> f64 {
 }
 
 /**
-Returns the **Julian Emphemeris day**
+Returns the Julian Emphemeris day from a
+Julian day
 
 # Arguments
 
@@ -172,7 +173,7 @@ pub fn JulEphmDay(JD: f64, delT: f64) -> f64 {
 }
 
 /**
-Returns a ```Date``` **equivalent** to a given **Julian day**
+Returns a ```Date``` equivalent to a given Julian day
 
 # Returns
 
@@ -239,15 +240,14 @@ Returns the **apparent sidereal time** from mean sidereal time
 
 * ```mean_sidreal  ```: Mean sidereal time (*radians*)
 * ```nut_in_long```: Nutatation in longitude (*radians*)
-* ```true_oblq```: True obliquity of the ecliptic (*radians*),
-                   i.e, *with* correction for nutation
+* ```true_oblq```: True obliquity of the ecliptic (*radians*)
 **/
 pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
     mean_sidreal + nut_in_long*true_oblq.cos()
 }
 
 /**
-Returns the **apparent sidereal time** from a Julian day
+Returns the **apparent sidereal time** for a Julian day
 
 # Returns
 
@@ -267,7 +267,7 @@ macro_rules! AppSidr {
 }
 
 /**
-Returns the **mean sidereal time** from a Julian day
+Returns the **mean sidereal time** for a Julian day
 
 # Returns
 
@@ -288,9 +288,9 @@ pub fn MnSidr(JD: f64) -> f64 {
 }
 
 /**
-Returns an approximate value of **ΔT** for a given year and month
+Returns an approximate value of ΔT for a given year and month
 
-This function approximates **ΔT** from polynomial expressions using a
+This function approximates ΔT from polynomial expressions using a
 method different from that given in the *Meeus* book. The method
 used is given [here](http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html);
 it covers a far wider time range.
@@ -298,7 +298,7 @@ it covers a far wider time range.
 # Arguments
 
 * ```year```: Year
-* ```month```: Month *(range: 1 - 12)*
+* ```month```: Month (*range: 1 - 12*)
 **/
 pub fn ApproxDelT(year: i32, month: u8) -> f64 {
     let y = (year as f64) + ((month as f64) - 0.5) / 12.0;
