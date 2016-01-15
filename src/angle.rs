@@ -3,10 +3,10 @@ Returns the **angular separation** between two angular points
 
 # Arguments
 
-* ```p1a1```: Angle 1 of point 1 *(radians)*
-* ```p1a2```: Angle 2 of point 1 *(radians)*
-* ```p2a1```: Angle 1 of point 2 *(radians)*
-* ```p2a2```: Angle 2 of point 2 *(radians)*
+* ```p1a1```: Angle 1 of point 1 (*radians*)
+* ```p1a2```: Angle 2 of point 1 (*radians*)
+* ```p2a1```: Angle 1 of point 2 (*radians*)
+* ```p2a2```: Angle 2 of point 2 (*radians*)
 
 Angle 1 may be right ascension or longitude.
 Angle 2 may be declination or latitude.

@@ -7,13 +7,13 @@ Returns the **aberration** in **equatorial coordinates**
 
 ```(abrr_in_asc, abrr_in_dec)```
 
-* ```abrr_in_asc```: Aberration in right ascension *(radians)*
-* ```abrr_in_dec```: Aberration in declination *(radians)*
+* ```abrr_in_asc```: Aberration in right ascension (*radians*)
+* ```abrr_in_dec```: Aberration in declination (*radians*)
 
 # Arguments
 
-* ```asc```: Right ascension *(radians)*
-* ```dec```: Declination *(radians)*
+* ```asc```: Right ascension (*radians*)
+* ```dec```: Declination (*radians*)
 * ```JD```: Julian (Emphemeris) day
 **/
 pub fn AberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {

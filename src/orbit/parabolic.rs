@@ -24,20 +24,20 @@ fn ABC_abc_terms(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64) ->
 }
 
 /**
-Returns the **true anomaly** and **radius vector** *(AU)* of a body in a parabolic orbit
+Returns the **true anomaly** and **radius vector** (*AU*) of a body in a parabolic orbit
 
 # Returns
 
 ```(true_anomaly, radius_vector)```
 
 * ```true_anomaly```: True anomaly of the body
-* ```radius_vector```: Radius vector of the body from the Sun *(AU)*
+* ```radius_vector```: Radius vector of the body from the Sun (*AU*)
 
 # Arguments
 
 * ```t```: Time
 * ```time_passg_perih```: Time of passage in perihelion
-* ```perih_dist```: Perihelion distance *(AU)*
+* ```perih_dist```: Perihelion distance (*AU*)
 **/
 pub fn TruAnomAndRadVec(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64, time_passg_perih: f64, t: f64, perih_dist: f64) -> (f64, f64) {
     let W = 0.03649116245 * (t - time_passg_perih) / perih_dist.powf(1.5);

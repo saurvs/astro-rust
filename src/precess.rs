@@ -10,14 +10,14 @@ Returns the **annual precession** in **equatorial coordinates** for a new epoch
 ```(ann_precess_asc, ann_precess_dec)```
 
 * ```ann_precess_asc```: Annual precession in right ascension for the new
-                         epoch *(radians)*
+                         epoch (*radians*)
 * ```ann_precess_dec```: Annual precession in declination for the new
-                         epoch *(radians)*
+                         epoch (*radians*)
 
 # Arguments
 
-* ```asc```: Right ascension for the old epoch *(radians)*
-* ```dec```: Declination for the old epoch *(radians)*; should not
+* ```asc```: Right ascension for the old epoch (*radians*)
+* ```dec```: Declination for the old epoch (*radians*); should not
              be too close to the poles
 * ```JD```: Julian (Ephemeris) day corresponding to the new epoch;
             should not be more than a few hundred years away from
@@ -38,14 +38,14 @@ Returns **equatorial coordinates** for a **different epoch**
 
 ```(new_asc, new_dec)```
 
-* ```new_asc```: Right ascension for the new epoch *(radians)*
-* ```new_dec```: Declination for the new epoch *(radians)*
+* ```new_asc```: Right ascension for the new epoch (*radians*)
+* ```new_dec```: Declination for the new epoch (*radians*)
 
 # Arguments
 
-* ```old_asc```: Right ascension for the old epoch *(radians)*,
+* ```old_asc```: Right ascension for the old epoch (*radians*),
                  referred to the FK5 system
-* ```old_dec```: Declination for the old epoch *(radians)*,
+* ```old_dec```: Declination for the old epoch (*radians*),
                  referred to the FK5 system
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
@@ -86,14 +86,14 @@ Returns **equatorial coordinates**, from coordinates referred to the
 
 ```(new_asc, new_dec)```
 
-* ```new_asc```: Right ascension for the new epoch *(radians)*
-* ```new_dec```: Declination for the new epoch *(radians)*
+* ```new_asc```: Right ascension for the new epoch (*radians*)
+* ```new_dec```: Declination for the new epoch (*radians*)
 
 # Arguments
 
-* ```old_asc```: Right ascension for the old epoch *(radians)*,
+* ```old_asc```: Right ascension for the old epoch (*radians*),
                  referred to the FK4 system
-* ```old_dec```: Declination for the old epoch *(radians)*,
+* ```old_dec```: Declination for the old epoch (*radians*),
                  referred to the FK4 system
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
@@ -125,13 +125,13 @@ Returns **ecliptical coordinates** for a **different epoch**
 
 ```(new_long, new_lat)```
 
-* ```new_long```: Longitude for the new epoch *(radians)*
-* ```new_lat```: Latitude for the new epoch *(radians)*
+* ```new_long```: Longitude for the new epoch (*radians*)
+* ```new_lat```: Latitude for the new epoch (*radians*)
 
 # Arguments
 
-* ```old_long```: Longitude for the old epoch *(radians)*
-* ```old_lat```: Latitude for the old epoch *(radians)*
+* ```old_long```: Longitude for the old epoch (*radians*)
+* ```old_lat```: Latitude for the old epoch (*radians*)
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
 **/
@@ -177,15 +177,15 @@ Returns **orbital elements** for a **different equinox**
 
 ```(new_inc, new_arg_perih, new_long_ascend_node)```
 
-* ```new_inc```: Inclination for the new equinox *(radians)*
-* ```new_arg_perih```: Argument of perihelion for the new equinox *(radians)*
-* ```new_long_ascend_node```: Longitude of ascending node for the new equinox *(radians)*
+* ```new_inc```: Inclination for the new equinox (*radians*)
+* ```new_arg_perih```: Argument of perihelion for the new equinox (*radians*)
+* ```new_long_ascend_node```: Longitude of ascending node for the new equinox (*radians*)
 
 # Arguments
 
-* ```old_inc```: Inclination for the old equinox *(radians)*
-* ```old_arg_perih```: Argument of perihelion for the old equinox *(radians)*
-* ```old_long_ascend_node```: Longitude of ascending node for the old equinox *(radians)*
+* ```old_inc```: Inclination for the old equinox (*radians*)
+* ```old_arg_perih```: Argument of perihelion for the old equinox (*radians*)
+* ```old_long_ascend_node```: Longitude of ascending node for the old equinox (*radians*)
 * ```JD1```: Julian (Ephemeris) day corresponding to the old equinox
 * ```JD2```: Julian (Ephemeris) day corresponding to the new equinox
 **/

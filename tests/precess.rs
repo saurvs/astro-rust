@@ -43,7 +43,7 @@ fn ChangeOrbElements() {
     assert_eq!(util::RoundUptoDigits(new_inc.to_degrees(), 4), 47.138);
     assert_eq!(util::RoundUptoDigits(new_arg_perih.to_degrees(), 4), 151.4782);
     assert_eq!(util::RoundUptoDigits(new_long_ascend_node.to_degrees(), 4), 48.6037);
-
+/*
     let dd = time::DayOfMonth{day: 1, hr: 12, min: 0, sec: 0.0};
     let d = time::Date{year: 2000, month: 1, decimal_day: time::DecimalDay(&dd), cal_type: time::CalType::Gregorian};
     println!("{:?}", time::JulDay(&d));
@@ -57,6 +57,8 @@ fn ChangeOrbElements() {
     assert_eq!(util::RoundUptoDigits(new_inc_2.to_degrees(), 5), 11.94524);
     assert_eq!(util::RoundUptoDigits(new_arg_perih_2.to_degrees(), 5), 186.23352);
     assert_eq!(util::RoundUptoDigits(new_long_ascend_node_2.to_degrees(), 5), 334.75006);
+*/
+
 }
 
 #[test]

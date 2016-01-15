@@ -233,13 +233,13 @@ Returns the **apparent sidereal time** from mean sidereal time
 
 # Returns
 
-* ```apparent_sidereal_time```: Apparent sidereal time *(radians)*
+* ```apparent_sidereal_time```: Apparent sidereal time (*radians*)
 
 # Arguments
 
-* ```mean_sidreal  ```: Mean sidereal time *(radians)*
-* ```nut_in_long```: Nutatation in longitude *(radians)*
-* ```true_oblq```: True obliquity of the ecliptic *(radians)*,
+* ```mean_sidreal  ```: Mean sidereal time (*radians*)
+* ```nut_in_long```: Nutatation in longitude (*radians*)
+* ```true_oblq```: True obliquity of the ecliptic (*radians*),
                    i.e, *with* correction for nutation
 **/
 pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
@@ -251,7 +251,7 @@ Returns the **apparent sidereal time** from a Julian day
 
 # Returns
 
-* ```apparent_sidereal_time```: Apparent sidereal time *(radians)*
+* ```apparent_sidereal_time```: Apparent sidereal time (*radians*)
 
 # Arguments
 
@@ -271,7 +271,7 @@ Returns the **mean sidereal time** from a Julian day
 
 # Returns
 
-* ```mean_sidereal_time```: Mean sidereal time *(radians)*
+* ```mean_sidereal_time```: Mean sidereal time (*radians*)
 
 # Arguments
 

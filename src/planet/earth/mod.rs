@@ -103,7 +103,7 @@ both of an observer on the Earth's surface.
 
 # Arguments
 
-* ```geograph_lat```: Observer's geographic latitude *(radians)*
+* ```geograph_lat```: Observer's geographic latitude (*radians*)
 * ```height```: Observer's height above sea level *(meters)*
 **/
 pub fn RhoSinAndCosPhi(geograph_lat: f64, height: f64) -> (f64, f64) {
@@ -127,7 +127,7 @@ on the **ellipsoid**
 
 # Arguments
 
-* ```geograph_lat```: Geographic latitude of a point on the ellipsoid *(radians)*
+* ```geograph_lat```: Geographic latitude of a point on the ellipsoid (*radians*)
 **/
 pub fn Rho(geograph_lat: f64) -> f64 {
       0.9983271
@@ -149,7 +149,7 @@ Returns the **radius** of the **parallel** of a **latitude**
 
 # Arguments
 
-* ```geograph_lat```: Geographic latitude of a point on the ellipsoid *(radians)*
+* ```geograph_lat```: Geographic latitude of a point on the ellipsoid (*radians*)
 **/
 pub fn RadOfParllLat(geograph_lat: f64) -> f64 {
     let e = EccOfMerd();
@@ -166,7 +166,7 @@ Returns the **linear velocity** of a point at a **latitude**
 
 # Arguments
 
-* ```geograph_lat```: Geographic latitude of a point on the ellipsoid *(radians)*
+* ```geograph_lat```: Geographic latitude of a point on the ellipsoid (*radians*)
 **/
 pub fn LinrVelAtLat(geograph_lat: f64) -> f64 {
     RotAnglVel() * RadOfParllLat(geograph_lat)
@@ -183,7 +183,7 @@ latitude *(kilometers)*
 
 # Arguments
 
-* ```geograph_lat```: Geographic latitude of a point on the ellipsoid *(radians)*
+* ```geograph_lat```: Geographic latitude of a point on the ellipsoid (*radians*)
 **/
 pub fn RadOfCurvOfMerd(lat: f64) -> f64 {
     let e = EccOfMerd();
@@ -197,11 +197,11 @@ geocentric latitude
 
 # Returns
 
-* ```diff```: (Geographic latitude - Geocentric latitude) *(radians)*
+* ```diff```: (Geographic latitude - Geocentric latitude) (*radians*)
 
 # Arguments
 
-* ```geograph_lat```: Geographic latitude *(radians)*
+* ```geograph_lat```: Geographic latitude (*radians*)
 **/
 pub fn GeographGeocenLatDiff(geograph_lat: f64) -> f64 {
       angle::DegFrmDMS(0, 0, 692.73) * (2.0*geograph_lat).sin()
@@ -209,14 +209,14 @@ pub fn GeographGeocenLatDiff(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the **equation of time** *(radians)*
+Returns the **equation of time** (*radians*)
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
-* ```sun_asc```: Right ascension of the Sun *(radians)*
-* ```nut_log```: Nutation correction for longitude *(radians)*
-* ```tru_obl```: *True* obliquity of the ecliptic *(radians)*
+* ```sun_asc```: Right ascension of the Sun (*radians*)
+* ```nut_log```: Nutation correction for longitude (*radians*)
+* ```tru_obl```: *True* obliquity of the ecliptic (*radians*)
 **/
 pub fn EquationOfTime(JD: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
     let t = time::JulMill(JD);
@@ -241,12 +241,12 @@ Returns the **angle** between **diurnal path** and the **horizon**
 # Returns
 
 * ```angle```: Angle between the diurnal path of a celestial body
-and the horizon *(radians)*
+and the horizon (*radians*)
 
 # Arguments
 
-* ```dec```: Declination of the celestial body *(radians)*
-* ```observer_lat```: Observer's geographic latitude *(radians)*
+* ```dec```: Declination of the celestial body (*radians*)
+* ```observer_lat```: Observer's geographic latitude (*radians*)
 **/
 pub fn AnglBetweenDiurnalPathAndHz(dec: f64, observer_lat: f64) -> f64 {
     let B = dec.tan() * observer_lat.tan();

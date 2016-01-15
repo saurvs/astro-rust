@@ -11,7 +11,7 @@ Returns Jupiter's geocentric equatorial semidiameter
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance to Earth *(AU)*
+* ```distance_to_earth```: Jupiter's distance to Earth (*AU*)
 **/
 pub fn EqSemdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 98.44) / distance_to_earth
@@ -26,7 +26,7 @@ Returns Jupiter's geocentric polar semidiameter
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance to Earth *(AU)*
+* ```distance_to_earth```: Jupiter's distance to Earth (*AU*)
 **/
 pub fn PolSemdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 92.06) / distance_to_earth

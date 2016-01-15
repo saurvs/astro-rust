@@ -9,13 +9,13 @@ is more than 15 degrees.
 
 # Returns
 
-* ```refraction```: The refraction term *(radians)*, that needs to be
+* ```refraction```: The refraction term (*radians*), that needs to be
                     subtracted from apparent altitude to get
                     true altitude.
 
 # Arguments
 
-* ```apprnt_alt```: Apparent altitude *(radians)*
+* ```apprnt_alt```: Apparent altitude (*radians*)
 **/
 pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
       angle::DegFrmDMS(0, 0, 58.294).to_radians() * (90_f64.to_radians() - apprnt_alt).tan()
@@ -31,12 +31,12 @@ is more than 15 degrees.
 
 # Returns
 
-* ```refraction```: The refraction term *(radians)*, that needs to be
+* ```refraction```: The refraction term (*radians*), that needs to be
                     added to true altitude to get apparent altitude.
 
 # Arguments
 
-* ```true_alt```: True altitude *(radians)*
+* ```true_alt```: True altitude (*radians*)
 **/
 pub fn RefracFrmTrueAlt(true_alt: f64) -> f64 {
       angle::DegFrmDMS(0, 0, 58.276).to_radians() * (90_f64.to_radians() - true_alt).tan()
@@ -53,13 +53,13 @@ altitude.
 
 # Returns
 
-* ```refraction```: The refraction term *(radians)*, that needs to be
+* ```refraction```: The refraction term (*radians*), that needs to be
                     subtracted from apparent altitude to get
                     true altitude.
 
 # Arguments
 
-* ```apprnt_alt```: Apparent altitude *(radians)*
+* ```apprnt_alt```: Apparent altitude (*radians*)
 **/
 pub fn ApproxRefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
     if apprnt_alt.to_degrees() == 90.0 { 0.0 }
@@ -82,12 +82,12 @@ is consistent with ApproxRefractionFromApparentAltitude() to within
 
 # Returns
 
-* ```refraction```: The refraction term *(radians)*, that needs to be
+* ```refraction```: The refraction term (*radians*), that needs to be
                     added to true altitude to get apparent altitude.
 
 # Arguments
 
-* ```true_alt```: True altitude *(radians)*
+* ```true_alt```: True altitude (*radians*)
 **/
 pub fn ApproxRefracFromTrueAlt(true_alt: f64) -> f64 {
     if true_alt.to_degrees() == 90.0 { 0.0 }

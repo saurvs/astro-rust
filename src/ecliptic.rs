@@ -3,25 +3,21 @@ use time;
 use std;
 
 /**
-Returns the **mean obliquity** of the ecliptic
+Returns the mean obliquity of the ecliptic
+
+This function uses a formula given by Laskar.
 
 # Returns
 
-* ```mean_obliquity```: The obliquity of the ecliptic *(radians)*;
-  			            the angle between the Earth's equator and
-		                the ecliptic.
-
-The **mean** obliquity isn't corrected for nutation.
-To obtain the **true** obliquity, use [```NutationCorrections()```]
-(../fn.NutationCorrections.html) *to get the nutation correction for obliquity*,
-and add it to the **mean** obliquity.
+* ```mn_oblq```: Mean obliquity of the ecliptic (*radians*)
 
 # Arguments
 
-```JED```: Julian Ephemeris day
+* ```JD```: Julian (Ephemeris) day
 **/
-pub fn MnOblq(JED: f64) -> (f64) {
-    let u = time::JulCent(JED) / 100.0;
+pub fn MnOblq(JD: f64) -> (f64) {
+
+    let u = time::JulCent(JD) / 100.0;
 
     (       angle::DegFrmDMS(23, 26, 21.448)
      - u * (angle::DegFrmDMS(0, 0, 4680.93)
@@ -35,45 +31,49 @@ pub fn MnOblq(JED: f64) -> (f64) {
      + u * (angle::DegFrmDMS(0, 0, 5.79)
      + u *  angle::DegFrmDMS(0, 0, 2.45)
     )))))))))).to_radians()
+
 }
 
-pub fn MnOblq_IAU(JED: f64) -> (f64) {
-    let u = time::JulCent(JED) / 100.0;
+/**
+Returns the mean obliquity of the ecliptic using the IAU formula
+
+This function uses a formula adopted by the IAU.
+
+# Returns
+
+* ```mn_oblq```: Mean obliquity of the ecliptic (*radians*)
+
+# Arguments
+
+* ```JD```: Julian (Ephemeris) day
+**/
+pub fn MnOblq_IAU(JD: f64) -> (f64) {
+
+    let u = time::JulCent(JD) / 100.0;
 
     (       angle::DegFrmDMS(23, 26, 21.448)
      - u * (angle::DegFrmDMS(0, 0, 46.815)
      + u * (angle::DegFrmDMS(0, 0, 0.00059)
      - u *  angle::DegFrmDMS(0, 0, 0.001813)
     ))).to_radians()
-}
 
-/// Returns the **obliquity** *(radians)* of the ecliptic
-/// for the epoch **J2000.0**
-pub fn MnOblq_J2000() -> f64 {
-    23.4392911_f64.to_radians()
-}
-
-/// Returns the **obliquity** *(radians)* of the ecliptic
-/// for the epoch **J1950.0**
-pub fn MnOblq_J1950() -> f64 {
-    23.4457889_f64.to_radians()
 }
 
 /**
-Returns the **longitudes** of the **ecliptic points** on the **horizon**
+Returns the longitudes of the ecliptic points on the horizon
 
 # Returns
 
 ```(long_point_1, long_point_2)```
 
-* ```long_point_1```: Longitude of ecliptic point 1 *(radians)*
-* ```long_point_2```: Longitude of ecliptic point 2 *(radians)*
+* ```long_point_1```: Longitude of ecliptic point 1 (*radians*)
+* ```long_point_2```: Longitude of ecliptic point 2 (*radians*)
 
 # Arguments
 
-* ```oblq_eclip```: Obliquity of the ecliptic *(radians)*
-* ```observer_lat```: Observer's geographical latitude *(radians)*
-* ```loc_sidreal```: Local sidereal time *(radians)*
+* ```oblq_eclip```  : Obliquity of the ecliptic (*radians*)
+* ```observer_lat```: Observer's geographical latitude (*radians*)
+* ```loc_sidreal``` : Local sidereal time (*radians*)
 **/
 pub fn LongOfEclipPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
     let p = (-loc_sidreal.cos())
@@ -85,17 +85,18 @@ pub fn LongOfEclipPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f6
 }
 
 /**
-Returns the **angle** between the **ecliptic** and the **horizon**
+Returns the angle between the ecliptic and the horizon
 
 # Returns
 
-* ```angle```: The angle between the ecliptic and the horizon *(radians)*
+* ```angle```: Angle between the ecliptic and
+               the horizon (*radians*)
 
 # Arguments
 
-* ```oblq_eclip```: Obliquity of the ecliptic *(radians)*
-* ```observer_lat```: Observer's geographical latitude *(radians)*
-* ```loc_sidreal```: Local sidereal time *(radians)*
+* ```oblq_eclip```: Obliquity of the ecliptic (*radians*)
+* ```observer_lat```: Observer's geographical latitude (*radians*)
+* ```loc_sidreal```: Local sidereal time (*radians*)
 **/
 pub fn AnglBetwnEclipAndHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
     (   oblq_eclip.cos() * observer_lat.sin()

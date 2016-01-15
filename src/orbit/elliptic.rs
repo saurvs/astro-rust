@@ -7,11 +7,11 @@ Returns the **true anomaly** of a body in an elliptic orbit
 
 ```(true_anomaly)```
 
-* ```(true_anomaly)```: True anomaly of the body *(AU)*
+* ```(true_anomaly)```: True anomaly of the body (*AU*)
 
 # Arguments
 
-* ```eccentric_anomaly```: Eccentric anomaly of the body *(radians)*
+* ```eccentric_anomaly```: Eccentric anomaly of the body (*radians*)
 * ```eccentricity```: Eccentricity of the orbit
 **/
 pub fn TruAnom(eccentric_anomaly: f64, eccentricity: f64) -> f64 {
@@ -26,12 +26,12 @@ it's eccentric anomaly
 
 ```(radius_vector)```
 
-* ```(radius_vector)```: Radius vector of the body *(AU)*
+* ```(radius_vector)```: Radius vector of the body (*AU*)
 
 # Arguments
 
-* ```eccentric_anomaly```: Eccentric anomaly of the body *(radians)*
-* ```semimaj_ax```: Semimajor axis of the orbit *(AU)*
+* ```eccentric_anomaly```: Eccentric anomaly of the body (*radians*)
+* ```semimaj_ax```: Semimajor axis of the orbit (*AU*)
 * ```eccentricity```: Eccentricity of the orbit
 **/
 pub fn RadVecFrmEccAnom(eccentric_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
@@ -46,12 +46,12 @@ it's true anomaly
 
 ```(radius_vector)```
 
-* ```(radius_vector)```: Radius vector of the body *(AU)*
+* ```(radius_vector)```: Radius vector of the body (*AU*)
 
 # Arguments
 
-* ```true_anomaly```: True anomaly of the body *(radians)*
-* ```semimaj_ax```: Semimajor axis of the orbit *(AU)*
+* ```true_anomaly```: True anomaly of the body (*radians*)
+* ```semimaj_ax```: Semimajor axis of the orbit (*AU*)
 * ```eccentricity```: Rccentricity of the orbit
 **/
 pub fn RadVecFrmTruAnom(true_anomaly: f64, semimaj_ax: f64, eccentricity: f64) -> f64 {
@@ -65,11 +65,11 @@ Returns the **eccentric anomaly** of a body in an elliptic orbit
 
 ```(eccentric_anomaly)```
 
-* ```(eccentric_anomaly)```: Eccentric anomaly of the body *(radians)*
+* ```(eccentric_anomaly)```: Eccentric anomaly of the body (*radians*)
 
 # Arguments
 
-* ```mean_anomaly```: Mean anomaly of the body *(radians)*
+* ```mean_anomaly```: Mean anomaly of the body (*radians*)
 * ```eccentricity```: Eccentricity of the orbit
 * ```accuracy```: Desired accuracy for eccentric anomaly. *Eg: 0.000001 radians*
 **/
@@ -97,8 +97,8 @@ elliptic orbit
 
 # Arguments
 
-* ```dist_to_sun```: Body's distance to Sun *(AU)*
-* ```semimaj_axis```: Semimajor axis of orbit *(AU)*
+* ```dist_to_sun```: Body's distance to Sun (*AU*)
+* ```semimaj_axis```: Semimajor axis of orbit (*AU*)
 **/
 pub fn Vel(dist_to_sun: f64, semimaj_axis:f64) -> f64 {
     0.0421219 * (1.0/dist_to_sun - 1.0/(2.0 * semimaj_axis)).sqrt()
@@ -117,7 +117,7 @@ in an elliptic orbit
 
 # Arguments
 
-* ```semimaj_axis```: Semimajor axis of orbit *(AU)*
+* ```semimaj_axis```: Semimajor axis of orbit (*AU*)
 * ```orb_eccen```: Eccentricity of orbit
 **/
 pub fn PerihVel(semimaj_axis:f64, orb_eccen:f64) -> f64 {
@@ -136,7 +136,7 @@ Returns the **velocity** of a body at **aphelion** in an elliptic orbit
 
 # Arguments
 
-* ```semimaj_axis```: Semimajor axis of orbit *(AU)*
+* ```semimaj_axis```: Semimajor axis of orbit (*AU*)
 * ```orb_eccen```: Eccentricity of orbit
 **/
 pub fn AphVel(semimaj_axis:f64, orb_eccen:f64) -> f64 {

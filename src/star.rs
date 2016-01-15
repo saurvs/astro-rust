@@ -82,13 +82,13 @@ Returns the **angle** between the vector from a star to the
 
 # Returns
 
-* ```angle```: The desired angle *(radians)*
+* ```angle```: The desired angle (*radians*)
 
 # Arguments
 
-* ```eclip_long```: The star's ecliptical longitude *(radians)*
-* ```eclip_lat```: The star's ecliptical latitude *(radians)*
-* ```oblq_eclip```: Obliquity of the ecliptic *(radians)*
+* ```eclip_long```: The star's ecliptical longitude (*radians*)
+* ```eclip_lat```: The star's ecliptical latitude (*radians*)
+* ```oblq_eclip```: Obliquity of the ecliptic (*radians*)
 **/
 pub fn AnglBetweenNorthCelesAndEclipticPole(eclip_long: f64, eclip_lat: f64, oblq_eclip: f64) -> f64 {
     (eclip_long.cos() * oblq_eclip.tan())

@@ -35,7 +35,7 @@ Returns the **inclination** of the **mean lunar equator** with the
 # Returns
 
 * ```inclination_of_mean_lunar_equator_with_ecliptic```: Inclination
-of the mean lunar equator with the ecliptic *(radians)*
+of the mean lunar equator with the ecliptic (*radians*)
 **/
 pub fn IncOfMnLunEq() -> f64 {
     angle::DegFrmDMS(1, 32, 32.7).to_radians()
@@ -117,16 +117,16 @@ Returns the **optical librations** of the Moon in **longitude** and
 ```(optical_libration_in_longitude, optical_libration_in_longitude)```
 
 * ```optical_libration_in_longitude```: The optical libration in
-longitude *(radians)*
+longitude (*radians*)
 * ```optical_libration_in_longitude```: The optical libration in
-latitude *(radians)*
+latitude (*radians*)
 
 # Arguments
 
 * ```mean_geocen_moon_long```: The mean geocentric longitude of the
-Moon *(radians)*, i.e, *without* the correction for nutation
+Moon (*radians*), i.e, *without* the correction for nutation
 * ```app_geocen_moon_lat```: The apparent geocentric longitude of the
-Moon *(radians)*, i.e, *with* the correction for nutation
+Moon (*radians*), i.e, *with* the correction for nutation
 * ```JED```: Julian Emphemeris day
 **/
 pub fn OptLibr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
@@ -158,17 +158,17 @@ Returns the **physical librations** of the Moon in **longitude** and
 ```(physical_libration_in_longitude, physical_libration_in_longitude)```
 
 * ```physical_libration_in_longitude```: The physical libration in
-longitude *(radians)*
+longitude (*radians*)
 * ```physical_libration_in_longitude```: The physical libration in
-latitude *(radians)*
+latitude (*radians*)
 
 # Arguments
 
 * ```mean_geocen_moon_long```: The mean geocentric longitude of the
-Moon *(radians)*, i.e, *without* the correction for nutation
+Moon (*radians*), i.e, *without* the correction for nutation
 * ```app_geocen_moon_lat```: The apparent geocentric longitude of the
-Moon *(radians)*, i.e, *with* the correction for nutation
-* ```optical_lib_lat```: The optical libration in latitude *(radians)*
+Moon (*radians*), i.e, *with* the correction for nutation
+* ```optical_lib_lat```: The optical libration in latitude (*radians*)
 * ```JED```: Julian Emphemeris day
 **/
 pub fn PhysLibr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
@@ -227,17 +227,17 @@ Returns the **total librations** of the Moon in **longitude** and
 ```(total_libration_in_longitude, total_libration_in_longitude)```
 
 * ```total_libration_in_longitude```: The total libration in
-longitude *(radians)*
+longitude (*radians*)
 * ```total_libration_in_longitude```: The total libration in
-latitude *(radians)*
+latitude (*radians*)
 
 # Arguments
 
 * ```mean_geocen_moon_long```: The mean geocentric longitude of the
-Moon *(radians)*, i.e, *without* the correction for nutation
+Moon (*radians*), i.e, *without* the correction for nutation
 * ```app_geocen_moon_lat```: The apparent geocentric longitude of the
-Moon *(radians)*, i.e, *with* the correction for nutation
-* ```optical_lib_lat```: The optical libration in latitude *(radians)*
+Moon (*radians*), i.e, *with* the correction for nutation
+* ```optical_lib_lat```: The optical libration in latitude (*radians*)
 * ```JED```: Julian Emphemeris day
 **/
 pub fn TotLibr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
@@ -257,15 +257,15 @@ Returns the **position angle** of the **axis of rotation** of the Moon
 # Returns
 
 * ```position_angle_of_axis_of_rotation```: The position angle of the axis
-                                            of rotation of the Moon *(radians)*
+                                            of rotation of the Moon (*radians*)
 
 # Arguments
 
-* ```mean_ascen_node_long```: Longitude of the mean ascending node of the Moon *(radians)*
-* ```total_lib_lat```: Total libration of the Moon in latitude *(radians)*
-* ```nut_in_long```: Nutation correction for longitude *(radians)*
-* ```true_oblq_eclip```: True obliquity of the ecliptic *(radians)*
-* ```app_moon_asc```: Apparent geocentric right ascension of the Moon *(radians)*
+* ```mean_ascen_node_long```: Longitude of the mean ascending node of the Moon (*radians*)
+* ```total_lib_lat```: Total libration of the Moon in latitude (*radians*)
+* ```nut_in_long```: Nutation correction for longitude (*radians*)
+* ```true_oblq_eclip```: True obliquity of the ecliptic (*radians*)
+* ```app_moon_asc```: Apparent geocentric right ascension of the Moon (*radians*)
 * ```JED```: Julian Emphemeris day
 **/
 pub fn PosAnglOfAxisOfRot(mean_ascen_node_long: f64, total_lib_lat: f64,
@@ -293,19 +293,19 @@ Returns the **topocentric librations** of the Moon
 
 ```(topocentric_libration_in_long, topocentric_libration_in_lat, topocentric_libration_in_P)```
 
-* ```topocentric_libration_in_long```: Topocentric libration in longitude *(radians)*
-* ```topocentric_libration_in_lat```: Topocentric libration in latitude *(radians)*
+* ```topocentric_libration_in_long```: Topocentric libration in longitude (*radians*)
+* ```topocentric_libration_in_lat```: Topocentric libration in latitude (*radians*)
 * ```topocentric_libration_in_P```: Topocentric libration in position angle of the axis
-                                            of rotation *(radians)*
+                                            of rotation (*radians*)
 
 # Arguments
 
-* ```observer_lat```: Latitude of the observer *(radians)*
-* ```geocen_dec_moon```: Geocentric decation of the Moon *(radians)*
-* ```local_hour_angle```: Local hour angle of the Moon *(radians)*
-* ```geocen_horizontal_parallax_moon```: Geocentric equatorial horizontal parallax of the Moon *(radians)*
-* ```pos_angle_axis_of_rot```: Position angle of the axis of rotation of the Moon *(radians)*
-* ```total_lib_lat```: Total libration of the Moon in latitude *(radians)*
+* ```observer_lat```: Latitude of the observer (*radians*)
+* ```geocen_dec_moon```: Geocentric decation of the Moon (*radians*)
+* ```local_hour_angle```: Local hour angle of the Moon (*radians*)
+* ```geocen_horizontal_parallax_moon```: Geocentric equatorial horizontal parallax of the Moon (*radians*)
+* ```pos_angle_axis_of_rot```: Position angle of the axis of rotation of the Moon (*radians*)
+* ```total_lib_lat```: Total libration of the Moon in latitude (*radians*)
 **/
 pub fn TopocenLibrByDiffCorrections(observer_lat: f64, geocen_dec_moon: f64,
                                                       local_hour_angle: f64, geocen_horizontal_parallax_moon: f64,
@@ -329,8 +329,8 @@ Returns the **ecliptic geocentric coordinates** of the Moon
 
 ```(longitude, latitude, distance)```
 
-* ```longitude```: Ecliptic longitude of the Moon *(radians)*
-* ```latitude```: Ecliptic latitude of the Moon *(radians)*
+* ```longitude```: Ecliptic longitude of the Moon (*radians*)
+* ```latitude```: Ecliptic latitude of the Moon (*radians*)
 * ```distance```: Distance between the Moon and the Earth *(kilometers)*
 
 # Arguments
@@ -536,7 +536,7 @@ Returns the longitude of the **mean ascending node** of the Moon
 # Returns
 
 * ```longitude_mean_ascending_node```: Longitude of the mean ascending
-                                       node *(radians)*
+                                       node (*radians*)
 
 # Arguments
 
@@ -555,7 +555,7 @@ Returns the longitude of the **true ascending node** of the Moon
 # Returns
 
 * ```longitude_true_ascending_node```: Longitude of the true ascending
-                                       node *(radians)*
+                                       node (*radians*)
 
 # Arguments
 
@@ -581,7 +581,7 @@ Returns the longitude of the **mean perigee** of the Moon
 
 ```(longitude_mean_perigee)```
 
-* ```longitude_mean_perigee```: Longitude of mean perigee *(radians)*
+* ```longitude_mean_perigee```: Longitude of mean perigee (*radians*)
 
 # Arguments
 
@@ -603,12 +603,12 @@ Returns the **position angle** of the **bright limb** of the Moon
 
 * ```position_angle_of_bright_limb```: The position angle of the midpoint
                                        of the illuminated limb of the Moon
-                                       *(radians)*
+                                       (*radians*)
 
 # Arguments
 
-* ```sun_eq_point```: Equatorial coordinate of the Sun *(radians)*
-* ```moon_eq_point```: Equatorial coordinate of the Moon *(radians)*
+* ```sun_eq_point```: Equatorial coordinate of the Sun (*radians*)
+* ```moon_eq_point```: Equatorial coordinate of the Moon (*radians*)
 **/
 pub fn BrightLimb(sun_eq_point: coords::EqPoint,
                                  moon_eq_point: coords::EqPoint) -> f64 {
@@ -624,8 +624,8 @@ Returns the **illuminated fraction** of the Moon, using **equatorial coordinates
 
 # Arguments
 
-* ```sun_eq_point```: Equatorial coordinate of the Sun *(radians)*
-* ```moon_eq_point```: Equatorial coordinate of the Moon *(radians)*
+* ```sun_eq_point```: Equatorial coordinate of the Sun (*radians*)
+* ```moon_eq_point```: Equatorial coordinate of the Moon (*radians*)
 * ```earth_moon_dist```: Distance between the Earth and it's Moon
                          (in any unit, but same as that of ```earth_sun_dist```)
 * ```earth_sun_dist```: Distance between the Earth and the Sun
@@ -643,9 +643,9 @@ Return the **illuminated fraction** of the Moon, using **eclipctical coordinates
 
 # Arguments
 
-* ```moon_long```: Eclipctical longitude of the Moon *(radians)*
-* ```moon_lat```: Eclipctical latitude of the Moon *(radians)*
-* ```sun_long```: Eclipctical longitude of the Sun *(radians)*
+* ```moon_long```: Eclipctical longitude of the Moon (*radians*)
+* ```moon_lat```: Eclipctical latitude of the Moon (*radians*)
+* ```sun_long```: Eclipctical longitude of the Sun (*radians*)
 * ```earth_moon_dist```: Distance between the Earth and it's Moon
                          (in any unit, but same as that of ```earth_sun_dist```)
 * ```earth_sun_dist```: Distance between the Earth and the Sun

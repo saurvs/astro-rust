@@ -41,7 +41,7 @@ Returns the **equatorial geocentric semidiameter** of a Planet
 
 * ```planet```: [Planet](./enum.Planet.html).
                 *Throws an error if Planet::Earth is passed.*
-* ```distance_to_earth```: Planet's distance to Earth *(AU)*
+* ```distance_to_earth```: Planet's distance to Earth (*AU*)
 **/
 pub fn Semdia(planet: Planet, distance_to_earth: f64) -> f64 {
     let mut s: f64;
@@ -68,16 +68,16 @@ Returns the **orbital elements** of a planet
 
 ```(L, a, e, i, omega, pi, M, w)```
 
-* ```L```: Mean longitude *(radians)*
-* ```a```: Semimajor axis of the orbit *(AU)*
+* ```L```: Mean longitude (*radians*)
+* ```a```: Semimajor axis of the orbit (*AU*)
 * ```e```: Eccentricity of the orbit
 * ```i```: Inclination of the plane of the orbit with the plane of
-           the Earth's ecliptic *(radians)*
-* ```omega```: Longitude of the ascending node *(radians)*.
+           the Earth's ecliptic (*radians*)
+* ```omega```: Longitude of the ascending node (*radians*).
                *An undefined value is returned for Planet::Earth*.
-* ```pi```: Longitude of the perihelion *(radians)*
-* ```M```: Mean anomaly *(radians)*
-* ```w```: Argument of the perihelion *(radians)*
+* ```pi```: Longitude of the perihelion (*radians*)
+* ```M```: Mean anomaly (*radians*)
+* ```w```: Argument of the perihelion (*radians*)
 
 # Arguments
 
@@ -180,9 +180,9 @@ Returns a planet's **heliocentric coordinates**.
 
 ```(longitude, latitude, radius_vec)```
 
-* ```longitude```: Heliocentric longitude *(radians)*
-* ```latitude```: Heliocentric latitude *(radians)*
-* ```radius_vec```: Heliocentric radius vector *(AU)*
+* ```longitude```: Heliocentric longitude (*radians*)
+* ```latitude```: Heliocentric latitude (*radians*)
+* ```radius_vec```: Heliocentric radius vector (*AU*)
 
 # Arguments
 

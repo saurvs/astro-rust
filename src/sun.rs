@@ -7,7 +7,7 @@ Returns the **equatorial semidiameter** of the Sun
 
 # Arguments
 
-* ```distance_to_earth```: The Sun's distance from the Earth *(AU)*
+* ```distance_to_earth```: The Sun's distance from the Earth (*AU*)
 **/
 pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 959.63) / distance_to_earth
@@ -20,8 +20,8 @@ Returns the **ecliptic geocentric coordinates** of the Sun
 
 ```(longitude, latitude, distance)```
 
-* ```longitude```: Ecliptic longitude of the Sun *(radians)*
-* ```latitude```: Ecliptic latitude of the Sun *(radians)*
+* ```longitude```: Ecliptic longitude of the Sun (*radians*)
+* ```latitude```: Ecliptic latitude of the Sun (*radians*)
 * ```distance```: Distance between the Sun and the Earth *(kilometers)*
 
 # Arguments
@@ -52,17 +52,17 @@ celestial pole
 
 ```(x, y z)```
 
-* ```x```: The X coordinate *(AU)*
-* ```y```: The Y coordinate *(AU)*
-* ```z```: The Z coordinate *(AU)*
+* ```x```: The X coordinate (*AU*)
+* ```y```: The Y coordinate (*AU*)
+* ```z```: The Z coordinate (*AU*)
 
 # Arguments
 
-* ```sun_geo_long```: The Sun's geometric longitude *(radians)*,
+* ```sun_geo_long```: The Sun's geometric longitude (*radians*),
                       *without* corrections for nutation and abberation
-* ```sun_geo_lat```: The Sun's geometric latitude *(radians)*,
+* ```sun_geo_lat```: The Sun's geometric latitude (*radians*),
                      *without* corrections for nutation and abberation
-* ```sun_rad_vec```: The Sun's geometric radius vector *(AU)*
+* ```sun_rad_vec```: The Sun's geometric radius vector (*AU*)
 * ```mean_obl```: The *mean* obliquity of the Earth's ecliptic;
                   not *true* obliquity
 **/
@@ -83,22 +83,22 @@ of the Sun
 
 * ```P```: Position angle of the northern extremity of the axis of
            rotation, measured eastwards from the North point of the
-           solar disk *(radians)*
+           solar disk (*radians*)
 * ```B0```: Heliographic latitude of the center of the solar
-            disk *(radians)*
+            disk (*radians*)
 * ```L0```: Heliographic longitude of the center of the solar
-            disk *(radians)*
+            disk (*radians*)
 
 # Arguments
 
 * ```JD```: Julian (Emphemeris) day
-* ```app_long```: Apparent longitude of the Sun *(radians)*,
+* ```app_long```: Apparent longitude of the Sun (*radians*),
                   including the effect of abberation and *not* that
                   of nutation
-* ```app_long_with_nut```: Apparent longitude of the Sun *(radians)*,
+* ```app_long_with_nut```: Apparent longitude of the Sun (*radians*),
                   including the effect of abberation *and* that
                   of nutation
-* ```oblq_eclip```: *True* obliquity of the Earth's ecliptic *(radians)*,
+* ```oblq_eclip```: *True* obliquity of the Earth's ecliptic (*radians*),
                     i.e, *with* correction for nutation
 **/
 pub fn Ephm(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {

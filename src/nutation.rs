@@ -2,22 +2,23 @@ use angle;
 use time;
 
 /**
-Returns the **nutation** in **ecliptic longitude** and **obliquity**
+Returns the nutation in ecliptic longitude and obliquity
 
 # Returns
 
 ```(nut_in_long, nut_in_oblq)```
 
 * ```nut_in_long```: Nutation in ecliptic
-                     longitude *(radians)*
+                     longitude (*radians*)
 * ```nut_in_oblq```: Nutation in obliquity
-                     of the ecliptic *(radians)*
+                     of the ecliptic (*radians*)
 
 # Arguments
 
 ```JD```: Julian (Ephemeris) day
 **/
 pub fn Nutation(JD: f64) -> (f64, f64) {
+
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
     let terms_for_nutation = [
         terms( 0,  0,  0,  0,  1, -171996, -1742, 92025,  89),
@@ -87,54 +88,65 @@ pub fn Nutation(JD: f64) -> (f64, f64) {
 
     let t = time::JulCent(JD);
 
-    let M1 = angle::LimitTo360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/56250.0)))).to_radians();
-    let M = angle::LimitTo360((357.52772 + t*(35999.05034 - t*(0.0001603 + t/300000.0)))).to_radians();
-    let D = angle::LimitTo360((297.85036 + t*(445267.11148 - t*(0.0019142 - t/189474.0)))).to_radians();
-    let F = angle::LimitTo360((93.27191 + t*(483202.017538 - t*(0.0036825 - t/327270.0)))).to_radians();
-    let om = angle::LimitTo360((125.04452 - t*(1934.136261 - t*(0.0020708 + t/450000.0)))).to_radians();
+    let M1 = angle::LimitTo360((134.96298 + t*(477198.867398 + t*(0.0086972 +  t/56250.0)))).to_radians();
+    let M  = angle::LimitTo360((357.52772 + t*(35999.05034   - t*(0.0001603 + t/300000.0)))).to_radians();
+    let D  = angle::LimitTo360((297.85036 + t*(445267.11148  - t*(0.0019142 - t/189474.0)))).to_radians();
+    let F  = angle::LimitTo360((93.27191  + t*(483202.017538 - t*(0.0036825 - t/327270.0)))).to_radians();
+    let om = angle::LimitTo360((125.04452 - t*(1934.136261   - t*(0.0020708 + t/450000.0)))).to_radians();
 
     let mut nut_in_long = 0.0;
     let mut nut_in_obl = 0.0;
 
+    let div = 0.0001/3600.0;
+
     for x in terms_for_nutation.iter() {
-        let arg = (x.0 as f64) * D +
-                  (x.1 as f64) * M +
+        let arg = (x.0 as f64) * D  +
+                  (x.1 as f64) * M  +
                   (x.2 as f64) * M1 +
-                  (x.3 as f64) * F +
+                  (x.3 as f64) * F  +
                   (x.4 as f64) * om;
-        nut_in_long += ((x.5 as f64) + t*(x.6 as f64)/10.0) * arg.sin() * 0.0001/3600.0;
-        nut_in_obl += ((x.7 as f64) + t*(x.8 as f64)/10.0) * arg.cos() * 0.0001/3600.0;
+        nut_in_long += ((x.5 as f64) + t*(x.6 as f64)/10.0) * arg.sin() * div;
+        nut_in_obl  += ((x.7 as f64) + t*(x.8 as f64)/10.0) * arg.cos() * div;
     }
 
     (nut_in_long.to_radians(), nut_in_obl.to_radians())
+
 }
 
 /**
-Returns the **nutation** in **equatorial coordinates**
-
-The mean equatorial coordinates should not be close to one of the
-celestial poles, as the returned values of nutation are only first-order
-corrections.
+Returns the nutation in equatorial coordinates
 
 # Returns
 
 ```(nut_in_asc, nut_in_dec)```
 
-* ```nut_in_asc```: Nutation in right ascension *(radians)*
-* ```nut_in_dec```: Nutation in declination *(radians)*
+* ```nut_in_asc```: Nutation in right ascension (*radians*)
+* ```nut_in_dec```: Nutation in declination (*radians*)
 
 # Arguments
 
-*  ```asc```: Right ascension *(radians)*
-*  ```dec```: Declination *(radians)*
-*  ```nut_in_long```: Nutation in longitude *(radians)*
-* ```nut_in_oblq```: Nutation in obliquity *(radians)*
-* ```tru_oblq```: True obliquity of the ecliptic *(radians)*
+* ```asc```        : Right ascension (*radians*)
+* ```dec```        : Declination (*radians*)
+* ```nut_in_long```: Nutation in longitude (*radians*)
+* ```nut_in_oblq```: Nutation in obliquity (*radians*)
+* ```tru_oblq```   : True obliquity of the ecliptic (*radians*)
+
+The declination passed should not be close to either of
+the celestial poles, as the values of nutation returned
+are only first-order corrections.
+
 **/
-pub fn NutationInEqCoords(asc: f64, dec: f64, nut_in_long: f64, nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {
-    let nut_asc =   (tru_oblq.cos() + tru_oblq.sin()*asc.sin()*dec.tan()) * nut_in_long
-                  - asc.cos() * dec.tan() * nut_in_oblq;
-    let nut_dec = tru_oblq.sin()*asc.cos()*nut_in_long + asc.sin()*nut_in_oblq;
+pub fn NutationInEqCoords(asc: f64, dec: f64, nut_in_long: f64,
+                          nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {
+
+    let nut_asc =   (  tru_oblq.cos()
+                     + tru_oblq.sin()*asc.sin()*dec.tan()
+                    )*nut_in_long
+                  - asc.cos()*dec.tan()*nut_in_oblq;
+
+    let nut_dec =   tru_oblq.sin()*asc.cos()*nut_in_long
+                  + asc.sin()*nut_in_oblq;
 
     (nut_asc, nut_dec)
+
 }
