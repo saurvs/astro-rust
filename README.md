@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-```astro-rust``` implements, in the rust programming language, essential algorithms used in astronomy for accurate calculations.
+```astro-rust``` implements essential algorithms used in astronomy for accurate calculations.
 
 The main reference used for implementation is the comprehensive set of algorithms described in book *Astronomical Algorithms by Jean Meeus*, that includes methods for calculating the positions of the planets, the sun, the moon, converting between different celestial coordinates systems, finding corrections for nutation and atmospheric refraction, and so on.
 
@@ -142,11 +142,7 @@ illuminated fraction of the disk
 
 ## Contributing
 
-The goal of this project is to build
-
-* a polished, production-quality library with a well-tested implementation of algorithms used in fundamental astronomy,
-* a well-designed Rust API,
-* and an excellent documentation of code and coverage.
+The goal of this project is to build a polished, production-quality library with a well-tested implementation of algorithms useful in  astronomy, with a well-designed Rust API and an excellent documentation of code and coverage.
 
 Anyone interested to contribute in any way possible is encouraged to do so.
 
