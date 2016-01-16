@@ -4,7 +4,7 @@
 
 ```astro-rust``` implements, in the rust programming language, essential algorithms used in astronomy for accurate calculations.
 
-The main reference used for implementation is the comprehensive set of algorithms described in book *Astronomical Algorithms by Jean Meeus*, that includes methods for calculating the positions of the planets, the sun, the moon, converting between different celestial coordinates systems, finding corrections for nutation and atmospheric refraction, doing astrometry, and so on.
+The main reference used for implementation is the comprehensive set of algorithms described in book *Astronomical Algorithms by Jean Meeus*, that includes methods for calculating the positions of the planets, the sun, the moon, converting between different celestial coordinates systems, finding corrections for nutation and atmospheric refraction, and so on.
 
 Detailed information about functions and modules available in this library is in the [Rust API Documentation](https://saurvs.github.io/astro-rust/), and the full listing of algorithms available is given below.
 
@@ -64,7 +64,7 @@ Detailed information about functions and modules available in this library is in
 
 * Find the corrections for nutation in ecliptic longitude and obliquity of the ecliptic
   ```rust
-  let (nut_in_long, nut_in_oblq) = nutation::Corrections(julian_day);
+  let (nut_in_long, nut_in_oblq) = nutation::Nutation(julian_day);
   ```
 
 * Find the geodesic distance between two locations on the Earth
@@ -140,15 +140,19 @@ illuminated fraction of the disk
 * **Ecliptic** mean obliquity by IAU and Laskar
 * **Nutation** nutation in ecliptic longitude, obliquity, and equatorial coordinates
 
-## Contributing 
+## Contributing
 
-The goal of this project is to build a polished, production-quality library with a well-tested, comprehensive implementation of algorithms used in fundamental astronomy, a well-designed Rust API, and an excellent documentation of code and coverage.
+The goal of this project is to build
 
-Anyone interested to contribute in any way possible is encouraged to do so. 
+* a polished, production-quality library with a well-tested implementation of algorithms used in fundamental astronomy,
+* a well-designed Rust API,
+* and an excellent documentation of code and coverage.
+
+Anyone interested to contribute in any way possible is encouraged to do so.
 
 A good start would be to go through Meeus's book and browse the API documentation, read the code, and submit a pull request if anything warrants an addition or a modification.
 
-Even refactoring of code and small optimisations here and there is much encouraged.
+Even refactoring code and minor optimizations are accepted.
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
