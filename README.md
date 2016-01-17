@@ -6,7 +6,7 @@
 
 Several such libraries have existed for a long time, being written in popular languages such as C, Python and Java, which have comprehensive coverage of astronomical algorithms and are well-tested, albeit occasionally distributed with restrictive licenses.
 
- This library however is written in the Rust programming language; a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, such as excellent memory safety without a garbage collector, strong static typing, better concurrency support and a better module system, and all the while being blazingly fast by running close to the metal. This new language justifies a new astronomical library for use in the future.
+ This library however is written in the Rust programming language; a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong static typing, better concurrency support, better module system, and running [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html). This new language justifies a new astronomical library for use in the future.
 
  And, the MIT license adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable, as long as due credit is given to the original authors(s).
 
