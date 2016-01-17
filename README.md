@@ -2,11 +2,21 @@
 
 [![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-```astro-rust``` implements essential algorithms used in astronomy for accurate calculations.
+```astro-rust``` is an MIT licensed library of algorithms focused on rigorous and accurate astronomical calculations.
 
-The main reference used for implementation is the comprehensive set of algorithms described in book *Astronomical Algorithms by Jean Meeus*, that includes methods for calculating the positions of the planets, the sun, the moon, converting between different celestial coordinates systems, finding corrections for nutation and atmospheric refraction, and so on.
+Several such libraries have existed for a long time written in popular languages such as C, Python and Java, and which have comprehensive coverage and are well-tested, abeit occasionally distributed with restrictive licenses.
 
-Detailed information about functions and modules available in this library is in the [Rust API Documentation](https://saurvs.github.io/astro-rust/), and the full listing of algorithms available is given below.
+ This library however is written in the Rust programming language; a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, such as excellent memory safety without a garbage collector, strong static typing, better concurrency support and a better module system, and all the while being blazingly fast by running close to the metal. This new language justifies a new astronomical library for use in the future.
+
+ And, the MIT license adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable, as long as due credit is given to the original authors(s).
+
+ Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, physical ephemeris of Mars, Jupiter, Saturn and the Moon, finding position angles, illuminated fractions, and visual magnitudes. Even Pluto gets a chapter.
+
+ However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, which were in turn adopted in recent times by NASA and the IAU.
+
+For information related to the programming aspects of this library on the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
+
+A high level list of algorithms is given at the bottom of this page.
 
 ## Usage
 
@@ -121,34 +131,125 @@ Detailed information about functions and modules available in this library is in
 
 ## Algorithms
 
-Algorithms implemented in this library so far allow you to calculate or perform the following:
+Algorithms implemented in this library allow you to calculate or perform the following:
 
-* **Time** Julian day from Gregorian and Julian dates, and vice-versa. Analytic approximation to delta T. Mean and apparent sidereal time.
-* **Transform** coordinates between equatorial, ecliptic, topocentric, local horizontal, and galactic coordinate systems
-* **Transform** heliocentric coordinates to ecliptic and equatorial geocentric coordinates
-* **All 8 Planets** heliocentric coordinates (full VSOP87-D solution), orbital elements, apparent magnitudes, equatorial semidiameters, times of passage through nodes, illuminated fraction of the disk
-* **Pluto** heliocentric coordinates, apparent magnitude, equatorial semidiameter
-* **Earth** high-accuracy geodesic distances
-* **Moon** ecliptic geocentric coordinates, optical, physical and topocentric librations, times of passage through nodes,
-illuminated fraction of the disk
-* **Sun** ecliptic geocentric coordinates, rectangular geocentric coordinates, ephemeris for physical observations, times of Carrington's synodic rotation
-* **Mars** ecliptic coordinates of the North pole, ephemeris for physical observations
-* **Stars** combined magnitude of two or more stars, absolute magnitude from parallax
-* **Binary stars** radius vector, angular separation, eccentricity of the apparent orbit, apparent position angle, and mean annual motion and mean anomaly of the companion star
-* **Asteroids** true and apparent diameters
-* **Atmospheric refraction** apparent altitude from true altitude and vice-versa, effect of local pressure and temperature
-* **Ecliptic** mean obliquity by IAU and Laskar
-* **Nutation** nutation in ecliptic longitude, obliquity, and equatorial coordinates
+The 8 Solar System Planets
+
+* heliocentric coordinates (using the *full* VSOP87-D solution)
+* orbital elements
+* apparent magnitude
+* equatorial semidiameter
+* polar semidiameter for Saturn and Jupiter
+* time of passage through the nodes
+* illuminated fraction of the planetary disk
+
+Sun
+
+* ecliptic geocentric coordinates
+* rectangular geocentric coordinates
+* ephemeris for physical observations
+* time of the begining of Carrington's synodic rotation
+
+Moon
+
+* ecliptic geocentric coordinates
+* optical, physical and topocentric liberations
+* times of passage through nodes
+* illuminated fraction of the lunar disk
+* equatorial horizontal parallax
+
+Earth
+
+* high accuracy geodesic
+* eccentricity of the meridian
+* angle between the diurnal path and the horizon
+
+Pluto
+
+* heliocentric coordinates
+* orbital elements
+* apparent magnitude
+* equatorial semidiameter
+
+Mars
+
+* ecliptic coordinates of the North pole
+* ephemeris for physical observations
+
+Jupiter
+
+* ephemeris for physical observations
+
+Transform
+
+* ecliptic coordinates to equatorial coordinates, and vice-versa
+* equatorial coordinates to local horizontal coordinates, and vice-versa
+* ecliptic coordinates to galactic coordinates, and vice-versa
+* heliocentric coordinates to ecliptic/equatorial geocentric coordinates
+* orbital elements to heliocentric coordinates
+* ecliptic/equatorial coordinates from one epoch to another
+  (due to precession)
+* orbital elements from one equinox to another
+
+Time
+
+* Julian day from Gregorian and Julian dates, and vice-versa
+* a good analytic approximation of delta T over several centuries
+* mean and apparent sidereal time
+
+Ecliptic
+
+* mean obliquity (IAU and Laskar formulae)
+* angle between the ecliptic and the horizon
+* longitudes of the two ecliptic points on the horizon
+
+Nutation in
+
+* ecliptic longitude
+* obliquity of the ecliptic
+* right ascension and declination
+
+Atmospheric refraction
+
+* apparent altitude from true altitude, and vice-versa
+* effect of local pressure and temperature
+
+Stars
+
+* combined magnitude of two or more stars
+* absolute magnitude from parallax or distance from Earth
+* brightness ratio from difference in magnitude, and vice-versa
+* angle between a vector from a star to the Earth's north
+  celestial pole and a vector from the same star to the north
+  pole of the ecliptic
+* equatorial coordinates at a different time due to proper
+  motion radial velocity
+
+Binary stars
+
+* angular separation
+* apparent position angle
+* eccentric of the apparent orbit
+* radius vector
+* true anomaly
+* mean annual motion of the companion star from period of revolution
+* mean anomaly of the companion star
+
+Asteroids
+
+* true diameter from absolute magnitude and albedo
+* apparent diameter from true diameter and distance to the
+  Earth
 
 ## Contributing
 
-The goal of this project is to build a polished, production-quality library with a well-tested implementation of algorithms useful in  astronomy, with a well-designed Rust API and an excellent documentation of code and coverage.
+The goal of this project is to build a polished, production-quality library with a well-tested implementation of algorithms useful in astronomy, with a well-designed Rust API and an excellent documentation of code and coverage.
 
 Anyone interested to contribute in any way possible is encouraged to do so.
 
-A good start would be to go through Meeus's book and browse the API documentation, read the code, and submit a pull request if anything warrants an addition or a modification.
+A good start would be to go through Meeus's book or documents published by the IAU, browse the API documentation, read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-Even refactoring code and minor optimizations are accepted.
+One suggested addition is the recent model for calculating nutation adopted by the IAU. This method is more accurate as it takes into account
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

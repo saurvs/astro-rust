@@ -341,6 +341,10 @@ pub fn HeliocenCoordsFrmOrbElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) 
      z.atan2((x*x + y*y).sqrt()))
 }
 
+pub fn Elong(app_ecl_long: f64, app_ecl_lat: f64, sun_app_ecl_long: f64) -> f64 {
+    (app_ecl_lat * (app_ecl_long - sun_app_ecl_long).cos()).acos()
+}
+
 pub fn ApprntMag_Muller(planet: Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();
     match planet {

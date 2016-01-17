@@ -19,7 +19,7 @@ pub fn AnglSepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
 }
 
 /**
-Returns an angle expressed in **degrees only**, from an angle expressed in
+Returns an angle expressed in degrees only, from an angle expressed in
 degrees, minutes and seconds
 
 # Arguments
@@ -35,9 +35,8 @@ pub fn DegFrmDMS(deg: i64, min: i64, sec: f64) -> f64 {
 }
 
 /**
-Returns an angle expressed in **degrees**, **minutes** and **seconds**,
+Returns an angle expressed in degrees, minutes and seconds,
 from an angle expressed in degrees only
-
 
 # Arguments
 
@@ -66,6 +65,22 @@ pub fn HMSFrmDeg(angle: f64) -> (i8, i8, f64) {
 
 pub fn DegFrmHMS(hour: i8, minute: i8, seconds: f64) -> f64 {
     15.0 * ((hour as f64) + (minute as f64)/60.0 + seconds/3600.0)
+}
+
+pub fn ArcSecFrmDeg(deg: f64) -> f64 {
+    deg * 3600.0
+}
+
+pub fn TimeSecFrmDeg(deg: f64) -> f64 {
+    deg * 3600.0
+}
+
+pub fn DegFrmArcSec(arc_sec: f64) -> f64 {
+    arc_sec / 3600.0
+}
+
+pub fn DegFrmTimeSec(time_sec: f64) -> f64 {
+    time_sec / 3600.0
 }
 
 /**

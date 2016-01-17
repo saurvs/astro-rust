@@ -1,4 +1,4 @@
-use time;
+use angle;
 
 /**
 Returns the combined magnitude of two stars
@@ -76,9 +76,9 @@ pub fn AbsMagFrmDist(d: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the angle between the vector from a star to the
-Earth's northern celestial pole and vector from the same star to the
-north pole of the ecliptic
+Returns the angle between a vector from a star to the
+Earth's north celestial pole and a vector from the
+same star to the north pole of the ecliptic
 
 # Returns
 
@@ -94,4 +94,59 @@ pub fn AnglBetweenNorthCelesAndEclipticPole(eclip_long: f64, eclip_lat: f64, obl
     (eclip_long.cos() * oblq_eclip.tan())
     .atan2(   eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan()
             - eclip_lat.cos())
+}
+
+/**
+Returns the equatorial coordinates of a star at
+at a different time from it's motion in space
+
+This function returns the equatorial coordinates
+of a star at a different time by taking into account
+it's proper motion, distance and radial velocity.
+
+# Returns
+
+```(new_asc, new_dec)```
+
+* ```new_asc```: Right ascension at the different
+                 time (*radians*)
+* ```new_dec```: Declination at the different
+                 time (*radians*)
+
+# Arguments
+
+* ```asc0```: Right ascension of the star initially (*radians*)
+* ```dec0```: Declination of the star initially (*radians*)
+* ```r```: Distance of the star (*parsecs*)
+* ```delta_r```: Radial velocity of the star (*parsecs/second*)
+* ```proper_motion_asc```: Proper motion of the star in right ascension
+                           (*radians*)
+* ```proper_motion_dec```: Proper motion of the star in declination
+                           (*radians*)
+* ```t```: Decimal years from the inital time; negative in the past
+          and positive in the future
+**/
+pub fn EqCoordsFrmMotion(asc0: f64, dec0: f64, r: f64, delta_r: f64,
+                     proper_motion_asc: f64, proper_motion_dec: f64, t: f64) -> (f64, f64) {
+
+    let x = r*dec0.cos()*asc0.cos();
+    let y = r*dec0.cos()*asc0.sin();
+    let z = r*dec0.sin();
+
+    let delta_asc = angle::TimeSecFrmDeg(proper_motion_asc.to_degrees()) / 13751.0;
+    let delta_dec = angle::ArcSecFrmDeg(proper_motion_dec.to_degrees()) / 206265.0;
+
+    let delta_x = (x/r)*delta_r - z*delta_dec*asc0.cos() - y*delta_asc;
+    let delta_y = (y/r)*delta_r - z*delta_dec*asc0.sin() + x*delta_asc;
+    let delta_z = (z/r)*delta_r + r*delta_dec*dec0.cos();
+
+    let x1 = x + t*delta_x;
+    let y1 = y + t*delta_y;
+    let z1 = z + t*delta_z;
+
+    let asc = y1.atan2(x1);
+    let dec = z1.atan2((x1*x1 + y1*y1).sqrt());
+
+    (asc, dec)
+
 }

@@ -3,36 +3,48 @@ use std;
 use time;
 
 /**
-Returns the annual precession in equatorial coordinates for a new epoch
+Returns the annual precession in equatorial coordinates
+towards a new epoch
 
 # Returns
 
 ```(ann_precess_asc, ann_precess_dec)```
 
-* ```ann_precess_asc```: Annual precession in right ascension for the new
-                         epoch (*radians*)
-* ```ann_precess_dec```: Annual precession in declination for the new
-                         epoch (*radians*)
+* ```ann_precess_asc```: Annual precession in right ascension from the
+                         new epoch (*radians*)
+* ```ann_precess_dec```: Annual precession in declination from the
+                         new epoch (*radians*)
+
+In the case of a star, the precession returned here does not take
+into account the annual proper motion of the star. The annual proper
+motion in right ascension and declination must simply be added to the
+corresponding annual precession returned in order to reduce the equatorial
+coordinates to the new epoch.
 
 # Arguments
 
 * ```asc```: Right ascension for the old epoch (*radians*)
 * ```dec```: Declination for the old epoch (*radians*); should not
-             be too close to the poles
+             be too close to the celestial poles
 * ```JD```: Julian (Ephemeris) day corresponding to the new epoch;
             should not be more than a few hundred years away from
             the year 2000 AD.
 **/
 pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
+
     let JC = time::JulCent(JD);
-    let m = (angle::DegFrmHMS(0, 0, 3.07496) + JC*angle::DegFrmHMS(0, 0, 0.00186)).to_radians();
-    let n = (angle::DegFrmHMS(0, 0, 1.33621) - JC*angle::DegFrmHMS(0, 0, 0.00057)).to_radians();
+
+    let m = (     angle::DegFrmHMS(0, 0, 3.07496)
+             + JC*angle::DegFrmHMS(0, 0, 0.00186)).to_radians();
+    let n = (     angle::DegFrmHMS(0, 0, 1.33621)
+             - JC*angle::DegFrmHMS(0, 0, 0.00057)).to_radians();
 
     (m + n*asc.sin()*dec.tan(), n*asc.cos())
+
 }
 
 /**
-Returns **equatorial coordinates** for a **different epoch**
+Returns equatorial coordinates reduced to a different epoch
 
 # Returns
 
@@ -79,8 +91,8 @@ pub fn ChangeEpochEqCoords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f
 }
 
 /**
-Returns **equatorial coordinates**, from coordinates referred to the
-**FK4** system, for a **different epoch**
+Returns equatorial coordinates, from coordinates referred to the
+FK4 system, reduced to a different epoch
 
 # Returns
 
@@ -119,7 +131,7 @@ pub fn ChangeEpochEqCoords_FK4(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -
 }
 
 /**
-Returns **ecliptical coordinates** for a **different epoch**
+Returns ecliptical coordinates reduced to a different epoch
 
 # Returns
 
@@ -171,7 +183,7 @@ fn AnglesForEclChange(t: f64, T: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns **orbital elements** for a **different equinox**
+Returns orbital elements reduced to a different equinox
 
 # Returns
 
@@ -191,6 +203,7 @@ Returns **orbital elements** for a **different equinox**
 **/
 pub fn ChangeOrbElements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node: f64,
                          JD1: f64, JD2: f64) -> (f64, f64, f64) {
+
     let T = time::JulCent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
@@ -216,4 +229,5 @@ pub fn ChangeOrbElements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node:
     let delta_w = (-nu.sin()*(old_long_ascend_node - Pi).sin()/new_inc.sin()).asin();
 
     (new_inc, old_arg_perih + delta_w, new_long_ascend_node)
+
 }
