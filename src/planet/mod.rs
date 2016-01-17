@@ -218,7 +218,7 @@ pub fn OrbElements(planet: Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f6
 }
 
 /**
-Returns a planet's **heliocentric coordinates**.
+Returns a planet's heliocentric coordinates
 
 # Returns
 
@@ -231,7 +231,7 @@ Returns a planet's **heliocentric coordinates**.
 # Arguments
 
 * ```planet```: [Planet](./enum.Planet.html)
-* ```JD```: Julian (Emphemeris) day
+* ```JD```: Julian (Ephemeris) day
 **/
 pub fn HeliocenCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
 
@@ -283,18 +283,22 @@ pub fn HeliocenCoords(planet: Planet, JD: f64) -> (f64, f64, f64) {
     (L, B, R)
 }
 
-fn EffectOfLightTime(x: f64, y: f64, z: f64) -> f64 {
-    0.0057755183 * (x*x + y*y + z*z).sqrt()
+pub fn LightTime(dist: f64) -> f64 {
+    0.0057755183 * dist
 }
 
 pub fn EclGeocenCoords(L: f64, B: f64, R: f64, L0: f64, B0: f64, R0: f64) -> (f64, f64, f64) {
+
     let x = R*B.cos()*L.cos() - R0*B0.cos()*L0.cos();
     let y = R*B.cos()*L.sin() - R0*B0.cos()*L0.sin();
     let z = R*B.sin() - R0*B0.sin();
 
+    let dist = (x*x + y*y + z*z).sqrt();
+
     (y.atan2(x),
      z/(x*x + y*y).sqrt(),
-     EffectOfLightTime(x, y, z))
+     LightTime(dist))
+
 }
 
 pub fn EqGeocenCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, w: f64, sigma: f64, n: f64,
@@ -327,8 +331,9 @@ pub fn EqGeocenCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64,
 
     let asc = angle::LimitTo360(nu.atan2(xi).to_degrees()).to_radians();
     let dec = et.atan2((xi*xi + nu*nu).sqrt());
+    let dist = (x*x + y*y + z*z).sqrt();
 
-    (asc, dec, EffectOfLightTime(x, y, z))
+    (asc, dec, LightTime(dist))
 }
 
 pub fn HeliocenCoordsFrmOrbElements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {

@@ -33,14 +33,15 @@ pub fn PolSemdia(distance_to_earth: f64) -> f64 {
 }
 
 /**
-Returns Jupiter's
+Return quantites used in the emphemeris for physical observations
+of Jupiter
 
 # Arguments
 
-* ```jed```: Julian Ephemeris day
-**/
-pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
-    let d = jed - 2433282.5;
+* ```JD```: Julian (Ephemeris) day
+**//*
+pub fn Ephemeris(JD: f64) -> (f64, f64, f64, f64, f64) {
+    let d = JD - 2433282.5;
     let T1 = d / 36525.0;
 
     let asc0 = 268.0_f64.to_radians() + 0.1061_f64.to_radians()*T1;
@@ -51,6 +52,7 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
     let W1 = angle::LimitTo360(17.710_f64.to_radians() + 877.90003539_f64.to_radians()*d);
     let W2 = angle::LimitTo360(16.838_f64.to_radians() + 870.27003539_f64.to_radians()*d);
 
+    let (l0, b0, R)
     let l0: f64 = 0.0; // heliocentric longitude of the Earth
     let b0: f64 = 0.0; // heliocentric latitude of the Earth
     let R: f64 = 0.0; // radius vector of the Earth
@@ -116,7 +118,7 @@ pub fn Ephemeris(jed: f64) -> (f64, f64, f64, f64, f64) {
     let P = 0.0;
 
     (D_e, D_s, w1, w2, P)
-}
+}*/
 
 pub fn Io() {
 

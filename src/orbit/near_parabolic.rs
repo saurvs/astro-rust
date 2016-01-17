@@ -12,8 +12,8 @@ Returns the **true anomaly** and **radius vector** of a body in a near-parabolic
 
 # Arguments
 
-* ```t```: Time
-* ```time_passg_perih```: Time of passage in perihelion
+* ```ecc```: Eccentricity of the orbit
+* ```t```: Time of perihelion passage in days
 * ```perih_dist```: Perihelion distance (*AU*)
 **/
 pub fn TruAnomAndRadVec(ecc: f64, t: f64, perih_dist: f64) -> (f64, f64) {

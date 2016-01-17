@@ -14,21 +14,21 @@ Also, see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ## Intro
 
-```astro-rust``` is an MIT licensed library of algorithms focused on rigorous and accurate astronomical calculations.
+```astro-rust``` is an MIT licensed library of algorithms for rigorous and accurate astronomical calculations.
 
 Several such libraries have existed for a long time, being written in popular languages such as [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have comprehensive, well-tested coverage of various astronomical algorithms, albeit occasionally distributed with slightly restrictive licenses.
 
- This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong static typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's features justifies a new astronomical library for use in future times.
+ This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong static typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
 
- The [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted is as liberal as open source licenses get, with the permission to do pretty much anything imaginable, as long as due credit is given to the original authors(s), and the same license is passed along to derived works.
+ Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s), and the same license is passed along to derived works.
 
- Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, physical ephemeris of Mars, Jupiter, Saturn and the Moon, finding position angles, illuminated fractions, and visual magnitudes. Even Pluto gets a chapter.
+ Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, calculating physical ephemeris of Mars, Jupiter, Saturn and the Moon,finding position angles, illuminated fractions, and visual magnitudes, and much more. Even Pluto gets a chapter.
 
- However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, which were in turn adopted in recent times by NASA and the IAU.
+ However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU in recent times.
 
-For information related to the programming aspects of this library on the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
+For information related to the programming aspects of this library, such as on the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
 
-A high level list of algorithms is given at the bottom of this page.
+A high-level list of algorithms implemented so far is given at the [bottom of this page](#algorithms).
 
 ## Usage
 
@@ -143,7 +143,7 @@ A high level list of algorithms is given at the bottom of this page.
 
 ## Algorithms
 
-Algorithms implemented in this library allow you to calculate or perform the following:
+Algorithms implemented in this library allow you to calculate or perform the following, categorically:
 
 **The 8 Solar System Planets**
 
@@ -179,7 +179,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 **Pluto**
 
 * heliocentric coordinates
-* orbital elements
+* mean orbital elements near 2000 AD
 * apparent magnitude
 * equatorial semidiameter
 

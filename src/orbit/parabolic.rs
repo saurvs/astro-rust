@@ -43,7 +43,7 @@ pub fn TruAnomAndRadVec(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: 
 
     let W = 0.03649116245 * (t - time_passg_perih) / perih_dist.powf(1.5);
     let G = W / 2.0;
-    let Y = G + (G*G + 1.0).sqrt();
+    let Y = (G + (G*G + 1.0).sqrt()).powf(1.0/3.0);
     let s = Y - 1.0/Y;
     let v = 2.0 * s.atan();
     let r = perih_dist * (1.0 + s*s);

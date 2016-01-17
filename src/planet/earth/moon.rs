@@ -595,7 +595,7 @@ pub fn MnPerigee(JC: f64) -> f64 {
 }
 
 /**
-Returns the **position angle** of the **bright limb** of the Moon
+Returns the position angle of the bright limb of the Moon
 
 # Returns
 
@@ -620,7 +620,7 @@ pub fn BrightLimb(sun_eq_point: coords::EqPoint,
 }
 
 /**
-Returns the **illuminated fraction** of the Moon, using **equatorial coordinates**
+Returns the illuminated fraction of the Moon, using equatorial coordinates
 
 # Arguments
 
@@ -639,7 +639,7 @@ pub fn IllmFracFrmEqCoords(sun_eq_point: &coords::EqPoint,
 }
 
 /**
-Return the **illuminated fraction** of the Moon, using **eclipctical coordinates**
+Return the illuminated fraction of the Moon, using eclipctical coordinates
 
 # Arguments
 
@@ -663,8 +663,8 @@ fn illuminated_fraction(moon_geocen_elong: f64, earth_moon_dist: f64, earth_sun_
 }
 
 /**
-Returns the **times of passage** of the Moon through the **ascending**
-and **descending nodes**, close to a given date
+Returns the times of passage of the Moon through the ascending
+and descending nodes, close to a given date
 
 # Returns
 

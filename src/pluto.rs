@@ -20,7 +20,7 @@ pub fn ApprntMag_84(planet: planet::Planet, i: f64, delta: f64, r: f64) -> f64 {
 /**
 Returns Pluto's heliocentric coordinates
 
-**Valid only for the years 1885 AD - 2099 AD.**
+Valid only for the years 1885 AD - 2099 AD.
 
 # Returns
 
@@ -28,11 +28,11 @@ Returns Pluto's heliocentric coordinates
 
 * ```longitude```: Heliocentric longitude (*radians*)
 * ```latitude```: Heliocentric latitude (*radians*)
-* ```radius_vec```: Heliocentric radius vector (*AU*)
+* ```rad_vec```: Heliocentric radius vector (*AU*)
 
 # Arguments
 
-* ```JD```: Julian day
+* ```JD```: Julian (Ephemeris) day
 **/
 pub fn HeliocenCoords(JD: f64) -> (f64, f64, f64) {
 
@@ -103,4 +103,11 @@ pub fn HeliocenCoords(JD: f64) -> (f64, f64, f64) {
     }
 
     (long, lat, r)
+}
+
+pub fn MnOrbElements_2000() -> (f64, f64, f64, f64, f64) {
+    (39.543, 0.249,
+     17.14_f64.to_radians(),
+     110.307_f64.to_radians(),
+     113.768_f64.to_radians())
 }

@@ -99,7 +99,7 @@ of the Sun
                   of nutation
 * ```oblq_eclip```: True obliquity of the ecliptic (*radians*)
 **/
-pub fn Ephm(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
+pub fn Ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
     let theta = angle::LimitTo360((JD - 2398220.0) * (360.0/25.38)).to_radians();
     let I = 7.25_f64.to_radians();
     let K = (73.6667 + 1.3958333*((JD - 2396758.0) / 36525.0)).to_radians();

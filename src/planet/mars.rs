@@ -3,6 +3,7 @@ use planet;
 use planet::earth;
 use time;
 use nutation;
+use ecliptic;
 
 #[macro_use]
 use coords;
@@ -16,46 +17,89 @@ pub fn EqCoordsOfNorthPol_J2000() -> (f64, f64) {
 }
 
 pub fn EclCoordsOfNorthPol(JC: f64) -> (f64, f64) {
-    ((317.9065 + 1.1733*JC).to_radians(),
+    ((352.9065 + 1.1733*JC).to_radians(),
      (63.2818 - 0.00394*JC).to_radians())
 }
 
 /**
-Return quantites used in the **emphemeris** for physical observations
+Return quantites used in the emphemeris for physical observations
 of Mars
+
+ω   Areographic longitude of the central meridian, as seen from Earth.
+//	P   Geocentric position angle of Mars' northern rotation pole.
+//	Q   Position angle of greatest defect of illumination.
+//	d   Apparent diameter of Mars.
+//	k   Illuminated fraction of the disk.
+//	q   Greatest defect of illumination.
+
+# Returns
+
+* ```De```: Mars-centric declination of the Earth (*radians*)
+* ```Ds```: Mars-centric declination of the Sun (*radians*)
+* ```P```: Geocentric position angle of Mars' northern
+           rotation pole, or also called, position angle
+           of the axis (*radians*)
+* ```q```: Angular amount of the greaest defect of
+           illumination (*radians*)
+* ```Q```: Position angle of the greatest defect of
+           illumination (*radians*)
+* ```w```: Longitude of the central maridian, as seen from
+           the Earth (*radians*)
+* ```d```: Apparent diameter of Mars (*AU*)
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
-**//*
-pub fn Ephm(JD: f64, l0: f64, b0: f64, R: f64,
-                     l: f64, b: f64, r: f64, mean_oblq_eclip: f64, nut_in_long; f64, nut_in_oblq: f64) {
-    let JC = time::JulianCentury(JD);
+**/
+pub fn Ephemeris(JD: f64) -> (f64, f64, f64, f64,
+                              f64, f64, f64, f64) {
+
+    let JC = time::JulCent(JD);
     let (mut lambda0, mut beta0) = EclCoordsOfNorthPol(JC);
 
-    let tau = 0.0;
-    let mut mars_earth_dist = 0.0;
-    let x = r*b.cos()*l.cos() - R*l0.cos();
-    let y = r*b.cos()*l.sin() - R*l0.sin();
-    let z = r*b.sin()         - R*b0.sin();
-    mars_earth_dist = (x*x + y*y + z*z).sqrt();
+    let (l0, b0, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
+
+    let mut mars_earth_dist = 0.5;
+    let mut light_time = planet::LightTime(mars_earth_dist);
+    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
+    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
+    let mut i: u8 = 0;
+    while i < 2 {
+
+        let (t1, t2, t3) = planet::HeliocenCoords(planet::Planet::Mars, JD - light_time);
+        l = t1; b = t2; r = t3;
+        x = r*b.cos()*l.cos() - R*l0.cos();
+        y = r*b.cos()*l.sin() - R*l0.sin();
+        z = r*b.sin()         - R*b0.sin();
+        mars_earth_dist = (x*x + y*y + z*z).sqrt();
+        light_time = planet::LightTime(mars_earth_dist);
+
+        i += 1;
+
+    }
 
     let mut lambda = y.atan2(x);
     let mut beta = z.atan2((x*x + y*y).sqrt());
-    //let D_e = -angle::AnglSepr(lambda0, beta0, lambda, beta);
+    let D_e = - beta0.sin()*beta.sin()
+              - beta0.cos()*beta.cos()*(lambda0 - lambda).cos();
 
     let N = (49.5581 + 0.7721*JC).to_radians();
 
     let l1 = l - (0.00697/r).to_radians();
     let b1 = b - (0.000225*(l - N).cos()/r).to_radians();
-    //let D_s = -angle::AngularSep(lambda0, beta0, l1, b1);
+    let D_s = - beta0.sin()*b1.sin()
+              - beta0.cos()*b1.cos()*(lambda0 - l1).cos();
 
-    let W = (11.504 + 350.89200025*(JD - tau - 2433282.5)).to_radians();
+    let W = angle::LimitTo360(  11.504
+                              + 350.89200025*(JD - light_time - 2433282.5)
+                             ).to_radians();
 
-    let (asc0, dec0) = EqFrmEcl!(lambda0, beta0, mean_oblq_eclip);
+    let mn_oblq_eclip = ecliptic::MnOblq(JD);
+    let asc0 = coords::AscFrmEcl(lambda0, beta0, mn_oblq_eclip);
+    let dec0 = coords::DecFrmEcl(lambda0, beta0, mn_oblq_eclip);
 
-    let u = y*oblq_eclip.cos() - z*oblq_eclip.sin();
-    let v = y*oblq_eclip.sin() + z*oblq_eclip.cos();
+    let u = y*mn_oblq_eclip.cos() - z*mn_oblq_eclip.sin();
+    let v = y*mn_oblq_eclip.sin() + z*mn_oblq_eclip.cos();
 
     let asc = u.atan2(x);
     let dec = v.atan2((x*x + u*u).sqrt());
@@ -63,22 +107,30 @@ pub fn Ephm(JD: f64, l0: f64, b0: f64, R: f64,
                .atan2(dec.cos()*(asc0 - asc).sin());
     let w = W - zeta;
 
+    lambda += 0.005693_f64.to_radians() * (l0 - lambda).cos()/beta.cos();
+    beta += 0.005693_f64.to_radians() * (l0 - lambda).sin() * beta.sin();
+
+    let (nut_in_long, nut_in_oblq) = nutation::Nutation(JD);
     lambda += nut_in_long;
     lambda0 += nut_in_long;
-    let true_oblq_eclip = mean_oblq_eclip + nut_in_oblq;
+    let tru_oblq_eclip = mn_oblq_eclip + nut_in_oblq;
 
-    let (nut_in_long, nut_in_oblq) = nutation::Nutation(jed);
-    let true_oblq_ecliptic = mean_oblq_ecliptic + nut_in_oblq;
-
-    let (asc01, dec01) = EqFrmEcl!(lambda0, beta0, true_oblq_ecliptic);
-    let (asc1, dec1) = EqFrmEcl!(lambda, beta, true_oblq_ecliptic);
+    let asc01 = coords::AscFrmEcl(lambda0, beta0, tru_oblq_eclip);
+    let dec01 = coords::DecFrmEcl(lambda0, beta0, tru_oblq_eclip);
+    let asc1 = coords::AscFrmEcl(lambda, beta, tru_oblq_eclip);
+    let dec1 = coords::DecFrmEcl(lambda, beta, tru_oblq_eclip);
 
     let P = (dec01.cos() * (asc01 - asc1).sin())
             .atan2(dec01.sin()*dec1.cos() - dec01.cos()*dec1.sin()*(asc01 - asc1).cos());
 
-    let d = angle::PureDegrees(0, 0, 9.36) / mars_earth_dist;
+    let d = angle::DegFrmDMS(0, 0, 9.36) / mars_earth_dist;
+    let k = planet::IllumFracFrmDist(r, mars_earth_dist, R);
+    let q = (1.0 - k)*d;let Q = 0.0;
+
+    (D_e, D_s, P, q, Q, w, d)
+
 }
-*/
+
 pub fn VSOP87_Terms() -> Vec<Vec<Vec<[f64; 3]>>> {
     vec![
         vec![
