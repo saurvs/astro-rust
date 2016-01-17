@@ -143,14 +143,14 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 * time of passage through the nodes
 * illuminated fraction of the planetary disk
 
-Sun
+** The Sun**
 
 * ecliptic geocentric coordinates
 * rectangular geocentric coordinates
 * ephemeris for physical observations
 * time of the begining of Carrington's synodic rotation
 
-Moon
+**The Moon**
 
 * ecliptic geocentric coordinates
 * optical, physical and topocentric liberations
@@ -158,29 +158,29 @@ Moon
 * illuminated fraction of the lunar disk
 * equatorial horizontal parallax
 
-Earth
+**The Earth**
 
 * high accuracy geodesic
 * eccentricity of the meridian
 * angle between the diurnal path and the horizon
 
-Pluto
+**Pluto**
 
 * heliocentric coordinates
 * orbital elements
 * apparent magnitude
 * equatorial semidiameter
 
-Mars
+**Mars**
 
 * ecliptic coordinates of the North pole
 * ephemeris for physical observations
 
-Jupiter
+**Jupiter**
 
 * ephemeris for physical observations
 
-Transform
+**Transform**
 
 * ecliptic coordinates to equatorial coordinates, and vice-versa
 * equatorial coordinates to local horizontal coordinates, and vice-versa
@@ -191,30 +191,30 @@ Transform
   (due to precession)
 * orbital elements from one equinox to another
 
-Time
+**Time**
 
 * Julian day from Gregorian and Julian dates, and vice-versa
-* a good analytic approximation of delta T over several centuries
+* analytic approximation of delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
 * mean and apparent sidereal time
 
-Ecliptic
+**Ecliptic**
 
 * mean obliquity (IAU and Laskar formulae)
 * angle between the ecliptic and the horizon
 * longitudes of the two ecliptic points on the horizon
 
-Nutation in
+**Nutation** in
 
 * ecliptic longitude
 * obliquity of the ecliptic
 * right ascension and declination
 
-Atmospheric refraction
+**Atmospheric refraction**
 
 * apparent altitude from true altitude, and vice-versa
 * effect of local pressure and temperature
 
-Stars
+**Stars**
 
 * combined magnitude of two or more stars
 * absolute magnitude from parallax or distance from Earth
@@ -225,7 +225,7 @@ Stars
 * equatorial coordinates at a different time due to proper
   motion radial velocity
 
-Binary stars
+**Binary stars**
 
 * angular separation
 * apparent position angle
@@ -235,7 +235,7 @@ Binary stars
 * mean annual motion of the companion star from period of revolution
 * mean anomaly of the companion star
 
-Asteroids
+**Asteroids**
 
 * true diameter, from absolute magnitude and albedo
 * apparent diameter, from true diameter and distance to the
@@ -243,16 +243,14 @@ Asteroids
 
 ## Contributing
 
-The goal of this project is to build a polished, production-quality library with a well-tested implementation of algorithms useful in astronomy, with a well-designed Rust API and an excellent documentation of code and coverage.
-
 Anyone interested to contribute in any way possible is encouraged to do so.
 
 A good start would be to go through Meeus's book or documents published by the IAU, browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-One suggested addition is the recent IAU 2000/2006 precession-nutation model. This method improves upon the existing model implemented here "by taking into
+One suggested addition is the recent IAU 2000/2006 precession-nutation model. This method improves upon the existing model implemented here "*by taking into
 account the effect of mantle anelasticity, ocean tides, electromagnetic couplings
 produced between the fluid outer core and the mantle as well as between the solid
-inner core and fluid outer core".
+inner core and fluid outer core*".
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
