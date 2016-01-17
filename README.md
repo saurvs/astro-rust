@@ -4,7 +4,7 @@
 
 ```astro-rust``` is an MIT licensed library of algorithms focused on rigorous and accurate astronomical calculations.
 
-Several such libraries have existed for a long time written in popular languages such as C, Python and Java, and which have comprehensive coverage and are well-tested, abeit occasionally distributed with restrictive licenses.
+Several such libraries have existed for a long time, being written in popular languages such as C, Python and Java, which have comprehensive coverage of astronomical algorithms and are well-tested, albeit occasionally distributed with restrictive licenses.
 
  This library however is written in the Rust programming language; a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, such as excellent memory safety without a garbage collector, strong static typing, better concurrency support and a better module system, and all the while being blazingly fast by running close to the metal. This new language justifies a new astronomical library for use in the future.
 
@@ -249,7 +249,10 @@ Anyone interested to contribute in any way possible is encouraged to do so.
 
 A good start would be to go through Meeus's book or documents published by the IAU, browse the API documentation, read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-One suggested addition is the recent model for calculating nutation adopted by the IAU. This method is more accurate as it takes into account
+One suggested addition is the recent IAU 2000/2006 precession-nutation model. This method improves upon the existing model implemented here so far by taking into
+account the effect of mantle anelasticity, ocean tides, electromagnetic couplings
+produced between the fluid outer core and the mantle as well as between the solid
+inner core and fluid outer core
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
