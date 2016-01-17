@@ -1,4 +1,5 @@
 use angle;
+use time;
 
 #[macro_use]
 use coords;
@@ -12,14 +13,18 @@ pub fn Inc(JC: f64) -> f64 {
 
 pub fn AscenNode(JC: f64) -> f64 {
     (      169.50847
-      - JC*(1.394681
+      + JC*(1.394681
       + JC*0.000412)
     ).to_radians()
-}/*
+}
 
-pub Stuff(inc: f64, ascend_node: f64,
+pub fn Position(JD: f64,
           l0: f64, b0: f64, R: f64,
-          l: f64, b: f64, r: f64) {
+          l: f64, b: f64, r: f64,
+          nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
+    let JC = time::JulCent(JD);
+    let inc = Inc(JC);
+    let ascend_node = AscenNode(JC);
 
     let x = r*b.cos()*l.cos() - R*l0.cos();
     let y = r*b.cos()*l.sin() - R*l0.sin();
@@ -27,15 +32,15 @@ pub Stuff(inc: f64, ascend_node: f64,
 
     let saturn_earth_dist = (x*x + y*y + z*z).sqrt();
 
-    let lambda = y.atan2(x);
-    let beta = z.atan2((x*x + y*y).sqrt());
+    let mut lambda = y.atan2(x);
+    let mut beta = z.atan2((x*x + y*y).sqrt());
     let B = (  inc.sin() * beta.cos() * (lambda - ascend_node).sin()
              - inc.cos() * beta.sin()
             ).asin();
-    let a = angle::DegFrmDMS(0, 0, 375.35, saturn_earth_dist);
-    let b = a * B.abs().sin();
+    let semi_maj = angle::DegFrmDMS(0, 0, 375.35).to_radians() / saturn_earth_dist;
+    let semi_min = semi_maj * B.abs().sin();
 
-    let N = 113.6655 + 0.8771*JC;
+    let N = (113.6655 + 0.8771*JC).to_radians();
 
     let l1 = l - (0.01759/r).to_radians();
     let b1 = b - (0.000764*(l - N).cos()/r).to_radians();
@@ -52,14 +57,36 @@ pub Stuff(inc: f64, ascend_node: f64,
     let mut lambda0 = ascend_node - 90.0_f64.to_radians();
     let beta0 = 90.0_f64.to_radians() - inc;
 
+    let q = 0.005693_f64.to_radians();
+    lambda += q * (l0 - lambda).cos() / beta.cos();
+    beta += q * (l0 - lambda).sin() * beta.sin();
+
     lambda0 += nut_in_long;
     lambda += nut_in_long;
 
-    let (asc0, dec0) = EqFrmEcl!(lambda0, beta0, true_oblq_eclip);
-    let (asc, dec) = EqFrmEcl!(lambda, beta, true_oblq_eclip);
+    let asc0 = coords::AscFrmEcl(lambda0, beta0, tru_oblq_eclip);
+    let dec0 = coords::DecFrmEcl(lambda0, beta0, tru_oblq_eclip);
+    let asc = coords::AscFrmEcl(lambda, beta, tru_oblq_eclip);
+    let dec = coords::DecFrmEcl(lambda, beta, tru_oblq_eclip);
 
     let P = (dec0.cos() * (asc0 - asc).sin())
             .atan2(dec0.sin()*dec.cos() - dec0.cos()*dec.sin()*(asc0 - asc).cos());
 
+    (B, B1, P, deltaU, semi_maj, semi_min)
 }
-*/
+
+pub fn InnEdgeOutRing(a: f64, b: f64) -> (f64, f64) {
+    (a*0.8801, b*0.8801)
+}
+
+pub fn OutEdgeInnRing(a: f64, b: f64) -> (f64, f64) {
+    (a*0.8599, b*0.8599)
+}
+
+pub fn InnEdgeInnRing(a: f64, b: f64) -> (f64, f64) {
+    (a*0.665, b*0.665)
+}
+
+pub fn InnEdgeDuskRing(a: f64, b: f64) -> (f64, f64) {
+    (a*0.5486, b*0.5486)
+}

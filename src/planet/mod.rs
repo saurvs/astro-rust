@@ -8,6 +8,7 @@ mod uranus;
 mod neptune;
 
 use angle;
+use coords;
 use time;
 
 /// Represents a planet
@@ -58,16 +59,38 @@ it's distance to the Sun and the Earth
 
 # Arguments
 
-* ```dist_to_sun```: A planet's distance to the Sun (*AU*)
-* ```dist_to_earth```: A planet's distance to the Earth (*AU*)
-* ```earth_sun_dist```: Sun-Earth distance (*AU*)
+* ```r```: A planet's distance to the Sun (*AU*)
+* ```delta```: A planet's distance to the Earth (*AU*)
+* ```R```: Sun-Earth distance (*AU*)
 **/
-pub fn IllumFracFrmDist(dist_to_sun: f64, dist_to_earth: f64,
-                        earth_sun_dist: f64) -> f64 {
-    let x = dist_to_sun + dist_to_earth;
+pub fn IllumFracFrmDist(r: f64, delta: f64, R: f64) -> f64 {
+    let x = r + delta;
 
-      (x*x - earth_sun_dist*earth_sun_dist)
-    / 4.0 * dist_to_sun * dist_to_earth
+    (x*x - R*R) / (4.0 * r * delta)
+}
+
+/**
+Returns the position angle of the bright limb of a planet
+
+# Returns
+
+* ```position_angle_of_bright_limb```: The position angle of the midpoint
+                                       of the illuminated limb of a planet
+                                       (*radians*)
+
+# Arguments
+
+* ```sun_eq_point```: Equatorial coordinate of the Sun (*radians*)
+* ```planet_eq_point```: Equatorial coordinate of the Planet (*radians*)
+**/
+pub fn BrightLimb(sun_eq_point: coords::EqPoint,
+                  planet_eq_point: coords::EqPoint) -> f64 {
+    let a = sun_eq_point.dec.cos();
+    let n = a * (sun_eq_point.asc - planet_eq_point.asc).sin();
+    let d =   sun_eq_point.dec.sin()    * planet_eq_point.dec.cos()
+            - planet_eq_point.dec.sin() * (sun_eq_point.asc - planet_eq_point.asc).cos() * a;
+
+    n.atan2(d)
 }
 
 /**
@@ -279,7 +302,7 @@ pub fn HeliocenCoords(planet: &Planet, JD: f64) -> (f64, f64, f64) {
     (L, B, R)
 }
 
-fn LightTime(dist: f64) -> f64 {
+pub fn LightTime(dist: f64) -> f64 {
     0.0057755183 * dist
 }
 

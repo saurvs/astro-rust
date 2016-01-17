@@ -4,7 +4,7 @@
 
 **Contents**
 
-* [Intro](#intro)
+* [About](#intro)
 * [Usage](#usage)
 * [List of algorithms](#algorithms)
 * [Contributing](#contributing)
@@ -12,7 +12,7 @@
 
 Also, see the [API Docs](https://saurvs.github.io/astro-rust/)
 
-## Intro
+## About
 
 ```astro-rust``` is an MIT licensed library of algorithms made for rigorous and accurate astronomical calculations.
 
@@ -81,7 +81,7 @@ A high-level list of algorithms implemented so far is given at the [bottom of th
 
 * Find the *heliocentric* coordinates of Jupiter
   ```rust
-  let (long, lat, rad_vec) = planet::HeliocenCoords(planet::Planet::Jupiter, julian_day);
+  let (long, lat, rad_vec) = planet::HeliocenCoords(&planet::Planet::Jupiter, julian_day);
   ```
 
 * Find the corrections for nutation in ecliptic longitude and obliquity of the ecliptic
@@ -191,6 +191,10 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 **Jupiter**
 
 * ephemeris for physical observations
+
+**Saturn**
+
+* position of the ring
 
 **Transform**
 
