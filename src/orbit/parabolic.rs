@@ -40,8 +40,8 @@ Returns the **true anomaly** and **radius vector** (*AU*) of a body in a parabol
 * ```perih_dist```: Perihelion distance (*AU*)
 **/
 pub fn TruAnomAndRadVec(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64, time_passg_perih: f64, t: f64, perih_dist: f64) -> (f64, f64) {
-    let W = 0.03649116245 * (t - time_passg_perih) / perih_dist.powf(1.5);
 
+    let W = 0.03649116245 * (t - time_passg_perih) / perih_dist.powf(1.5);
     let G = W / 2.0;
     let Y = G + (G*G + 1.0).sqrt();
     let s = Y - 1.0/Y;

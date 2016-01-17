@@ -2,6 +2,7 @@ pub mod angle;
 pub mod time;
 pub mod coords;
 pub mod util;
+pub mod consts;
 
 pub mod star;
 pub mod binary_star;

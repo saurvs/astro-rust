@@ -1,3 +1,5 @@
+use consts;
+
 /**
 Returns the **true anomaly** and **radius vector** of a body in a near-parabolic orbit
 
@@ -15,8 +17,8 @@ Returns the **true anomaly** and **radius vector** of a body in a near-parabolic
 * ```perih_dist```: Perihelion distance (*AU*)
 **/
 pub fn TruAnomAndRadVec(ecc: f64, t: f64, perih_dist: f64) -> (f64, f64) {
-    let k = 0.0;
-    let Q = k/2.0 * perih_dist * ((1.0 + ecc)/perih_dist).sqrt();
+
+    let Q = consts::GaussGrav()*(1.0 + ecc).sqrt()/(2.0 * perih_dist.powf(1.5));
     let y = (1.0 - ecc)/(1.0 + ecc);
     let s: f64 = 0.2;
 
@@ -24,4 +26,5 @@ pub fn TruAnomAndRadVec(ecc: f64, t: f64, perih_dist: f64) -> (f64, f64) {
     let r = perih_dist * (1.0 + ecc)/(1.0 + ecc*v.cos());
 
     (v, r)
+
 }
