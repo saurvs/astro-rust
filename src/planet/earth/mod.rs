@@ -6,7 +6,7 @@ use time;
 use planet;
 
 /**
-Returns the **flattening factor** factor of the Earth
+Returns the flattening factor factor of the Earth
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -15,7 +15,7 @@ pub fn FlatFac() -> f64 {
 }
 
 /**
-Returns the **equatorial radius** of the Earth *(kilometers)*
+Returns the equatorial radius of the Earth (*kilometers*)
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -25,7 +25,7 @@ pub fn EqRad() -> f64 {
 
 /**
 
-Returns the **polar radius** of the Earth *(kilometers)*
+Returns the polar radius of the Earth (*kilometers*)
 
 Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html) and
 [```eq_radius()```](./fn.eq_radius.html)
@@ -35,7 +35,7 @@ pub fn PolRad() -> f64 {
 }
 
 /**
-Returns the **eccentricity** of the Earth's **meridian**
+Returns the eccentricity of the Earth's meridian
 
 Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html)
 **/
@@ -44,8 +44,8 @@ pub fn EccOfMerd() -> f64 {
 }
 
 /**
-Returns a **low accuracy distance** between two points on the Earth's
-surface *(kilometers)*
+Returns a low accuracy distance between two points on the Earth's
+surface (*kilometers*)
 
 Assumes that the Earth is a sphere.
 
@@ -59,8 +59,8 @@ pub fn ApproxGeodesicDist(p1: &coords::GeographPoint, p2: &coords::GeographPoint
 }
 
 /**
-Returns a **high accuracy distance** between two points on the Earth's
-surface *(kilometers)*
+Returns a high accuracy distance between two points on the Earth's
+surface (*kilometers*)
 
 # Arguments
 
@@ -117,13 +117,13 @@ pub fn RhoSinAndCosPhi(geograph_lat: f64, height: f64) -> (f64, f64) {
 }
 
 /**
-Returns the **distance** from the **Earth's center** to a **point**
-on the **ellipsoid**
+Returns the distance from the Earth's center to a point
+on the ellipsoid
 
 # Returns
 
 * ```rho```: Distance from the Earth's center to the point on the
-             ellipsoid *(fraction of the equatorial radius)*
+             ellipsoid (*fraction of the equatorial radius*)
 
 # Arguments
 
@@ -135,17 +135,17 @@ pub fn Rho(geograph_lat: f64) -> f64 {
     - 0.0000035 * (4.0*geograph_lat).cos()
 }
 
-/// Returns the **rotational angular velocity** of the Earth *(radian/second)*
+/// Returns the rotational angular velocity of the Earth (*radian per second*)
 pub fn RotAnglVel() -> f64 {
     0.00007292114992
 }
 
 /**
-Returns the **radius** of the **parallel** of a **latitude**
+Returns the radius of the parallel of a latitude
 
 # Returns
 
-* ```rad```: Radius of the parallel of the latitude *(kilometers)*
+* ```rad```: Radius of the parallel of the latitude (*kilometers*)
 
 # Arguments
 
@@ -158,11 +158,11 @@ pub fn RadOfParllLat(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the **linear velocity** of a point at a **latitude**
+Returns the linear velocity of a point at a latitude
 
 # Returns
 
-* ```lin_vel```: Linear velocity at the latitude *(kilometers/second)*
+* ```lin_vel```: Linear velocity at the latitude (kilometers per second*)
 
 # Arguments
 
@@ -173,13 +173,13 @@ pub fn LinrVelAtLat(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the **radius** of **curvature** of the Earth's **meridian**
-at a **latitude**
+Returns the radius of curvature of the Earth's meridian
+at a latitude
 
 # Returns
 
 * ```rad```: Radius of curvature of the Earth's meridian at the
-latitude *(kilometers)*
+latitude (*kilometers*)
 
 # Arguments
 
@@ -192,12 +192,12 @@ pub fn RadOfCurvOfMerd(lat: f64) -> f64 {
 }
 
 /**
-Returns the **differenc** between the geographic latitude and
+Returns the difference between the geographic latitude and
 geocentric latitude
 
 # Returns
 
-* ```diff```: (Geographic latitude - Geocentric latitude) (*radians*)
+* ```diff```: Geographic latitude - geocentric latitude (*radians*)
 
 # Arguments
 
@@ -209,16 +209,16 @@ pub fn GeographGeocenLatDiff(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the **equation of time** (*radians*)
+Returns the equation of time (*radians*)
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 * ```sun_asc```: Right ascension of the Sun (*radians*)
 * ```nut_log```: Nutation correction for longitude (*radians*)
-* ```tru_obl```: *True* obliquity of the ecliptic (*radians*)
+* ```tru_oblq```: True obliquity of the ecliptic (*radians*)
 **/
-pub fn EquationOfTime(JD: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64 {
+pub fn EquationOfTime(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> f64 {
     let t = time::JulMill(JD);
     let L = angle::LimitTo360(
             280.4664567 +
@@ -231,12 +231,12 @@ pub fn EquationOfTime(JD: f64, sun_asc: f64, nut_long: f64, tru_obl: f64) -> f64
 
     (L - 0.0057183 -
      sun_asc.to_degrees() +
-     nut_long.to_degrees()*tru_obl.cos()
+     nut_long.to_degrees()*tru_oblq.cos()
     ).to_radians()
 }
 
 /**
-Returns the **angle** between **diurnal path** and the **horizon**
+Returns the angle between diurnal path and the horizon
 
 # Returns
 

@@ -1,5 +1,5 @@
 /**
-Returns the **angular separation** between two angular points
+Returns the angular separation between two angular points
 
 # Arguments
 
@@ -84,7 +84,7 @@ pub fn DegFrmTimeSec(time_sec: f64) -> f64 {
 }
 
 /**
-Returns the equivalent angle in **[0, 360] degree range**
+Returns the equivalent angle in [0, 360] degree range
 
 # Arguments
 

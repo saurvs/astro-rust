@@ -130,7 +130,7 @@ pub fn JulMill(JD: f64) -> f64 {
 }
 
 /**
-Returns the **Julian day**
+Returns the Julian day from a date
 
 # Arguments
 
@@ -160,8 +160,7 @@ pub fn JulDay(date: &Date) -> f64 {
 }
 
 /**
-Returns the Julian Emphemeris day from a
-Julian day
+Returns the Julian Ephemeris day from a Julian day
 
 # Arguments
 
@@ -189,7 +188,7 @@ Returns a ```Date``` equivalent to a given Julian day
 **/
 pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
     if JD < 0.0 {
-        // panic
+        panic!("A negative value for JD was passed to time::DateFrmJulDay")
     }
 
     JD += 0.5;
@@ -227,10 +226,11 @@ pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
                };
 
     (year as i16, month as i8, day)
+    
 }
 
 /**
-Returns the **apparent sidereal time** from mean sidereal time
+Returns the apparent sidereal time from mean sidereal time
 
 # Returns
 
@@ -247,7 +247,7 @@ pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
 }
 
 /**
-Returns the **apparent sidereal time** for a Julian day
+Returns the apparent sidereal time for a Julian day
 
 # Returns
 
@@ -267,7 +267,7 @@ macro_rules! AppSidr {
 }
 
 /**
-Returns the **mean sidereal time** for a Julian day
+Returns the mean sidereal time for a Julian day
 
 # Returns
 

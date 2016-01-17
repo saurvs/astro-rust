@@ -4,8 +4,6 @@ use planet::earth;
 use time;
 use nutation;
 use ecliptic;
-
-#[macro_use]
 use coords;
 
 pub fn EqCoordsOfNorthPol_J1950() -> (f64, f64) {
@@ -22,17 +20,12 @@ pub fn EclCoordsOfNorthPol(JC: f64) -> (f64, f64) {
 }
 
 /**
-Return quantites used in the emphemeris for physical observations
+Return quantites used in the ephemeris for physical observations
 of Mars
 
-ω   Areographic longitude of the central meridian, as seen from Earth.
-//	P   Geocentric position angle of Mars' northern rotation pole.
-//	Q   Position angle of greatest defect of illumination.
-//	d   Apparent diameter of Mars.
-//	k   Illuminated fraction of the disk.
-//	q   Greatest defect of illumination.
-
 # Returns
+
+```(De, Ds, P, q, Q, w, d)```
 
 * ```De```: Mars-centric declination of the Earth (*radians*)
 * ```Ds```: Mars-centric declination of the Sun (*radians*)
@@ -50,9 +43,9 @@ of Mars
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
-**/
+**//*
 pub fn Ephemeris(JD: f64) -> (f64, f64, f64, f64,
-                              f64, f64, f64, f64) {
+                              f64, f64, f64) {
 
     let JC = time::JulCent(JD);
     let (mut lambda0, mut beta0) = EclCoordsOfNorthPol(JC);
@@ -129,7 +122,7 @@ pub fn Ephemeris(JD: f64) -> (f64, f64, f64, f64,
 
     (D_e, D_s, P, q, Q, w, d)
 
-}
+}*/
 
 pub fn VSOP87_Terms() -> Vec<Vec<Vec<[f64; 3]>>> {
     vec![

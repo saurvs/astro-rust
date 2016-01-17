@@ -1,9 +1,9 @@
 /**
-Returns the **diameter** of an asteroid
+Returns the diameter of an asteroid
 
 # Returns
 
-* ```diameter```: Diameter of the asteroid *(meters)*
+* ```diameter```: Diameter of the asteroid (*meters*)
 
 # Arguments
 
@@ -15,11 +15,11 @@ pub fn Diamtr(abs_mag: f64, albedo: f64) -> f64 {
 }
 
 /**
-Returns the **apparent diameter** of an asteroid
+Returns the apparent diameter of an asteroid
 
 # Returns
 
-* ```apprnt_diameter```: Apparent diameter of the asteroid *(meters)*
+* ```apprnt_diameter```: Apparent diameter of the asteroid (*meters*)
 
 # Arguments
 

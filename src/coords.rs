@@ -1,7 +1,7 @@
 use angle;
 use time;
 
-/// Represents a point on the **Earth's surface**
+/// Represents a point on the Earth's surface
 pub struct GeographPoint {
     /// Right ascension
     pub long: f64,
@@ -16,7 +16,7 @@ impl GeographPoint {
     }
 }
 
-/// Represents a point on the **equatorial coordinate system**
+/// Represents a point on the equatorial coordinate system
 pub struct EqPoint {
     /// Right ascension
     pub asc: f64,
@@ -34,7 +34,7 @@ impl EqPoint {
 //-------------------------------------------------------------------
 
 /**
-Returns the **hour angle** from **local longitude** and **right ascension**
+Returns the hour angle from local longitude and right ascension
 
 If right ascension is corrected for nutation, then sidereal time
 too must be corrected for it.
@@ -54,7 +54,7 @@ pub fn HrAnglFrmObserverLong(green_sidreal: f64, observer_long: f64, asc: f64) -
 }
 
 /**
-Returns the **hour angle** from **local sidereal time** and **right ascension**
+Returns the hour angle from local sidereal time and right ascension
 
 If right ascension is corrected for nutation, then sidereal time
 too must be corrected for it.
@@ -76,7 +76,7 @@ pub fn HrAnglFrmLocSidr(local_sidreal: f64, asc: f64) -> f64 {
 // Ecliptic coordinates to equatorial coordinates
 
 /**
-Returns the **ecliptic longitude** from **equatorial coordinates**
+Returns the ecliptic longitude from equatorial coordinates
 
 # Returns
 
@@ -97,7 +97,7 @@ pub fn EclLongFrmEq(asc: f64, dec: f64, oblq_eclip: f64,) -> f64 {
 }
 
 /**
-Returns the **ecliptic latitude** from **equatorial coordinates**
+Returns the ecliptic latitude from equatorial coordinates
 
 # Returns
 
@@ -118,7 +118,7 @@ pub fn EclLatFrmEq(asc: f64, dec: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns **ecliptic coordinates** from **equatorial coordinates**
+Returns ecliptic coordinates from equatorial coordinates
 
 # Returns
 
@@ -147,7 +147,7 @@ macro_rules! EclFrmEq {
 // Equatorial coordinates to ecliptic coordinates
 
 /**
-Returns the **right ascension** from **ecliptic coordinates**
+Returns the right ascension from ecliptic coordinates
 
 # Returns
 
@@ -168,7 +168,7 @@ pub fn AscFrmEcl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns the **declination** from **ecliptic coordinates**
+Returns the declination from ecliptic coordinates
 
 # Returns
 
@@ -189,7 +189,7 @@ pub fn DecFrmEcl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns **equatorial coordinates** from **ecliptic coordinates**
+Returns equatorial coordinates from ecliptic coordinates
 
 # Returns
 
@@ -218,7 +218,7 @@ macro_rules! EqFrmEcl {
 // Local horizontal coordinates from equatorial coordinates
 
 /**
-Returns the **azimuth** from **equatorial coordinates**
+Returns the azimuth from equatorial coordinates
 
 # Returns
 
@@ -238,7 +238,7 @@ pub fn AzFrmEqCoords(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
 }
 
 /**
-Returns the **altitude** from **equatorial coordinates**
+Returns the altitude from equatorial coordinates
 
 # Returns
 
@@ -257,7 +257,7 @@ pub fn AltFrmEqCoords(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
 }
 
 /**
-Returns **local horizontal coordinates** from **equatorial coordinates**
+Returns local horizontal coordinates from equatorial coordinates
 
 # Returns
 
@@ -284,7 +284,7 @@ macro_rules! LocHzFrmEq {
 // Equatorial coordinates from local horizontal coordinates
 
 /**
-Returns the **hour angle** from **horizontal coordinates**
+Returns the hour angle from horizontal coordinates
 
 # Returns
 
@@ -304,7 +304,7 @@ pub fn HourAnglFrmHz(az: f64, alt: f64, observer_lat: f64) -> f64 {
 }
 
 /**
-Returns the **declination** from **horizontal coordinates**
+Returns the declination from horizontal coordinates
 
 # Returns
 
@@ -326,7 +326,7 @@ pub fn DecFrmHz(az: f64, alt: f64, observer_lat: f64) -> f64 {
 // Equatorial coordinates to galactic coordinates
 
 /**
-Returns the **galactic longitude** from **equatorial coordinates**
+Returns the galactic longitude from equatorial coordinates
 
 The equatorial coordinates must be referred to the standard equinox
 of B1950.0
@@ -349,7 +349,7 @@ pub fn GalLongFrmEq(asc: f64, dec: f64) -> f64 {
 }
 
 /**
-Returns the **galactic latitude** from **equatorial coordinates**
+Returns the galactic latitude from equatorial coordinates
 
 The equatorial coordinates must be referred to the standard equinox
 of B1950.0
@@ -370,7 +370,7 @@ pub fn GalLatFrmEq(asc: f64, dec: f64) -> f64 {
 }
 
 /**
-Returns **galactic coordinates** from **equatorial coordinates**
+Returns galactic coordinates from equatorial coordinates
 
 # Returns
 
@@ -396,7 +396,7 @@ macro_rules! GalFrmEq {
 // Galactic coordinates to equatorial coordinates
 
 /**
-Returns the **right ascension** from **galactic coordinates**
+Returns the right ascension from galactic coordinates
 
 The right ascension is referred to the standard equinox
 of B1950.0
@@ -419,7 +419,7 @@ pub fn AscFrmGal(gal_long: f64, gal_lat: f64) -> f64 {
 }
 
 /**
-Returns the **declination** from **galactic coordinates**
+Returns the declination from galactic coordinates
 
 The declination is referred to the standard equinox
 of B1950.0
@@ -440,7 +440,7 @@ pub fn DecFrmGal(gal_long: f64, gal_lat: f64) -> f64 {
 }
 
 /**
-Returns **equatorial coordinates** from **galactic coordinates**
+Returns equatorial coordinates from galactic coordinates
 
 # Returns
 

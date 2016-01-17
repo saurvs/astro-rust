@@ -32,7 +32,7 @@ Returns Saturn's geocentric polar semidiameter
 
 # Returns
 
-* ```polar_semidiameter```: Polar semidiameter *(radians per AU)*
+* ```polar_semidiameter```: Polar semidiameter (*radians per AU*)
 
 # Arguments
 
@@ -51,7 +51,7 @@ Returns Saturn's geocentric equatorial semidiameter
 
 # Returns
 
-* ```equatorial_semidiameter```: Equatorial semidiameter *(radians per AU)*
+* ```equatorial_semidiameter```: Equatorial semidiameter (*radians per AU*)
 
 # Arguments
 

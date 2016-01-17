@@ -15,7 +15,7 @@ Returns the aberration in equatorial coordinates
 
 * ```asc```: Right ascension (*radians*)
 * ```dec```: Declination (*radians*)
-* ```JD``` : Julian (Emphemeris) day
+* ```JD``` : Julian (Ephemeris) day
 **/
 pub fn AberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     let t = time::JulCent(JD);

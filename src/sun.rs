@@ -29,7 +29,7 @@ Returns the ecliptic geocentric coordinates of the Sun
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn EclGeocenCoords(JD: f64) -> (f64, f64, f64) {
-    let (L, B, R) = planet::HeliocenCoords(planet::Planet::Earth, JD);
+    let (L, B, R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
 
     let L_sun = angle::LimitTo360((L + std::f64::consts::PI).to_degrees());
     let B_sun = angle::LimitTo360(-1.0 * B.to_degrees());
@@ -73,7 +73,7 @@ pub fn RectGeocenCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, m
 }
 
 /**
-Return quantites used in the emphemeris for physical observations
+Return quantites used in the ephemeris for physical observations
 of the Sun
 
 # Returns

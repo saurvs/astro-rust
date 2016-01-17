@@ -1,8 +1,8 @@
 use angle;
 
 /**
-Returns the **refraction** term for true altitude, using
-**apparent altitude**
+Returns the refraction term for true altitude, using
+apparent altitude
 
 This method is valid only when the altitude of the body
 is more than 15 degrees.
@@ -23,8 +23,8 @@ pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
 }
 
 /**
-Returns the **refraction** term for apparent altitude, using
-**true altitude**
+Returns the refraction term for apparent altitude, using
+true altitude
 
 This method is valid only when the altitude of the body
 is more than 15 degrees.
@@ -44,8 +44,8 @@ pub fn RefracFrmTrueAlt(true_alt: f64) -> f64 {
 }
 
 /**
-Returns an approximate **refraction** term for true altitude, using
-**apparent altitude**
+Returns an approximate refraction term for true altitude, using
+apparent altitude
 
 This method is valid for all values of altitude from 0 to 90 degrees;
 the accuracy is upto 0.07 arcminute for all values of apparent
@@ -73,8 +73,8 @@ pub fn ApproxRefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
 }
 
 /**
-Returns an approximate **refraction** term for apparent altitude, using
-**true altitude**
+Returns an approximate refraction term for apparent altitude, using
+true altitude
 
 This method is valid for all values of altitude from 0 to 90 degrees;
 is consistent with ApproxRefractionFromApparentAltitude() to within
@@ -102,32 +102,32 @@ pub fn ApproxRefracFromTrueAlt(true_alt: f64) -> f64 {
 }
 
 /**
-Returns the **refraction** term modifier for **pressure**
+Returns the refraction term modifier for pressure
 
 # Returns
 
 * ```refraction_term_modifier```: The value that needs to be multiplied by the
-                                  refraction term to account for local pressure.
+                                  refraction term to account for local pressure
 
 # Arguments
 
-* ```pressure```: Local pressure *(millibars)*
+* ```pressure```: Local pressure (*millibars*)
 **/
 pub fn RefracDueToPressure(pressure: f64) -> f64 {
     pressure / 1010.0
 }
 
 /**
-Returns the **refraction** term modifier for **temperature**
+Returns the refraction term modifier for temperature
 
 # Returns
 
 * ```refraction_term_modifier```: The value that needs to be multiplied by the
-                                  refraction term to account for local temperature.
+                                  refraction term to account for local temperature
 
 # Arguments
 
-* ```temp```: Local temperature *(kelvins)*
+* ```temp```: Local temperature (*kelvins*)
 **/
 pub fn RefracDueToTemp(temp: f64) -> f64 {
     283.0 / temp

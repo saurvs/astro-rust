@@ -24,7 +24,7 @@ fn ABC_abc_terms(obl_eclp: f64, long_asc_node: f64, inc: f64, perih_arg: f64) ->
 }
 
 /**
-Returns the **true anomaly** and **radius vector** (*AU*) of a body in a parabolic orbit
+Returns the true anomaly and radius vector of a body in a parabolic orbit
 
 # Returns
 
