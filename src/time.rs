@@ -119,7 +119,7 @@ pub fn JulCent(JD: f64) -> f64 {
 }
 
 /**
-Returns the Julian millenium for a Julian day
+Returns the Julian millennium for a Julian day
 
 # Arguments
 

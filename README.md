@@ -195,6 +195,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * Julian day from Gregorian and Julian dates, and vice-versa
 * analytic approximation of delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
+* Julian century and millennium
 * mean and apparent sidereal time
 
 **Ecliptic**
