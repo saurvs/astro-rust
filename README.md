@@ -4,7 +4,7 @@
 
 ```astro-rust``` is an MIT licensed library of algorithms focused on rigorous and accurate astronomical calculations.
 
-Several such libraries have existed for a long time, being written in popular languages such as (C/C++)[http://www.projectpluto.com/source.htm], [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have comprehensive, well-tested coverage of various astronomical algorithms, albeit occasionally distributed with slightly restrictive licenses.
+Several such libraries have existed for a long time, being written in popular languages such as [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have comprehensive, well-tested coverage of various astronomical algorithms, albeit occasionally distributed with slightly restrictive licenses.
 
  This library however is written in the Rust programming language; a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong static typing, better concurrency support, better module system, and running [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html). This new language justifies a new astronomical library for use in the future.
 
