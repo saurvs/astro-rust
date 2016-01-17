@@ -1,6 +1,8 @@
 # astro-rust
 
-[![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
+[![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust) [API Docs](https://saurvs.github.io/astro-rust/)
+
+[Usage](#usage)
 
 ```astro-rust``` is an MIT licensed library of algorithms focused on rigorous and accurate astronomical calculations.
 
@@ -154,13 +156,13 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * ecliptic geocentric coordinates
 * optical, physical and topocentric liberations
-* times of passage through nodes
+* time of passage through nodes
 * illuminated fraction of the lunar disk
 * equatorial horizontal parallax
 
 **The Earth**
 
-* high accuracy geodesic
+* high accuracy geodesic distance
 * eccentricity of the meridian
 * angle between the diurnal path and the horizon
 
