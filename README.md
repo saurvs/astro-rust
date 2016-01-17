@@ -1,8 +1,17 @@
 # astro-rust
 
-[![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust) [API Docs](https://saurvs.github.io/astro-rust/)
+[![License](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-[Usage](#usage)
+## Contents
+* [Intro](#intro)
+* [Usage](#usage)
+* [List of algorithms](#algorithms)
+* [Contributing](#contributing)
+* [References](#references)
+
+Also, see the [API Docs](https://saurvs.github.io/astro-rust/)
+
+## Intro
 
 ```astro-rust``` is an MIT licensed library of algorithms focused on rigorous and accurate astronomical calculations.
 
