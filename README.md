@@ -143,7 +143,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 * time of passage through the nodes
 * illuminated fraction of the planetary disk
 
-** The Sun**
+**The Sun**
 
 * ecliptic geocentric coordinates
 * rectangular geocentric coordinates
@@ -247,10 +247,10 @@ Anyone interested to contribute in any way possible is encouraged to do so.
 
 A good start would be to go through Meeus's book or documents published by the IAU, browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-One suggested addition is the recent IAU 2000/2006 precession-nutation model. This method improves upon the existing model implemented here "*by taking into
+One suggested addition is the recent IAU 2000/2006 precession-nutation model. This method improves upon the existing model implemented here *"by taking into
 account the effect of mantle anelasticity, ocean tides, electromagnetic couplings
 produced between the fluid outer core and the mantle as well as between the solid
-inner core and fluid outer core*".
+inner core and fluid outer core"*.
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)
