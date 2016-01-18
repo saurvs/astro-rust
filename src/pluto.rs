@@ -7,7 +7,7 @@ Returns Pluto's equatorial semidiameter
 
 # Arguments
 
-* ```distance_to_earth```: Pluto's distance from Earth (*AU*)
+* ```distance_to_earth```: Pluto's distance from Earth *| in AU*
 **/
 pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 2.07) / distance_to_earth
@@ -24,11 +24,11 @@ Valid only for the years 1885 AD - 2099 AD.
 
 # Returns
 
-```(longitude, latitude, radius_vec)```
+```(longitude, latitude, rad_vec)```
 
-* ```longitude```: Heliocentric longitude (*radians*)
-* ```latitude```: Heliocentric latitude (*radians*)
-* ```rad_vec```: Heliocentric radius vector (*AU*)
+* ```longitude```: Heliocentric longitude *| in radians*
+* ```latitude```: Heliocentric latitude *| in radians*
+* ```rad_vec```: Heliocentric radius vector *| in AU*
 
 # Arguments
 

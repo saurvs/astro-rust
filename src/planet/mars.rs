@@ -28,16 +28,16 @@ of Mars
 
 ```(De, Ds, P, q, Q, w, d)```
 
-* ```De```: Mars-centric declination of the Earth (*radians*)
-* ```Ds```: Mars-centric declination of the Sun (*radians*)
+* ```De```: Mars-centric declination of the Earth *| in radians*
+* ```Ds```: Mars-centric declination of the Sun *| in radians*
 * ```P```: Geocentric position angle of Mars' northern
            rotation pole, or also called, position angle
-           of the axis (*radians*)
-* ```q```: Angular amount of the greaest defect of
-           illumination (*radians*)
-* ```w```: Longitude of the central maridian, as seen from
-           the Earth (*radians*)
-* ```d```: Apparent diameter of Mars (*radians*)
+           of the axis *| in radians*
+* ```q```: Angular amount of the greatest defect of
+           illumination *| in radians*
+* ```w```: Longitude of the central meridian, as seen from
+           the Earth *| in radians*
+* ```d```: Apparent diameter of Mars *| in radians*
 
 # Arguments
 

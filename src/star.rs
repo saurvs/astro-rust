@@ -82,13 +82,13 @@ same star to the north pole of the ecliptic
 
 # Returns
 
-* ```angle```: The desired angle (*radians*)
+* ```angle```: The desired angle *| in radians*
 
 # Arguments
 
-* ```eclip_long```: The star's ecliptical longitude (*radians*)
-* ```eclip_lat```: The star's ecliptical latitude (*radians*)
-* ```oblq_eclip```: Obliquity of the ecliptic (*radians*)
+* ```eclip_long```: The star's ecliptical longitude *| in radians*
+* ```eclip_lat```: The star's ecliptical latitude *| in radians*
+* ```oblq_eclip```: Obliquity of the ecliptic *| in radians*
 **/
 pub fn AnglBetweenNorthCelesAndEclipticPole(eclip_long: f64, eclip_lat: f64, oblq_eclip: f64) -> f64 {
     (eclip_long.cos() * oblq_eclip.tan())
@@ -109,20 +109,20 @@ it's proper motion, distance and radial velocity.
 ```(new_asc, new_dec)```
 
 * ```new_asc```: Right ascension at the different
-                 time (*radians*)
+                 time *| in radians*
 * ```new_dec```: Declination at the different
-                 time (*radians*)
+                 time *| in radians*
 
 # Arguments
 
-* ```asc0```: Right ascension of the star initially (*radians*)
-* ```dec0```: Declination of the star initially (*radians*)
+* ```asc0```: Right ascension of the star initially *| in radians*
+* ```dec0```: Declination of the star initially *| in radians*
 * ```r```: Distance of the star (*parsecs*)
 * ```delta_r```: Radial velocity of the star (*parsecs/second*)
 * ```proper_motion_asc```: Proper motion of the star in right ascension
-                           (*radians*)
+                           *| in radians*
 * ```proper_motion_dec```: Proper motion of the star in declination
-                           (*radians*)
+                           *| in radians*
 * ```t```: Decimal years from the inital time; negative in the past
           and positive in the future
 **/

@@ -22,7 +22,7 @@ Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
  Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s), and the same license is passed along to derived works.
 
- Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, calculating physical ephemeris of Mars, Jupiter, Saturn and the Moon, finding position angles, illuminated fractions, and visual magnitudes, and much more. Even Pluto gets a chapter.
+ Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, calculating physical ephemeris of Mars, Jupiter, and the Moon, finding position angles, illuminated fractions, and visual magnitudes, and much more. Even Pluto gets a chapter.
 
  However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently.
 
@@ -76,7 +76,7 @@ A high-level list of algorithms implemented so far is given at the [bottom of th
 
 * Also for the Moon
   ```rust
-  let (long, lat, rad_vec) = planet::earth::moon::EclGeocenCoords(julian_day);
+  let (long, lat, rad_vec) = lunar::EclGeocenCoords(julian_day);
   ```
 
 * Find the *heliocentric* coordinates of Jupiter
@@ -152,7 +152,6 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 * apparent magnitude
 * equatorial semidiameter
 * polar semidiameter for Saturn and Jupiter
-* time of passage through the nodes
 * illuminated fraction of the planetary disk
 
 **The Sun**
@@ -160,7 +159,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 * ecliptic geocentric coordinates
 * rectangular geocentric coordinates
 * ephemeris for physical observations
-* time of the begining of Carrington's synodic rotation
+* time of the beginning of Carrington's synodic rotation
 
 **The Moon**
 
@@ -207,22 +206,36 @@ Algorithms implemented in this library allow you to calculate or perform the fol
   (due to precession)
 * orbital elements from one equinox to another
 
+**Transit**
+
+* Times of rise, transit and set
+
 **Elliptic orbits**
 
-* Eccentric anomaly of a body, from it's mean anomaly
-* True anomaly of a body, from it's eccentric anomaly
-* Radius vector of a body, from it's eccentric anomaly or true anomaly
+* eccentric anomaly of a body, from it's mean anomaly
+* true anomaly of a body, from it's eccentric anomaly
+* radius vector of a body, from it's eccentric anomaly or true anomaly
+* time of passage through the nodes
+
+**Parabolic orbits**
+
+* true anomaly and radius vector of a body, from time of passage in perihelion
+* time of passage through the nodes
+
+**Near-parabolic orbits**
+
+* true anomaly and radius vector of a body, from time of passage in perihelion
 
 **Time**
 
 * Julian day from Gregorian and Julian dates, and vice-versa
-* analytic approximation for delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
 * Julian century and millennium
+* analytic approximation for delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
 * mean and apparent sidereal time
 
 **Ecliptic**
 
-* mean obliquity, the IAU or Laskar methods
+* mean obliquity, the IAU and Laskar methods
 * angle between the ecliptic and the horizon
 * longitudes of the two ecliptic points on the horizon
 
@@ -246,7 +259,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
   celestial pole and a vector from the same star to the north
   pole of the ecliptic
 * equatorial coordinates at a different time due to proper
-  motion radial velocity
+  motion and radial velocity
 
 **Binary stars**
 
@@ -266,11 +279,11 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 ## Contributing
 
-Anyone interested to contribute in any way possible is encouraged to do so.
+Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. And tests, along with good (typo-free) documentation, need to be written for them.
 
 A good start would be to go through Meeus's book or documents published by the IAU, browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-One suggested addition is the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
+One fun suggestion the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

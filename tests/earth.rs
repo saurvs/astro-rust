@@ -4,7 +4,7 @@ use astro::*;
 
 #[test]
 fn RhoSinAndCosPhi() {
-    let (rho_sin_phi, rho_cos_phi) = planet::earth::RhoSinAndCosPhi(angle::DegFrmDMS(33, 21, 22.0).to_radians(), 1706.0);
+    let (rho_sin_phi, rho_cos_phi) = planet::earth::RhoSinCosPhi(angle::DegFrmDMS(33, 21, 22.0).to_radians(), 1706.0);
     assert_eq!((util::RoundUptoDigits(rho_sin_phi, 6),
                 util::RoundUptoDigits(rho_cos_phi, 6)), (0.546861, 0.836339));
 }
@@ -31,7 +31,7 @@ fn Radii() {
     let Rp = planet::earth::RadOfParllLat(lat);
     assert_eq!(util::RoundUptoDigits(Rp, 0), util::RoundUptoDigits(4747.001, 0));
 
-    let lin_vel = planet::earth::LinrVelAtLat(lat);
+    let lin_vel = planet::earth::LinearVelAtLat(lat);
     assert_eq!(util::RoundUptoDigits(lin_vel, 5), 0.34616);
 
     let Rm = planet::earth::RadOfCurvOfMerd(lat);

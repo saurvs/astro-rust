@@ -3,7 +3,7 @@ Returns the diameter of an asteroid
 
 # Returns
 
-* ```diameter```: Diameter of the asteroid (*meters*)
+* ```diameter```: Diameter of the asteroid *| in meters*
 
 # Arguments
 
@@ -19,12 +19,12 @@ Returns the apparent diameter of an asteroid
 
 # Returns
 
-* ```apprnt_diameter```: Apparent diameter of the asteroid (*meters*)
+* ```apprnt_diameter```: Apparent diameter of the asteroid *| in meters*
 
 # Arguments
 
-* ```true_diameter```: True diameter of the asteroid *(kilometers)*
-* ```dist_to_earth```: Asteroid's distance to Earth (*AU*)
+* ```true_diameter```: True diameter of the asteroid *| in kilometers*
+* ```dist_to_earth```: The asteroid's distance to Earth *| in AU*
 **/
 pub fn ApprntDiamtr(true_diameter: f64, dist_to_earth: f64) -> f64 {
     1.3788 * (true_diameter / dist_to_earth)

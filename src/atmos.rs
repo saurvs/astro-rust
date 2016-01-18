@@ -1,21 +1,20 @@
 use angle;
 
 /**
-Returns the refraction term for true altitude, using
-apparent altitude
+Returns the **refraction term** for true altitude
 
 This method is valid only when the altitude of the body
 is more than 15 degrees.
 
 # Returns
 
-* ```refraction```: The refraction term (*radians*), that needs to be
-                    subtracted from apparent altitude to get
-                    true altitude.
+* ```refrac```: The refraction term *| in radians*, that needs to be
+                subtracted from apparent altitude to get
+                true altitude
 
 # Arguments
 
-* ```apprnt_alt```: Apparent altitude (*radians*)
+* ```apprnt_alt```: Apparent altitude *| in radians*
 **/
 pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
       angle::DegFrmDMS(0, 0, 58.294).to_radians() * (90_f64.to_radians() - apprnt_alt).tan()
@@ -23,20 +22,19 @@ pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
 }
 
 /**
-Returns the refraction term for apparent altitude, using
-true altitude
+Returns the **refraction term** for apparent altitude
 
 This method is valid only when the altitude of the body
 is more than 15 degrees.
 
 # Returns
 
-* ```refraction```: The refraction term (*radians*), that needs to be
-                    added to true altitude to get apparent altitude.
+* ```refrac```: The refraction term *| in radians*, that needs to be
+                added to true altitude to get apparent altitude
 
 # Arguments
 
-* ```true_alt```: True altitude (*radians*)
+* ```true_alt```: True altitude *| in radians*
 **/
 pub fn RefracFrmTrueAlt(true_alt: f64) -> f64 {
       angle::DegFrmDMS(0, 0, 58.276).to_radians() * (90_f64.to_radians() - true_alt).tan()
@@ -44,8 +42,7 @@ pub fn RefracFrmTrueAlt(true_alt: f64) -> f64 {
 }
 
 /**
-Returns an approximate refraction term for true altitude, using
-apparent altitude
+Returns the **approximate refraction term** for true altitude
 
 This method is valid for all values of altitude from 0 to 90 degrees;
 the accuracy is upto 0.07 arcminute for all values of apparent
@@ -53,13 +50,13 @@ altitude.
 
 # Returns
 
-* ```refraction```: The refraction term (*radians*), that needs to be
-                    subtracted from apparent altitude to get
-                    true altitude.
+* ```refrac```: The refraction term *| in radians*, that needs to be
+                subtracted from apparent altitude to get
+                true altitude
 
 # Arguments
 
-* ```apprnt_alt```: Apparent altitude (*radians*)
+* ```apprnt_alt```: Apparent altitude *| in radians*
 **/
 pub fn ApproxRefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
     if apprnt_alt.to_degrees() == 90.0 { 0.0 }
@@ -73,21 +70,20 @@ pub fn ApproxRefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
 }
 
 /**
-Returns an approximate refraction term for apparent altitude, using
-true altitude
+Returns the **approximate refraction term** for apparent altitude
 
 This method is valid for all values of altitude from 0 to 90 degrees;
-is consistent with ApproxRefractionFromApparentAltitude() to within
-4 arcsecond.
+it is consistent with ```ApproxRefracFrmApprntAlt()``` to within
+4 arcseconds.
 
 # Returns
 
-* ```refraction```: The refraction term (*radians*), that needs to be
-                    added to true altitude to get apparent altitude.
+* ```refrac```: The refraction term *| in radians*, that needs to be
+               added to true altitude to get apparent altitude
 
 # Arguments
 
-* ```true_alt```: True altitude (*radians*)
+* ```true_alt```: True altitude *| in radians*
 **/
 pub fn ApproxRefracFromTrueAlt(true_alt: f64) -> f64 {
     if true_alt.to_degrees() == 90.0 { 0.0 }
@@ -102,12 +98,12 @@ pub fn ApproxRefracFromTrueAlt(true_alt: f64) -> f64 {
 }
 
 /**
-Returns the refraction term modifier for pressure
+Returns the **refraction term modifier** for local pressure
 
 # Returns
 
-* ```refraction_term_modifier```: The value that needs to be multiplied by the
-                                  refraction term to account for local pressure
+* ```refrac_term_modifier```: The value that needs to be multiplied by the
+                              refraction term to account for local pressure
 
 # Arguments
 
@@ -118,12 +114,12 @@ pub fn RefracDueToPressure(pressure: f64) -> f64 {
 }
 
 /**
-Returns the refraction term modifier for temperature
+Returns the **refraction term modifier** for local temperature
 
 # Returns
 
-* ```refraction_term_modifier```: The value that needs to be multiplied by the
-                                  refraction term to account for local temperature
+* ```refrac_term_modifier```: The value that needs to be multiplied by the
+                              refraction term to account for local temperature
 
 # Arguments
 

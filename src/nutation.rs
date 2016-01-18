@@ -2,23 +2,21 @@ use angle;
 use time;
 
 /**
-Returns the nutation in ecliptic longitude and obliquity
+Returns nutation in ecliptic longitude and obliquity
 
 # Returns
 
 ```(nut_in_long, nut_in_oblq)```
 
-* ```nut_in_long```: Nutation in ecliptic
-                     longitude (*radians*)
-* ```nut_in_oblq```: Nutation in obliquity
-                     of the ecliptic (*radians*)
+* ```nut_in_long```: Nutation in ecliptic longitude *| in radians*
+* ```nut_in_oblq```: Nutation in obliquity of the
+                     ecliptic *| in radians*
 
 # Arguments
 
 ```JD```: Julian (Ephemeris) day
 **/
 pub fn Nutation(JD: f64) -> (f64, f64) {
-
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
     let terms_for_nutation = [
         terms( 0,  0,  0,  0,  1, -171996, -1742, 92025,  89),
@@ -110,26 +108,25 @@ pub fn Nutation(JD: f64) -> (f64, f64) {
     }
 
     (nut_in_long.to_radians(), nut_in_obl.to_radians())
-
 }
 
 /**
-Returns the nutation in equatorial coordinates
+Returns nutation in equatorial coordinates
 
 # Returns
 
 ```(nut_in_asc, nut_in_dec)```
 
-* ```nut_in_asc```: Nutation in right ascension (*radians*)
-* ```nut_in_dec```: Nutation in declination (*radians*)
+* ```nut_in_asc```: Nutation in right ascension *| in radians*
+* ```nut_in_dec```: Nutation in declination *| in radians*
 
 # Arguments
 
-* ```asc```        : Right ascension (*radians*)
-* ```dec```        : Declination (*radians*)
-* ```nut_in_long```: Nutation in longitude (*radians*)
-* ```nut_in_oblq```: Nutation in obliquity (*radians*)
-* ```tru_oblq```   : True obliquity of the ecliptic (*radians*)
+* ```asc```        : Right ascension *| in radians*
+* ```dec```        : Declination *| in radians*
+* ```nut_in_long```: Nutation in longitude *| in radians*
+* ```nut_in_oblq```: Nutation in obliquity *| in radians*
+* ```tru_oblq```   : True obliquity of the ecliptic *| in radians*
 
 The declination passed should not be close to either of
 the celestial poles, as the values of nutation returned
@@ -138,7 +135,6 @@ are only first-order corrections.
 **/
 pub fn NutationInEqCoords(asc: f64, dec: f64, nut_in_long: f64,
                           nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {
-
     let nut_asc =   (  tru_oblq.cos()
                      + tru_oblq.sin()*asc.sin()*dec.tan()
                     )*nut_in_long
@@ -148,5 +144,4 @@ pub fn NutationInEqCoords(asc: f64, dec: f64, nut_in_long: f64,
                   + asc.sin()*nut_in_oblq;
 
     (nut_asc, nut_dec)
-
 }

@@ -7,11 +7,11 @@ Returns Jupiter's geocentric equatorial semidiameter
 
 # Returns
 
-* ```equatorial_semidiameter```: Equatorial semidiameter (*radians per AU*)
+* ```eq_semidia```: Equatorial semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance to Earth (*AU*)
+* ```distance_to_earth```: Jupiter's distance to Earth *| in AU*
 **/
 pub fn EqSemdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 98.44) / distance_to_earth
@@ -22,11 +22,11 @@ Returns Jupiter's geocentric polar semidiameter
 
 # Returns
 
-* ```polar_semidiameter```: Polar semidiameter (*radians per AU*)
+* ```pol_semidia```: Polar semidiameter (*radians per AU*)
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance to Earth (*AU*)
+* ```distance_to_earth```: Jupiter's distance to Earth *| in AU*
 **/
 pub fn PolSemdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 92.06) / distance_to_earth
@@ -114,19 +114,19 @@ pub fn Ephemeris(JD: f64,
     (D_e, D_s, w1, w2, P)
 }
 
-pub fn Io() {
+fn Io() {
 
 }
 
-pub fn Europa() {
+fn Europa() {
 
 }
 
-pub fn Ganymede() {
+fn Ganymede() {
 
 }
 
-pub fn Callisto() {
+fn Callisto() {
 
 }
 

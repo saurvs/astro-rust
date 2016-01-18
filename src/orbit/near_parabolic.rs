@@ -8,14 +8,16 @@ Returns the true anomaly and radius vector of a body in a near-parabolic orbit
 
 ```(true_anomaly, radius_vector)```
 
-* ```true_anomaly```: True anomaly of the body
-* ```radius_vector```: Radius vector of the body from the Sun (*AU*)
+* ```true_anomaly```: True anomaly of the body *| in radians*
+* ```radius_vector```: Radius vector of the body *| in AU*
 
 # Arguments
 
-* ```ecc```: Eccentricity of the orbit
+* ```t```: The current time, in Julian (Ephemeris) day
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
-* ```q```: Perihelion distance (*AU*)
+* ```ecc```: Eccentricity of the orbit
+* ```q```: Perihelion distance *| in AU*
+* ```accuracy```: Desired accuracy for the results. *Eg: 0.000001 radians/AU*
 **/
 pub fn TruAnomAndRadVec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) -> (f64, f64) {
     let days_frm_perih = t - T;

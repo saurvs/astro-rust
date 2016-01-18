@@ -8,13 +8,13 @@ Returns the aberration in equatorial coordinates
 
 ```(abrr_in_asc, abrr_in_dec)```
 
-* ```abrr_in_asc```: Aberration in right ascension (*radians*)
-* ```abrr_in_dec```: Aberration in declination (*radians*)
+* ```abrr_in_asc```: Aberration in right ascension *| in radians*
+* ```abrr_in_dec```: Aberration in declination *| in radians*
 
 # Arguments
 
-* ```asc```: Right ascension (*radians*)
-* ```dec```: Declination (*radians*)
+* ```asc```: Right ascension *| in radians*
+* ```dec```: Declination *| in radians*
 * ```JD``` : Julian (Ephemeris) day
 **/
 pub fn AberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
@@ -305,35 +305,12 @@ Returns a low accuracy solar aberration in ecliptic longitude
 # Returns
 
 * ```abrr_in_ecl_long```: Solar aberration in ecliptic
-                          longitude (*radians*)
+                          longitude *| in radians*
 
 # Arguments
 
-* ```R```: Distance to Earth (*AU*)
+* ```R```: Distance to Earth *| in AU*
 **/
 pub fn LowAccuracySolarAbbr(R: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 20.4898).to_radians() / R
-}
-
-/**
-Returns a high accuracy solar aberration in ecliptic longitude
-
-# Returns
-
-* ```abrr_in_ecl_long```: Solar aberration in ecliptic
-                          longitude (*radians*)
-
-# Arguments
-
-* ```JD```: Julian (Ephemeris) day
-* ```R```: Distance to Earth (*AU*)
-**/
-pub fn SolarAbbr(JD: f64, R: f64) -> f64 {
-
-    let JM = time::JulMill(JD);
-    let terms = [[3548.193/JM, 87.5287, 359993.7286],
-                 [3548.193/JM, 87.5287, 359993.7286]];
-    let delta_lambda = 0.0;
-
-    -0.005775518 * R * delta_lambda
 }

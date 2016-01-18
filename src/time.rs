@@ -21,16 +21,16 @@ pub struct Date {
     pub month: u8,
     /// Decimal day
     pub decimal_day: f64,
-    /// Calenday type
+    /// Calendar type
     pub cal_type: CalType,
 }
 
-/// Represents a day of month with hours, minutes and seconds
+/// Represents a day of a month with hours, minutes and seconds
 pub struct DayOfMonth {
     /// Day of month
     ///
     /// range: *1 - 31*
-    pub day: i16,
+    pub day: u8,
     /// Hour of day
     ///
     /// range: *0 - 60*
@@ -52,9 +52,9 @@ Returns the decimal day for a ```DayOfMonth```
 **/
 pub fn DecimalDay(day: &DayOfMonth) -> f64 {
       (day.day as f64)
-    + (day.hr as f64) / 24.0
-    + (day.min as f64) / 60.0
-    +  day.sec / 60.0
+    + (day.hr as f64)/24.0
+    + (day.min as f64)/60.0
+    +  day.sec/60.0
 }
 
 /**
@@ -74,13 +74,13 @@ pub fn DecimalYear(date: &Date) -> f64 {
             days += 1.0;
         }
     }
-    if date.month > 3 { y += 31; }
-    if date.month > 4 { y += 30; }
-    if date.month > 5 { y += 31; }
-    if date.month > 6 { y += 30; }
-    if date.month > 7 { y += 31; }
-    if date.month > 8 { y += 31; }
-    if date.month > 9 { y += 30; }
+    if date.month > 3  { y += 31; }
+    if date.month > 4  { y += 30; }
+    if date.month > 5  { y += 31; }
+    if date.month > 6  { y += 30; }
+    if date.month > 7  { y += 31; }
+    if date.month > 8  { y += 31; }
+    if date.month > 9  { y += 30; }
     if date.month > 10 { y += 31; }
     if date.month > 11 { y += 30; }
 
@@ -137,7 +137,6 @@ Returns the Julian day from a date
 ```date```: A ```date``` struct
 **/
 pub fn JulDay(date: &Date) -> f64 {
-
     let mut y = date.year;
     let mut m = date.month;
     if m == 1 || m == 2 {
@@ -156,7 +155,6 @@ pub fn JulDay(date: &Date) -> f64 {
     + (date.decimal_day as f64)
     + (b as f64)
     - 1524.5
-
 }
 
 /**
@@ -188,7 +186,7 @@ Returns a ```Date``` equivalent to a given Julian day
 **/
 pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
     if JD < 0.0 {
-        panic!("A negative value for JD was passed to time::DateFrmJulDay")
+        panic!("A negative value for JD was passed to time::DateFrmJulDay()")
     }
 
     JD += 0.5;
@@ -234,13 +232,13 @@ Returns the apparent sidereal time from mean sidereal time
 
 # Returns
 
-* ```apparent_sidereal_time```: Apparent sidereal time (*radians*)
+* ```apparent_sidereal_time```: Apparent sidereal time *| in radians*
 
 # Arguments
 
-* ```mean_sidreal  ```: Mean sidereal time (*radians*)
-* ```nut_in_long```: Nutatation in longitude (*radians*)
-* ```true_oblq```: True obliquity of the ecliptic (*radians*)
+* ```mean_sidreal  ```: Mean sidereal time *| in radians*
+* ```nut_in_long```: Nutatation in longitude *| in radians*
+* ```true_oblq```: True obliquity of the ecliptic *| in radians*
 **/
 pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
     mean_sidreal + nut_in_long*true_oblq.cos()
@@ -251,18 +249,18 @@ Returns the apparent sidereal time for a Julian day
 
 # Returns
 
-* ```apparent_sidereal_time```: Apparent sidereal time (*radians*)
+* ```apparent_sidereal_time```: Apparent sidereal time *| in radians*
 
 # Arguments
 
-* ```$x```: Julian day
+* ```$JD```: Julian day
 **/
 #[macro_export]
 macro_rules! AppSidr {
-    ($x: expr) => {{
-        let (nut_in_long, nut_in_oblq) = astro::nutation::Nutation($x);
-        let eclip_oblq = astro::ecliptic::MnOblq($x);
-        astro::time::AppSidr(astro::time::MnSidr($x), nut_in_long, eclip_oblq + nut_in_oblq)
+    ($JD: expr) => {{
+        let (nut_in_long, nut_in_oblq) = astro::nutation::Nutation($JD);
+        let eclip_oblq = astro::ecliptic::MnOblq($JD);
+        astro::time::AppSidr(astro::time::MnSidr($JD), nut_in_long, eclip_oblq + nut_in_oblq)
     }};
 }
 
@@ -271,7 +269,7 @@ Returns the mean sidereal time for a Julian day
 
 # Returns
 
-* ```mean_sidereal_time```: Mean sidereal time (*radians*)
+* ```mean_sidereal_time```: Mean sidereal time *| in radians*
 
 # Arguments
 

@@ -5,7 +5,7 @@ use astro::*;
 #[test]
 fn RingPosition() {
 
-    let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::ring::Elements(
+    let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::RingElements(
         2448972.50068,
 /*
         84.285703_f64.to_radians(),
