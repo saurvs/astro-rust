@@ -612,7 +612,7 @@ pub fn BrightLimb(sun_eq_point: coords::EqPoint,
     let n = a * (sun_eq_point.asc - moon_eq_point.asc).sin();
     let d =   sun_eq_point.dec.sin()  * moon_eq_point.dec.cos()
             - moon_eq_point.dec.sin() * (sun_eq_point.asc - moon_eq_point.asc).cos() * a;
-            
+
     n.atan2(d)
 }
 

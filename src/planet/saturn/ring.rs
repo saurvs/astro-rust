@@ -1,7 +1,6 @@
 use angle;
 use time;
-
-#[macro_use]
+use planet;
 use coords;
 
 pub fn Inc(JC: f64) -> f64 {
@@ -18,19 +17,64 @@ pub fn AscenNode(JC: f64) -> f64 {
     ).to_radians()
 }
 
-pub fn Position(JD: f64,
+/**
+Returns the elements for the ring of Saturn
+
+# Returns
+
+```(B, B1, P, deltaU, a, b)```
+
+* ```B```: Saturnicentric latitude of the Earth (*radians*)
+* ```B1```: Saturnicentric latitude of the Sun (*radians*)
+* ```P```: Geocentric position angle of the northern
+           semiminor axis of the apparent ellipse of the
+           ring(*radians*)
+* ```deltaU```: Difference between Saturnicentric
+                longitudes of the Sun and the Earth (*radians*)
+* ```a```: Major axis of the outer edge of the outer ring (*radians*)
+* ```b```: Minor axis of the outer edge of the outer ring (*radians*)
+
+# Arguments
+
+* ```JD```: Julian (Ephemeris) day
+* ```l0```: Heliocentric longitude of the Earth (*radians*)
+            on ```JD```
+* ```b0```: Heliocentric latitude of the Earth (*radians*)
+            on ```JD```
+* ```R```: Heliocentric radius vector of the Earth (*AU*)
+            on ```JD```
+
+If ```tau``` is the light time from Saturn to the Earth
+
+* ```l```: Heliocentric longitude of the Earth (*radians*)
+           on ```JD - tau```
+* ```b```: Julian (Ephemeris) day
+* ```r```: Apparent heliocentric of  (*radians*)
+* ```nut_in_long```: Nutation in longitude (*radians*)
+* ```tru_oblq_eclip```: True obliquity of the ecliptic (*radians*)
+**/
+
+pub fn Elements(JD: f64/*,
           l0: f64, b0: f64, R: f64,
-          l: f64, b: f64, r: f64,
+          l: f64, b: f64, r: f64,*/,
           nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
+    let (l0,b0,R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
     let JC = time::JulCent(JD);
     let inc = Inc(JC);
     let ascend_node = AscenNode(JC);
 
-    let x = r*b.cos()*l.cos() - R*l0.cos();
-    let y = r*b.cos()*l.sin() - R*l0.sin();
-    let z = r*b.sin()         - R*b0.sin();
+    let (mut l,mut b,mut r) = planet::HeliocenCoords(&planet::Planet::Saturn, JD);
+    let mut x = r*b.cos()*l.cos() - R*l0.cos();
+    let mut y = r*b.cos()*l.sin() - R*l0.sin();
+    let mut z = r*b.sin()         - R*b0.sin();
+    let mut saturn_earth_dist = (x*x + y*y + z*z).sqrt();
+    let light_time = planet::LightTime(saturn_earth_dist);
+    let (t1,t2,t3) = planet::HeliocenCoords(&planet::Planet::Saturn, JD-light_time);
+    x = r*b.cos()*l.cos() - R*l0.cos();
+    y = r*b.cos()*l.sin() - R*l0.sin();
+    z = r*b.sin()         - R*b0.sin();
+    saturn_earth_dist = (x*x + y*y + z*z).sqrt();
 
-    let saturn_earth_dist = (x*x + y*y + z*z).sqrt();
 
     let mut lambda = y.atan2(x);
     let mut beta = z.atan2((x*x + y*y).sqrt());

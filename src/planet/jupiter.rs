@@ -76,7 +76,7 @@ pub fn Ephemeris(JD: f64,
     let mut dec = v.atan2((x*x + u*u).sqrt());
     let zeta = (dec0.sin()*dec.cos()*(asc0 - asc).cos() - dec.sin()*dec0.cos())
                .atan2(dec.cos()*(asc0 - asc).sin());
-               
+
     let D_e = (-dec0.sin()*dec.sin() - dec0.cos()*dec.cos()*(asc0 - asc).cos()).asin();
 
     let mut w1 = angle::LimitTo360(W1.to_degrees() - zeta.to_degrees() - 5.07033*jup_earth_dist);

@@ -36,9 +36,6 @@ impl EqPoint {
 /**
 Returns the hour angle from local longitude and right ascension
 
-If right ascension is corrected for nutation, then sidereal time
-too must be corrected for it.
-
 # Returns
 
 * ```hour_angle```: Hour angle (*radians*)
@@ -55,9 +52,6 @@ pub fn HrAnglFrmObserverLong(green_sidreal: f64, observer_long: f64, asc: f64) -
 
 /**
 Returns the hour angle from local sidereal time and right ascension
-
-If right ascension is corrected for nutation, then sidereal time
-too must be corrected for it.
 
 # Returns
 

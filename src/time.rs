@@ -226,7 +226,7 @@ pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
                };
 
     (year as i16, month as i8, day)
-    
+
 }
 
 /**

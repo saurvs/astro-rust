@@ -382,6 +382,20 @@ pub fn Elong(app_ecl_long: f64, app_ecl_lat: f64, sun_app_ecl_long: f64) -> f64 
     (app_ecl_lat * (app_ecl_long - sun_app_ecl_long).cos()).acos()
 }
 
+/**
+Returns a planet's apparent magnitude using G. Muller's formulae
+
+# Returns
+
+* ```app_mag```: Apparent magnitude of the planet (*radians*)
+
+# Arguments
+
+* ```planet```: [Planet](./enum.Planet.html)
+* ```i```: Phase angle of the planet (*radians*)
+* ```delta```: The planet's distance to the Earth (*radians*)
+* ```r```: The planet's distance to the Sun (*radians*)
+**/
 pub fn ApprntMag_Muller(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();
     match planet {
@@ -399,6 +413,21 @@ pub fn ApprntMag_Muller(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     }
 }
 
+/**
+Returns a planet's apparent magnitude using the Astronomical
+Almanac's method adopted in 1984
+
+# Returns
+
+* ```app_mag```: Apparent magnitude of the planet (*radians*)
+
+# Arguments
+
+* ```planet```: [Planet](./enum.Planet.html)
+* ```i```: Phase angle of the planet (*radians*)
+* ```delta```: The planet's distance to the Earth (*radians*)
+* ```r```: The planet's distance to the Sun (*radians*)
+**/
 pub fn ApprntMag_84(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();
     match planet {

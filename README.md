@@ -4,13 +4,13 @@
 
 **Contents**
 
-* [About](#intro)
+* [About](#about)
 * [Usage](#usage)
-* [List of algorithms](#algorithms)
+* [Algorithms](#algorithms)
 * [Contributing](#contributing)
 * [References](#references)
 
-Also, see the [API Docs](https://saurvs.github.io/astro-rust/)
+Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ## About
 
@@ -22,9 +22,9 @@ Also, see the [API Docs](https://saurvs.github.io/astro-rust/)
 
  Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s), and the same license is passed along to derived works.
 
- Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, calculating physical ephemeris of Mars, Jupiter, Saturn and the Moon,finding position angles, illuminated fractions, and visual magnitudes, and much more. Even Pluto gets a chapter.
+ Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*, which includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, calculating physical ephemeris of Mars, Jupiter, Saturn and the Moon, finding position angles, illuminated fractions, and visual magnitudes, and much more. Even Pluto gets a chapter.
 
- However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU in recent times.
+ However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently.
 
 For information related to the programming aspects of this library, such as on the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
 
@@ -143,7 +143,7 @@ A high-level list of algorithms implemented so far is given at the [bottom of th
 
 ## Algorithms
 
-Algorithms implemented in this library allow you to calculate or perform the following, categorically:
+Algorithms implemented in this library allow you to calculate or perform the following:
 
 **The 8 Solar System Planets**
 
@@ -166,7 +166,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * ecliptic geocentric coordinates
 * optical, physical and topocentric liberations
-* time of passage through nodes
+* time of passage through the nodes
 * illuminated fraction of the lunar disk
 * equatorial horizontal parallax
 
@@ -185,7 +185,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 **Mars**
 
-* ecliptic coordinates of the North pole
+* ecliptic coordinates of the north pole
 * ephemeris for physical observations
 
 **Jupiter**
@@ -194,7 +194,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 **Saturn**
 
-* position of the ring
+* elements of the ring
 
 **Transform**
 
@@ -207,16 +207,22 @@ Algorithms implemented in this library allow you to calculate or perform the fol
   (due to precession)
 * orbital elements from one equinox to another
 
+**Elliptic orbits**
+
+* Eccentric anomaly of a body, from it's mean anomaly
+* True anomaly of a body, from it's eccentric anomaly
+* Radius vector of a body, from it's eccentric anomaly or true anomaly
+
 **Time**
 
 * Julian day from Gregorian and Julian dates, and vice-versa
-* analytic approximation of delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
+* analytic approximation for delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
 * Julian century and millennium
 * mean and apparent sidereal time
 
 **Ecliptic**
 
-* mean obliquity (IAU and Laskar formulae)
+* mean obliquity, the IAU or Laskar methods
 * angle between the ecliptic and the horizon
 * longitudes of the two ecliptic points on the horizon
 
@@ -235,7 +241,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * combined magnitude of two or more stars
 * absolute magnitude from parallax or distance from Earth
-* brightness ratio from difference in magnitude, and vice-versa
+* brightness ratio of two stars from their difference in magnitudes, and vice-versa
 * angle between a vector from a star to the Earth's north
   celestial pole and a vector from the same star to the north
   pole of the ecliptic

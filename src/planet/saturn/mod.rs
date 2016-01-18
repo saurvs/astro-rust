@@ -3,6 +3,23 @@ pub mod ring;
 use angle;
 use planet;
 
+/**
+Returns Saturn's apparent magnitude using G. Muller's formula
+
+# Returns
+
+* ```app_mag```: Apparent magnitude of Saturn (*radians*)
+
+# Arguments
+
+* ```planet```: [Planet](./enum.Planet.html)
+* ```i```: Phase angle of Saturn (*radians*)
+* ```delta```: Saturn's distance to the Earth (*radians*)
+* ```r```: Saturn's distance to the Sun (*radians*)
+* ```deltaU```: Difference between Saturnicentric
+                longitudes of the Sun and the Earth (*radians*)
+* ```B```: Saturnicentric latitude of the Earth (*radians*)
+**/
 pub fn ApprntMag_Muller(planet: planet::Planet, i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     - 8.68
     + 5.0*(r*delta).log10()
@@ -11,6 +28,24 @@ pub fn ApprntMag_Muller(planet: planet::Planet, i: f64, delta: f64, r: f64, delU
     + 1.25*B.sin().powi(2)
 }
 
+/**
+Returns Saturn's apparent magnitude using the Astronomical
+Almanac's method adopted in 1984
+
+# Returns
+
+* ```app_mag```: Apparent magnitude of Saturn (*radians*)
+
+# Arguments
+
+* ```planet```: [Planet](./enum.Planet.html)
+* ```i```: Phase angle of Saturn (*radians*)
+* ```delta```: Saturn's distance to the Earth (*radians*)
+* ```r```: Saturn's distance to the Sun (*radians*)
+* ```deltaU```: Difference between Saturnicentric
+                longitudes of the Sun and the Earth (*radians*)
+* ```B```: Saturnicentric latitude of the Earth (*radians*)
+**/
 pub fn ApprntMag_84(planet: planet::Planet, i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     - 8.68
     + 5.0*(r*delta).log10()
