@@ -9,7 +9,7 @@ is more than 15 degrees.
 # Returns
 
 * ```refrac```: The refraction term *| in radians*, that needs to be
-                subtracted from apparent altitude to get
+                subtracted from the apparent altitude to get the
                 true altitude
 
 # Arguments
@@ -30,7 +30,7 @@ is more than 15 degrees.
 # Returns
 
 * ```refrac```: The refraction term *| in radians*, that needs to be
-                added to true altitude to get apparent altitude
+                added to the true altitude to get the apparent altitude
 
 # Arguments
 
@@ -51,7 +51,7 @@ altitude.
 # Returns
 
 * ```refrac```: The refraction term *| in radians*, that needs to be
-                subtracted from apparent altitude to get
+                subtracted from the apparent altitude to get the
                 true altitude
 
 # Arguments
@@ -79,13 +79,13 @@ it is consistent with ```ApproxRefracFrmApprntAlt()``` to within
 # Returns
 
 * ```refrac```: The refraction term *| in radians*, that needs to be
-               added to true altitude to get apparent altitude
+               added to the true altitude to get the apparent altitude
 
 # Arguments
 
 * ```true_alt```: True altitude *| in radians*
 **/
-pub fn ApproxRefracFromTrueAlt(true_alt: f64) -> f64 {
+pub fn ApproxRefracFrmTrueAlt(true_alt: f64) -> f64 {
     if true_alt.to_degrees() == 90.0 { 0.0 }
     else {
         let a = (   true_alt.to_degrees()
