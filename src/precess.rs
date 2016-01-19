@@ -28,10 +28,9 @@ coordinates to the new epoch.
              be too close to the celestial poles
 * ```JD```: Julian (Ephemeris) day corresponding to the new epoch;
             should not be more than a few hundred years away from
-            the year 2000 AD.
+            the old epoch.
 **/
 pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
-
     let JC = time::JulCent(JD);
 
     let m = (     angle::DegFrmHMS(0, 0, 3.07496)
@@ -40,7 +39,6 @@ pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
              - JC*angle::DegFrmHMS(0, 0, 0.00057)).to_radians();
 
     (m + n*asc.sin()*dec.tan(), n*asc.cos())
-
 }
 
 /**

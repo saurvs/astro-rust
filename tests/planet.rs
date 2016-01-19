@@ -30,6 +30,24 @@ fn EclGeocenCoords() {
 }
 
 #[test]
+fn EclCoordsToFK5() {
+    let (FK5_long, FK5_lat) = planet::EclCoordsToFK5(
+        2448976.5,
+        313.07689_f64.to_radians(),
+        -2.08489_f64.to_radians()
+    );
+
+    assert_eq!(
+        util::RoundUptoDigits(FK5_long.to_degrees(), 5),
+        313.07686
+    );
+    assert_eq!(
+        util::RoundUptoDigits(FK5_lat.to_degrees(), 5),
+        -2.08487
+    );
+}
+
+#[test]
 fn ApprntEclGeocenCoords() {
     let (mut L, mut B, mut R) = ApprntEclGeocenCoords!(&planet::Planet::Venus, 2448976.5);
     L = util::RoundUptoDigits(angle::LimitTo360(L.to_degrees()), 2);

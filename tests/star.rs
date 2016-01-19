@@ -10,7 +10,7 @@ fn EqCoordsFrmMotion() {
                                              angle::DegFrmTimeSec(-0.03847).to_radians(),
                                              angle::DegFrmArcSec(-1.2053).to_radians(),
                                              -1000.0);
-                                             
+
     let (h1, m1, s1) = angle::HMSFrmDeg(asc.to_degrees());
     assert_eq!((h1, m1, util::RoundUptoDigits(s1, 2)), (6, 45, 47.16));
 

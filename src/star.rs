@@ -128,7 +128,6 @@ it's proper motion, distance and radial velocity.
 **/
 pub fn EqCoordsFrmMotion(asc0: f64, dec0: f64, r: f64, delta_r: f64,
                      proper_motion_asc: f64, proper_motion_dec: f64, t: f64) -> (f64, f64) {
-
     let x = r*dec0.cos()*asc0.cos();
     let y = r*dec0.cos()*asc0.sin();
     let z = r*dec0.sin();
@@ -148,5 +147,18 @@ pub fn EqCoordsFrmMotion(asc0: f64, dec0: f64, r: f64, delta_r: f64,
     let dec = z1.atan2((x1*x1 + y1*y1).sqrt());
 
     (asc, dec)
+}
 
+pub fn ProperMotionInEclCoords(asc: f64, dec: f64, pmotion_asc: f64, pmotion_dec:f64, ecl_lat: f64, oblq_eclip: f64) -> (f64, f64) {
+    let ecl_lat_cos = ecl_lat.cos();
+    let pmotion_long = (
+        pmotion_dec*oblq_eclip.sin()*asc.cos()
+      + pmotion_asc*dec.cos()*(oblq_eclip.cos()*dec.cos() + oblq_eclip.sin()*dec.sin()*asc.sin())
+    )/(ecl_lat_cos*ecl_lat_cos);
+    let pmotion_lat = (
+        pmotion_dec*(oblq_eclip.cos()*dec.cos() + oblq_eclip.sin()*dec.sin()*asc.sin())
+      - pmotion_asc*oblq_eclip.sin()*asc.cos()*dec.cos()
+    )/ecl_lat_cos;
+
+    (pmotion_long, pmotion_lat)
 }

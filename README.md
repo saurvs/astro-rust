@@ -208,7 +208,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 **Transit**
 
-* Times of rise, transit and set
+* Times of rise, transit and set for stars, planets, the Sun, and the Moon
 
 **Elliptic orbits**
 
@@ -258,6 +258,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 * angle between a vector from a star to the Earth's north
   celestial pole and a vector from the same star to the north
   pole of the ecliptic
+* aberration correction in equatorial coordinates
 * equatorial coordinates at a different time due to proper
   motion and radial velocity
 

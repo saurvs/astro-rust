@@ -13,7 +13,21 @@ pub fn Semdia(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 2.07) / distance_to_earth
 }
 
-pub fn ApprntMag_84(planet: planet::Planet, i: f64, delta: f64, r: f64) -> f64 {
+/**
+Returns Pluto's apparent magnitude using the Astronomical
+Almanac's method adopted in 1984
+
+# Returns
+
+* ```app_mag```: Apparent magnitude of Pluto *| in radians*
+
+# Arguments
+
+* ```i```: Phase angle of Pluto *| in radians*
+* ```delta```: Pluto-Earth distance *| in AU*
+* ```r```: Pluto-Sun distance *| in AU*
+**/
+pub fn ApprntMag_84(i: f64, delta: f64, r: f64) -> f64 {
     5.0*(r*delta).log10() - 1.0
 }
 

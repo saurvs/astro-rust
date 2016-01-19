@@ -350,6 +350,41 @@ macro_rules! ApprntEclGeocenCoords {
     }};
 }
 
+/**
+Returns ecliptic geocentric coordinates of a planet
+converted to the **FK5** system
+
+# Returns
+
+```(ecl_long_FK5, ecl_lat_FK5)```
+
+* ```ecl_long_FK5```: Ecliptic longitude of the planet *| in radians*,
+                      converted to the FK5 system
+* ```ecl_lat_FK5```: Ecliptic latitude of the planet *| in radians*,
+                     converted to the FK5 system
+
+# Arguments
+
+* ```JD```: Julian (Ephemeris) day
+* ```ecl_long```: Ecliptic longitude of the planet on ```JD```
+                  *| in radians*, referred to the mean equinox
+                  of the date
+* ```ecl_lat```: Ecliptic latitude of the planet ```JD```
+                 *| in radians*, referred to the mean equinox
+                 of the date
+**/
+pub fn EclCoordsToFK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
+    let JC = time::JulCent(JD);
+    let lambda1 = ecl_long - JC*(1.397 + JC*0.00031).to_radians();
+    let x = angle::DegFrmDMS(0, 0, 0.03916).to_radians();
+
+    let ecl_long_correction = - angle::DegFrmDMS(0, 0, 0.09033).to_radians()
+                              + x*(lambda1.cos() + lambda1.sin())*ecl_lat.tan();
+
+    (ecl_long + ecl_long_correction,
+     ecl_lat  + x*(lambda1.cos() - lambda1.sin()))
+}
+
 pub fn EqGeocenCoords(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, w: f64, sigma: f64, n: f64,
             oblq_eclip: f64, M: f64, E: f64, v: f64, r: f64) -> (f64, f64, f64) {
 
@@ -410,8 +445,8 @@ Returns a planet's apparent magnitude using G. Muller's formulae
 
 * ```planet```: [Planet](./enum.Planet.html)
 * ```i```: Phase angle of the planet *| in radians*
-* ```delta```: The planet's distance to the Earth *| in radians*
-* ```r```: The planet's distance to the Sun *| in radians*
+* ```delta```: Planet-Earth distance *| in AU*
+* ```r```: Planet-Sun distance *| in AU*
 **/
 pub fn ApprntMag_Muller(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();
@@ -442,8 +477,8 @@ Almanac's method adopted in 1984
 
 * ```planet```: [Planet](./enum.Planet.html)
 * ```i```: Phase angle of the planet *| in radians*
-* ```delta```: The planet's distance to the Earth *| in radians*
-* ```r```: The planet's distance to the Sun *| in radians*
+* ```delta```: Planet-Earth distance *| in AU*
+* ```r```: Planet-Sun distance *| in AU*
 **/
 pub fn ApprntMag_84(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();

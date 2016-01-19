@@ -2,7 +2,7 @@ use angle;
 use time;
 
 /**
-Returns the aberration in equatorial coordinates
+Returns **stellar aberration** in equatorial coordinates
 
 # Returns
 
@@ -17,7 +17,7 @@ Returns the aberration in equatorial coordinates
 * ```dec```: Declination *| in radians*
 * ```JD``` : Julian (Ephemeris) day
 **/
-pub fn AberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
+pub fn StellAberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     let t = time::JulCent(JD);
 
     let l2 = 3.1761467 + 1021.3285546*t;
@@ -300,7 +300,7 @@ pub fn AberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
 }
 
 /**
-Returns a low accuracy solar aberration in ecliptic longitude
+Returns **solar aberration** in ecliptic longitude
 
 # Returns
 
@@ -309,8 +309,8 @@ Returns a low accuracy solar aberration in ecliptic longitude
 
 # Arguments
 
-* ```R```: Distance to Earth *| in AU*
+* ```R```: Sun-Earth distance *| in AU*
 **/
-pub fn LowAccuracySolarAbbr(R: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 20.4898).to_radians() / R
+pub fn SolarAbbr(R: f64) -> f64 {
+    -angle::DegFrmDMS(0, 0, 20.4898).to_radians() / R
 }
