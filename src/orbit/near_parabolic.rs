@@ -1,3 +1,5 @@
+//! Near-parabolic orbits
+
 use angle;
 use consts;
 

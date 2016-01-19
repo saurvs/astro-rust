@@ -1,3 +1,5 @@
+//! Corrections for atmospheric refraction
+
 use angle;
 
 /**
@@ -17,8 +19,8 @@ is more than 15 degrees.
 * ```apprnt_alt```: Apparent altitude *| in radians*
 **/
 pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
-      angle::DegFrmDMS(0, 0, 58.294).to_radians() * (90_f64.to_radians() - apprnt_alt).tan()
-    - angle::DegFrmDMS(0, 0, 0.0668).to_radians() * (90_f64.to_radians() - apprnt_alt).tan().powi(3)
+      angle::DegFrmDMS(0, 0, 58.294).to_radians()*(90_f64.to_radians() - apprnt_alt).tan()
+    - angle::DegFrmDMS(0, 0, 0.0668).to_radians()*(90_f64.to_radians() - apprnt_alt).tan().powi(3)
 }
 
 /**
@@ -37,8 +39,8 @@ is more than 15 degrees.
 * ```true_alt```: True altitude *| in radians*
 **/
 pub fn RefracFrmTrueAlt(true_alt: f64) -> f64 {
-      angle::DegFrmDMS(0, 0, 58.276).to_radians() * (90_f64.to_radians() - true_alt).tan()
-    - angle::DegFrmDMS(0, 0, 0.0824).to_radians() * (90_f64.to_radians() - true_alt).tan().powi(3)
+      angle::DegFrmDMS(0, 0, 58.276).to_radians()*(90_f64.to_radians() - true_alt).tan()
+    - angle::DegFrmDMS(0, 0, 0.0824).to_radians()*(90_f64.to_radians() - true_alt).tan().powi(3)
 }
 
 /**
@@ -79,7 +81,7 @@ it is consistent with ```ApproxRefracFrmApprntAlt()``` to within
 # Returns
 
 * ```refrac```: The refraction term *| in radians*, that needs to be
-               added to the true altitude to get the apparent altitude
+                added to the true altitude to get the apparent altitude
 
 # Arguments
 

@@ -1,3 +1,5 @@
+//! The Sun
+
 use angle;
 use time;
 use std;

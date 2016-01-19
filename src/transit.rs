@@ -1,9 +1,11 @@
+//! Time of rise, transit and set for a celestial body
+
 use angle;
 use coords;
 use interpol;
 use std::*;
 
-/// Represents a body in transit
+/// Represents a **celestial body** in transit
 pub enum TransitBody {
     /// A star or a planet
     StarOrPlanet,
@@ -13,7 +15,7 @@ pub enum TransitBody {
     Moon
 }
 
-/// Represents a transit type
+/// Represents a **transit type**
 pub enum TransitType {
     /// Rise
     Rise,
@@ -24,7 +26,7 @@ pub enum TransitType {
 }
 
 /**
-Returns the time of a transit
+Returns the **time** of **transit** for a celestial body
 
 # Returns
 
@@ -42,9 +44,11 @@ Let ```JD``` be the Julian (Ephemeris) day of interest.
 * ```eq_point2```: Equatorial point of the transit body on ```JD``` *| in radians*
 * ```eq_point3```: Equatorial point of the transit body on ```JD + 1``` *| in radians*
 * ```app_green_sidr```: Apparent sidereal time at Greenwhich on ```JD``` *| in radians*
-* ```deltaT```: Delta T
-* ```moon_eq_hz_parallax```: *Pass only when TransitBody::Moon is passed for transit_body*.
-                              Equatorial horizontal parallax of the Moon *| in radians*
+* ```deltaT```: Delta T on ```JD```
+* ```moon_eq_hz_parallax```: Equatorial horizontal parallax of the Moon on ```JD```
+                             *| in radians*. *Pay attention to this only when*
+                             ```TransitBody::Moon``` *is passed for* ```transit_body```.
+
 **/
 pub fn Time(
     transit_type: &TransitType,

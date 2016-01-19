@@ -1,3 +1,5 @@
+//! Angles for astronomy
+
 /**
 Returns the angular separation between two angular points
 

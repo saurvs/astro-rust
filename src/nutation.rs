@@ -1,16 +1,18 @@
+//! Corrections for nutation
+
 use angle;
 use time;
 
 /**
-Returns nutation in ecliptic longitude and obliquity
+Returns **nutation** in **ecliptic longitude** and **obliquity**
 
 # Returns
 
 ```(nut_in_long, nut_in_oblq)```
 
 * ```nut_in_long```: Nutation in ecliptic longitude *| in radians*
-* ```nut_in_oblq```: Nutation in obliquity of the
-                     ecliptic *| in radians*
+* ```nut_in_oblq```: Nutation in obliquity of the ecliptic
+                     *| in radians*
 
 # Arguments
 
@@ -111,7 +113,7 @@ pub fn Nutation(JD: f64) -> (f64, f64) {
 }
 
 /**
-Returns nutation in equatorial coordinates
+Returns **nutation** in **equatorial coordinates**
 
 # Returns
 
@@ -131,7 +133,6 @@ Returns nutation in equatorial coordinates
 The declination passed should not be close to either of
 the celestial poles, as the values of nutation returned
 are only first-order corrections.
-
 **/
 pub fn NutationInEqCoords(asc: f64, dec: f64, nut_in_long: f64,
                           nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {

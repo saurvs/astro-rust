@@ -1,3 +1,5 @@
+//! Miscellaneous stuff
+
 /**
 Returns the parallactic angle of a celestial body
 

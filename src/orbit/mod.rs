@@ -1,3 +1,5 @@
+//! Elliptic, parabolic and near-parabolic orbits
+
 pub mod elliptic;
 pub mod parabolic;
 pub mod near_parabolic;
@@ -6,6 +8,6 @@ pub mod near_parabolic;
 pub enum Node {
     /// Ascending node
     Ascend,
-    /// Descending node 
+    /// Descending node
     Descend
 }

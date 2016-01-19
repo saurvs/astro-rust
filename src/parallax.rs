@@ -1,3 +1,5 @@
+//! Find topocentric coordinates
+
 use angle;
 use coords;
 use planet;

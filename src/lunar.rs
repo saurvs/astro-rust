@@ -1,3 +1,5 @@
+//! The Earth's moon
+
 use angle;
 use coords;
 use time;

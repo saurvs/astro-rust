@@ -1,3 +1,5 @@
+//! Stars
+
 use angle;
 
 /**

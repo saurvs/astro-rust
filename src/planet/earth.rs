@@ -1,3 +1,5 @@
+//! The Earth
+
 use coords;
 use angle;
 use time;

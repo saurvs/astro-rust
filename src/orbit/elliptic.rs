@@ -1,3 +1,5 @@
+//! Elliptic orbits
+
 use std::*;
 use orbit;
 

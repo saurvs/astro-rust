@@ -1,3 +1,5 @@
+//! Corrections for aberration
+
 use angle;
 use time;
 
@@ -294,7 +296,7 @@ pub fn StellAberrInEqCoords(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     let c = 17314463350.0;
 
     let delta_asc = (y*asc.cos() - x*asc.sin()) / (c*dec.cos());
-    let delta_dec = -(((x*asc.cos() + y*asc.sin()) * dec.sin() - z*dec.cos())) / c;
+    let delta_dec = -(((x*asc.cos() + y*asc.sin())*dec.sin() - z*dec.cos())) / c;
 
     (delta_asc, delta_dec)
 }
@@ -304,8 +306,8 @@ Returns **solar aberration** in ecliptic longitude
 
 # Returns
 
-* ```abrr_in_ecl_long```: Solar aberration in ecliptic
-                          longitude *| in radians*
+* ```abrr```: Solar aberration in ecliptic
+              longitude *| in radians*
 
 # Arguments
 

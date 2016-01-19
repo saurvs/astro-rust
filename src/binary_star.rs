@@ -1,3 +1,5 @@
+//! Binary stars
+
 use angle;
 
 /**

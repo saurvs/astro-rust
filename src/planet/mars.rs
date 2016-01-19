@@ -1,3 +1,5 @@
+//! Mars
+
 use angle;
 use planet;
 use planet::earth;

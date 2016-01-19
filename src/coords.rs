@@ -1,3 +1,5 @@
+//! Transform between coordinate systems
+
 use angle;
 use time;
 

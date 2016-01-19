@@ -1,3 +1,5 @@
+//! Time for astronomy
+
 use angle;
 use ecliptic;
 use nutation;

@@ -1,3 +1,5 @@
+//! The 8 Planets in our Solar System
+
 mod mercury;
 mod venus;
 pub mod earth;

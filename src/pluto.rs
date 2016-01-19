@@ -1,25 +1,27 @@
+//! The dwarf planet Pluto
+
 use angle;
 use planet;
 use time;
 
 /**
-Returns Pluto's equatorial semidiameter
+Returns Pluto's **equatorial semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Pluto's distance from Earth *| in AU*
+* ```distance_to_earth```: Pluto-Earth distance *| in AU*
 **/
-pub fn Semdia(distance_to_earth: f64) -> f64 {
+pub fn Semdiameter(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 2.07) / distance_to_earth
 }
 
 /**
-Returns Pluto's apparent magnitude using the Astronomical
+Returns Pluto's **apparent magnitude** using the Astronomical
 Almanac's method adopted in 1984
 
 # Returns
 
-* ```app_mag```: Apparent magnitude of Pluto *| in radians*
+* ```app_mag```: Apparent magnitude of Pluto
 
 # Arguments
 
@@ -32,24 +34,31 @@ pub fn ApprntMag_84(i: f64, delta: f64, r: f64) -> f64 {
 }
 
 /**
-Returns Pluto's heliocentric coordinates
+Returns Pluto's **heliocentric coordinates**, referred to the standard
+equinox of J2000.0
 
-Valid only for the years 1885 AD - 2099 AD.
+This function is valid only for the years
+1885 AD to 2099 AD.
 
 # Returns
 
-```(longitude, latitude, rad_vec)```
+```(long, lat, rad_vec)```
 
-* ```longitude```: Heliocentric longitude *| in radians*
-* ```latitude```: Heliocentric latitude *| in radians*
-* ```rad_vec```: Heliocentric radius vector *| in AU*
+* ```long```: Heliocentric longitude of Pluto *| in radians*
+* ```lat```: Heliocentric latitude of Pluto *| in radians*
+* ```rad_vec```: Heliocentric radius vector of Pluto *| in AU*
+
+The error in
+
+* ```long``` is less than 0.07 arcseconds
+* ```lat``` is less than 0.02 arcseconds
+* ```rad_vec``` is less than 0.000006 AU
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn HeliocenCoords(JD: f64) -> (f64, f64, f64) {
-
     let JC = time::JulCent(JD);
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
@@ -119,6 +128,20 @@ pub fn HeliocenCoords(JD: f64) -> (f64, f64, f64) {
     (long, lat, r)
 }
 
+/**
+Returns Pluto's **mean orbital elements** near 2000 AD
+
+# Returns
+
+```(a, e, i, omega, w)```
+
+* ```a```: Semimajor axis of the orbit *| in AU*
+* ```e```: Eccentricity of the orbit
+* ```i```: Inclination of the plane of the orbit with the plane of
+           the Earth's ecliptic *| in radians*
+* ```omega```: Longitude of the ascending node *| in radians*
+* ```w```: Argument of the perihelion *| in radians*
+**/
 pub fn MnOrbElements_2000() -> (f64, f64, f64, f64, f64) {
     (39.543, 0.249,
      17.14_f64.to_radians(),

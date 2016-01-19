@@ -1,3 +1,5 @@
+//! Parabolic orbits
+
 use std::*;
 use orbit;
 

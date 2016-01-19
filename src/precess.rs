@@ -1,33 +1,35 @@
+//! Corrections for precession
+
 use angle;
 use std;
 use time;
 
 /**
-Returns the annual precession in equatorial coordinates
+Returns **annual precession** in **equatorial coordinates**
 towards a new epoch
 
 # Returns
 
 ```(ann_precess_asc, ann_precess_dec)```
 
-* ```ann_precess_asc```: Annual precession in right ascension from the
-                         new epoch *| in radians*
-* ```ann_precess_dec```: Annual precession in declination from the
+* ```ann_precess_asc```: Annual precession in right ascension towards
+                         the new epoch *| in radians*
+* ```ann_precess_dec```: Annual precession in declination towards the
                          new epoch *| in radians*
 
 In the case of a star, the precession returned here does not take
-into account the annual proper motion of the star. The annual proper
-motion in right ascension and declination must simply be added to the
-corresponding annual precession returned in order to reduce the equatorial
-coordinates to the new epoch.
+into account it's annual proper motion. The annual proper motion
+in right ascension and declination must simply be added to the
+corresponding annual precession returned here in order to reduce
+the equatorial coordinates to the new epoch.
 
 # Arguments
 
 * ```asc```: Right ascension for the old epoch *| in radians*
-* ```dec```: Declination for the old epoch *| in radians*; should not
-             be too close to the celestial poles
-* ```JD```: Julian (Ephemeris) day corresponding to the new epoch;
-            should not be more than a few hundred years away from
+* ```dec```: Declination for the old epoch *| in radians*. Should
+             not be too close to the celestial poles.
+* ```JD```: Julian (Ephemeris) day corresponding to the new epoch.
+            Should not be more than a few hundred years away from
             the old epoch.
 **/
 pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
@@ -42,20 +44,20 @@ pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
 }
 
 /**
-Returns equatorial coordinates reduced to a different epoch
+Returns **equatorial coordinates reduced** to a different epoch
 
 # Returns
 
 ```(new_asc, new_dec)```
 
-* ```new_asc```: Right ascension for the new epoch *| in radians*
-* ```new_dec```: Declination for the new epoch *| in radians*
+* ```new_asc```: Right ascension in the new epoch *| in radians*
+* ```new_dec```: Declination in the new epoch *| in radians*
 
 # Arguments
 
-* ```old_asc```: Right ascension for the old epoch *| in radians*,
+* ```old_asc```: Right ascension in the old epoch *| in radians*,
                  referred to the FK5 system
-* ```old_dec```: Declination for the old epoch *| in radians*,
+* ```old_dec```: Declination in the old epoch *| in radians*,
                  referred to the FK5 system
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
@@ -89,21 +91,21 @@ pub fn ChangeEpochEqCoords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f
 }
 
 /**
-Returns equatorial coordinates, from coordinates referred to the
-FK4 system, reduced to a different epoch
+Returns **equatorial coordinates**, from coordinates referred to the
+**FK4** system, **reduced** to a different epoch
 
 # Returns
 
 ```(new_asc, new_dec)```
 
-* ```new_asc```: Right ascension for the new epoch *| in radians*
-* ```new_dec```: Declination for the new epoch *| in radians*
+* ```new_asc```: Right ascension in the new epoch *| in radians*
+* ```new_dec```: Declination in the new epoch *| in radians*
 
 # Arguments
 
-* ```old_asc```: Right ascension for the old epoch *| in radians*,
+* ```old_asc```: Right ascension in the old epoch *| in radians*,
                  referred to the FK4 system
-* ```old_dec```: Declination for the old epoch *| in radians*,
+* ```old_dec```: Declination for in old epoch *| in radians*,
                  referred to the FK4 system
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
@@ -129,19 +131,19 @@ pub fn ChangeEpochEqCoords_FK4(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -
 }
 
 /**
-Returns ecliptical coordinates reduced to a different epoch
+Returns **ecliptic coordinates reduced** to a different epoch
 
 # Returns
 
 ```(new_long, new_lat)```
 
-* ```new_long```: Longitude for the new epoch *| in radians*
-* ```new_lat```: Latitude for the new epoch *| in radians*
+* ```new_long```: Ecliptic longitude in the new epoch *| in radians*
+* ```new_lat```: Ecliptic latitude in the new epoch *| in radians*
 
 # Arguments
 
-* ```old_long```: Longitude for the old epoch *| in radians*
-* ```old_lat```: Latitude for the old epoch *| in radians*
+* ```old_long```: Ecliptic longitude in the old epoch *| in radians*
+* ```old_lat```: Ecliptic latitude in the old epoch *| in radians*
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
 **/
@@ -181,27 +183,26 @@ fn AnglesForEclChange(t: f64, T: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns orbital elements reduced to a different equinox
+Returns **orbital elements reduced** to a different equinox
 
 # Returns
 
 ```(new_inc, new_arg_perih, new_long_ascend_node)```
 
-* ```new_inc```: Inclination for the new equinox *| in radians*
-* ```new_arg_perih```: Argument of perihelion for the new equinox *| in radians*
-* ```new_long_ascend_node```: Longitude of ascending node for the new equinox *| in radians*
+* ```new_inc```: Inclination in the new equinox *| in radians*
+* ```new_arg_perih```: Argument of perihelion in the new equinox *| in radians*
+* ```new_long_ascend_node```: Longitude of ascending node in the new equinox *| in radians*
 
 # Arguments
 
-* ```old_inc```: Inclination for the old equinox *| in radians*
-* ```old_arg_perih```: Argument of perihelion for the old equinox *| in radians*
-* ```old_long_ascend_node```: Longitude of ascending node for the old equinox *| in radians*
+* ```old_inc```: Inclination in the old equinox *| in radians*
+* ```old_arg_perih```: Argument of perihelion in the old equinox *| in radians*
+* ```old_long_ascend_node```: Longitude of ascending node in the old equinox *| in radians*
 * ```JD1```: Julian (Ephemeris) day corresponding to the old equinox
 * ```JD2```: Julian (Ephemeris) day corresponding to the new equinox
 **/
 pub fn ChangeOrbElements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node: f64,
                          JD1: f64, JD2: f64) -> (f64, f64, f64) {
-
     let T = time::JulCent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
@@ -227,5 +228,4 @@ pub fn ChangeOrbElements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node:
     let delta_w = (-nu.sin()*(old_long_ascend_node - Pi).sin()/new_inc.sin()).asin();
 
     (new_inc, old_arg_perih + delta_w, new_long_ascend_node)
-
 }
