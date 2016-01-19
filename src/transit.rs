@@ -28,8 +28,7 @@ Returns the time of a transit
 
 # Returns
 
-* ```m```: Topocentric equatorial point of the
-                     celestial body *| in radians*
+* ```(hour, minute, second)```: Time of the transit on the day of interest
 
 # Arguments
 
@@ -42,7 +41,7 @@ Let ```JD``` be the Julian (Ephemeris) day of interest.
 * ```eq_point1```: Equatorial point of the transit body on ```JD - 1``` *| in radians*
 * ```eq_point2```: Equatorial point of the transit body on ```JD``` *| in radians*
 * ```eq_point3```: Equatorial point of the transit body on ```JD + 1``` *| in radians*
-* ```app_green_sidr```: Apparent sidereal time at Greenwhich *| in radians*
+* ```app_green_sidr```: Apparent sidereal time at Greenwhich on ```JD``` *| in radians*
 * ```deltaT```: Delta T
 * ```moon_eq_hz_parallax```: *Pass only when TransitBody::Moon is passed for transit_body*.
                               Equatorial horizontal parallax of the Moon *| in radians*
@@ -56,7 +55,7 @@ pub fn Time(
     eq_point3: &coords::EqPoint,
     app_green_sidr: f64,
     deltaT: f64,
-    moon_eq_hz_parallax: f64) -> f64 {
+    moon_eq_hz_parallax: f64) -> (i64, i64, f64) {
 
     let h0 = match transit_body {
         &TransitBody::StarOrPlanet => -0.5667_f64.to_radians(),
@@ -101,7 +100,13 @@ pub fn Time(
         &TransitType::Set     => (h - h0) / (rad360 * dec.cos() * geograph_point.lat.cos() * H.sin())
     };
 
-    m
+    let h = 24.0 * m;
+    let hour = h as i64;
+    let m = (h - (hour as f64)) * 60.0;
+    let minute = m as i64;
+    let second = (m - (minute as f64)) * 60.0;
+
+    (hour, minute, second)
 }
 
 fn m(transit_type: &TransitType, H0: f64, asc: f64, L: f64, Theta0: f64, rad360: f64) -> f64 {

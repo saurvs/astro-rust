@@ -123,28 +123,35 @@ Returns the elements for the ring of Saturn
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
-* ```l0```: Heliocentric longitude of the Earth *| in radians*
-            on ```JD```
-* ```b0```: Heliocentric latitude of the Earth *| in radians*
-            on ```JD```
-* ```R```: Heliocentric radius vector of the Earth *| in AU*
-            on ```JD```
-
-If ```tau``` is the light time from Saturn to the Earth
-
-* ```l```: Heliocentric longitude of the Earth *| in radians*
-           on ```JD - tau```
-* ```b```: Julian (Ephemeris) day
-* ```r```: Apparent heliocentric of  *| in radians*
 * ```nut_in_long```: Nutation in longitude *| in radians*
 * ```tru_oblq_eclip```: True obliquity of the ecliptic *| in radians*
 **/
-
-pub fn RingElements(JD: f64/*,
-          l0: f64, b0: f64, R: f64,
-          l: f64, b: f64, r: f64,*/,
+pub fn RingElements(JD: f64,
           nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
-    let (l0,b0,R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
+
+    let (l0, b0, R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
+
+    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
+    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
+    let mut saturn_earth_dist = 0.0;
+    let mut light_time = 0.0;
+
+    let mut i: u8 = 1;
+    let n: u8 = 2;
+    while i <= n {
+        let (new_l, new_b, new_r) = planet::HeliocenCoords(&planet::Planet::Saturn, JD - light_time);
+        l = new_l; b = new_b; r = new_r;
+
+        x = r*b.cos()*l.cos() - R*l0.cos();
+        y = r*b.cos()*l.sin() - R*l0.sin();
+        z = r*b.sin()         - R*b0.sin();
+
+        saturn_earth_dist = (x*x + y*y + z*z).sqrt();
+        light_time = planet::LightTime(saturn_earth_dist);
+
+        i += 1;
+    }
+
     let JC = time::JulCent(JD);
     let inc = Inc(JC);
     let ascend_node = AscenNode(JC);

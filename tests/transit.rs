@@ -23,7 +23,7 @@ fn Time() {
     };
     let Theta0 = 177.74208_f64.to_radians();
 
-    let m_rise = transit::Time(
+    let (h_rise, m_rise, s_rise) = transit::Time(
         &transit::TransitType::Rise,
         &transit::TransitBody::StarOrPlanet,
         &geograph_point,
@@ -34,9 +34,9 @@ fn Time() {
         deltaT,
         0.0
     );
-    assert_eq!(util::RoundUptoDigits(m_rise, 5), 0.51766);
+    assert_eq!((h_rise, m_rise), (12, 25));
 
-    let m_transit = transit::Time(
+    let (h_transit, m_transit, s_transit) = transit::Time(
         &transit::TransitType::Transit,
         &transit::TransitBody::StarOrPlanet,
         &geograph_point,
@@ -47,9 +47,9 @@ fn Time() {
         deltaT,
         0.0
     );
-    assert_eq!(util::RoundUptoDigits(m_transit, 5), 0.81980);
+    assert_eq!((h_transit, m_transit), (19, 40));
 
-    let m_set = transit::Time(
+    let (h_set, m_set, s_set) = transit::Time(
         &transit::TransitType::Set,
         &transit::TransitBody::StarOrPlanet,
         &geograph_point,
@@ -60,5 +60,5 @@ fn Time() {
         deltaT,
         0.0
     );
-    assert_eq!(util::RoundUptoDigits(m_set, 5), 0.12130);
+    assert_eq!((h_set, m_set), (2, 54));
 }

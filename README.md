@@ -158,6 +158,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * ecliptic geocentric coordinates
 * rectangular geocentric coordinates
+* aberration in ecliptic longitude
 * ephemeris for physical observations
 * time of the beginning of Carrington's synodic rotation
 

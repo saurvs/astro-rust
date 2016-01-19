@@ -254,15 +254,16 @@ pub fn OrbElements(planet: &Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f
 }
 
 /**
-Returns a planet's heliocentric coordinates
+Returns a planet's heliocentric coordinates,
+referred to the mean equinox of the date
 
 # Returns
 
-```(longitude, latitude, radius_vec)```
+```(long, lat, rad_vec)```
 
-* ```longitude```: Heliocentric longitude *| in radians*
-* ```latitude```: Heliocentric latitude *| in radians*
-* ```radius_vec```: Heliocentric radius vector *| in AU*
+* ```long```: Heliocentric longitude *| in radians*
+* ```lat```: Heliocentric latitude *| in radians*
+* ```rad_vec```: Heliocentric radius vector *| in AU*
 
 # Arguments
 
@@ -323,7 +324,33 @@ pub fn LightTime(dist: f64) -> f64 {
     0.0057755183 * dist
 }
 
-pub fn EclGeocenCoords(L0: f64, B0: f64, R0: f64,
+/**
+Returns a planet's ecliptic geocentric coordinates
+from it's heliocentric coordinates
+
+This method does not correct for the effect of light-time.
+
+# Returns
+
+```(ecl_long, ecl_lat, rad_vec, light_time)```
+
+* ```ecl_long```: Geocentric longitude of the planet *| in radians*
+* ```ecl_lat```: Geocentric latitude of the planet *| in radians*
+* ```rad_vec```: Geocentric radius vector of the planet *| in AU*
+* ```light_time```: Time taken by light to travel from the planet's
+                    current position to the Earth, in days of
+                    dynamical time
+
+# Arguments
+
+* ```L0```: Heliocentric longitude of the Earth *| in radians*
+* ```B0```: Heliocentric latitude of the Earth *| in radians*
+* ```R0```: Heliocentric radius vector of the Earth *| in radians*
+* ```L```: Heliocentric longitude of the planet *| in radians*
+* ```B```: Heliocentric latitude of the planet *| in radians*
+* ```R```: Heliocentric radius vector of the planet *| in radians*
+**/
+pub fn EclGeocenCoords_UncorrectedLightTime(L0: f64, B0: f64, R0: f64,
                        L: f64, B: f64, R: f64) -> (f64, f64, f64, f64) {
     let x = R*B.cos()*L.cos() - R0*B0.cos()*L0.cos();
     let y = R*B.cos()*L.sin() - R0*B0.cos()*L0.sin();
@@ -335,19 +362,35 @@ pub fn EclGeocenCoords(L0: f64, B0: f64, R0: f64,
     (y.atan2(x), z.atan2((x*x + y*y).sqrt()), planet_earth_dist, light_time)
 }
 
-#[macro_export]
-macro_rules! ApprntEclGeocenCoords {
-    ($planet: expr, $JD: expr) => {{
-        let (L0, B0, R0) = astro::planet::HeliocenCoords(&astro::planet::Planet::Earth, $JD);
+/**
+Returns a planet's ecliptic geocentric coordinates
+from it's heliocentric coordinates
 
-        let (L1, B1, R1) = astro::planet::HeliocenCoords($planet, $JD);
-        let (l1, b1, r1, t) = astro::planet::EclGeocenCoords(L0, B0, R0, L1, B1, R1);
+This method corrects for the effect of light-time.
 
-        let (L2, B2, R2) = astro::planet::HeliocenCoords($planet, $JD - t);
-        let (l2, b2, r2, t2) = astro::planet::EclGeocenCoords(L0, B0, R0, L2, B2, R2);
+# Returns
 
-        (l2, b2, r2)
-    }};
+```(ecl_long, ecl_lat, rad_vec)```
+
+* ```ecl_long```: Geocentric longitude of the planet *| in radians*
+* ```ecl_lat```: Geocentric latitude of the planet *| in radians*
+* ```rad_vec```: Geocentric radius vector of the planet *| in AU*
+
+# Arguments
+
+* ```planet```: [Planet](./enum.Planet.html)
+* ```JD```: Julian (Ephemeris) day
+**/
+pub fn EclGeocenCoords(planet: &Planet, JD: f64) -> (f64, f64, f64) {
+    let (L0, B0, R0) = HeliocenCoords(&Planet::Earth, JD);
+
+    let (L1, B1, R1) = HeliocenCoords(&planet, JD);
+    let (l1, b1, r1, t) = EclGeocenCoords_UncorrectedLightTime(L0, B0, R0, L1, B1, R1);
+
+    let (L2, B2, R2) = HeliocenCoords(&planet, JD - t);
+    let (l2, b2, r2, t2) = EclGeocenCoords_UncorrectedLightTime(L0, B0, R0, L2, B2, R2);
+
+    (l2, b2, r2)
 }
 
 /**

@@ -13,8 +13,8 @@ fn HeliocenCoords() {
 }
 
 #[test]
-fn EclGeocenCoords() {
-    let (L, B, mut R, mut t) = planet::EclGeocenCoords(
+fn EclGeocenCoords_UncorrectedLightTime() {
+    let (L, B, mut R, mut t) = planet::EclGeocenCoords_UncorrectedLightTime(
         88.35704_f64.to_radians(),
         0.00014_f64.to_radians(),
         0.983824,
@@ -48,8 +48,8 @@ fn EclCoordsToFK5() {
 }
 
 #[test]
-fn ApprntEclGeocenCoords() {
-    let (mut L, mut B, mut R) = ApprntEclGeocenCoords!(&planet::Planet::Venus, 2448976.5);
+fn EclGeocenCoords() {
+    let (mut L, mut B, mut R) = planet::EclGeocenCoords(&planet::Planet::Venus, 2448976.5);
     L = util::RoundUptoDigits(angle::LimitTo360(L.to_degrees()), 2);
     B = util::RoundUptoDigits(B.to_degrees(), 2);
     R = util::RoundUptoDigits(R, 4);

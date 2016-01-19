@@ -44,16 +44,31 @@ of Mars
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn Ephemeris(JD: f64, mut lambda0: f64, mut beta0: f64,
-                 l0: f64, b0: f64, R: f64,
-                 l: f64, b: f64, r: f64,
                  mn_oblq_eclip: f64,
                  nut_in_long: f64, nut_in_oblq: f64) -> (f64, f64, f64, f64, f64, f64) {
-    let x = r*b.cos()*l.cos() - R*l0.cos();
-    let y = r*b.cos()*l.sin() - R*l0.sin();
-    let z = r*b.sin()         - R*b0.sin();
 
-    let mars_earth_dist = (x*x + y*y + z*z).sqrt();
-    let light_time = planet::LightTime(mars_earth_dist);
+    let (l0, b0, R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
+
+    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
+    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
+    let mut mars_earth_dist = 0.0;
+    let mut light_time = 0.0;
+
+    let mut i: u8 = 1;
+    let n: u8 = 2;
+    while i <= n {
+        let (new_l, new_b, new_r) = planet::HeliocenCoords(&planet::Planet::Mars, JD - light_time);
+        l = new_l; b = new_b; r = new_r;
+
+        x = r*b.cos()*l.cos() - R*l0.cos();
+        y = r*b.cos()*l.sin() - R*l0.sin();
+        z = r*b.sin()         - R*b0.sin();
+
+        mars_earth_dist = (x*x + y*y + z*z).sqrt();
+        light_time = planet::LightTime(mars_earth_dist);
+
+        i += 1;
+    }
 
     let mut lambda = y.atan2(x);
     let mut beta = z.atan2((x*x + y*y).sqrt());
