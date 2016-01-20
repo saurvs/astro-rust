@@ -21,7 +21,7 @@ pub fn TruAnom(ecc_anom: f64, ecc: f64) -> f64 {
 }
 
 /**
-Returns the **radius vector** of a body in an elliptic orbit, using
+Returns the **radius vector** of a body in an elliptic orbit from
 it's **eccentric anomaly**
 
 # Returns
@@ -39,7 +39,7 @@ pub fn RadVecFrmEccAnom(ecc_anom: f64, a: f64, ecc: f64) -> f64 {
 }
 
 /**
-Returns the **radius vector** of a body in an elliptic orbit, using
+Returns the **radius vector** of a body in an elliptic orbit from
 it's **true anomaly**
 
 # Returns
@@ -86,11 +86,11 @@ Returns the **velocity** of a body in an elliptic orbit
 # Returns
 
 * ```velocity```: Instantaneous velocity of the body
-                    *(kilometers per second)*
+                    *| in kilometers per second*
 
 # Arguments
 
-* ```r```: Body's distance to Sun *| in AU*
+* ```r```: Radius vector of the body *| in AU*
 * ```a```: Semimajor axis of orbit *| in AU*
 **/
 pub fn Velocity(r: f64, a:f64) -> f64 {
@@ -164,7 +164,7 @@ Returns the approximate **length** of an **ellipse**
 
 # Returns
 
-* ```(approximate_length)```: An approximate value for the length of
+* ```approx_length```: An approximate value for the length of
                               the ellipse (same unit as that of ```a```
                               and ```b```)
 
@@ -196,7 +196,7 @@ Returns the **semimajor axis** of an elliptic orbit
 * ```perih```: Perihelion of the orbit
 * ```ecc```: Eccentricity of the orbit
 **/
-pub fn SemimajAx(perih: f64, ecc: f64) -> f64 {
+pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
     perih / (1.0 - ecc)
 }
 
@@ -205,7 +205,8 @@ Returns the **mean motion** of an elliptic orbit
 
 # Returns
 
-* ```mean_motion```: Mean motion of the orbit (*radians per day*)
+* ```mean_motion```: Mean motion of the orbit
+                     *| in radians per days of dynamical time*
 
 # Arguments
 

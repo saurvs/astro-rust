@@ -5,7 +5,7 @@ use astro::*;
 #[test]
 fn RingPosition() {
 
-    let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::RingElements(
+    let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::ring::Elements(
         2448972.50068,
 /*
         84.285703_f64.to_radians(),
@@ -24,15 +24,19 @@ fn RingPosition() {
     B1 = util::RoundUptoDigits(B1.to_degrees(), 3);
     P = util::RoundUptoDigits(angle::LimitTo360(P.to_degrees()), 3);
     deltaU = util::RoundUptoDigits(deltaU.to_degrees(), 3);
-/*
-    assert_eq!(B, 16.442);
-    assert_eq!(B1, 14.679);
-    assert_eq!(P, 6.741);
-    assert_eq!(deltaU, 4.198);
-
-    let (h1, m1, sec1) = angle::DMSFrmDeg(a.to_degrees());
-    assert_eq!(util::RoundUptoDigits(sec1, 2), 35.87);
-
-    let (h2, m2, sec2) = angle::DMSFrmDeg(b.to_degrees());
-    assert_eq!(util::RoundUptoDigits(sec2, 2), 10.15);*/
 }
+/*
+#[test]
+fn Mimas() {
+
+    let (mut X, mut Y, mut Z) = planet::saturn::moon::ApprntRectCoords(
+        2451439.50074,
+        &planet::saturn::moon::Moon::Mimas
+    );
+
+    X = util::RoundUptoDigits(X, 3);
+    Y = util::RoundUptoDigits(Y, 3);
+
+    assert_eq!(X, 3.102);
+    assert_eq!(Y, -0.204);
+}*/

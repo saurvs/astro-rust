@@ -5,8 +5,11 @@ use coords;
 use planet;
 use time;
 
+pub mod moon;
+pub mod ring;
+
 /**
-Returns Saturn's apparent magnitude using G. Muller's formula
+Returns Saturn's **apparent magnitude** using G. Muller's formula
 
 # Returns
 
@@ -30,8 +33,8 @@ pub fn ApprntMag_Muller(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
 }
 
 /**
-Returns Saturn's apparent magnitude using the Astronomical
-Almanac's method adopted in 1984
+Returns Saturn's **apparent magnitude** using the Astronomical
+Almanac's formula adopted in 1984
 
 # Returns
 
@@ -58,7 +61,7 @@ fn equatorial_unit_semidiameter() -> f64 { angle::DegFrmDMS(0, 0, 82.73) }
 fn polar_unit_semidiameter() -> f64 { angle::DegFrmDMS(0, 0, 73.82) }
 
 /**
-Returns Saturn's geocentric polar semidiameter
+Returns Saturn's **polar semidiameter**
 
 # Returns
 
@@ -77,7 +80,7 @@ pub fn PolSemdiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
 }
 
 /**
-Returns Saturn's geocentric equatorial semidiameter
+Returns Saturn's **equatorial semidiameter**
 
 # Returns
 
@@ -89,177 +92,6 @@ Returns Saturn's geocentric equatorial semidiameter
 **/
 pub fn EqSemdiameter(distance_to_earth: f64) -> f64 {
     equatorial_unit_semidiameter() / distance_to_earth
-}
-
-pub fn Inc(JC: f64) -> f64 {
-    (      28.075216
-      - JC*(0.012998
-      + JC*0.000004)
-    ).to_radians()
-}
-
-pub fn AscenNode(JC: f64) -> f64 {
-    (      169.50847
-      + JC*(1.394681
-      + JC*0.000412)
-    ).to_radians()
-}
-
-/**
-Returns the elements for the ring of Saturn
-
-# Returns
-
-```(B, B1, P, deltaU, a, b)```
-
-* ```B```: Saturnicentric latitude of the Earth *| in radians*
-* ```B1```: Saturnicentric latitude of the Sun *| in radians*
-* ```P```: Geocentric position angle of the northern
-           semiminor axis of the apparent ellipse of the
-           ring*| in radians*
-* ```deltaU```: Difference between Saturnicentric
-                longitudes of the Sun and the Earth *| in radians*
-* ```a```: Major axis of the outer edge of the outer ring *| in radians*
-* ```b```: Minor axis of the outer edge of the outer ring *| in radians*
-
-# Arguments
-
-* ```JD```: Julian (Ephemeris) day
-* ```nut_in_long```: Nutation in longitude *| in radians*
-* ```tru_oblq_eclip```: True obliquity of the ecliptic *| in radians*
-**/
-pub fn RingElements(JD: f64,
-          nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
-
-    let (l0, b0, R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
-
-    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
-    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
-    let mut saturn_earth_dist = 0.0;
-    let mut light_time = 0.0;
-
-    let mut i: u8 = 1;
-    let n: u8 = 2;
-    while i <= n {
-        let (new_l, new_b, new_r) = planet::HeliocenCoords(&planet::Planet::Saturn, JD - light_time);
-        l = new_l; b = new_b; r = new_r;
-
-        x = r*b.cos()*l.cos() - R*l0.cos();
-        y = r*b.cos()*l.sin() - R*l0.sin();
-        z = r*b.sin()         - R*b0.sin();
-
-        saturn_earth_dist = (x*x + y*y + z*z).sqrt();
-        light_time = planet::LightTime(saturn_earth_dist);
-
-        i += 1;
-    }
-
-    let JC = time::JulCent(JD);
-    let inc = Inc(JC);
-    let ascend_node = AscenNode(JC);
-
-    let (mut l,mut b,mut r) = planet::HeliocenCoords(&planet::Planet::Saturn, JD);
-    let mut x = r*b.cos()*l.cos() - R*l0.cos();
-    let mut y = r*b.cos()*l.sin() - R*l0.sin();
-    let mut z = r*b.sin()         - R*b0.sin();
-    let mut saturn_earth_dist = (x*x + y*y + z*z).sqrt();
-    let light_time = planet::LightTime(saturn_earth_dist);
-    let (t1,t2,t3) = planet::HeliocenCoords(&planet::Planet::Saturn, JD-light_time);
-    x = r*b.cos()*l.cos() - R*l0.cos();
-    y = r*b.cos()*l.sin() - R*l0.sin();
-    z = r*b.sin()         - R*b0.sin();
-    saturn_earth_dist = (x*x + y*y + z*z).sqrt();
-
-
-    let mut lambda = y.atan2(x);
-    let mut beta = z.atan2((x*x + y*y).sqrt());
-    let B = (  inc.sin() * beta.cos() * (lambda - ascend_node).sin()
-             - inc.cos() * beta.sin()
-            ).asin();
-    let semi_maj = angle::DegFrmDMS(0, 0, 375.35).to_radians() / saturn_earth_dist;
-    let semi_min = semi_maj * B.abs().sin();
-
-    let N = (113.6655 + 0.8771*JC).to_radians();
-
-    let l1 = l - (0.01759/r).to_radians();
-    let b1 = b - (0.000764*(l - N).cos()/r).to_radians();
-
-    let B1 = (   inc.sin() * b1.cos() * (l1 - ascend_node).sin()
-               - inc.cos() * b1.sin()
-             ).asin();
-    let U1 = (inc.sin()*b1.sin() + inc.cos()*b1.cos()*(l1 - ascend_node).sin())
-             .atan2(b1.cos()*(l1 - ascend_node).cos());
-    let U2 = (inc.sin()*beta.sin() + inc.cos()*beta.cos()*(lambda - ascend_node).sin())
-             .atan2(beta.cos()*(lambda - ascend_node).cos());
-    let deltaU = (U1 - U2).abs();
-
-    let mut lambda0 = ascend_node - 90.0_f64.to_radians();
-    let beta0 = 90.0_f64.to_radians() - inc;
-
-    let q = 0.005693_f64.to_radians();
-    lambda += q * (l0 - lambda).cos() / beta.cos();
-    beta += q * (l0 - lambda).sin() * beta.sin();
-
-    lambda0 += nut_in_long;
-    lambda += nut_in_long;
-
-    let asc0 = coords::AscFrmEcl(lambda0, beta0, tru_oblq_eclip);
-    let dec0 = coords::DecFrmEcl(lambda0, beta0, tru_oblq_eclip);
-    let asc = coords::AscFrmEcl(lambda, beta, tru_oblq_eclip);
-    let dec = coords::DecFrmEcl(lambda, beta, tru_oblq_eclip);
-
-    let P = (dec0.cos() * (asc0 - asc).sin())
-            .atan2(dec0.sin()*dec.cos() - dec0.cos()*dec.sin()*(asc0 - asc).cos());
-
-    (B, B1, P, deltaU, semi_maj, semi_min)
-}
-
-pub fn InnEdgeOutRing(a: f64, b: f64) -> (f64, f64) {
-    (a*0.8801, b*0.8801)
-}
-
-pub fn OutEdgeInnRing(a: f64, b: f64) -> (f64, f64) {
-    (a*0.8599, b*0.8599)
-}
-
-pub fn InnEdgeInnRing(a: f64, b: f64) -> (f64, f64) {
-    (a*0.665, b*0.665)
-}
-
-pub fn InnEdgeDuskRing(a: f64, b: f64) -> (f64, f64) {
-    (a*0.5486, b*0.5486)
-}
-
-fn Mimas() {
-
-}
-
-fn Enceladus() {
-
-}
-
-fn Tethys() {
-
-}
-
-fn Dione() {
-
-}
-
-fn Rhea() {
-
-}
-
-fn Titan() {
-
-}
-
-fn Hyperion() {
-
-}
-
-fn Iapetus() {
-
 }
 
 pub fn VSOP87_Terms() -> Vec<Vec<Vec<[f64; 3]>>> {

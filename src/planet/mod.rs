@@ -15,21 +15,21 @@ use time;
 
 /// Represents a planet
 pub enum Planet {
-    /// Mercury *Thanks for help proving General Relativity*
+    /// Mercury *Thanks for help in testing General Relativity*
     Mercury,
     /// Venus **Climate change was here**
     Venus,
-    /// Earth *Pale blue dot*
+    /// Earth *The pale blue dot*
     Earth,
     /// Mars *Panspermia sounds nice*
     Mars,
     /// Jupiter *Oh, Europa*
     Jupiter,
-    /// Saturn *62 moons and smaller moonlets*
+    /// Saturn *62 moons and some moonlets*
     Saturn,
     /// Uranus *Remember King George?*
     Uranus,
-    /// Neptune *Oceans of liquid diamond, maybe*
+    /// Neptune *Oceans of liquid diamond (probably)*
     Neptune,
 }
 

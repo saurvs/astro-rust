@@ -42,15 +42,13 @@ pub fn Refrac15FrmTrueAlt(true_alt: f64) -> f64 {
 /**
 Returns the **refraction term** for true altitude
 
-This method is valid for all values of altitude from 0 to 90 degrees;
-the accuracy is upto 0.07 arcminute for all values of apparent
-altitude.
-
 # Returns
 
 * ```refrac_term```: The refraction term *| in radians*, that needs to be
                      subtracted from the apparent altitude to get the
                       true altitude
+
+The accuracy of ```refrac_term``` is upto 0.07 arcminutes.
 
 # Arguments
 
@@ -70,8 +68,7 @@ pub fn RefracFrmApprntAlt(apprnt_alt: f64) -> f64 {
 /**
 Returns the **refraction term** for apparent altitude
 
-This method is valid for all values of altitude from 0 to 90 degrees;
-it is consistent with ```RefracFrmApprntAlt()``` to within
+This function is consistent with ```RefracFrmApprntAlt()``` to within
 4 arcseconds.
 
 # Returns
