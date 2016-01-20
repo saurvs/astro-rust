@@ -6,7 +6,7 @@ use nutation;
 use planet;
 
 /**
-Returns Jupiter's geocentric equatorial semidiameter
+Returns Jupiter's **equatorial semidiameter**
 
 # Returns
 
@@ -16,12 +16,12 @@ Returns Jupiter's geocentric equatorial semidiameter
 
 * ```distance_to_earth```: Jupiter's distance to Earth *| in AU*
 **/
-pub fn EqSemdia(distance_to_earth: f64) -> f64 {
+pub fn EqSemdiameter(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 98.44) / distance_to_earth
 }
 
 /**
-Returns Jupiter's geocentric polar semidiameter
+Returns Jupiter's **polar semidiameter**
 
 # Returns
 
@@ -31,7 +31,7 @@ Returns Jupiter's geocentric polar semidiameter
 
 * ```distance_to_earth```: Jupiter's distance to Earth *| in AU*
 **/
-pub fn PolSemdia(distance_to_earth: f64) -> f64 {
+pub fn PolSemdiameter(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 92.06) / distance_to_earth
 }
 

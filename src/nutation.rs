@@ -130,9 +130,9 @@ Returns **nutation** in **equatorial coordinates**
 * ```nut_in_oblq```: Nutation in obliquity *| in radians*
 * ```tru_oblq```   : True obliquity of the ecliptic *| in radians*
 
-The declination passed should not be close to either of
-the celestial poles, as the values of nutation returned
-are only first-order corrections.
+The declination passed should not be close to either of the two of
+the celestial poles, as the values of nutation returned here are
+only first-order corrections.
 **/
 pub fn NutationInEqCoords(asc: f64, dec: f64, nut_in_long: f64,
                           nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {

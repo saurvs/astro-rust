@@ -9,7 +9,8 @@ Returns the **equatorial horizontal parallax** of a celestial body
 
 # Returns
 
-* ```eq_hz_parllx```: Equatorial horizontal parallax of the celestial body *| in radians*
+* ```eq_hz_parllx```: Equatorial horizontal parallax of the celestial
+                      body *| in radians*
 
 # Arguments
 
@@ -33,17 +34,17 @@ Returns the **topocentric equatorial coordinates** of a celestial body
 * ```dist_to_earth```: The celestial body's distance to the Earth *| in AU*
 * ```geograph_point```: Geographic point of the observer *| in radians*
 * ```observer_ht```: Height of the observer above sea level *| in meters*
-* ```green_sidreal```: Sidereal time at Greenwhich *| in radians*
+* ```greenwhich_sidreal```: Sidereal time at Greenwhich *| in radians*
 **/
 pub fn TopocenEqCoords(
     eq_point: &coords::EqPoint,
     dist_to_earth: f64,
     geograph_point: &coords::GeographPoint,
     observer_ht: f64,
-    green_sidreal: f64) -> coords::EqPoint {
+    greenwhich_sidreal: f64) -> coords::EqPoint {
 
     let (rho_sin, rho_cos) = planet::earth::RhoSinCosPhi(geograph_point.lat, observer_ht);
-    let geocen_hr_angl = coords::HrAnglFrmObserverLong(green_sidreal, geograph_point.long, eq_point.asc);
+    let geocen_hr_angl = coords::HrAnglFrmObserverLong(greenwhich_sidreal, geograph_point.long, eq_point.asc);
 
     let eq_hz_parllx_sin = EqHzParllx(dist_to_earth).sin();
     let del_asc = (-rho_cos*eq_hz_parllx_sin*geocen_hr_angl.sin())

@@ -112,19 +112,19 @@ pub fn BrightLimb(sun_eq_point: coords::EqPoint,
 }
 
 /**
-Returns the equatorial geocentric semidiameter of a Planet
+Returns the **equatorial semidiameter** of a planet
 
 # Returns
 
-* ```semidiameter```: Equatorial geocentric semidiameter (*radians per AU*)
+* ```semidiameter```: Equatorial semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```planet```: [Planet](./enum.Planet.html).
-                *Throws an error if Planet::Earth is passed.*
-* ```distance_to_earth```: Planet's distance to Earth *| in AU*
+* ```planet```: The [Planet](./enum.Planet.html).
+                *Throws an error if* ```Planet::Earth``` *is passed.*
+* ```planet_earth_dist```: Planet-Earth distance *| in AU*
 **/
-pub fn Semdia(planet: &Planet, distance_to_earth: f64) -> f64 {
+pub fn Semdiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
     let mut s: f64;
 
     match planet {
@@ -133,18 +133,18 @@ pub fn Semdia(planet: &Planet, distance_to_earth: f64) -> f64 {
         &Planet::Earth => panic!("Planet::Earth was passed to the function
                                  planet::Semidiameter()."),
         &Planet::Mars => s = angle::DegFrmDMS(0, 0, 4.68),
-        &Planet::Jupiter => s = jupiter::EqSemdia(1.0),
-        &Planet::Saturn => s = saturn::EqSemdia(1.0),
+        &Planet::Jupiter => s = jupiter::EqSemdiameter(1.0),
+        &Planet::Saturn => s = saturn::EqSemdiameter(1.0),
         &Planet::Uranus => s = angle::DegFrmDMS(0, 0, 35.02),
         &Planet::Neptune => s = angle::DegFrmDMS(0, 0, 33.5),
     };
 
-    s / distance_to_earth
+    s / planet_earth_dist
 }
 
 /**
-Returns the orbital elements of a planet,
-referred to the mean equinox of the date
+Returns the **orbital elements** of a planet,
+referred to the **mean equinox of the date**
 
 # Returns
 
@@ -163,7 +163,7 @@ referred to the mean equinox of the date
 
 # Arguments
 
-* ```planet```: [Planet](./enum.Planet.html)
+* ```planet```: The [Planet](./enum.Planet.html)
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn OrbElements(planet: &Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {

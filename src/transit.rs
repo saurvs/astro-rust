@@ -38,7 +38,7 @@ Returns the **time** of **transit** for a celestial body
 * ```transit_body```: The ```TransitBody```
 * ```geograph_point```: Geographic point of the observer *| in radians*
 
-Let ```JD``` be the Julian (Ephemeris) day of interest.
+Let ```JD``` be the Julian (Ephemeris) day of interest,
 
 * ```eq_point1```: Equatorial point of the transit body on ```JD - 1``` *| in radians*
 * ```eq_point2```: Equatorial point of the transit body on ```JD``` *| in radians*
@@ -46,7 +46,7 @@ Let ```JD``` be the Julian (Ephemeris) day of interest.
 * ```app_green_sidr```: Apparent sidereal time at Greenwhich on ```JD``` *| in radians*
 * ```deltaT```: Delta T on ```JD```
 * ```moon_eq_hz_parallax```: Equatorial horizontal parallax of the Moon on ```JD```
-                             *| in radians*. *Pay attention to this only when*
+                             *| in radians*. *Pass a meaningfull value here only when*
                              ```TransitBody::Moon``` *is passed for* ```transit_body```.
 
 **/

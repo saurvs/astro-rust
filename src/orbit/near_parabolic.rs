@@ -4,22 +4,23 @@ use angle;
 use consts;
 
 /**
-Returns the true anomaly and radius vector of a body in a near-parabolic orbit
+Returns the **true anomaly** and **radius vector** of a body in a
+near-parabolic orbit
 
 # Returns
 
-```(true_anomaly, radius_vector)```
+```(true_anom, rad_vec)```
 
-* ```true_anomaly```: True anomaly of the body *| in radians*
-* ```radius_vector```: Radius vector of the body *| in AU*
+* ```true_anom```: True anomaly of the body *| in radians*
+* ```rad_vec```: Radius vector of the body *| in AU*
 
 # Arguments
 
-* ```t```: The current time, in Julian (Ephemeris) day
+* ```t```: The time of interest, in Julian (Ephemeris) day
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
 * ```ecc```: Eccentricity of the orbit
 * ```q```: Perihelion distance *| in AU*
-* ```accuracy```: Desired accuracy for the results. *Eg: 0.000001 radians/AU*
+* ```accuracy```: Desired accuracy for the results. *Eg: 0.000001 radians*
 **/
 pub fn TruAnomAndRadVec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) -> (f64, f64) {
     let days_frm_perih = t - T;

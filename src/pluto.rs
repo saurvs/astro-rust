@@ -5,14 +5,19 @@ use planet;
 use time;
 
 /**
-Returns Pluto's **equatorial semidiameter**
+Returns Pluto's geocentric **equatorial semidiameter**
+
+# Returns
+
+* ```semidiameter```: Geocentric equatorial semidiameter
+                      *| in radians per AU*
 
 # Arguments
 
-* ```distance_to_earth```: Pluto-Earth distance *| in AU*
+* ```pluto_earth_dist```: Pluto-Earth distance *| in AU*
 **/
-pub fn Semdiameter(distance_to_earth: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 2.07) / distance_to_earth
+pub fn Semdiameter(pluto_earth_dist: f64) -> f64 {
+    angle::DegFrmDMS(0, 0, 2.07).to_radians() / pluto_earth_dist
 }
 
 /**
@@ -137,7 +142,7 @@ Returns Pluto's **mean orbital elements** near 2000 AD
 
 * ```a```: Semimajor axis of the orbit *| in AU*
 * ```e```: Eccentricity of the orbit
-* ```i```: Inclination of the plane of the orbit with the plane of
+* ```i```: Inclination of the plane of Pluto's orbit with the plane of
            the Earth's ecliptic *| in radians*
 * ```omega```: Longitude of the ascending node *| in radians*
 * ```w```: Argument of the perihelion *| in radians*

@@ -5,7 +5,7 @@ use coords;
 use time;
 
 /**
-Returns the geocentric equatorial horizontal parallax of the Moon
+Returns the **equatorial horizontal parallax** of the Moon
 
 # Returns
 
@@ -13,25 +13,26 @@ Returns the geocentric equatorial horizontal parallax of the Moon
 
 # Arguments
 
-* ```moon_earth_distance```: Distance between the Moon and Earth (*kilometers*)
+* ```earth_moon_dist```: Earth-Moon distance (*kilometers*)
 **/
-pub fn EqHzParllx(moon_earth_distance: f64) -> f64 {
-    (6378.14 / moon_earth_distance).asin()
+pub fn EqHzParllx(earth_moon_dist: f64) -> f64 {
+    (6378.14 / earth_moon_dist).asin()
 }
 
 /**
-Returns the Moon's geocentric equatorial semidiameter
+Returns the **equatorial semidiameter** of the Moon
 
 # Returns
 
-* ```equatorial_semidiameter```: Semidiameter (*radians per kilometers*)
+* ```eq_semidiameter```: Geocentric equatorial semidiameter
+                         *| in radians per kilometers*
 
 # Arguments
 
-* ```distance_to_earth```: The moon's distance to Earth (*kilometers*)
+* ```earth_moon_dist```: Earth-Moon distance *| in kilometers
 **/
-pub fn GeocenSemdia(distance_to_earth: f64) -> f64 {
-    0.272481 * EqHzParllx(distance_to_earth).sin()
+pub fn Semdiameter(earth_moon_dist: f64) -> f64 {
+    0.272481 * EqHzParllx(earth_moon_dist).sin()
 }
 
 /**
@@ -246,7 +247,7 @@ Moon *| in radians*, i.e, *with* the correction for nutation
 * ```optical_lib_lat```: The optical libration in latitude *| in radians*
 * ```JED```: Julian (Ephemeris) day
 **/
-pub fn TotLibr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
+pub fn TotalLibr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
                          JED: f64, optical_lib_lat: f64) -> (f64, f64) {
     let (opt_long, opt_lat) = OptLibr(mean_geocen_moon_long,
                                                 app_geocen_moon_lat, JED);

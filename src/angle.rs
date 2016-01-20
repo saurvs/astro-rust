@@ -1,7 +1,7 @@
 //! Angles for astronomy
 
 /**
-Returns the angular separation between two angular points
+Returns the **angular separation** between two angular points
 
 # Arguments
 
@@ -21,14 +21,14 @@ pub fn AnglSepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
 }
 
 /**
-Returns an angle expressed in degrees only, from an angle expressed in
-degrees, minutes and seconds
+Returns an angle in **degrees with decimals**, from an angle
+expressed in **degrees, arcminutes** and **arcseconds**
 
 # Arguments
 
 * ```deg```: Degrees
-* ```min```: Minute
-* ```sec```: Second
+* ```min```: Arcminutes
+* ```sec```: Arcseconds
 **/
 pub fn DegFrmDMS(deg: i64, min: i64, sec: f64) -> f64 {
     let (M, S) = if deg < 0 { (-min.abs(), -sec.abs()) }
@@ -37,12 +37,20 @@ pub fn DegFrmDMS(deg: i64, min: i64, sec: f64) -> f64 {
 }
 
 /**
-Returns an angle expressed in degrees, minutes and seconds,
-from an angle expressed in degrees only
+Returns an **angle** expressed in **degrees, arcminutes** and
+**arcseconds**, from an angle in **degrees with decimals**
+
+# Returns
+
+```(deg, min, sec)```
+
+* ```deg```: Degrees
+* ```min```: Arcminutes
+* ```sec```: Arcseconds
 
 # Arguments
 
-* ```deg```: Angle in degrees only
+* ```deg```: Angle in degrees with decimals
 **/
 pub fn DMSFrmDeg(deg: f64) -> (i64, i64, f64) {
     let degree = deg as i64;
@@ -53,40 +61,98 @@ pub fn DMSFrmDeg(deg: f64) -> (i64, i64, f64) {
     (degree, minute, seconds)
 }
 
-pub fn HMSFrmDeg(angle: f64) -> (i8, i8, f64) {
-    let hours = angle / 15.0;
-    let hour = hours as i8;
+/**
+Returns an **angle** expressed in **hours, minutes** and
+**seconds**, from an angle in **degrees with decimals**
+
+# Returns
+
+```(deg, min, sec)```
+
+* ```hour```: Hours
+* ```min```: Minutes
+* ```sec```: Seconds
+
+# Arguments
+
+* ```deg```: Angle in degrees with decimals
+**/
+pub fn HMSFrmDeg(deg: f64) -> (i64, i64, f64) {
+    let hours = deg / 15.0;
+    let hour = hours as i64;
 
     let minutes = (hours - (hour as f64)) * 60.0;
-    let minute = minutes as i8;
+    let minute = minutes as i64;
 
     let seconds = (minutes - (minute as f64)) * 60.0;
 
     (hour, minute, seconds)
 }
 
-pub fn DegFrmHMS(hour: i8, minute: i8, seconds: f64) -> f64 {
-    15.0 * ((hour as f64) + (minute as f64)/60.0 + seconds/3600.0)
+/**
+Returns an angle in **degrees with decimals**, from an angle
+expressed in **hours, minutes** and **seconds**
+
+# Arguments
+
+* ```hours```: Hours
+* ```min```: Minutes
+* ```sec```: Seconds
+**/
+pub fn DegFrmHMS(hour: i64, min: i64, sec: f64) -> f64 {
+    15.0 * ((hour as f64) + (min as f64)/60.0 + sec/3600.0)
 }
 
+/**
+Returns an angle in **arcseconds**, from an angle in **degrees
+with decimals**
+
+# Arguments
+
+* ```deg```: Degrees with decimals
+**/
 pub fn ArcSecFrmDeg(deg: f64) -> f64 {
     deg * 3600.0
 }
 
+/**
+Returns an angle in **seconds**, from an angle in **degrees with
+decimals**
+
+# Arguments
+
+* ```deg```: Degrees with decimals
+**/
 pub fn TimeSecFrmDeg(deg: f64) -> f64 {
     deg * 3600.0
 }
 
+/**
+Returns an angle in **degrees with decimals**, from an angle
+in **arcseconds**
+
+# Arguments
+
+* ```arc_sec```: Arcseconds
+**/
 pub fn DegFrmArcSec(arc_sec: f64) -> f64 {
     arc_sec / 3600.0
 }
 
+/**
+Returns an angle in **degrees with decimals**, from an angle
+in **seconds**
+
+# Arguments
+
+* ```arc_sec```: Seconds
+**/
 pub fn DegFrmTimeSec(time_sec: f64) -> f64 {
     time_sec / 3600.0
 }
 
 /**
-Returns the equivalent angle in [0, 360] degree range
+Returns the equivalent angle in **[0, 360]** degree range
 
 # Arguments
 

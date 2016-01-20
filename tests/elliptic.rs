@@ -12,11 +12,11 @@ fn EccAnom() {
 fn Velocity() {
     let a = 17.9400782;
     let e = 0.96727426;
-    let (vel_p, vel_a) = (orbit::elliptic::PerihVel(a, e), orbit::elliptic::AphVel(a, e));
+    let (vel_p, vel_a) = (orbit::elliptic::PerihVelocity(a, e), orbit::elliptic::AphVelocity(a, e));
     assert_eq!(util::RoundUptoDigits(vel_p, 2), 54.52);
     assert_eq!(util::RoundUptoDigits(vel_a, 2), 0.91);
 
-    let V = orbit::elliptic::Vel(1.0, a);
+    let V = orbit::elliptic::Velocity(1.0, a);
     assert_eq!(util::RoundUptoDigits(V, 2), 41.53);
 }
 

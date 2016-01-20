@@ -4,7 +4,8 @@ use std::*;
 use orbit;
 
 /**
-Returns the true anomaly and radius vector of a body in a parabolic orbit
+Returns the **true anomaly** and **radius vector** of a body in a
+parabolic orbit
 
 # Returns
 
@@ -15,7 +16,7 @@ Returns the true anomaly and radius vector of a body in a parabolic orbit
 
 # Arguments
 
-* ```t```: The current time, in Julian (Ephemeris) day
+* ```t```: The time of interest, in Julian (Ephemeris) day
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
 * ```q```: Perihelion distance *| in AU*
 **/
@@ -31,15 +32,15 @@ pub fn TruAnomAndRadVec(t: f64, T: f64, q: f64) -> (f64, f64) {
 }
 
 /**
-Returns the time of passage of a body through a node,
-and it's radius vector at that time
+Returns the **time of passage** of a body through a **node**,
+along with it's **radius vector** at that time
 
 # Returns
 
 ```(time_of_pass, rad_vec)```
 
 * ```time_of_pass```: Time of passage through the node, in Julian (Ephemeris) day
-* ```rad_vec```: Radius vector of the body *| in AU*
+* ```rad_vec```: Radius vector of the body at the time of passage *| in AU*
 
 # Arguments
 

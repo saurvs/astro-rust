@@ -6,21 +6,21 @@ use std;
 
 /**
 Returns the **mean obliquity** of the ecliptic using
-J. Laskar's formula
+**J. Laskar's** formula
 
 # Returns
 
 * ```mn_oblq```: Mean obliquity of the ecliptic *| in radians*
 
 The accuracy of ```mn_oblq``` is estimated to be 0.01 arcseconds
-for a 1000 years before and after 2000 AD, and a few arcseconds
-for a 10000 years before and afters 2000 AD.
+for 1000 years before and after 2000 AD, and a few arcseconds
+for 10000 years before and after 2000 AD.
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn MnOblq(JD: f64) -> (f64) {
+pub fn MnOblq_Laskar(JD: f64) -> (f64) {
     let u = time::JulCent(JD) / 100.0;
 
     (       angle::DegFrmDMS(23, 26, 21.448)
@@ -38,14 +38,15 @@ pub fn MnOblq(JD: f64) -> (f64) {
 }
 
 /**
-Returns the **mean obliquity** of the ecliptic using the IAU formula
+Returns the **mean obliquity** of the ecliptic using the **IAU** formula
 
 # Returns
 
 * ```mn_oblq```: Mean obliquity of the ecliptic *| in radians*
 
 The error in ```mn_oblq``` reaches 1 arcsecond over a period of
-2000 years, and about 10 arcseconds over a period of 4000 years.
+2000 years from 2000 AD, and about 10 arcseconds over a period of
+4000 years from 2000 AD.
 
 # Arguments
 
@@ -62,14 +63,15 @@ pub fn MnOblq_IAU(JD: f64) -> (f64) {
 }
 
 /**
-Returns the **longitudes** of the **ecliptic points** on the **horizon**
+Returns the **longitudes** of the two **ecliptic points** on
+a **horizon** on Earth
 
 # Returns
 
 ```(long_point_1, long_point_2)```
 
-* ```long_point_1```: Longitude of the ecliptic point 1 *| in radians*
-* ```long_point_2```: Longitude of the ecliptic point 2 *| in radians*
+* ```long_point_1```: Longitude of ecliptic point 1 *| in radians*
+* ```long_point_2```: Longitude of ecliptic point 2 *| in radians*
 
 # Arguments
 
@@ -87,17 +89,17 @@ pub fn LongOfEclipPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f6
 }
 
 /**
-Returns the **angle** between the **ecliptic** and the **horizon**
+Returns the **angle** between the **ecliptic** and a **horizon**
+on Earth
 
 # Returns
 
-* ```angle```: Angle between the ecliptic and
-               the horizon *| in radians*
+* ```angle```: Angle between the ecliptic and the horizon *| in radians*
 
 # Arguments
 
 * ```oblq_eclip```: Obliquity of the ecliptic *| in radians*
-* ```observer_lat```: The bserver's geographical latitude *| in radians*
+* ```observer_lat```: The observer's geographical latitude *| in radians*
 * ```loc_sidreal```: Local sidereal time *| in radians*
 **/
 pub fn AnglBetwnEclipAndHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {

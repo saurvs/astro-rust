@@ -249,9 +249,12 @@ pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
 /**
 Returns the apparent sidereal time for a Julian day
 
+This functions uses J. Laskar's formula for computing
+the obliquity of the ecliptic.
+
 # Returns
 
-* ```apparent_sidereal_time```: Apparent sidereal time *| in radians*
+* ```app_sidereal_time```: Apparent sidereal time *| in radians*
 
 # Arguments
 
@@ -261,7 +264,7 @@ Returns the apparent sidereal time for a Julian day
 macro_rules! AppSidr {
     ($JD: expr) => {{
         let (nut_in_long, nut_in_oblq) = astro::nutation::Nutation($JD);
-        let eclip_oblq = astro::ecliptic::MnOblq($JD);
+        let eclip_oblq = astro::ecliptic::MnOblq_Laskar($JD);
         astro::time::AppSidr(astro::time::MnSidr($JD), nut_in_long, eclip_oblq + nut_in_oblq)
     }};
 }
