@@ -26,7 +26,6 @@ fn RingPosition() {
     deltaU = util::RoundUptoDigits(deltaU.to_degrees(), 3);
 }
 /*
-#[test]
 fn Mimas() {
 
     let (mut X, mut Y, mut Z) = planet::saturn::moon::ApprntRectCoords(
