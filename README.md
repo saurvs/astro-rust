@@ -17,7 +17,7 @@ Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ```astro-rust``` is an MIT licensed library of algorithms made for rigorous and accurate astronomical calculations.
 
-[Several](http://www.naughter.com/aa.html) [such](http://mhuss.com/AstroLib/docs/Overview.html) libraries have existed for a long time, being written in popular languages such as [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have comprehensive, well-tested coverage of various astronomical algorithms, and occasionally distributed with slightly restrictive licenses.
+[Several](http://www.naughter.com/aa.html) [such](http://mhuss.com/AstroLib/docs/Overview.html) libraries have existed for a long time, being written in popular languages such as [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have comprehensive, well-tested coverage of various astronomical algorithms, although sometimes distributed with slightly restrictive licenses.
 
  This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong static typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
 
@@ -210,19 +210,17 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 **Transit**
 
-* Times of rise, transit and set for stars, planets, the Sun, and the Moon
+* Times of rise, transit and set for the stars, the planets, the Sun, and the Moon
 
 **Elliptic orbits**
 
-* eccentric anomaly of a body, from it's mean anomaly
-* true anomaly of a body, from it's eccentric anomaly
-* radius vector of a body, from it's eccentric anomaly or true anomaly
-* time of passage through the nodes
+* eccentric anomaly, true anomaly and radius of a body
+* times of passage through the nodes
 
 **Parabolic orbits**
 
-* true anomaly and radius vector of a body, from time of passage in perihelion
-* time of passage through the nodes
+* true anomaly and radius vector of a body
+* times of passage through the nodes
 
 **Near-parabolic orbits**
 
@@ -282,9 +280,9 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 ## Contributing
 
-Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. And tests, along with good (typo-free) documentation, need to be written for them.
+Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. Tests, along with good documentation, need to be written for them as well.
 
-A good start would be to go through Meeus's book or documents published by the IAU, browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
+A good start would be to go through Meeus's book or documents published by the IAU, then browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
 One fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
