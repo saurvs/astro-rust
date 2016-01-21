@@ -17,19 +17,16 @@ Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ```astro-rust``` is an MIT licensed library of algorithms made for rigorous and accurate astronomical calculations.
 
-[Several](http://www.naughter.com/aa.html) [such](http://mhuss.com/AstroLib/docs/Overview.html) libraries have existed for a long time, being written in popular languages such as [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have comprehensive, well-tested coverage of various astronomical algorithms, although sometimes distributed with slightly restrictive licenses.
+It includes things such as  planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, calculating physical ephemeris of Mars and Jupiter, finding the elements of the moons and rings of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit for bodies on the celestial sphere. Even Pluto's position and orbit can be calculated accurately. 
 
- This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong static typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
+Most of the algorithms implemented here are those described in *Astronomical Algorithms by Jean Meeus*, a book that has long been a well-respected and comprehensive source of astronomical algorithms. [Several](http://www.naughter.com/aa.html) [code libraries](http://mhuss.com/AstroLib/docs/Overview.html) based off the book have existed for a long time, being implemented in popular languages like [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have well-tested coverage of various algorithms, although sometimes distributed with slightly restrictive licenses.
 
- And, the adopted [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s) and the same license is passed along to derived works.
+This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
 
- Most of the algorithms implemented in this library are those described in the book *Astronomical Algorithms by Jean Meeus*. That book includes things like planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, times of conjunctions, elongations, and oppositions, calculating physical ephemeris of Mars, Jupiter, and the Moon, finding position angles, illuminated fractions, and visual magnitudes, and much more. Even Pluto gets a chapter.
+Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s) and the same license is passed along to derived works.
 
- However, the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently.
-
-For information related to the programming aspects of this library, such as descriptions on the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
-
-A high-level list of the implemented algorithms is given at the [bottom of this page](#algorithms).
+For information related to the programming aspects of this library, such as descriptions of the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
+And for a high-level list of all the algorithms implemented so far, see the [Algorithms](#algorithms) section.
 
 ## Usage
 
@@ -66,9 +63,9 @@ A high-level list of the implemented algorithms is given at the [bottom of this 
 
   ```
 
-* Find the ecliptic *geocentric* coordinates of the Sun
+* Find the *geocentric* ecliptic coordinates of the Sun
   ```rust
-  let (long, lat, rad_vec) = sun::EclGeocenCoords(julian_day);
+  let (long, lat, rad_vec) = sun::GeocenEclCoords(julian_day);
 
   // long    - ecliptic longitude (radians)
   // lat     - ecliptic latitude (radians)
@@ -77,7 +74,7 @@ A high-level list of the implemented algorithms is given at the [bottom of this 
 
 * Similarly for the Moon
   ```rust
-  let (long, lat, rad_vec) = lunar::EclGeocenCoords(julian_day);
+  let (long, lat, rad_vec) = lunar::GeocenEclCoords(julian_day);
   ```
 
 * Find the *heliocentric* coordinates of Jupiter
@@ -118,7 +115,7 @@ A high-level list of the implemented algorithms is given at the [bottom of this 
 
     let oblq_eclip = 23.4392911_f64.to_radians();
 
-    // you can also get oblq_eclip from ecliptic::MnOblq(julian_day)
+    // you can also get oblq_eclip from ecliptic::MnOblq_IAU(julian_day)
     // for the same Julian day when the coordinates of the star
     // were observed
 
@@ -282,9 +279,11 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. Tests along with good documentation need to be written for them as well.
 
-A good start would be to go through Meeus's book or documents published by the IAU, then browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
+A good start would be to go through Meeus's book, then browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-One fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
+Also worth noting, is that the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently. And so, papers published by the internationally recognized authorities like the IAU, should also be considered as sources for algorithms. The end of goal of this project should be to build a modern, well-tested, production-ready code library for astronomy.
+
+One fun suggestion in that direction is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

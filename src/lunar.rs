@@ -330,7 +330,7 @@ pub fn TopocenLibrByDiffCorrections(observer_lat: f64, geocen_dec_moon: f64,
 }
 
 /**
-Returns the ecliptic geocentric coordinates of the Moon
+Returns the **geocentric** ecliptic coordinates of the Moon
 
 # Returns
 
@@ -344,7 +344,7 @@ Returns the ecliptic geocentric coordinates of the Moon
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn EclGeocenCoords(JED: f64) -> (f64, f64, f64) {
+pub fn GeocenEclCoords(JED: f64) -> (f64, f64, f64) {
     let JC = time::JulCent(JED);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);

@@ -7,7 +7,7 @@ fn RingPosition() {
 
     let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::ring::Elements(
         2448972.50068,
-        
+
         angle::DegFrmDMS(0, 0, 16.86).to_radians(),
         23.43971_f64.to_radians()
     );
@@ -41,9 +41,10 @@ fn Moons() {
     //assert_eq!(Y, -1.061);
 
     //Dione
-    //assert_eq!(X, -5.365);
-    //assert_eq!(Y, -1.148);
+    assert_eq!(X, -5.365);
+    assert_eq!(Y, -1.148);
 
-    assert_eq!(X, -1.122);
-    assert_eq!(Y, -3.123);
+    //Rhea
+    //assert_eq!(X, -1.122);
+    //assert_eq!(Y, -3.123);
 }

@@ -226,14 +226,14 @@ fn Dione(info: &Info) -> (f64, f64, f64, f64) {
 
     (lambda_4, gamma_4, Omega_4, r_4)
 }
-
+/*
 fn Rhea(info: &Info) -> (f64, f64, f64, f64) {
     let p1 = (342.7 + 10.057*info.t2);
     let a1 = 0.000265*p1.sin() + 0.01*info.W4.sin();
     let a2 = 0.000265*p1.cos() + 0.01*info.W$.cos();
     let e = (a1*a1 + a2*a2).sqrt();
     let p = (a1/a2).atan();
-}
+}*/
 
 fn XYZ(lambda_j: f64, gamma_j: f64, Omega_j: f64, r_j: f64, info: &Info) -> (f64, f64, f64) {
     let u = lambda_j - Omega_j;
