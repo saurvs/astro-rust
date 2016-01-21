@@ -7,15 +7,7 @@ fn RingPosition() {
 
     let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::ring::Elements(
         2448972.50068,
-/*
-        84.285703_f64.to_radians(),
-        0.000197_f64.to_radians(),
-        0.98412316,
-
-        319.191636_f64.to_radians(),
-        -1.075183_f64.to_radians(),
-        9.8678819,*/
-
+        
         angle::DegFrmDMS(0, 0, 16.86).to_radians(),
         23.43971_f64.to_radians()
     );
@@ -25,9 +17,9 @@ fn RingPosition() {
     P = util::RoundUptoDigits(angle::LimitTo360(P.to_degrees()), 3);
     deltaU = util::RoundUptoDigits(deltaU.to_degrees(), 3);
 }
-/*
-fn Mimas() {
 
+#[test]
+fn Moons() {
     let (mut X, mut Y, mut Z) = planet::saturn::moon::ApprntRectCoords(
         2451439.50074,
         &planet::saturn::moon::Moon::Mimas
@@ -36,6 +28,22 @@ fn Mimas() {
     X = util::RoundUptoDigits(X, 3);
     Y = util::RoundUptoDigits(Y, 3);
 
-    assert_eq!(X, 3.102);
-    assert_eq!(Y, -0.204);
-}*/
+    // Mimas
+    //assert_eq!(X, 3.102);
+    //assert_eq!(Y, -0.204);
+
+    //Enceladus
+    //assert_eq!(X, 3.823);
+    //assert_eq!(Y, 0.318);
+
+    //Tethys
+    //assert_eq!(X, 4.027);
+    //assert_eq!(Y, -1.061);
+
+    //Dione
+    //assert_eq!(X, -5.365);
+    //assert_eq!(Y, -1.148);
+
+    assert_eq!(X, -1.122);
+    assert_eq!(Y, -3.123);
+}

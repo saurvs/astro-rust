@@ -44,7 +44,7 @@ pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
 }
 
 /**
-Returns **equatorial coordinates reduced** to a different epoch
+Returns **equatorial** coordinates **reduced** to a different epoch
 
 # Returns
 
@@ -91,7 +91,7 @@ pub fn ChangeEpochEqCoords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f
 }
 
 /**
-Returns **equatorial coordinates**, from coordinates referred to the
+Returns **equatorial** coordinates, from coordinates referred to the
 **FK4** system, **reduced** to a different epoch
 
 # Returns
@@ -131,7 +131,7 @@ pub fn ChangeEpochEqCoords_FK4(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -
 }
 
 /**
-Returns **ecliptic coordinates reduced** to a different epoch
+Returns **ecliptic** coordinates **reduced** to a different epoch
 
 # Returns
 
@@ -144,12 +144,12 @@ Returns **ecliptic coordinates reduced** to a different epoch
 
 * ```old_long```: Ecliptic longitude in the old epoch *| in radians*
 * ```old_lat```: Ecliptic latitude in the old epoch *| in radians*
-* ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
-* ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
+* ```JD_old```: Julian (Ephemeris) day corresponding to the old epoch
+* ```JD_new```: Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn ChangeEpochEclCoords(old_long: f64, old_lat: f64, JD1: f64, JD2: f64) -> (f64, f64) {
-    let T = time::JulCent(JD1);
-    let t = (JD2 - JD1) / 36525.0;
+pub fn ChangeEpochEclCoords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f64) -> (f64, f64) {
+    let T = time::JulCent(JD_old);
+    let t = (JD_new - JD_old) / 36525.0;
 
     let (nu, Pi, rho) = AnglesForEclChange(t, T);
 

@@ -10,7 +10,7 @@ fn Ephemeris() {
 
         352.82267_f64.to_radians(),
         63.28208_f64.to_radians(),
-        
+
         23.44022_f64.to_radians(),
 
         angle::DegFrmDMS(0, 0, 15.42).to_radians(),

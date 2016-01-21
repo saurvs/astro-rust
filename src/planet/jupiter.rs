@@ -55,7 +55,7 @@ pub fn Ephemeris(JD: f64,
     let W1 = angle::LimitTo360(17.710 + 877.90003539*d).to_radians();
     let W2 = angle::LimitTo360(16.838 + 870.27003539*d).to_radians();
 
-    let (l0, b0, R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
+    let (l0, b0, R) = planet::HeliocenPos(&planet::Planet::Earth, JD);
 
     let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
     let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
@@ -65,23 +65,21 @@ pub fn Ephemeris(JD: f64,
     let mut i: u8 = 1;
     let n: u8 = 2;
     while i <= n {
-        let (new_l, new_b, new_r) = planet::HeliocenCoords(&planet::Planet::Jupiter, JD - light_time);
+        let (new_l, new_b, new_r) = planet::HeliocenPos(&planet::Planet::Jupiter, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        x = r*b.cos()*l.cos() - R*l0.cos();
-        y = r*b.cos()*l.sin() - R*l0.sin();
-        z = r*b.sin()         - R*b0.sin();
+        let (new_x, new_y, new_z) = planet::GeocenEclRectCoords(l0, b0, R, l, b, r);
+        x = new_x; y = new_y; z = new_z;
 
-        jup_earth_dist = (x*x + y*y + z*z).sqrt();
+        jup_earth_dist = planet::DistFrmEclRectCoords(x, y, z);
         light_time = planet::LightTime(jup_earth_dist);
 
         i += 1;
     }
 
     l -= 0.01299_f64.to_radians()*jup_earth_dist / (r*r);
-    x = r*b.cos()*l.cos() - R*l0.cos();
-    y = r*b.cos()*l.sin() - R*l0.sin();
-    jup_earth_dist = (x*x + y*y + z*z).sqrt();
+    let (x, y, z) = planet::GeocenEclRectCoords(l0, b0, R, l, b, r);
+    jup_earth_dist = planet::DistFrmEclRectCoords(x, y, z);
 
     let asc_s = (mn_oblq_eclip.cos()*l.sin() - mn_oblq_eclip.sin()*b.tan()).atan2(l.cos());
     let dec_s = (mn_oblq_eclip.cos()*b.sin() + mn_oblq_eclip.sin()*b.cos()*l.sin()).asin();

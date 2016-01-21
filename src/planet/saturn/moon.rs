@@ -4,6 +4,8 @@ use angle;
 use coords;
 use planet;
 use time;
+use sun;
+use precess;
 
 /// Represents a moon of Saturn
 pub enum Moon {
@@ -37,14 +39,24 @@ Returns the apparent **rectangular** coordinates for a moon of Saturn
 * ```JD```: Julian (Ephemeris) day
 **/
 
-fn ApprntRectCoords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
+pub fn ApprntRectCoords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
     let mut info = CreateInfoStruct(JD - 0.04942);
 
-    info.lambda0 = 46.170287_f64.to_radians();
-    info.beta0 = -2.544441_f64.to_radians();
-    info.delta = 8.557599;
+    let (lambda0, beta0, saturn_earth_dist) = planet::GeocenEclPos(&planet::Planet::Saturn, JD);
 
-    Mimas(&info)
+    let (lambda0, beta0) = precess::ChangeEpochEclCoords(
+        lambda0, beta0,
+        JD,
+        time::JulDay(&time::Date{year: 1950, month: 1, decimal_day: 1.5, cal_type: time::CalType::Gregorian})
+    );
+
+    info.lambda0 = lambda0;
+    info.beta0 = beta0;
+    info.delta = saturn_earth_dist;
+
+    let (lambda_j, gamma_j, Omega_j, r_j) = Dione(&info);
+
+    XYZ(lambda_j, gamma_j, Omega_j, r_j, &info)
 }
 
 struct Info {
@@ -129,7 +141,7 @@ fn CreateInfoStruct(JD: f64) -> Info {
     info
 }
 
-fn Mimas(info: &Info) -> (f64, f64, f64) {
+fn Mimas(info: &Info) -> (f64, f64, f64, f64) {
     let L = (
         127.64
         + 381.994497*info.t1
@@ -151,14 +163,83 @@ fn Mimas(info: &Info) -> (f64, f64, f64) {
     let Omega_1 = (54.5 - 365.072*info.t2).to_radians();
     let r_1 = 3.06879/(1.0 + 0.01905*(M + C).cos());
 
-    XYZ(lambda_1, gamma_1, Omega_1, r_1, &info)
+    (lambda_1, gamma_1, Omega_1, r_1)
+}
+
+fn Enceladus(info: &Info) -> (f64, f64, f64, f64) {
+    let L = (
+        200.317
+        + 262.7319002*info.t1
+        + 0.25667*info.W1.sin()
+        + 0.20883*info.W2.sin()
+    ).to_radians();
+
+    let p = (309.107 + 123.44121*info.t2).to_radians();
+    let M = L - p;
+    let C = (
+        0.55577*M.sin()
+        + 0.00168*(2.0*M).sin()
+    ).to_radians();
+
+    let lambda_2 = L + C;
+    let gamma_2 = 0.0262_f64.to_radians();
+    let Omega_2 = (348.0 - 151.95*info.t2).to_radians();
+    let r_2 = 3.94118/(1.0 + 0.00485*(M + C).cos());
+
+    (lambda_2, gamma_2, Omega_2, r_2)
+}
+
+fn Tethys(info: &Info) -> (f64, f64, f64, f64) {
+    let lambda_3 = (
+        285.306
+        + 190.69791226*info.t1
+        + 2.063*info.W0.sin()
+        + 0.03409*(3.0*info.W0).sin()
+        + 0.001015*(5.0*info.W0).sin()
+    ).to_radians();
+    let gamma_3 = 1.0976_f64.to_radians();
+    let Omega_3 =(111.33 - 72.2441*info.t2).to_radians();
+    let r_3 = 4.880998;
+
+    (lambda_3, gamma_3, Omega_3, r_3)
+}
+
+fn Dione(info: &Info) -> (f64, f64, f64, f64) {
+    let L = (
+        254.712
+        + 131.53493193*info.t1
+        - 0.0215*info.W1.sin()
+        - 0.01733*info.W2.sin()
+    ).to_radians();
+
+    let p = (174.8 + 30.82*info.t2).to_radians();
+    let M = L - p;
+    let C = (
+        0.24717*M.sin()
+        + 0.00033*(2.0*M).sin()
+    ).to_radians();
+
+    let lambda_4 = L + C;
+    let gamma_4 = 0.0139_f64.to_radians();
+    let Omega_4 = (232.0 - 30.27*info.t2).to_radians();
+    let r_4 = 6.24871/(1.0 + 0.002157*(M + C).cos());
+
+    (lambda_4, gamma_4, Omega_4, r_4)
+}
+
+fn Rhea(info: &Info) -> (f64, f64, f64, f64) {
+    let p1 = (342.7 + 10.057*info.t2);
+    let a1 = 0.000265*p1.sin() + 0.01*info.W4.sin();
+    let a2 = 0.000265*p1.cos() + 0.01*info.W$.cos();
+    let e = (a1*a1 + a2*a2).sqrt();
+    let p = (a1/a2).atan();
 }
 
 fn XYZ(lambda_j: f64, gamma_j: f64, Omega_j: f64, r_j: f64, info: &Info) -> (f64, f64, f64) {
     let u = lambda_j - Omega_j;
     let w = Omega_j - 168.8112_f64.to_radians();
 
-    // the moon of interest
+    // moon of interest
     let X_j = r_j*(u.cos()*w.cos() - u.sin()*gamma_j.cos()*w.sin());
     let Y_j = r_j*(u.sin()*w.cos()*gamma_j.cos() + u.cos()*w.sin());
     let Z_j = r_j*u.sin()*gamma_j.sin();
@@ -212,22 +293,6 @@ fn D(X_j: f64, Y_j: f64, Z_j: f64, D_j: f64, info: &Info) -> (f64, f64, f64, f64
     let Z = B4;
 
     (X, Y, Z, D)
-}
-
-fn Enceladus() {
-
-}
-
-fn Tethys() {
-
-}
-
-fn Dione() {
-
-}
-
-fn Rhea() {
-
 }
 
 fn Titan() {

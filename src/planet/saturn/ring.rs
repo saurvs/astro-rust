@@ -46,7 +46,7 @@ Returns the **elements** for the **ring** of Saturn
 * ```tru_oblq_eclip```: True obliquity of the ecliptic on ```JD``` *| in radians*
 **/
 pub fn Elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
-    let (l0, b0, R) = planet::HeliocenCoords(&planet::Planet::Earth, JD);
+    let (l0, b0, R) = planet::HeliocenPos(&planet::Planet::Earth, JD);
 
     let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
     let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
@@ -56,14 +56,13 @@ pub fn Elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
     let mut i: u8 = 1;
     let n: u8 = 2;
     while i <= n {
-        let (new_l, new_b, new_r) = planet::HeliocenCoords(&planet::Planet::Saturn, JD - light_time);
+        let (new_l, new_b, new_r) = planet::HeliocenPos(&planet::Planet::Saturn, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        x = r*b.cos()*l.cos() - R*l0.cos();
-        y = r*b.cos()*l.sin() - R*l0.sin();
-        z = r*b.sin()         - R*b0.sin();
+        let (new_x, new_y, new_z) = planet::GeocenEclRectCoords(l0, b0, R, l, b, r);
+        x = new_x; y = new_y; z = new_z;
 
-        saturn_earth_dist = (x*x + y*y + z*z).sqrt();
+        saturn_earth_dist = planet::DistFrmEclRectCoords(x, y, z);
         light_time = planet::LightTime(saturn_earth_dist);
 
         i += 1;
@@ -73,8 +72,7 @@ pub fn Elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
     let inc = Inc(JC);
     let ascend_node = AscenNode(JC);
 
-    let mut lambda = y.atan2(x);
-    let mut beta = z.atan2((x*x + y*y).sqrt());
+    let (mut lambda, mut beta) = planet::EclCoordsFrmEclRectCoords(x, y, z);
     let B = (  inc.sin() * beta.cos() * (lambda - ascend_node).sin()
              - inc.cos() * beta.sin()
             ).asin();

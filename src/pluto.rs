@@ -63,7 +63,7 @@ The error in
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn HeliocenCoords(JD: f64) -> (f64, f64, f64) {
+pub fn HeliocenPos(JD: f64) -> (f64, f64, f64) {
     let JC = time::JulCent(JD);
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);

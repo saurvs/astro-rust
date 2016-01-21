@@ -35,8 +35,8 @@ fn EclCoordsToFK5() {
 }
 
 #[test]
-fn EclGeocenCoords() {
-    let (ecl_long, ecl_lat, rad_vec) = sun::EclGeocenCoords(
+fn GeocenEclPos() {
+    let (ecl_long, ecl_lat, rad_vec) = sun::GeocenEclPos(
         2448908.5
     );
 
