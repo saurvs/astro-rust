@@ -281,9 +281,9 @@ Anyone interested to contribute in any way possible is encouraged to do so. Not 
 
 A good start would be to go through Meeus's book, then browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
 
-An important fact worth mentioning is that the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently. Papers published by internationally recognized authorities like the IAU, should also be considered as sources for algorithms.
+An important fact worth mentioning is that the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently. Papers published by internationally recognized authorities (like the IAU) ought to be considered as sources for algorithms as well.
 
-The end of goal of this project is to build a modern, well-tested, production-ready code library of algorithms for astronomy.
+The end of goal of this project is to build a modern, well-tested, production-quality code library of algorithms for astronomy.
 
 One fun suggestion in that direction is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 

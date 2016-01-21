@@ -104,8 +104,7 @@ pub fn DegFrmHMS(hour: i64, min: i64, sec: f64) -> f64 {
 }
 
 /**
-Returns an angle in **arcseconds**, from an angle in **degrees
-with decimals**
+Returns an angle in **arcseconds**, from an angle in **degrees**
 
 # Arguments
 
@@ -116,8 +115,7 @@ pub fn ArcSecFrmDeg(deg: f64) -> f64 {
 }
 
 /**
-Returns an angle in **seconds**, from an angle in **degrees with
-decimals**
+Returns an angle in **seconds**, from an angle in **degrees**
 
 # Arguments
 
@@ -128,7 +126,7 @@ pub fn TimeSecFrmDeg(deg: f64) -> f64 {
 }
 
 /**
-Returns an angle in **degrees with decimals**, from an angle
+Returns an angle in **degrees**, from an angle
 in **arcseconds**
 
 # Arguments
@@ -140,7 +138,7 @@ pub fn DegFrmArcSec(arc_sec: f64) -> f64 {
 }
 
 /**
-Returns an angle in **degrees with decimals**, from an angle
+Returns an angle in **degrees**, from an angle
 in **seconds**
 
 # Arguments
