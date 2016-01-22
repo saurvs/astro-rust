@@ -22,7 +22,7 @@ Returns Saturn's **apparent magnitude** using G. Muller's formula
 * ```r```: Saturn-Sun distance *| in AU*
 * ```deltaU```: Difference between Saturnicentric
                 longitudes of the Sun and the Earth,
-                measured in the plane of it's ring *| in radians*
+                measured in the plane of Saturn's ring *| in radians*
 * ```B```: Saturnicentric latitude of the Earth *| in radians*
 **/
 pub fn ApprntMag_Muller(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
@@ -48,7 +48,7 @@ Almanac's formula adopted in 1984
 * ```r```: Saturn-Sun distance *| in AU*
 * ```deltaU```: Difference between Saturnicentric
                 longitudes of the Sun and the Earth,
-                measured in the plane of it's ring *| in radians*
+                measured in the plane of Saturn's ring *| in radians*
 * ```B```: Saturnicentric latitude of the Earth *| in radians*
 **/
 pub fn ApprntMag_84(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {

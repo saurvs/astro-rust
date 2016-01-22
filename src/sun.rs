@@ -10,14 +10,14 @@ Returns the **equatorial semidiameter** of the Sun
 
 # Arguments
 
-* ```distance_to_earth```: The Sun's distance from the Earth *| in AU*
+* ```sun_earth_dist```: Sun-Earth distance *| in AU*
 **/
-pub fn Semdiameter(distance_to_earth: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 959.63) / distance_to_earth
+pub fn Semdiameter(sun_earth_dist: f64) -> f64 {
+    angle::DegFrmDMS(0, 0, 959.63) / sun_earth_dist
 }
 
 /**
-Returns **ecliptic geocentric coordinates** of the Sun,
+Returns **geocentric ecliptic coordinates** of the Sun,
 referred to the mean equinox of the date
 
 # Returns

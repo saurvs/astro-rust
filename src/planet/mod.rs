@@ -34,7 +34,7 @@ pub enum Planet {
 }
 
 /**
-Returns the illuminated fraction of a planet's disk from
+Returns the **illuminated fraction** of a planet's **disk** from
 it's phase angle
 
 # Returns
@@ -51,7 +51,7 @@ pub fn IllumFracFrmPhaseAngl(i: f64) -> f64 {
 }
 
 /**
-Returns the illuminated fraction of a planet's disk from
+Returns the **illuminated fraction** of a planet's **disk** from
 it's distance to the Sun and the Earth
 
 # Returns
@@ -71,7 +71,7 @@ pub fn IllumFracFrmDist(r: f64, delta: f64, R: f64) -> f64 {
 }
 
 /**
-Returns the phase angle of a planet
+Returns the **phase angle** of a planet
 
 # Returns
 
@@ -88,7 +88,7 @@ pub fn PhaseAngl(r: f64, delta: f64, R: f64) -> f64 {
 }
 
 /**
-Returns the position angle of the bright limb of a planet
+Returns the position angle of the **bright limb** of a planet
 
 # Returns
 
@@ -327,7 +327,7 @@ pub fn LightTime(dist: f64) -> f64 {
 }
 
 /**
-Returns a planet's **ecliptic geometric position**
+Returns a planet's **geometric ecliptic position**
 from it's heliocentric position
 
 # Returns
@@ -368,7 +368,7 @@ pub fn GeometricEclPos(
 }
 
 /**
-Returns a planet's **ecliptic rectangular coordinates**
+Returns a planet's **geocentric ecliptic rectangular** coordinates
 from it's heliocentric position
 
 # Returns
@@ -398,7 +398,7 @@ pub fn GeocenEclRectCoords(
 
 /**
 Returns a planet's **ecliptic coordinates**
-from it's ecliptic rectangular coordinates
+from it's geocentric **ecliptic rectangular coordinates**
 
 # Returns
 
@@ -416,8 +416,8 @@ pub fn EclCoordsFrmEclRectCoords(x: f64, y: f64, z: f64) -> (f64, f64) {
 }
 
 /**
-Returns a planet's **distance from Earth**,
-from it's ecliptic rectangular coordinates
+Returns a planet's **distance to Earth**,
+from it's geocentric **ecliptic rectangular coordinates**
 
 # Returns
 
@@ -434,8 +434,7 @@ pub fn DistFrmEclRectCoords(x: f64, y: f64, z: f64) -> f64 {
 }
 
 /**
-Returns a planet's **ecliptic geocentric coordinates**
-from it's heliocentric coordinates
+Returns a planet's **geocentric ecliptic coordinates**
 
 # Returns
 
@@ -467,7 +466,7 @@ pub fn GeocenEclPos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns ecliptic coordinates of a planet converted to the **FK5**
+Returns the geocentric ecliptic coordinates of a planet converted to the **FK5**
 system
 
 # Returns
@@ -551,7 +550,7 @@ pub fn Elongation(app_ecl_long: f64, app_ecl_lat: f64, sun_app_ecl_long: f64) ->
 }
 
 /**
-Returns a planet's apparent magnitude using G. Muller's formulae
+Returns a planet's **apparent magnitude** using G. Muller's formulae
 
 # Returns
 
@@ -583,7 +582,7 @@ pub fn ApprntMag_Muller(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
 }
 
 /**
-Returns a planet's apparent magnitude using the Astronomical
+Returns a planet's **apparent magnitude** using the Astronomical
 Almanac's method adopted in 1984
 
 # Returns
