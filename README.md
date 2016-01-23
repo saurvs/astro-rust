@@ -7,7 +7,7 @@
 
 * [About](#about)
 * [Usage](#usage)
-* [Rationale](#rationale)
+* [Why](#why)
 * [Algorithms](#algorithms)
 * [Contributing](#contributing)
 * [References](#references)
@@ -57,7 +57,7 @@ These include things such as  planetary, solar and lunar positioning, correction
 
 * Find the *geocentric* ecliptic coordinates of the Sun
   ```rust
-  let (long, lat, rad_vec) = sun::GeocenEclCoords(julian_day);
+  let (long, lat, rad_vec) = sun::geocen_ecl_pos(julian_day);
 
   // long    - ecliptic longitude (radians)
   // lat     - ecliptic latitude (radians)
@@ -66,17 +66,17 @@ These include things such as  planetary, solar and lunar positioning, correction
 
 * Similarly for the Moon
   ```rust
-  let (long, lat, rad_vec) = lunar::GeocenEclCoords(julian_day);
+  let (long, lat, rad_vec) = lunar::geocen_ecl_pos(julian_day);
   ```
 
 * Find the *heliocentric* coordinates of Jupiter
   ```rust
-  let (long, lat, rad_vec) = planet::HeliocenCoords(&planet::Planet::Jupiter, julian_day);
+  let (long, lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Jupiter, julian_day);
   ```
 
 * Find the corrections for nutation in ecliptic longitude and obliquity of the ecliptic
   ```rust
-  let (nut_in_long, nut_in_oblq) = nutation::Nutation(julian_day);
+  let (nut_in_long, nut_in_oblq) = nutation::nutation(julian_day);
   ```
 
 * Find the geodesic distance between two locations on the Earth
@@ -93,7 +93,7 @@ These include things such as  planetary, solar and lunar positioning, correction
 	// angle::DegFrmDMS() converts degrees expressed in degrees,
 	// minutes and seconds into degrees with decimals
 
-    let distance = planet::earth::GeodesicDist(&paris, &washington); // in meters
+    let distance = planet::earth::geodesic_dist(&paris, &washington); // in meters
   ```
 
 * Convert equatorial coordinates to ecliptic coordinates
@@ -131,7 +131,7 @@ These include things such as  planetary, solar and lunar positioning, correction
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
 
-## Rationale
+## Why
 
 Most of the algorithms implemented here are those described in *Astronomical Algorithms by Jean Meeus*, a book that has long been a well-respected and comprehensive source of astronomical algorithms. [Several](http://www.naughter.com/aa.html) [code libraries](http://mhuss.com/AstroLib/docs/Overview.html) based off the book have existed for a long time, being implemented in popular languages like [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have had well-tested coverage of various algorithms, although sometimes distributed with slightly restrictive licenses.
 
