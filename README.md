@@ -57,10 +57,10 @@ These include things such as  planetary, solar and lunar positioning, correction
 
 * Find the *geocentric* ecliptic coordinates of the Sun
   ```rust
-  let (long, lat, rad_vec) = sun::geocen_ecl_pos(julian_day);
+  let (sun_eq_point, rad_vec) = sun::geocen_ecl_pos(julian_day);
 
-  // long    - ecliptic longitude (radians)
-  // lat     - ecliptic latitude (radians)
+  // sun_eq_point.long    - ecliptic longitude (radians)
+  // sun_eq_point.lat     - ecliptic latitude (radians)
   // rad_vec - distance between the Sun and the Earth (AU)
   ```
 
