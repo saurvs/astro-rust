@@ -55,7 +55,7 @@ These include things such as  planetary, solar and lunar positioning, correction
 
   ```
 
-* Find the *geocentric* ecliptic coordinates of the Sun
+* Find the *geocentric* ecliptic coordinates and radius vector of the Sun
   ```rust
   let (sun_eq_point, rad_vec) = sun::geocen_ecl_pos(julian_day);
 
@@ -69,7 +69,7 @@ These include things such as  planetary, solar and lunar positioning, correction
   let (long, lat, rad_vec) = lunar::geocen_ecl_pos(julian_day);
   ```
 
-* Find the *heliocentric* coordinates of Jupiter
+* Find the *heliocentric* coordinates and radius vector of Jupiter
   ```rust
   let (long, lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Jupiter, julian_day);
   ```
