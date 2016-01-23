@@ -1,3 +1,5 @@
+#[allow(non_snake_case)]
+
 pub mod aberr;
 pub mod angle;
 pub mod asteroid;

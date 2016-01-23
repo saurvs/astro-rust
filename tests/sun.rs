@@ -36,16 +36,16 @@ fn ecl_coords_to_FK5() {
 
 #[test]
 fn geocen_ecl_pos() {
-    let (ecl_long, ecl_lat, rad_vec) = sun::geocen_ecl_pos(
+    let (sun_eq_point, rad_vec) = sun::geocen_ecl_pos(
         2448908.5
     );
 
     assert_eq!(
-        util::RoundUptoDigits(ecl_long.to_degrees(), 6),
+        util::RoundUptoDigits(sun_eq_point.long.to_degrees(), 6),
         199.907297
     );
     assert_eq!(
-        util::RoundUptoDigits(ecl_lat.to_degrees(), 6),
+        util::RoundUptoDigits(sun_eq_point.lat.to_degrees(), 6),
         0.000207
     );
     assert_eq!(

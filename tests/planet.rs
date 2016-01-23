@@ -16,8 +16,8 @@ fn heliocen_pos() {
 }
 
 #[test]
-fn geometric_ecl_pos() {
-    let (L, B, mut R, mut t) = planet::geometric_ecl_pos(
+fn geocen_geomet_ecl_pos() {
+    let (L, B, mut R, mut t) = planet::geocen_geomet_ecl_pos(
         88.35704_f64.to_radians(),
         0.00014_f64.to_radians(),
         0.983824,
@@ -51,8 +51,8 @@ fn ecl_coords_to_FK5() {
 }
 
 #[test]
-fn geocen_ecl_pos() {
-    let (mut L, mut B, mut R) = planet::geocen_ecl_pos(&planet::Planet::Venus, 2448976.5);
+fn geocen_apprnt_ecl_pos() {
+    let (mut L, mut B, mut R) = planet::geocen_apprnt_ecl_pos(&planet::Planet::Venus, 2448976.5);
     L = util::RoundUptoDigits(angle::LimitTo360(L.to_degrees()), 2);
     B = util::RoundUptoDigits(B.to_degrees(), 2);
     R = util::RoundUptoDigits(R, 4);

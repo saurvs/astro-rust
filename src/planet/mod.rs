@@ -1,21 +1,16 @@
 //! The 8 Planets in the Solar System
 
-mod mercury;
-mod venus;
+mod VSOPD_87;
+
 pub mod earth;
 pub mod mars;
-
-
-
+pub mod jupiter;
 pub mod saturn;
-mod uranus;
-mod neptune;
 
 use angle;
 use coords;
 use time;
-pub mod jupiter;
-pub use self::jupiter::ephemeris;
+
 /// Represents a planet
 pub enum Planet {
     /// Mercury *Thanks for help testing General Relativity*
@@ -74,7 +69,7 @@ pub fn illum_frac_frm_dist(r: f64, delta: f64, R: f64) -> f64 {
 }
 
 /**
-Returns the **phase angle** of a planet
+Returns a planet's **phase angle**
 
 # Returns
 
@@ -115,7 +110,7 @@ pub fn pos_angle_of_bright_limb(sun_eq_point: coords::EqPoint,
 }
 
 /**
-Returns the **equatorial semidiameter** of a planet
+Returns a planet's **equatorial semidiameter**
 
 # Returns
 
@@ -146,7 +141,7 @@ pub fn semdiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
 }
 
 /**
-Returns the **orbital elements** of a planet,
+Returns a planet's **orbital elements**,
 referred to the **mean equinox of the date**
 
 # Returns
@@ -278,15 +273,15 @@ referred to the **mean equinox of the date**
 **/
 pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
 
-    let VSOP87_Terms = match planet {
-        &Planet::Mercury => mercury::VSOP87_Terms(),
-        &Planet::Venus => venus::VSOP87_Terms(),
-        &Planet::Earth => earth::VSOP87_Terms(),
-        &Planet::Mars => mars::VSOP87_Terms(),
-        &Planet::Jupiter => self::jupiter::VSOP87_Terms(),
-        &Planet::Saturn => saturn::VSOP87_Terms(),
-        &Planet::Uranus => uranus::VSOP87_Terms(),
-        &Planet::Neptune => neptune::VSOP87_Terms(),
+    let VSOPD87_Terms = match planet {
+        &Planet::Mercury => VSOPD_87::mercury::terms(),
+        &Planet::Venus => VSOPD_87::venus::terms(),
+        &Planet::Earth => VSOPD_87::earth::terms(),
+        &Planet::Mars => VSOPD_87::mars::terms(),
+        &Planet::Jupiter => VSOPD_87::jupiter::terms(),
+        &Planet::Saturn => VSOPD_87::saturn::terms(),
+        &Planet::Uranus => VSOPD_87::uranus::terms(),
+        &Planet::Neptune => VSOPD_87::neptune::terms(),
     };
 
     let mut L = 0.0;
@@ -296,7 +291,7 @@ pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
     let JM = time::JulMill(JD);
 
     let mut n: u8 = 1; // L, then B, then R
-    for i in VSOP87_Terms.iter() { // L or B or R
+    for i in VSOPD87_Terms.iter() { // L or B or R
 
         let mut T = 1.0;
         let mut y = 0.0;
@@ -326,13 +321,13 @@ pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
     (L, B, R)
 }
 
-pub fn light_time(dist: f64) -> f64 {
+fn light_time(dist: f64) -> f64 {
     0.0057755183 * dist
 }
 
 /**
-Returns a planet's **geometric ecliptic position**
-from it's heliocentric position
+Returns a planet's **geocentric geometric ecliptic position**,
+uncorrected for light-time
 
 # Returns
 
@@ -358,7 +353,7 @@ are not corrected for the effect of light-time.
 * ```B```: Heliocentric latitude of the planet *| in radians*
 * ```R```: Heliocentric radius vector of the planet *| in radians*
 **/
-pub fn geometric_ecl_pos(
+pub fn geocen_geomet_ecl_pos(
     L0: f64, B0: f64, R0: f64,
     L: f64, B: f64, R: f64
 ) -> (f64, f64, f64, f64) {
@@ -388,7 +383,7 @@ from it's heliocentric position
 * ```B```: Heliocentric latitude of the planet *| in radians*
 * ```R```: Heliocentric radius vector of the planet *| in radians*
 **/
-pub fn geocen_ecl_rect_coords(
+fn geocen_ecl_rect_coords(
     L0: f64, B0: f64, R0: f64,
     L: f64, B: f64, R: f64
 ) -> (f64, f64, f64) {
@@ -415,7 +410,7 @@ from it's geocentric ecliptic **rectangular** coordinates
 * ```Y```
 * ```Z```
 **/
-pub fn ecl_coords_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> (f64, f64) {
+fn ecl_coords_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> (f64, f64) {
     (y.atan2(x), z.atan2((x*x + y*y).sqrt()))
 }
 
@@ -433,12 +428,12 @@ from it's geocentric ecliptic **rectangular** coordinates
 * ```Y```
 * ```Z```
 **/
-pub fn dist_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> f64 {
+fn dist_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> f64 {
     (x*x + y*y + z*z).sqrt()
 }
 
 /**
-Returns a planet's **geocentric ecliptic position**, corrected
+Returns a planet's **geocentric apparent ecliptic position**, corrected
 for light-time
 
 # Returns
@@ -458,20 +453,20 @@ coordinates for the effect of light-time.
 * ```planet```: The [Planet](./enum.Planet.html)
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn geocen_ecl_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
+pub fn geocen_apprnt_ecl_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
     let (L0, B0, R0) = heliocen_pos(&Planet::Earth, JD);
 
     let (L1, B1, R1) = heliocen_pos(&planet, JD);
-    let (l1, b1, r1, t) = geometric_ecl_pos(L0, B0, R0, L1, B1, R1);
+    let (l1, b1, r1, t) = geocen_geomet_ecl_pos(L0, B0, R0, L1, B1, R1);
 
     let (L2, B2, R2) = heliocen_pos(&planet, JD - t);
-    let (l2, b2, r2, t2) = geometric_ecl_pos(L0, B0, R0, L2, B2, R2);
+    let (l2, b2, r2, t2) = geocen_geomet_ecl_pos(L0, B0, R0, L2, B2, R2);
 
     (l2, b2, r2)
 }
 
 /**
-Returns the geocentric ecliptic coordinates of a planet converted to the **FK5**
+Returns a planet's geocentric ecliptic coordinates converted to the **FK5**
 system
 
 # Returns
@@ -546,10 +541,6 @@ pub fn heliocen_pos_frm_orb_elements(i: f64, sigma: f64, w: f64, v: f64, r: f64)
 
     (y.atan2(x),
      z.atan2((x*x + y*y).sqrt()))
-}
-
-pub fn elongation(app_ecl_long: f64, app_ecl_lat: f64, sun_app_ecl_long: f64) -> f64 {
-    (app_ecl_lat * (app_ecl_long - sun_app_ecl_long).cos()).acos()
 }
 
 /**

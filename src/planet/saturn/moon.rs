@@ -5,7 +5,7 @@ use coords;
 use planet;
 use time;
 use sun;
-use precess;use util;
+use precess;
 
 /// Represents a moon of Saturn
 pub enum Moon {
@@ -58,7 +58,7 @@ Earth-moon distance is lesser than the Earth-Saturn distance.
 pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
     let mut info = create_info_struct(JD - 0.04942);
 
-    let (lambda0, beta0, saturn_earth_dist) = planet::geocen_ecl_pos(&planet::Planet::Saturn, JD);
+    let (lambda0, beta0, saturn_earth_dist) = planet::geocen_apprnt_ecl_pos(&planet::Planet::Saturn, JD);
 
     let (lambda0, beta0) = precess::precess_ecl_coords(
         lambda0, beta0,

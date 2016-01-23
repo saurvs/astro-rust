@@ -4,9 +4,10 @@ use angle;
 use time;
 use std;
 use planet;
+use coords;
 
 /**
-Returns the **equatorial semidiameter** of the Sun
+Returns the Sun's **equatorial semidiameter**
 
 # Arguments
 
@@ -17,32 +18,36 @@ pub fn semdiameter(sun_earth_dist: f64) -> f64 {
 }
 
 /**
-Returns **geocentric ecliptic coordinates** of the Sun,
-referred to the mean equinox of the date
+Returns the Sun's **geocentric ecliptic coordinates**,
+referred to the **mean equinox of the date**
 
 # Returns
 
-```(longitude, latitude, distance)```
+```(sun_ecl_coords, sun_earth_dist)```
 
-* ```longitude```: Ecliptic longitude of the Sun *| in radians*
-* ```latitude```: Ecliptic latitude of the Sun *| in radians*
-* ```distance```: Distance between the Sun and the Earth *| in AU*
+* ```sun_ecl_coords```: Ecliptic coordinates of the Sun *| in radians*
+* ```sun_earth_dist```: Sun-Earth distance *| in AU*
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn geocen_ecl_pos(JD: f64) -> (f64, f64, f64) {
+pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
     let (L, B, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
     let L_sun = angle::LimitTo360((L + std::f64::consts::PI).to_degrees());
     let B_sun = angle::LimitTo360(-B.to_degrees());
 
-    (L_sun.to_radians(), B_sun.to_radians(), R)
+    let ecl_point = coords::EclPoint {
+        long: L_sun.to_radians(),
+        lat: B_sun.to_radians()
+    };
+
+    (ecl_point, R)
 }
 
 /**
-Returns geocentric ecliptic coordinates of the Sun
+Returns the Sun's geocentric ecliptic coordinates
 converted to the **FK5** system
 
 # Returns
@@ -80,7 +85,7 @@ macro_rules! ApprntGeocenEclPos {
 }
 
 /**
-Returns the geocentric **rectangular** coordinates of the Sun,
+Returns the Sun's **geocentric rectangular coordinates**,
 referred to the **mean equinox of the date**
 
 * The positive x-axis is directed towards the Earth's vernal equinox

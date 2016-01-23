@@ -5,16 +5,16 @@
 
 **Contents**
 
-* [Intro](#about)
-* [Usage](#usage)
 * [About](#about)
+* [Usage](#usage)
+* [Rationale](#rationale)
 * [Algorithms](#algorithms)
 * [Contributing](#contributing)
 * [References](#references)
 
 Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
-## Intro
+## About
 
 ```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
 
@@ -131,7 +131,7 @@ These include things such as  planetary, solar and lunar positioning, correction
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
 
-## About
+## Rationale
 
 Most of the algorithms implemented here are those described in *Astronomical Algorithms by Jean Meeus*, a book that has long been a well-respected and comprehensive source of astronomical algorithms. [Several](http://www.naughter.com/aa.html) [code libraries](http://mhuss.com/AstroLib/docs/Overview.html) based off the book have existed for a long time, being implemented in popular languages like [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have had well-tested coverage of various algorithms, although sometimes distributed with slightly restrictive licenses.
 
@@ -139,11 +139,11 @@ This library however is written in the [Rust programming language](https://www.r
 
 Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s) and the same license is passed along to derived works.
 
-For information related to the programming aspects of this library, such as descriptions of the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
-
 ## Algorithms
 
 Algorithms implemented in this library allow you to calculate or perform the following:
+
+(For information related to the programming aspects of this library, such as descriptions of the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/))
 
 **The 8 Solar System Planets**
 

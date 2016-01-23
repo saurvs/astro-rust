@@ -1,4 +1,4 @@
-pub fn VSOP87_Terms() -> Vec<Vec<Vec<[f64; 3]>>> {
+pub fn terms() -> Vec<Vec<Vec<[f64; 3]>>> {
     vec![
         vec![
             vec![
