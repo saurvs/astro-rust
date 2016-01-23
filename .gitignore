@@ -1,7 +1,8 @@
 # executables
 *.exe
 
-# created by cargo
+# cargo specific
+/Cargo.lock
 /target/
 
 # OS X Spotlight files

@@ -5,28 +5,20 @@
 
 **Contents**
 
-* [About](#about)
+* [Intro](#about)
 * [Usage](#usage)
+* [About](#about)
 * [Algorithms](#algorithms)
 * [Contributing](#contributing)
 * [References](#references)
 
 Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
-## About
+## Intro
 
-```astro-rust``` is an MIT licensed library of algorithms made for rigorous and accurate astronomical calculations.
+```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
 
-It includes things such as  planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, finding the elements of rings of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit for bodies on the celestial sphere. Even Pluto's position and orbit can be calculated accurately.
-
-Most of the algorithms implemented here are those described in *Astronomical Algorithms by Jean Meeus*, a book that has long been a well-respected and comprehensive source of astronomical algorithms. [Several](http://www.naughter.com/aa.html) [code libraries](http://mhuss.com/AstroLib/docs/Overview.html) based off the book have existed for a long time, being implemented in popular languages like [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have had well-tested coverage of various algorithms, although sometimes distributed with slightly restrictive licenses.
-
-This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
-
-Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s) and the same license is passed along to derived works.
-
-For information related to the programming aspects of this library, such as descriptions of the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
-And for a high-level list of all the algorithms implemented so far, see the [Algorithms](#algorithms) section.
+These include things such as  planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, finding the elements of rings of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit for bodies on the celestial sphere. Even Pluto's position and orbit can be calculated accurately.
 
 ## Usage
 
@@ -139,6 +131,16 @@ And for a high-level list of all the algorithms implemented so far, see the [Alg
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
 
+## About
+
+Most of the algorithms implemented here are those described in *Astronomical Algorithms by Jean Meeus*, a book that has long been a well-respected and comprehensive source of astronomical algorithms. [Several](http://www.naughter.com/aa.html) [code libraries](http://mhuss.com/AstroLib/docs/Overview.html) based off the book have existed for a long time, being implemented in popular languages like [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have had well-tested coverage of various algorithms, although sometimes distributed with slightly restrictive licenses.
+
+This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
+
+Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s) and the same license is passed along to derived works.
+
+For information related to the programming aspects of this library, such as descriptions of the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/).
+
 ## Algorithms
 
 Algorithms implemented in this library allow you to calculate or perform the following:
@@ -146,23 +148,29 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 **The 8 Solar System Planets**
 
 * heliocentric coordinates (using the *full* VSOP87-D solution)
-* orbital elements
-* apparent magnitude
+* orbital elements referred to the mean equinox of the date
+
+**The Solar System Planets excluding Earth**
+
+* geocentric ecliptic coordinates
+* geocentric equatorial coordinates
+* apparent visual magnitude
 * equatorial semidiameter
 * polar semidiameter for Saturn and Jupiter
 * illuminated fraction of the planetary disk
+* position angle of the bright limb
+* phase angle
 
 **The Sun**
 
-* ecliptic geocentric coordinates
-* rectangular geocentric coordinates
-* aberration in ecliptic longitude
+* geocentric ecliptic coordinates
+* geocentric rectangular coordinates
 * ephemeris for physical observations
 * time of the beginning of Carrington's synodic rotation
 
 **The Moon**
 
-* ecliptic geocentric coordinates
+* geocentric ecliptic coordinates
 * optical, physical and topocentric liberations
 * time of passage through the nodes
 * illuminated fraction of the lunar disk
@@ -178,7 +186,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * heliocentric coordinates
 * mean orbital elements near 2000 AD
-* apparent magnitude
+* apparent visual magnitude
 * equatorial semidiameter
 
 **Mars**
@@ -193,6 +201,34 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 **Saturn**
 
 * elements of the ring
+* rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
+Titan, Hyperion,and Iapetus
+
+**Transit**
+
+* Times of rise, transit and set for the stars, the planets, the Sun, and the Moon
+
+**Ecliptic**
+
+* mean obliquity, using the IAU and Laskar methods
+* angle between the ecliptic and the horizon
+* longitudes of the two ecliptic points on the horizon
+
+**Nutation** in
+
+* ecliptic longitude
+* obliquity of the ecliptic
+* right ascension and declination
+
+**Atmospheric refraction**
+
+* apparent altitude from true altitude, and vice-versa
+* effect of local pressure and temperature
+
+**Aberration**
+
+* solar aberration in ecliptic longitude
+* stellar aberration in equatorial coordinates
 
 **Transform**
 
@@ -205,13 +241,9 @@ Algorithms implemented in this library allow you to calculate or perform the fol
   (due to precession)
 * orbital elements from one equinox to another
 
-**Transit**
-
-* Times of rise, transit and set for the stars, the planets, the Sun, and the Moon
-
 **Elliptic orbits**
 
-* eccentric anomaly, true anomaly and radius of a body in orbit
+* eccentric anomaly, true anomaly and radius vector of a body in orbit
 * times of passage through the nodes
 
 **Parabolic orbits**
@@ -227,35 +259,17 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 * Julian day from Gregorian and Julian dates, and vice-versa
 * Julian century and millennium
-* analytic approximation for delta T, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
-* mean and apparent sidereal time
-
-**Ecliptic**
-
-* mean obliquity, the IAU and Laskar methods
-* angle between the ecliptic and the horizon
-* longitudes of the two ecliptic points on the horizon
-
-**Nutation** in
-
-* ecliptic longitude
-* obliquity of the ecliptic
-* right ascension and declination
-
-**Atmospheric refraction**
-
-* apparent altitude from true altitude, and vice-versa
-* effect of local pressure and temperature
+* analytic approximation for ΔT, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
+* mean and apparent Sidereal time
 
 **Stars**
 
 * combined magnitude of two or more stars
-* absolute magnitude from parallax or distance from Earth
+* absolute magnitude
 * brightness ratio of two stars from their difference in magnitudes, and vice-versa
 * angle between a vector from a star to the Earth's north
   celestial pole and a vector from the same star to the north
   pole of the ecliptic
-* aberration correction in equatorial coordinates
 * equatorial coordinates at a different time due to proper
   motion and radial velocity
 
@@ -266,7 +280,7 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 * eccentric of the apparent orbit
 * radius vector
 * true anomaly
-* mean annual motion of the companion star from period of revolution
+* mean annual motion of the companion star
 * mean anomaly of the companion star
 
 **Asteroids**

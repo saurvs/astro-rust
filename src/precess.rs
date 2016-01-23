@@ -32,7 +32,7 @@ the equatorial coordinates to the new epoch.
             Should not be more than a few hundred years away from
             the old epoch.
 **/
-pub fn AnnualPrecess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
+pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     let JC = time::JulCent(JD);
 
     let m = (     angle::DegFrmHMS(0, 0, 3.07496)
@@ -62,7 +62,7 @@ Returns **equatorial** coordinates **reduced** to a different epoch
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn ChangeEpochEqCoords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
+pub fn precess_eq_coords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
     let T = time::JulCent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
@@ -110,7 +110,7 @@ Returns **equatorial** coordinates, from coordinates referred to the
 * ```JD1```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn ChangeEpochEqCoords_FK4(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
+pub fn precess_eq_coords_FK5(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
     let T = (JD1 - 2415020.3135) / 36524.2199;
     let t = (JD2 - JD1) / 36524.2199;
 
@@ -147,11 +147,11 @@ Returns **ecliptic** coordinates **reduced** to a different epoch
 * ```JD_old```: Julian (Ephemeris) day corresponding to the old epoch
 * ```JD_new```: Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn ChangeEpochEclCoords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f64) -> (f64, f64) {
+pub fn precess_ecl_coords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f64) -> (f64, f64) {
     let T = time::JulCent(JD_old);
     let t = (JD_new - JD_old) / 36525.0;
 
-    let (nu, Pi, rho) = AnglesForEclChange(t, T);
+    let (nu, Pi, rho) = angles_for_ecl_change(t, T);
 
     let A = nu.cos()*old_lat.cos()*(Pi - old_long).sin() - nu.sin()*old_lat.sin();
     let B = old_lat.cos()*(Pi - old_long).cos();
@@ -160,7 +160,7 @@ pub fn ChangeEpochEclCoords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f6
     (rho + Pi - A.atan2(B), C.asin())
 }
 
-fn AnglesForEclChange(t: f64, T: f64) -> (f64, f64, f64) {
+fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
     let x = T * angle::DegFrmDMS(0, 0, 0.000598);
     let nu = (t * (angle::DegFrmDMS(0, 0, 47.0029) -
                    T * (angle::DegFrmDMS(0, 0, 0.06603) - x) +
@@ -201,12 +201,12 @@ Returns **orbital elements reduced** to a different equinox
 * ```JD1```: Julian (Ephemeris) day corresponding to the old equinox
 * ```JD2```: Julian (Ephemeris) day corresponding to the new equinox
 **/
-pub fn ChangeOrbElements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node: f64,
+pub fn precess_orb_elements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node: f64,
                          JD1: f64, JD2: f64) -> (f64, f64, f64) {
     let T = time::JulCent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
-    let (nu, Pi, rho) = AnglesForEclChange(t, T);
+    let (nu, Pi, rho) = angles_for_ecl_change(t, T);
 
     let mut new_inc;
     let mut new_long_ascend_node;

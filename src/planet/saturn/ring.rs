@@ -5,14 +5,14 @@ use coords;
 use planet;
 use time;
 
-pub fn Inc(JC: f64) -> f64 {
+pub fn inc(JC: f64) -> f64 {
     (      28.075216
       - JC*(0.012998
       + JC*0.000004)
     ).to_radians()
 }
 
-pub fn AscenNode(JC: f64) -> f64 {
+pub fn ascend_node(JC: f64) -> f64 {
     (      169.50847
       + JC*(1.394681
       + JC*0.000412)
@@ -45,8 +45,8 @@ Returns the **elements** for the **ring** of Saturn
 * ```nut_in_long```: Nutation in longitude on ```JD``` *| in radians*
 * ```tru_oblq_eclip```: True obliquity of the ecliptic on ```JD``` *| in radians*
 **/
-pub fn Elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
-    let (l0, b0, R) = planet::HeliocenPos(&planet::Planet::Earth, JD);
+pub fn elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
+    let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
     let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
     let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
@@ -56,23 +56,23 @@ pub fn Elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
     let mut i: u8 = 1;
     let n: u8 = 2;
     while i <= n {
-        let (new_l, new_b, new_r) = planet::HeliocenPos(&planet::Planet::Saturn, JD - light_time);
+        let (new_l, new_b, new_r) = planet::heliocen_pos(&planet::Planet::Saturn, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        let (new_x, new_y, new_z) = planet::GeocenEclRectCoords(l0, b0, R, l, b, r);
+        let (new_x, new_y, new_z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
         x = new_x; y = new_y; z = new_z;
 
-        saturn_earth_dist = planet::DistFrmEclRectCoords(x, y, z);
-        light_time = planet::LightTime(saturn_earth_dist);
+        saturn_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
+        light_time = planet::light_time(saturn_earth_dist);
 
         i += 1;
     }
 
     let JC = time::JulCent(JD);
-    let inc = Inc(JC);
-    let ascend_node = AscenNode(JC);
+    let inc = inc(JC);
+    let ascend_node = ascend_node(JC);
 
-    let (mut lambda, mut beta) = planet::EclCoordsFrmEclRectCoords(x, y, z);
+    let (mut lambda, mut beta) = planet::ecl_coords_frm_ecl_rect_coords(x, y, z);
     let B = (  inc.sin() * beta.cos() * (lambda - ascend_node).sin()
              - inc.cos() * beta.sin()
             ).asin();
@@ -114,18 +114,18 @@ pub fn Elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
     (B, B1, P, deltaU, semi_maj, semi_min)
 }
 
-pub fn InnEdgeOutRing(a: f64, b: f64) -> (f64, f64) {
+pub fn inn_edge_outer_ring(a: f64, b: f64) -> (f64, f64) {
     (a*0.8801, b*0.8801)
 }
 
-pub fn OutEdgeInnRing(a: f64, b: f64) -> (f64, f64) {
+pub fn out_edge_inner_ing(a: f64, b: f64) -> (f64, f64) {
     (a*0.8599, b*0.8599)
 }
 
-pub fn InnEdgeInnRing(a: f64, b: f64) -> (f64, f64) {
+pub fn inn_edge_inner_ring(a: f64, b: f64) -> (f64, f64) {
     (a*0.665, b*0.665)
 }
 
-pub fn InnEdgeDuskRing(a: f64, b: f64) -> (f64, f64) {
+pub fn inn_edge_dusk_ring(a: f64, b: f64) -> (f64, f64) {
     (a*0.5486, b*0.5486)
 }

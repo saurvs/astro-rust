@@ -160,7 +160,7 @@ pub fn JulDay(date: &Date) -> f64 {
 }
 
 /**
-Returns the Julian Ephemeris day from a Julian day
+Returns the Julian Ephemeris day
 
 # Arguments
 
@@ -263,8 +263,8 @@ the obliquity of the ecliptic.
 #[macro_export]
 macro_rules! AppSidr {
     ($JD: expr) => {{
-        let (nut_in_long, nut_in_oblq) = astro::nutation::Nutation($JD);
-        let eclip_oblq = astro::ecliptic::MnOblq_Laskar($JD);
+        let (nut_in_long, nut_in_oblq) = astro::nutation::nutation($JD);
+        let eclip_oblq = astro::ecliptic::mn_oblq_laskar($JD);
         astro::time::AppSidr(astro::time::MnSidr($JD), nut_in_long, eclip_oblq + nut_in_oblq)
     }};
 }
@@ -291,12 +291,12 @@ pub fn MnSidr(JD: f64) -> f64 {
 }
 
 /**
-Returns an approximate value of ΔT for a given year and month
+Returns an approximate value of **ΔT** for a given year and month
 
 This function approximates ΔT from polynomial expressions using a
 method different from that given in the *Meeus* book. The method
 used is given [here](http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html);
-it covers a far wider time range.
+it covers a far wider time range, and is more accurate.
 
 # Arguments
 
@@ -311,7 +311,6 @@ pub fn ApproxDelT(year: i32, month: u8) -> f64 {
         return -20.0 + 32.0*u*u;
     }
     else if y < 500.0 {
-        println!("fdsiu");
         let u = y / 100.0;
         return 10583.6 -
                u * (1014.41 +

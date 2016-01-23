@@ -25,7 +25,7 @@ Returns Saturn's **apparent magnitude** using G. Muller's formula
                 measured in the plane of Saturn's ring *| in radians*
 * ```B```: Saturnicentric latitude of the Earth *| in radians*
 **/
-pub fn ApprntMag_Muller(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
+pub fn apprnt_mag_muller(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     - 8.68
     + 5.0*(r*delta).log10()
     + 0.044*delU.abs()
@@ -51,7 +51,7 @@ Almanac's formula adopted in 1984
                 measured in the plane of Saturn's ring *| in radians*
 * ```B```: Saturnicentric latitude of the Earth *| in radians*
 **/
-pub fn ApprntMag_84(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
+pub fn apprnt_mag_84(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     - 8.88
     + 5.0*(r*delta).log10()
     + 0.044*delU.abs()
@@ -67,14 +67,14 @@ Returns Saturn's **polar semidiameter**
 
 # Returns
 
-* ```polar_semidiameter```: Polar semidiameter (*radians per AU*)
+* ```polar_semidiameter```: Polar semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```distance_to_earth```: Saturn's distance to Earth *| in AU*
+* ```saturn_earth_dist```: Saturn-Earth distance *| in AU*
 * ```earth_lat```: Saturnicentric latitude of Earth *| in radians*
 **/
-pub fn PolSemdiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
+pub fn pol_semdiameter(distance_to_earth: f64, earth_lat: f64) -> f64 {
     let a = equatorial_unit_semidiameter();
     let b = polar_unit_semidiameter();
     let k = 1.0 - (b/a).powi(2);
@@ -86,13 +86,13 @@ Returns Saturn's **equatorial semidiameter**
 
 # Returns
 
-* ```equatorial_semidiameter```: Equatorial semidiameter (*radians per AU*)
+* ```equatorial_semidiameter```: Equatorial semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```distance_to_earth```: Saturn's distance to Earth *| in AU*
+* ```saturn_earth_dist```: Saturn-Earth distance *| in AU*
 **/
-pub fn EqSemdiameter(distance_to_earth: f64) -> f64 {
+pub fn eq_semdiameter(distance_to_earth: f64) -> f64 {
     equatorial_unit_semidiameter() / distance_to_earth
 }
 

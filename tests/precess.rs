@@ -3,10 +3,10 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn AnnualPrecess() {
+fn annual_precess() {
     let d = time::Date{year: 1978, month: 1, decimal_day: 0.0, cal_type: time::CalType::Gregorian};
 
-    let (new_asc, new_dec) = precess::AnnualPrecess(
+    let (new_asc, new_dec) = precess::annual_precess(
         angle::DegFrmHMS(10, 8, 22.3).to_radians(),
         angle::DegFrmDMS(11, 58, 2.0).to_radians(),
         time::JulDay(&d)
@@ -20,8 +20,8 @@ fn AnnualPrecess() {
 }
 
 #[test]
-fn ChangeEpochEqCoords() {
-    let (new_asc, new_dec) = precess::ChangeEpochEqCoords(
+fn precess_eq_coords() {
+    let (new_asc, new_dec) = precess::precess_eq_coords(
         41.054063_f64.to_radians(),
         49.22775_f64.to_radians(),
         2451545.0,
@@ -32,8 +32,8 @@ fn ChangeEpochEqCoords() {
 }
 
 #[test]
-fn ChangeOrbElements() {
-    let (new_inc, new_arg_perih, new_long_ascend_node) = precess::ChangeOrbElements(
+fn precess_orb_elements() {
+    let (new_inc, new_arg_perih, new_long_ascend_node) = precess::precess_orb_elements(
         47.122_f64.to_radians(),
         151.4486_f64.to_radians(),
         45.7481_f64.to_radians(),
@@ -46,8 +46,8 @@ fn ChangeOrbElements() {
 }
 
 #[test]
-fn ChangeEpochEclCoords() {
-    let (new_asc, new_dec) = precess::ChangeEpochEclCoords(
+fn precess_ecl_coords() {
+    let (new_asc, new_dec) = precess::precess_ecl_coords(
         149.48194_f64.to_radians(),
         1.76549_f64.to_radians(),
         2451545.0,

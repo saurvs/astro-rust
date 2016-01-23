@@ -30,7 +30,7 @@ Returns the **time** of **transit** for a celestial body
 
 # Returns
 
-* ```(hour, minute, second)```: Time of the transit on the day of interest
+* ```(hour, min, sec)```: Time of the transit on the day of interest, in dynamical time
 
 # Arguments
 
@@ -43,22 +43,22 @@ Let ```JD``` be the Julian (Ephemeris) day of interest,
 * ```eq_point1```: Equatorial point of the transit body on ```JD - 1``` *| in radians*
 * ```eq_point2```: Equatorial point of the transit body on ```JD``` *| in radians*
 * ```eq_point3```: Equatorial point of the transit body on ```JD + 1``` *| in radians*
-* ```app_green_sidr```: Apparent sidereal time at Greenwhich on ```JD``` *| in radians*
-* ```deltaT```: Delta T on ```JD```
+* ```apprnt_greenwhich_sidr```: Apparent sidereal time at Greenwhich on ```JD``` *| in radians*
+* ```delta_t```: ΔT for ```JD``` (Julian day)
 * ```moon_eq_hz_parallax```: Equatorial horizontal parallax of the Moon on ```JD```
                              *| in radians*. *Pass a meaningfull value here only when*
                              ```TransitBody::Moon``` *is passed for* ```transit_body```.
 
 **/
-pub fn Time(
+pub fn time(
     transit_type: &TransitType,
     transit_body: &TransitBody,
     geograph_point: &coords::GeographPoint,
     eq_point1: &coords::EqPoint,
     eq_point2: &coords::EqPoint,
     eq_point3: &coords::EqPoint,
-    app_green_sidr: f64,
-    deltaT: f64,
+    apprnt_greenwhich_sidr: f64,
+    delta_t: f64,
     moon_eq_hz_parallax: f64) -> (i64, i64, f64) {
 
     let h0 = match transit_body {
@@ -74,17 +74,17 @@ pub fn Time(
     H0 = angle::LimitTo360(H0.to_degrees()).to_radians();
 
     let rad360 = 2.0 * f64::consts::PI;
-    let mut m = m(&transit_type, H0, eq_point2.asc, geograph_point.long, app_green_sidr, rad360);
-    let theta0 = app_green_sidr + m*360.985647_f64.to_radians();
+    let mut m = m(&transit_type, H0, eq_point2.asc, geograph_point.long, apprnt_greenwhich_sidr, rad360);
+    let theta0 = apprnt_greenwhich_sidr + m*360.985647_f64.to_radians();
 
-    let d = m + deltaT/86400.0;
+    let d = m + delta_t/86400.0;
 
-    let asc = interpol::ThreeValues(eq_point1.asc, eq_point2.asc, eq_point3.asc, d);
+    let asc = interpol::three_values(eq_point1.asc, eq_point2.asc, eq_point3.asc, d);
 
     let dec = match transit_type {
         &TransitType::Transit => 0.0,
-        &TransitType::Rise    => interpol::ThreeValues(eq_point1.dec, eq_point2.dec, eq_point3.dec, d),
-        &TransitType::Set     => interpol::ThreeValues(eq_point1.dec, eq_point2.dec, eq_point3.dec, d)
+        &TransitType::Rise    => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d),
+        &TransitType::Set     => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d)
     };
 
     let mut H = coords::HrAnglFrmObserverLong(theta0, geograph_point.long, asc).to_degrees();

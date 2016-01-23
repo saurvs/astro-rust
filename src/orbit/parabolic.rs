@@ -20,7 +20,7 @@ parabolic orbit
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
 * ```q```: Perihelion distance *| in AU*
 **/
-pub fn TruAnomAndRadVec(t: f64, T: f64, q: f64) -> (f64, f64) {
+pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
     let W = 0.03649116245 * (t - T) / q.powf(1.5);
     let G = W / 2.0;
     let Y = (G + (G*G + 1.0).sqrt()).powf(1.0/3.0);
@@ -49,13 +49,13 @@ along with it's **radius vector** at that time
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
 * ```node```: ```Ascend``` or ```Descend``` node
 **/
-pub fn PassageThroughNode(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
+pub fn passage_through_node(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
     match node {
-        &orbit::Node::Ascend  => passage_through_node(-w, q, T),
-        &orbit::Node::Descend => passage_through_node(f64::consts::PI - w, q, T)
+        &orbit::Node::Ascend  => pass_through_node(-w, q, T),
+        &orbit::Node::Descend => pass_through_node(f64::consts::PI - w, q, T)
     }
 }
-fn passage_through_node(v: f64, q: f64, T: f64) -> (f64, f64) {
+fn pass_through_node(v: f64, q: f64, T: f64) -> (f64, f64) {
     let s = (v/2.0).tan();
 
     (

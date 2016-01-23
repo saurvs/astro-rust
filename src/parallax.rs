@@ -16,7 +16,7 @@ Returns the **equatorial horizontal parallax** of a celestial body
 
 * ```dist_to_earth```: The celestial body's distance to the Earth *| in AU*
 **/
-pub fn EqHzParllx(dist_to_earth: f64) -> f64 {
+pub fn eq_hz_parallax(dist_to_earth: f64) -> f64 {
     (angle::DegFrmDMS(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
 }
 
@@ -36,17 +36,17 @@ Returns the **topocentric equatorial coordinates** of a celestial body
 * ```observer_ht```: Height of the observer above sea level *| in meters*
 * ```greenwhich_sidreal```: Sidereal time at Greenwhich *| in radians*
 **/
-pub fn TopocenEqCoords(
+pub fn topocen_eq_coords(
     eq_point: &coords::EqPoint,
     dist_to_earth: f64,
     geograph_point: &coords::GeographPoint,
     observer_ht: f64,
     greenwhich_sidreal: f64) -> coords::EqPoint {
 
-    let (rho_sin, rho_cos) = planet::earth::RhoSinCosPhi(geograph_point.lat, observer_ht);
+    let (rho_sin, rho_cos) = planet::earth::rho_sin_cos_phi(geograph_point.lat, observer_ht);
     let geocen_hr_angl = coords::HrAnglFrmObserverLong(greenwhich_sidreal, geograph_point.long, eq_point.asc);
 
-    let eq_hz_parllx_sin = EqHzParllx(dist_to_earth).sin();
+    let eq_hz_parllx_sin = eq_hz_parallax(dist_to_earth).sin();
     let del_asc = (-rho_cos*eq_hz_parllx_sin*geocen_hr_angl.sin())
                   .atan2(eq_point.dec.cos() - rho_cos*eq_hz_parllx_sin*geocen_hr_angl.cos());
     let dec_1 = ((eq_point.dec.sin() - rho_sin*eq_hz_parllx_sin) * del_asc.cos())
@@ -79,7 +79,7 @@ Returns the **topocentric ecliptic coordinates** of a celestial body
 * ```eclip_oblq```: Obliquity of the ecliptic *| in radians*
 * ```geocen_semdia```: Geocentric semidiameter of the celestial body *| in radians*
 **/
-pub fn TopocenEclCoords(
+pub fn topopcen_ecl_coords(
     ecl_point: &coords::EclPoint,
     eq_hz_parllx: f64,
     geograph_point: &coords::GeographPoint,
@@ -88,7 +88,7 @@ pub fn TopocenEclCoords(
     eclip_oblq: f64,
     geocen_semdia: f64) -> (coords::EclPoint, f64) {
 
-    let (rho_sin, rho_cos) = planet::earth::RhoSinCosPhi(geograph_point.lat, observer_ht);
+    let (rho_sin, rho_cos) = planet::earth::rho_sin_cos_phi(geograph_point.lat, observer_ht);
 
     let eq_hz_parllx_sin = eq_hz_parllx.sin();
     let N = ecl_point.long.cos()*ecl_point.lat.cos() - rho_cos*eq_hz_parllx_sin*loc_sidr.cos();

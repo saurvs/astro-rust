@@ -5,7 +5,7 @@ use astro::*;
 #[test]
 fn Ephemeris() {
 
-    let (mut D_e, mut D_s, mut w1, mut w2, mut P) = planet::jupiter::Ephemeris(
+    let (mut D_e, mut D_s, mut w1, mut w2, mut P) = planet::jupiter::ephemeris(
         2448972.50068,
 
         23.4402069_f64.to_radians(),

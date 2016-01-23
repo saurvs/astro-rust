@@ -4,8 +4,8 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn HeliocenPos_Venus() {
-    let (mut L, mut B, mut R) = planet::HeliocenPos(&planet::Planet::Venus, 2448976.5);
+fn heliocen_pos() {
+    let (mut L, mut B, mut R) = planet::heliocen_pos(&planet::Planet::Venus, 2448976.5);
     L = util::RoundUptoDigits(L.to_degrees(), 3);
     B = util::RoundUptoDigits(B.to_degrees(), 3);
     R = util::RoundUptoDigits(R, 5);
@@ -16,8 +16,8 @@ fn HeliocenPos_Venus() {
 }
 
 #[test]
-fn GeometricEclPos() {
-    let (L, B, mut R, mut t) = planet::GeometricEclPos(
+fn geometric_ecl_pos() {
+    let (L, B, mut R, mut t) = planet::geometric_ecl_pos(
         88.35704_f64.to_radians(),
         0.00014_f64.to_radians(),
         0.983824,
@@ -33,8 +33,8 @@ fn GeometricEclPos() {
 }
 
 #[test]
-fn EclCoordsToFK5() {
-    let (FK5_long, FK5_lat) = planet::EclCoordsToFK5(
+fn ecl_coords_to_FK5() {
+    let (FK5_long, FK5_lat) = planet::ecl_coords_to_FK5(
         2448976.5,
         313.07689_f64.to_radians(),
         -2.08489_f64.to_radians()
@@ -51,8 +51,8 @@ fn EclCoordsToFK5() {
 }
 
 #[test]
-fn GeocenEclPos() {
-    let (mut L, mut B, mut R) = planet::GeocenEclPos(&planet::Planet::Venus, 2448976.5);
+fn geocen_ecl_pos() {
+    let (mut L, mut B, mut R) = planet::geocen_ecl_pos(&planet::Planet::Venus, 2448976.5);
     L = util::RoundUptoDigits(angle::LimitTo360(L.to_degrees()), 2);
     B = util::RoundUptoDigits(B.to_degrees(), 2);
     R = util::RoundUptoDigits(R, 4);

@@ -22,13 +22,13 @@ near-parabolic orbit
 * ```q```: Perihelion distance *| in AU*
 * ```accuracy```: Desired accuracy for the results. *Eg: 0.000001 radians*
 **/
-pub fn TruAnomAndRadVec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) -> (f64, f64) {
+pub fn true_anom_and_rad_vec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) -> (f64, f64) {
     let days_frm_perih = t - T;
     if days_frm_perih == 0.0 {
         return (0.0, q)
     }
 
-    let k = consts::GaussGrav();
+    let k = consts::gauss_grav();
     let d1 = 1000.0;
 
     let q1 = k * ((1.0 + ecc)/q).sqrt() / (2.0*q);

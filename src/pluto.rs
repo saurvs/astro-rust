@@ -16,7 +16,7 @@ Returns Pluto's geocentric **equatorial semidiameter**
 
 * ```pluto_earth_dist```: Pluto-Earth distance *| in AU*
 **/
-pub fn Semdiameter(pluto_earth_dist: f64) -> f64 {
+pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 2.07).to_radians() / pluto_earth_dist
 }
 
@@ -34,7 +34,7 @@ Almanac's method adopted in 1984
 * ```delta```: Pluto-Earth distance *| in AU*
 * ```r```: Pluto-Sun distance *| in AU*
 **/
-pub fn ApprntMag_84(i: f64, delta: f64, r: f64) -> f64 {
+pub fn apparent_mag_84(i: f64, delta: f64, r: f64) -> f64 {
     5.0*(r*delta).log10() - 1.0
 }
 
@@ -63,7 +63,7 @@ The error in
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn HeliocenPos(JD: f64) -> (f64, f64, f64) {
+pub fn heliocen_pos(JD: f64) -> (f64, f64, f64) {
     let JC = time::JulCent(JD);
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
@@ -147,7 +147,7 @@ Returns Pluto's **mean orbital elements** near 2000 AD
 * ```omega```: Longitude of the ascending node *| in radians*
 * ```w```: Argument of the perihelion *| in radians*
 **/
-pub fn MnOrbElements_2000() -> (f64, f64, f64, f64, f64) {
+pub fn mean_orb_elements_J2000() -> (f64, f64, f64, f64, f64) {
     (39.543, 0.249,
      17.14_f64.to_radians(),
      110.307_f64.to_radians(),

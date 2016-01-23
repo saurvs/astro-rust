@@ -3,8 +3,8 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn Ephemeris() {
-    let (mut P, mut B, mut L) = sun::Ephemeris(2448908.50068,
+fn ephemeris() {
+    let (mut P, mut B, mut L) = sun::ephemeris(2448908.50068,
                                                199.90234_f64.to_radians(),
                                                199.906759_f64.to_radians(),
                                                23.440144_f64.to_radians());
@@ -15,8 +15,8 @@ fn Ephemeris() {
 }
 
 #[test]
-fn EclCoordsToFK5() {
-    let (FK5_long, FK5_lat) = sun::EclCoordsToFK5(
+fn ecl_coords_to_FK5() {
+    let (FK5_long, FK5_lat) = sun::ecl_coords_to_FK5(
         2448908.5,
         199.907372_f64.to_radians(),
         angle::DegFrmDMS(0, 0, 0.644).to_radians()
@@ -35,8 +35,8 @@ fn EclCoordsToFK5() {
 }
 
 #[test]
-fn GeocenEclPos() {
-    let (ecl_long, ecl_lat, rad_vec) = sun::GeocenEclPos(
+fn geocen_ecl_pos() {
+    let (ecl_long, ecl_lat, rad_vec) = sun::geocen_ecl_pos(
         2448908.5
     );
 
@@ -55,6 +55,6 @@ fn GeocenEclPos() {
 }
 
 #[test]
-fn CarringSyndRot() {
-    assert_eq!(util::RoundUptoDigits(sun::CarringSyndRot(1699), 2), 2444480.72);
+fn carring_synd_rot() {
+    assert_eq!(util::RoundUptoDigits(sun::carring_synd_rot(1699), 2), 2444480.72);
 }

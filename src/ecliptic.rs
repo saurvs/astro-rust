@@ -20,7 +20,7 @@ for 10000 years before and after 2000 AD.
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn MnOblq_Laskar(JD: f64) -> (f64) {
+pub fn mn_oblq_laskar(JD: f64) -> (f64) {
     let u = time::JulCent(JD) / 100.0;
 
     (       angle::DegFrmDMS(23, 26, 21.448)
@@ -52,7 +52,7 @@ The error in ```mn_oblq``` reaches 1 arcsecond over a period of
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn MnOblq_IAU(JD: f64) -> (f64) {
+pub fn mn_oblq_IAU(JD: f64) -> (f64) {
     let u = time::JulCent(JD) / 100.0;
 
     (       angle::DegFrmDMS(23, 26, 21.448)
@@ -79,7 +79,7 @@ a **horizon** on Earth
 * ```observer_lat```: The observer's geographical latitude *| in radians*
 * ```loc_sidreal``` : Local sidereal time *| in radians*
 **/
-pub fn LongOfEclipPointsOnHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
+pub fn eclip_points_on_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
     let p = (-loc_sidreal.cos())
             .atan2(   oblq_eclip.sin()*observer_lat.tan()
                     + oblq_eclip.cos()*loc_sidreal.sin()
@@ -102,7 +102,7 @@ on Earth
 * ```observer_lat```: The observer's geographical latitude *| in radians*
 * ```loc_sidreal```: Local sidereal time *| in radians*
 **/
-pub fn AnglBetwnEclipAndHz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
+pub fn angl_betwn_eclip_and_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
     (   oblq_eclip.cos() * observer_lat.sin()
       - oblq_eclip.sin() * observer_lat.cos() * loc_sidreal.sin()
     ).acos()

@@ -15,7 +15,7 @@ Returns the **true anomaly** of a body in an elliptic orbit
 * ```ecc_anom```: Eccentric anomaly of the body *| in radians*
 * ```ecc```: Eccentricity of the orbit
 **/
-pub fn TruAnom(ecc_anom: f64, ecc: f64) -> f64 {
+pub fn true_anom(ecc_anom: f64, ecc: f64) -> f64 {
     2.0 * ((1.0 + ecc).sqrt() * (ecc_anom/2.0).tan())
           .atan2((1.0 - ecc).sqrt())
 }
@@ -34,7 +34,7 @@ it's **eccentric anomaly**
 * ```a```: Semimajor axis of the orbit *| in AU*
 * ```ecc```: Eccentricity of the orbit
 **/
-pub fn RadVecFrmEccAnom(ecc_anom: f64, a: f64, ecc: f64) -> f64 {
+pub fn rad_vec_frm_ecc_anom(ecc_anom: f64, a: f64, ecc: f64) -> f64 {
     a*(1.0 - ecc*ecc_anom.cos())
 }
 
@@ -52,7 +52,7 @@ it's **true anomaly**
 * ```a```: Semimajor axis of the orbit *| in AU*
 * ```ecc```: Rccentricity of the orbit
 **/
-pub fn RadVecFrmTruAnom(true_anom: f64, a: f64, ecc: f64) -> f64 {
+pub fn rad_vec_frm_true_anom(true_anom: f64, a: f64, ecc: f64) -> f64 {
     a*(1.0 - ecc*ecc) / (1.0 + ecc*true_anom.cos())
 }
 
@@ -69,7 +69,7 @@ Returns the **eccentric anomaly** of a body in an elliptic orbit
 * ```ecc```: Eccentricity of the orbit
 * ```accuracy```: Desired accuracy for the eccentric anomaly. *Eg: 0.000001 radians*
 **/
-pub fn EccAnom(mean_anom: f64, ecc: f64, accuracy: f64) -> f64 {
+pub fn ecc_anom(mean_anom: f64, ecc: f64, accuracy: f64) -> f64 {
     let mut prev_E = 0.0;
     let mut current_E = mean_anom;
     while (current_E - prev_E).abs() > accuracy {
@@ -93,7 +93,7 @@ Returns the **velocity** of a body in an elliptic orbit
 * ```r```: Radius vector of the body *| in AU*
 * ```a```: Semimajor axis of orbit *| in AU*
 **/
-pub fn Velocity(r: f64, a:f64) -> f64 {
+pub fn velocity(r: f64, a:f64) -> f64 {
     42.1219 * (1.0/r - 1.0/(2.0 * a)).sqrt()
 }
 
@@ -110,7 +110,7 @@ in an elliptic orbit
 * ```a```: Semimajor axis of orbit *| in AU*
 * ```e```: Eccentricity of orbit
 **/
-pub fn PerihVelocity(a:f64, e:f64) -> f64 {
+pub fn perih_velocity(a:f64, e:f64) -> f64 {
     29.7847 * ((1.0 + e) / ((1.0 - e) * a)).sqrt()
 }
 
@@ -128,7 +128,7 @@ in an elliptic orbit
 * ```a```: Semimajor axis of orbit *| in AU*
 * ```e```: Eccentricity of orbit
 **/
-pub fn AphVelocity(a:f64, e:f64) -> f64 {
+pub fn aph_velocity(a:f64, e:f64) -> f64 {
     29.7847 * ((1.0 - e) / ((1.0 + e) * a)).sqrt()
 }
 
@@ -155,7 +155,7 @@ The **error** in ```(approximate_length)``` is:
 * ```b```: Semiminor axis of the ellipse (same unit as that of ```a```)
 * ```e```: Eccentricity of the ellipse
 **/
-pub fn Length_Ramanujan(a: f64, b: f64, e: f64) -> f64 {
+pub fn length_ramanujan(a: f64, b: f64, e: f64) -> f64 {
     f64::consts::PI * (3.0*(a + b) - ((a + 3.0*b)*(3.0*a + b)).sqrt())
 }
 
@@ -181,7 +181,7 @@ The **error** in ```(approximate_length)``` is:
 * ```b```: Semiminor axis of the ellipse (same unit as that of ```a```)
 * ```e```: Eccentricity of the ellipse
 **/
-pub fn Length(a: f64, b: f64, e: f64) -> f64 {
+pub fn length(a: f64, b: f64, e: f64) -> f64 {
     let A = (a + b)/2.0;
     let G = (a * b).sqrt();
     let H = (2.0 * a * b)/(a + b);
@@ -196,7 +196,7 @@ Returns the **semimajor axis** of an elliptic orbit
 * ```perih```: Perihelion of the orbit
 * ```ecc```: Eccentricity of the orbit
 **/
-pub fn SemimajorAxis(perih: f64, ecc: f64) -> f64 {
+pub fn semimajor_axis(perih: f64, ecc: f64) -> f64 {
     perih / (1.0 - ecc)
 }
 
@@ -212,13 +212,13 @@ Returns the **mean motion** of an elliptic orbit
 
 * ```semimaj_ax```: Semimajor axis of the orbit
 **/
-pub fn MeanMotion(semimaj_ax: f64) -> f64 {
+pub fn mn_motion(semimaj_ax: f64) -> f64 {
     0.01720209895 / (semimaj_ax.powf(1.5))
 }
 
 /**
 Returns the **time of passage** of a body through a **node**,
-along with it's radius vector at that time
+along with it's **radius vector** at that time
 
 # Returns
 
@@ -236,14 +236,14 @@ along with it's radius vector at that time
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
 * ```node```: ```Ascend``` or ```Descend``` node
 **/
-pub fn PassageThroughNode(w: f64, n: f64, a: f64, e: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
+pub fn passage_through_node(w: f64, n: f64, a: f64, e: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
     match node {
-        &orbit::Node::Ascend  => passage_through_node(-w, n, a, e, T),
-        &orbit::Node::Descend => passage_through_node(f64::consts::PI - w, n, a, e, T)
+        &orbit::Node::Ascend  => pass_through_node(-w, n, a, e, T),
+        &orbit::Node::Descend => pass_through_node(f64::consts::PI - w, n, a, e, T)
     }
 }
 
-fn passage_through_node(v: f64, n: f64, a: f64, e: f64, T: f64)  -> (f64, f64) {
+fn pass_through_node(v: f64, n: f64, a: f64, e: f64, T: f64)  -> (f64, f64) {
     let E = 2.0 * ((1.0 - e).sqrt()*(v/2.0).tan()).atan2((1.0 + e).sqrt());
     let M = E - e*E.sin();
 

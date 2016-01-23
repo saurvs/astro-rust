@@ -3,8 +3,8 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn EqCoordsFrmMotion() {
-    let (asc, dec) = star::EqCoordsFrmMotion(101.286962_f64.to_radians(),
+fn eq_coords_frm_motion() {
+    let (asc, dec) = star::eq_coords_frm_motion(101.286962_f64.to_radians(),
                                              -16.716108_f64.to_radians(),
                                              2.64, -0.000007773,
                                              angle::DegFrmTimeSec(-0.03847).to_radians(),

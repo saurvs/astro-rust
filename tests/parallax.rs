@@ -3,7 +3,7 @@ extern crate astro;
 use astro::*;
 
 #[test]
-pub fn TopocenEqCoords() {
+pub fn topocen_eq_coords() {
 
     let eq_point = coords::EqPoint{
         asc: 339.530208_f64.to_radians(),
@@ -13,7 +13,7 @@ pub fn TopocenEqCoords() {
         long: angle::DegFrmHMS(7, 47, 27.0).to_radians(),
         lat: 33.356111_f64.to_radians(),
     };
-    let topo_eq_point = parallax::TopocenEqCoords(
+    let topo_eq_point = parallax::topocen_eq_coords(
         &eq_point,
         0.37276,
         &geograph_point,

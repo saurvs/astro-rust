@@ -12,7 +12,7 @@ Returns the **equatorial semidiameter** of the Sun
 
 * ```sun_earth_dist```: Sun-Earth distance *| in AU*
 **/
-pub fn Semdiameter(sun_earth_dist: f64) -> f64 {
+pub fn semdiameter(sun_earth_dist: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 959.63) / sun_earth_dist
 }
 
@@ -32,8 +32,8 @@ referred to the mean equinox of the date
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn GeocenEclPos(JD: f64) -> (f64, f64, f64) {
-    let (L, B, R) = planet::HeliocenPos(&planet::Planet::Earth, JD);
+pub fn geocen_ecl_pos(JD: f64) -> (f64, f64, f64) {
+    let (L, B, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
     let L_sun = angle::LimitTo360((L + std::f64::consts::PI).to_degrees());
     let B_sun = angle::LimitTo360(-B.to_degrees());
@@ -42,7 +42,7 @@ pub fn GeocenEclPos(JD: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns ecliptic geocentric coordinates of the Sun
+Returns geocentric ecliptic coordinates of the Sun
 converted to the **FK5** system
 
 # Returns
@@ -64,7 +64,7 @@ converted to the **FK5** system
                  *| in radians*, referred to the mean equinox
                  of the date
 **/
-pub fn EclCoordsToFK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
+pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
     let JC = time::JulCent(JD);
     let lambda1 = ecl_long - JC*(1.397 + JC*0.00031).to_radians();
 
@@ -72,7 +72,7 @@ pub fn EclCoordsToFK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
      ecl_lat  + angle::DegFrmDMS(0, 0, 0.03916).to_radians()*(lambda1.cos() - lambda1.sin()))
 }
 
-#[macro_export]
+//#[macro_export]
 macro_rules! ApprntGeocenEclPos {
     ($planet: expr, $JD: expr) => {{
         3
@@ -80,8 +80,8 @@ macro_rules! ApprntGeocenEclPos {
 }
 
 /**
-Returns the rectangular geocentric coordinates of the Sun,
-referred to the mean equinox of the date
+Returns the geocentric **rectangular** coordinates of the Sun,
+referred to the **mean equinox of the date**
 
 * The positive x-axis is directed towards the Earth's vernal equinox
 (0 degrees longitude)
@@ -106,17 +106,17 @@ celestial pole
 * ```sun_geo_lat```: The Sun's geometric latitude *| in radians*,
                      *without* corrections for nutation and abberation
 * ```sun_rad_vec```: The Sun's geometric radius vector *| in AU*
-* ```mean_obl```: Mean obliquity of the ecliptic
+* ```mean_oblq```: Mean obliquity of the ecliptic
 **/
-pub fn RectGeocenCoords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_obl: f64) -> (f64, f64, f64) {
+pub fn geocen_rect_coords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_oblq: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
-    let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.cos() - sun_geo_lat.sin()*mean_obl.sin());
-    let z = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_obl.sin() + sun_geo_lat.sin()*mean_obl.cos());
+    let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_oblq.cos() - sun_geo_lat.sin()*mean_oblq.sin());
+    let z = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_oblq.sin() + sun_geo_lat.sin()*mean_oblq.cos());
     (x, y, z)
 }
 
 /**
-Return quantites used in the ephemeris for physical observations
+Return quantites used in the **ephemeris** for **physical observations**
 of the Sun
 
 # Returns
@@ -142,7 +142,7 @@ of the Sun
                   of nutation
 * ```oblq_eclip```: True obliquity of the ecliptic *| in radians*
 **/
-pub fn Ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
+pub fn ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
     let theta = angle::LimitTo360((JD - 2398220.0) * (360.0/25.38)).to_radians();
     let I = 7.25_f64.to_radians();
     let K = (73.6667 + 1.3958333*((JD - 2396758.0) / 36525.0)).to_radians();
@@ -163,7 +163,7 @@ pub fn Ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64
     (x + y, B_0, L_0)
 }
 
-pub fn CarringSyndRot(C: i64) -> f64 {
+pub fn carring_synd_rot(C: i64) -> f64 {
     let M = (281.96 + 26.882476*(C as f64)).to_radians();
 
       2398140.227 + 27.2752316*(C as f64)

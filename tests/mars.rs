@@ -3,13 +3,15 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn Ephemeris() {
+fn ephemeris() {
+    let JD = 2448935.500638;
+    let (mut D_e, mut D_s, mut P, q, mut w, mut d) = planet::mars::ephemeris(
+        JD,
 
-    let (mut D_e, mut D_s, mut P, q, mut w, mut d) = planet::mars::Ephemeris(
-        2448935.500638,
+        &planet::mars::ecl_coords_of_north_pol(time::JulCent(JD)),
 
-        352.82267_f64.to_radians(),
-        63.28208_f64.to_radians(),
+        //352.82267_f64.to_radians(),
+        //63.28208_f64.to_radians(),
 
         23.44022_f64.to_radians(),
 

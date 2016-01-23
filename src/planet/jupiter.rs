@@ -14,9 +14,9 @@ Returns Jupiter's **equatorial semidiameter**
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance to Earth *| in AU*
+* ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
 **/
-pub fn EqSemdiameter(distance_to_earth: f64) -> f64 {
+pub fn eq_semdiameter(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 98.44) / distance_to_earth
 }
 
@@ -25,25 +25,28 @@ Returns Jupiter's **polar semidiameter**
 
 # Returns
 
-* ```pol_semidia```: Polar semidiameter (*radians per AU*)
+* ```pol_semidia```: Polar semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```distance_to_earth```: Jupiter's distance to Earth *| in AU*
+* ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
 **/
-pub fn PolSemdiameter(distance_to_earth: f64) -> f64 {
+pub fn pol_semdiameter(distance_to_earth: f64) -> f64 {
     angle::DegFrmDMS(0, 0, 92.06) / distance_to_earth
 }
 
 /**
-Return quantites used in the ephemeris for physical observations
+Return quantites used in the **ephemeris** for **physical observations**
 of Jupiter
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
+* ```mn_oblq```: Mean obliquity of the ecliptic on ```JD``` *| in radians*
+* ```nut_in_long```: Nutation in ecliptic longitude on ```JD``` *| in radians*
+* ```nut_in_oblq```: Nutation in obliquity of the ecliptic on ```JD``` *| in radians*
 **/
-pub fn Ephemeris(JD: f64,
+pub fn ephemeris(JD: f64,
                 mn_oblq_eclip: f64,
                 nut_in_long: f64, nut_in_oblq: f64) -> (f64, f64, f64, f64, f64) {
     let d = JD - 2433282.5;
@@ -55,7 +58,7 @@ pub fn Ephemeris(JD: f64,
     let W1 = angle::LimitTo360(17.710 + 877.90003539*d).to_radians();
     let W2 = angle::LimitTo360(16.838 + 870.27003539*d).to_radians();
 
-    let (l0, b0, R) = planet::HeliocenPos(&planet::Planet::Earth, JD);
+    let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
     let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
     let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
@@ -65,21 +68,21 @@ pub fn Ephemeris(JD: f64,
     let mut i: u8 = 1;
     let n: u8 = 2;
     while i <= n {
-        let (new_l, new_b, new_r) = planet::HeliocenPos(&planet::Planet::Jupiter, JD - light_time);
+        let (new_l, new_b, new_r) = planet::heliocen_pos(&planet::Planet::Jupiter, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        let (new_x, new_y, new_z) = planet::GeocenEclRectCoords(l0, b0, R, l, b, r);
+        let (new_x, new_y, new_z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
         x = new_x; y = new_y; z = new_z;
 
-        jup_earth_dist = planet::DistFrmEclRectCoords(x, y, z);
-        light_time = planet::LightTime(jup_earth_dist);
+        jup_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
+        light_time = planet::light_time(jup_earth_dist);
 
         i += 1;
     }
 
     l -= 0.01299_f64.to_radians()*jup_earth_dist / (r*r);
-    let (x, y, z) = planet::GeocenEclRectCoords(l0, b0, R, l, b, r);
-    jup_earth_dist = planet::DistFrmEclRectCoords(x, y, z);
+    let (x, y, z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
+    jup_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
 
     let asc_s = (mn_oblq_eclip.cos()*l.sin() - mn_oblq_eclip.sin()*b.tan()).atan2(l.cos());
     let dec_s = (mn_oblq_eclip.cos()*b.sin() + mn_oblq_eclip.sin()*b.cos()*l.sin()).asin();
@@ -114,12 +117,12 @@ pub fn Ephemeris(JD: f64,
                 - asc.sin()*asc.cos())
                 + asc.cos()*dec.sin()*l0.sin());
 
-    let (asc_nut, dec_nut) = nutation::NutationInEqCoords(asc, dec, nut_in_long,
+    let (asc_nut, dec_nut) = nutation::nutation_in_eq_coords(asc, dec, nut_in_long,
                                                           nut_in_oblq, tru_oblq_eclip);
     let asc1 = asc + asc_nut;
     let dec1 = dec + dec_nut;
 
-    let (asc0_nut, dec0_nut) = nutation::NutationInEqCoords(asc0, dec0, nut_in_long,
+    let (asc0_nut, dec0_nut) = nutation::nutation_in_eq_coords(asc0, dec0, nut_in_long,
                                                             nut_in_oblq, tru_oblq_eclip);
     let asc01 = asc0 + asc0_nut;
     let dec01 = dec0 + dec0_nut;

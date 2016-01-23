@@ -3,7 +3,7 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn Time() {
+fn time() {
     let deltaT = time::ApproxDelT(1988, 3);println!("deltaT = {:?}", deltaT);
     let eq_point1 = coords::EqPoint{
         asc: 40.68021_f64.to_radians(),
@@ -23,7 +23,7 @@ fn Time() {
     };
     let Theta0 = 177.74208_f64.to_radians();
 
-    let (h_rise, m_rise, s_rise) = transit::Time(
+    let (h_rise, m_rise, s_rise) = transit::time(
         &transit::TransitType::Rise,
         &transit::TransitBody::StarOrPlanet,
         &geograph_point,
@@ -36,7 +36,7 @@ fn Time() {
     );
     assert_eq!((h_rise, m_rise), (12, 25));
 
-    let (h_transit, m_transit, s_transit) = transit::Time(
+    let (h_transit, m_transit, s_transit) = transit::time(
         &transit::TransitType::Transit,
         &transit::TransitBody::StarOrPlanet,
         &geograph_point,
@@ -49,7 +49,7 @@ fn Time() {
     );
     assert_eq!((h_transit, m_transit), (19, 40));
 
-    let (h_set, m_set, s_set) = transit::Time(
+    let (h_set, m_set, s_set) = transit::time(
         &transit::TransitType::Set,
         &transit::TransitBody::StarOrPlanet,
         &geograph_point,
