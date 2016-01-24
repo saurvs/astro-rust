@@ -17,8 +17,8 @@ Returns the **refraction term** for true altitudes greater than
 * ```apprnt_alt```: Apparent altitude *| in radians*
 **/
 pub fn refrac_frm_apprnt_alt_15(apprnt_alt: f64) -> f64 {
-      angle::DegFrmDMS(0, 0, 58.294).to_radians()*(90_f64.to_radians() - apprnt_alt).tan()
-    - angle::DegFrmDMS(0, 0, 0.0668).to_radians()*(90_f64.to_radians() - apprnt_alt).tan().powi(3)
+      angle::deg_frm_dms(0, 0, 58.294).to_radians()*(90_f64.to_radians() - apprnt_alt).tan()
+    - angle::deg_frm_dms(0, 0, 0.0668).to_radians()*(90_f64.to_radians() - apprnt_alt).tan().powi(3)
 }
 
 /**
@@ -35,8 +35,8 @@ Returns the **refraction term** for apparent altitudes greater than
 * ```true_alt```: True altitude *| in radians*
 **/
 pub fn refrac_frm_true_alt_15(true_alt: f64) -> f64 {
-      angle::DegFrmDMS(0, 0, 58.276).to_radians()*(90_f64.to_radians() - true_alt).tan()
-    - angle::DegFrmDMS(0, 0, 0.0824).to_radians()*(90_f64.to_radians() - true_alt).tan().powi(3)
+      angle::deg_frm_dms(0, 0, 58.276).to_radians()*(90_f64.to_radians() - true_alt).tan()
+    - angle::deg_frm_dms(0, 0, 0.0824).to_radians()*(90_f64.to_radians() - true_alt).tan().powi(3)
 }
 
 /**

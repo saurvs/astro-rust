@@ -21,19 +21,19 @@ for 10000 years before and after 2000 AD.
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn mn_oblq_laskar(JD: f64) -> (f64) {
-    let u = time::JulCent(JD) / 100.0;
+    let u = time::julian_cent(JD) / 100.0;
 
-    (       angle::DegFrmDMS(23, 26, 21.448)
-     - u * (angle::DegFrmDMS(0, 0, 4680.93)
-     + u * (angle::DegFrmDMS(0, 0, 1.55)
-     + u * (angle::DegFrmDMS(0, 0, 1999.25)
-     - u * (angle::DegFrmDMS(0, 0, 51.38)
-     - u * (angle::DegFrmDMS(0, 0, 249.67)
-     + u * (angle::DegFrmDMS(0, 0, 39.05)
-     + u * (angle::DegFrmDMS(0, 0, 7.12)
-     - u * (angle::DegFrmDMS(0, 0, 27.87)
-     + u * (angle::DegFrmDMS(0, 0, 5.79)
-     + u *  angle::DegFrmDMS(0, 0, 2.45)
+    (       angle::deg_frm_dms(23, 26, 21.448)
+     - u * (angle::deg_frm_dms(0, 0, 4680.93)
+     + u * (angle::deg_frm_dms(0, 0, 1.55)
+     + u * (angle::deg_frm_dms(0, 0, 1999.25)
+     - u * (angle::deg_frm_dms(0, 0, 51.38)
+     - u * (angle::deg_frm_dms(0, 0, 249.67)
+     + u * (angle::deg_frm_dms(0, 0, 39.05)
+     + u * (angle::deg_frm_dms(0, 0, 7.12)
+     - u * (angle::deg_frm_dms(0, 0, 27.87)
+     + u * (angle::deg_frm_dms(0, 0, 5.79)
+     + u *  angle::deg_frm_dms(0, 0, 2.45)
     )))))))))).to_radians()
 }
 
@@ -53,12 +53,12 @@ The error in ```mn_oblq``` reaches 1 arcsecond over a period of
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn mn_oblq_IAU(JD: f64) -> (f64) {
-    let u = time::JulCent(JD) / 100.0;
+    let u = time::julian_cent(JD) / 100.0;
 
-    (       angle::DegFrmDMS(23, 26, 21.448)
-     - u * (angle::DegFrmDMS(0, 0, 46.815)
-     + u * (angle::DegFrmDMS(0, 0, 0.00059)
-     - u *  angle::DegFrmDMS(0, 0, 0.001813)
+    (       angle::deg_frm_dms(23, 26, 21.448)
+     - u * (angle::deg_frm_dms(0, 0, 46.815)
+     + u * (angle::deg_frm_dms(0, 0, 0.00059)
+     - u *  angle::deg_frm_dms(0, 0, 0.001813)
     ))).to_radians()
 }
 

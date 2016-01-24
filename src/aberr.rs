@@ -20,7 +20,7 @@ Returns **stellar aberration** in equatorial coordinates
 * ```JD``` : Julian (Ephemeris) day
 **/
 pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
-    let t = time::JulCent(JD);
+    let t = time::julian_cent(JD);
 
     let l2 = 3.1761467 + 1021.3285546*t;
     let l3 = 1.7534703 +  628.3075849*t;
@@ -316,5 +316,5 @@ Returns **solar aberration** in ecliptic longitude
 * ```R```: Sun-Earth distance *| in AU*
 **/
 pub fn sol_aberr(R: f64) -> f64 {
-    -angle::DegFrmDMS(0, 0, 20.4898).to_radians() / R
+    -angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R
 }

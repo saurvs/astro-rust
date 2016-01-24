@@ -55,7 +55,7 @@ Assumes that the Earth is a sphere.
 * ```p2```: ```GeographPoint``` 2
 **/
 pub fn approx_geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
-    6371.0 * p1.AnglSepr(&p2)
+    6371.0 * p1.angl_sepr(&p2)
 }
 
 /**
@@ -204,8 +204,8 @@ geocentric latitude
 * ```geograph_lat```: Geographic latitude *| in radians*
 **/
 pub fn geograph_geocen_lat_diff(geograph_lat: f64) -> f64 {
-      angle::DegFrmDMS(0, 0, 692.73) * (2.0*geograph_lat).sin()
-    - angle::DegFrmDMS(0, 0, 1.16)   * (4.0*geograph_lat).sin()
+      angle::deg_frm_dms(0, 0, 692.73) * (2.0*geograph_lat).sin()
+    - angle::deg_frm_dms(0, 0, 1.16)   * (4.0*geograph_lat).sin()
 }
 
 /**
@@ -219,8 +219,8 @@ Returns the equation of time *| in radians*
 * ```tru_oblq```: True obliquity of the ecliptic *| in radians*
 **/
 pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> f64 {
-    let t = time::JulMill(JD);
-    let L = angle::LimitTo360(
+    let t = time::julian_mill(JD);
+    let L = angle::limit_to_360(
             280.4664567 +
             t * (360007.6982779 +
             t * (0.030328 +

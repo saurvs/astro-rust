@@ -58,8 +58,8 @@ pub fn apprnt_mag_84(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     + 1.25*B.sin().powi(2)
 }
 
-fn equatorial_unit_semidiameter() -> f64 { angle::DegFrmDMS(0, 0, 82.73) }
-fn polar_unit_semidiameter() -> f64 { angle::DegFrmDMS(0, 0, 73.82) }
+fn equatorial_unit_semidiameter() -> f64 { angle::deg_frm_dms(0, 0, 82.73) }
+fn polar_unit_semidiameter() -> f64 { angle::deg_frm_dms(0, 0, 73.82) }
 
 /**
 Returns Saturn's **polar semidiameter**

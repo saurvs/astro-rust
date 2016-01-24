@@ -71,7 +71,7 @@ pub fn time(
     let mut H0 = ( (h0.sin() - geograph_point.lat.sin()*eq_point2.dec.sin())
                    / (geograph_point.lat.cos() * eq_point2.dec.cos())
                  ).acos();
-    H0 = angle::LimitTo360(H0.to_degrees()).to_radians();
+    H0 = angle::limit_to_360(H0.to_degrees()).to_radians();
 
     let rad360 = 2.0 * f64::consts::PI;
     let mut m = m(&transit_type, H0, eq_point2.asc, geograph_point.long, apprnt_greenwhich_sidr, rad360);
@@ -88,7 +88,7 @@ pub fn time(
     };
 
     let mut H = coords::HrAnglFrmObserverLong(theta0, geograph_point.long, asc).to_degrees();
-    H = angle::LimitTo360(H);
+    H = angle::limit_to_360(H);
     if H > 180.0 { H = H - 360.0; }
     H = H.to_radians();
 

@@ -17,7 +17,7 @@ Returns Pluto's geocentric **equatorial semidiameter**
 * ```pluto_earth_dist```: Pluto-Earth distance *| in AU*
 **/
 pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 2.07).to_radians() / pluto_earth_dist
+    angle::deg_frm_dms(0, 0, 2.07).to_radians() / pluto_earth_dist
 }
 
 /**
@@ -64,7 +64,7 @@ The error in
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn heliocen_pos(JD: f64) -> (f64, f64, f64) {
-    let JC = time::JulCent(JD);
+    let JC = time::julian_cent(JD);
 
     struct terms(i8, i8, i8, f64, f64, f64, f64, f64, f64);
     let tuple_terms = [

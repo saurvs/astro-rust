@@ -65,7 +65,7 @@ Returns the **apparent position angle** of a binary star
 **/
 pub fn apprnt_pos_angl(asc_node_pos: f64, true_anom: f64, periastron_long: f64, i: f64) -> f64 {
     let x = ((true_anom + periastron_long).sin() * i.cos()).atan2((true_anom + periastron_long).cos());
-    angle::LimitTo360(x.to_degrees() + asc_node_pos.to_degrees()).to_radians()
+    angle::limit_to_360(x.to_degrees() + asc_node_pos.to_degrees()).to_radians()
 }
 
 /**

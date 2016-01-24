@@ -5,15 +5,15 @@ use astro::*;
 
 #[test]
 fn SidrealTime() {
-    let (h1, m1, s1) = angle::HMSFrmDeg(time::MnSidr(2446895.5).to_degrees());
-    assert_eq!((h1, m1, util::RoundUptoDigits(s1, 4)), (13, 10, 46.3668));
+    let (h1, m1, s1) = angle::hms_frm_deg(time::mn_sidr(2446895.5).to_degrees());
+    assert_eq!((h1, m1, util::round_upto_digits(s1, 4)), (13, 10, 46.3668));
 
-    let (h2, m2, s2) = angle::HMSFrmDeg(AppSidr!(2446895.5).to_degrees());
-    assert_eq!((h2, m2, util::RoundUptoDigits(s2, 4)), (13, 10, 46.1351));
+    let (h2, m2, s2) = angle::hms_frm_deg(apprnt_sidr!(2446895.5).to_degrees());
+    assert_eq!((h2, m2, util::round_upto_digits(s2, 4)), (13, 10, 46.1351));
 }
 
 #[test]
-fn JulDay() {
+fn julian_day() {
 
     let mut date = time::Date{year: 0, month: 0,
                               decimal_day: 0.0,
@@ -46,7 +46,7 @@ fn JulDay() {
             time::CalType::Gregorian => time::CalType::Gregorian,
             time::CalType::Julian    => time::CalType::Julian,
         };
-        assert_eq!(time::JulDay(&date), date_fields.3);
+        assert_eq!(time::julian_day(&date), date_fields.3);
     }
 
 }

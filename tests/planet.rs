@@ -6,12 +6,12 @@ use astro::*;
 #[test]
 fn heliocen_pos() {
     let (mut L, mut B, mut R) = planet::heliocen_pos(&planet::Planet::Venus, 2448976.5);
-    L = util::RoundUptoDigits(L.to_degrees(), 3);
-    B = util::RoundUptoDigits(B.to_degrees(), 3);
-    R = util::RoundUptoDigits(R, 5);
+    L = util::round_upto_digits(L.to_degrees(), 3);
+    B = util::round_upto_digits(B.to_degrees(), 3);
+    R = util::round_upto_digits(R, 5);
     assert_eq!(
         (L, B, R),
-        (26.114, util::RoundUptoDigits(angle::LimitTo360(-2.6207), 3), 0.72460)
+        (26.114, util::round_upto_digits(angle::limit_to_360(-2.6207), 3), 0.72460)
     );
 }
 
@@ -26,8 +26,8 @@ fn geocen_geomet_ecl_pos() {
         -2.6207_f64.to_radians(),
         0.724603,
     );
-    R = util::RoundUptoDigits(R, 6);
-    t = util::RoundUptoDigits(t, 7);
+    R = util::round_upto_digits(R, 6);
+    t = util::round_upto_digits(t, 7);
 
     assert_eq!((R, t), (0.910845, 0.0052606));
 }
@@ -41,11 +41,11 @@ fn ecl_coords_to_FK5() {
     );
 
     assert_eq!(
-        util::RoundUptoDigits(FK5_long.to_degrees(), 5),
+        util::round_upto_digits(FK5_long.to_degrees(), 5),
         313.07686
     );
     assert_eq!(
-        util::RoundUptoDigits(FK5_lat.to_degrees(), 5),
+        util::round_upto_digits(FK5_lat.to_degrees(), 5),
         -2.08487
     );
 }
@@ -53,9 +53,9 @@ fn ecl_coords_to_FK5() {
 #[test]
 fn geocen_apprnt_ecl_pos() {
     let (mut L, mut B, mut R) = planet::geocen_apprnt_ecl_pos(&planet::Planet::Venus, 2448976.5);
-    L = util::RoundUptoDigits(angle::LimitTo360(L.to_degrees()), 2);
-    B = util::RoundUptoDigits(B.to_degrees(), 2);
-    R = util::RoundUptoDigits(R, 4);
+    L = util::round_upto_digits(angle::limit_to_360(L.to_degrees()), 2);
+    B = util::round_upto_digits(B.to_degrees(), 2);
+    R = util::round_upto_digits(R, 4);
 
     assert_eq!((L, B, R), (313.08, -2.08, 0.9109));
 }

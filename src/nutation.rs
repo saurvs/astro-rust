@@ -86,13 +86,13 @@ pub fn nutation(JD: f64) -> (f64, f64) {
         terms( 2, -1,  0,  2,  2,      -3,     0,     0,   0),
     ];
 
-    let t = time::JulCent(JD);
+    let t = time::julian_cent(JD);
 
-    let M1 = angle::LimitTo360((134.96298 + t*(477198.867398 + t*(0.0086972 +  t/56250.0)))).to_radians();
-    let M  = angle::LimitTo360((357.52772 + t*(35999.05034   - t*(0.0001603 + t/300000.0)))).to_radians();
-    let D  = angle::LimitTo360((297.85036 + t*(445267.11148  - t*(0.0019142 - t/189474.0)))).to_radians();
-    let F  = angle::LimitTo360((93.27191  + t*(483202.017538 - t*(0.0036825 - t/327270.0)))).to_radians();
-    let om = angle::LimitTo360((125.04452 - t*(1934.136261   - t*(0.0020708 + t/450000.0)))).to_radians();
+    let M1 = angle::limit_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 +  t/56250.0)))).to_radians();
+    let M  = angle::limit_to_360((357.52772 + t*(35999.05034   - t*(0.0001603 + t/300000.0)))).to_radians();
+    let D  = angle::limit_to_360((297.85036 + t*(445267.11148  - t*(0.0019142 - t/189474.0)))).to_radians();
+    let F  = angle::limit_to_360((93.27191  + t*(483202.017538 - t*(0.0036825 - t/327270.0)))).to_radians();
+    let om = angle::limit_to_360((125.04452 - t*(1934.136261   - t*(0.0020708 + t/450000.0)))).to_radians();
 
     let mut nut_in_long = 0.0;
     let mut nut_in_obl = 0.0;

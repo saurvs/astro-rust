@@ -17,7 +17,7 @@ Returns the **equatorial horizontal parallax** of a celestial body
 * ```dist_to_earth```: The celestial body's distance to the Earth *| in AU*
 **/
 pub fn eq_hz_parallax(dist_to_earth: f64) -> f64 {
-    (angle::DegFrmDMS(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
+    (angle::deg_frm_dms(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
 }
 
 /**
@@ -101,7 +101,7 @@ pub fn topopcen_ecl_coords(
     let geocen_semdia_1 = (ecl_long_1.cos()*ecl_lat_1.cos()*geocen_semdia.sin() / N).asin();
 
     (coords::EclPoint{
-         long: angle::LimitTo360(ecl_long_1.to_degrees()).to_radians(),
+         long: angle::limit_to_360(ecl_long_1.to_degrees()).to_radians(),
          lat: ecl_lat_1
      },
       geocen_semdia_1

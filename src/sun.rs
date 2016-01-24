@@ -14,7 +14,7 @@ Returns the Sun's **equatorial semidiameter**
 * ```sun_earth_dist```: Sun-Earth distance *| in AU*
 **/
 pub fn semdiameter(sun_earth_dist: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 959.63) / sun_earth_dist
+    angle::deg_frm_dms(0, 0, 959.63) / sun_earth_dist
 }
 
 /**
@@ -35,8 +35,8 @@ referred to the **mean equinox of the date**
 pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
     let (L, B, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
-    let L_sun = angle::LimitTo360((L + std::f64::consts::PI).to_degrees());
-    let B_sun = angle::LimitTo360(-B.to_degrees());
+    let L_sun = angle::limit_to_360((L + std::f64::consts::PI).to_degrees());
+    let B_sun = angle::limit_to_360(-B.to_degrees());
 
     let ecl_point = coords::EclPoint {
         long: L_sun.to_radians(),
@@ -70,11 +70,11 @@ converted to the **FK5** system
                  of the date
 **/
 pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
-    let JC = time::JulCent(JD);
+    let JC = time::julian_cent(JD);
     let lambda1 = ecl_long - JC*(1.397 + JC*0.00031).to_radians();
 
-    (ecl_long - angle::DegFrmDMS(0, 0, 0.09033).to_radians(),
-     ecl_lat  + angle::DegFrmDMS(0, 0, 0.03916).to_radians()*(lambda1.cos() - lambda1.sin()))
+    (ecl_long - angle::deg_frm_dms(0, 0, 0.09033).to_radians(),
+     ecl_lat  + angle::deg_frm_dms(0, 0, 0.03916).to_radians()*(lambda1.cos() - lambda1.sin()))
 }
 
 //#[macro_export]
@@ -88,14 +88,6 @@ macro_rules! ApprntGeocenEclPos {
 Returns the Sun's **geocentric rectangular coordinates**,
 referred to the **mean equinox of the date**
 
-* The positive x-axis is directed towards the Earth's vernal equinox
-(0 degrees longitude)
-* The positive y-axis lies in the plane of the Earth's equator and is
-directed towards 90 degrees longitude
-* The positive z-axis is directed towards the Earth's northern
-celestial pole
-* The unit for all three axes is AU
-
 # Returns
 
 ```(x, y z)```
@@ -103,6 +95,13 @@ celestial pole
 * ```x```: The X coordinate *| in AU*
 * ```y```: The Y coordinate *| in AU*
 * ```z```: The Z coordinate *| in AU*
+
+* The positive x-axis is directed towards the Earth's vernal equinox
+(0 degrees longitude)
+* The positive y-axis lies in the plane of the Earth's equator and is
+directed towards 90 degrees longitude
+* The positive z-axis is directed towards the Earth's northern
+celestial pole
 
 # Arguments
 
@@ -148,7 +147,7 @@ of the Sun
 * ```oblq_eclip```: True obliquity of the ecliptic *| in radians*
 **/
 pub fn ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
-    let theta = angle::LimitTo360((JD - 2398220.0) * (360.0/25.38)).to_radians();
+    let theta = angle::limit_to_360((JD - 2398220.0) * (360.0/25.38)).to_radians();
     let I = 7.25_f64.to_radians();
     let K = (73.6667 + 1.3958333*((JD - 2396758.0) / 36525.0)).to_radians();
 
@@ -163,7 +162,7 @@ pub fn ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64
 
     let B_0 = (sin_z * I.sin()).asin();
     let nu = (-sin_z * I.cos()).atan2(-cos_z);
-    let L_0 = angle::LimitTo360((nu - theta).to_degrees()).to_radians();
+    let L_0 = angle::limit_to_360((nu - theta).to_degrees()).to_radians();
 
     (x + y, B_0, L_0)
 }

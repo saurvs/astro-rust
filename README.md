@@ -18,7 +18,7 @@ Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
 
-These include things such as  planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, finding the elements of rings of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit for bodies on the celestial sphere. Even Pluto's position and orbit can be calculated accurately.
+It include things such as  planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, finding the elements of rings of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit for bodies on the celestial sphere. Even Pluto's position and orbit can be calculated accurately.
 
 ## Usage
 
@@ -34,25 +34,26 @@ These include things such as  planetary, solar and lunar positioning, correction
   // time of the Apollo 11 moon landing
 
   let day_of_month = time::DayOfMonth{day: 20,
-				 			          hr : 20, // UTC
+				 			          hr : 20,
                                       min: 18,
-                                      sec: 4.0};
+                                      sec: 4.0,
+                                      time_zone: 0.0 // at Greenwhich
+                                     };
 
   let date = time::Date{year       : 1969,
                         month      : 7, // July
-                        decimal_day: time::DecimalDay(&day_of_month),
+                        decimal_day: time::decimal_day(&day_of_month),
                         cal_type   : time::CalType::Gregorian};
 
-  let julian_day = time::JulDay(&date);
+  let julian_day = time::julian_day(&date);
 
   // to be super accurate, get the Julian Ephemeris day;
   // calculate delta T, or get an observed value of
   // delta T from the Astronomical Almanac
 
-  let deltaT = time::ApproxDelT(date.year, date.month);
+  let deltaT = time::approx_delta_t(date.year, date.month);
 
-  let julian_ephm_day = time::JulEphmDay(julian_day, deltaT);
-
+  let julian_ephm_day = time::julian_emph_day(julian_day, deltaT);
   ```
 
 * Find the *geocentric* ecliptic coordinates and radius vector of the Sun
@@ -84,13 +85,13 @@ These include things such as  planetary, solar and lunar positioning, correction
 	// geodesic distance between the Observatoire de Paris and
     // the US Naval Observatory at Washington DC
 
-    let paris = coords::GeographPoint{long: angle::DegFrmDMS(-2, 20, 14.0).to_radians(),
-                                      lat : angle::DegFrmDMS(48, 50, 11.0).to_radians()};
+    let paris = coords::GeographPoint{long: angle::deg_frm_dms(-2, 20, 14.0).to_radians(),
+                                      lat : angle::deg_frm_dms(48, 50, 11.0).to_radians()};
 
-    let washington = coords::GeographPoint{long: angle::DegFrmDMS(77,  3, 56.0).to_radians(),
-                                           lat : angle::DegFrmDMS(38, 55, 17.0).to_radians()};
+    let washington = coords::GeographPoint{long: angle::deg_frm_dms(77,  3, 56.0).to_radians(),
+                                           lat : angle::deg_frm_dms(38, 55, 17.0).to_radians()};
 
-	// angle::DegFrmDMS() converts degrees expressed in degrees,
+	// angle::deg_frm_dms() converts degrees expressed in degrees,
 	// minutes and seconds into degrees with decimals
 
     let distance = planet::earth::geodesic_dist(&paris, &washington); // in meters
@@ -123,8 +124,8 @@ These include things such as  planetary, solar and lunar positioning, correction
   ```rust
 	// equatorial coordinates of the Nova Serpentis 1978
 
-    let right_ascension = angle::DegFrmHMS(17, 48, 59.74).to_radians();
-    let declination = angle::DegFrmDMS(-14, 43, 8.2).to_radians();
+    let right_ascension = angle::deg_frm_hms(17, 48, 59.74).to_radians();
+    let declination = angle::deg_frm_dms(-14, 43, 8.2).to_radians();
 
     // convert to galactic coordinates
 
@@ -200,9 +201,9 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 **Saturn**
 
-* elements of the ring
 * rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
-Titan, Hyperion,and Iapetus
+Titan, Hyperion, and Iapetus, with respect to Saturn
+* elements of the ring
 
 **Transit**
 

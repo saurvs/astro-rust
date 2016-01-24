@@ -120,7 +120,7 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
     let D_e = ( - beta0.sin()*beta.sin()
                 - beta0.cos()*beta.cos()*(lambda0 - lambda).cos()).asin();
 
-    let JC = time::JulCent(JD);
+    let JC = time::julian_cent(JD);
     let N = (49.5581 + 0.7721*JC).to_radians();
 
     let l1 = l - (0.00697/r).to_radians();
@@ -128,7 +128,7 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
     let D_s = ( - beta0.sin()*b1.sin()
                 - beta0.cos()*b1.cos()*(lambda0 - l1).cos()).asin();
 
-    let W = angle::LimitTo360(  11.504
+    let W = angle::limit_to_360(  11.504
                               + 350.89200025*(JD - light_time - 2433282.5)
                              ).to_radians();
 
@@ -158,7 +158,7 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
     let P = (dec01.cos() * (asc01 - asc1).sin())
             .atan2(dec01.sin()*dec1.cos() - dec01.cos()*dec1.sin()*(asc01 - asc1).cos());
 
-    let d = angle::DegFrmDMS(0, 0, 9.36).to_radians() / mars_earth_dist;
+    let d = angle::deg_frm_dms(0, 0, 9.36).to_radians() / mars_earth_dist;
     let k = planet::illum_frac_frm_dist(r, mars_earth_dist, R);
     let q = (1.0 - k)*d;
 

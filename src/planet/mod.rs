@@ -126,15 +126,15 @@ pub fn semdiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
     let mut s: f64;
 
     match planet {
-        &Planet::Mercury => s = angle::DegFrmDMS(0, 0, 3.36),
-        &Planet::Venus => s = angle::DegFrmDMS(0, 0, 8.41),
+        &Planet::Mercury => s = angle::deg_frm_dms(0, 0, 3.36),
+        &Planet::Venus => s = angle::deg_frm_dms(0, 0, 8.41),
         &Planet::Earth => panic!("Planet::Earth was passed to the function
                                  planet::Semidiameter()."),
-        &Planet::Mars => s = angle::DegFrmDMS(0, 0, 4.68),
+        &Planet::Mars => s = angle::deg_frm_dms(0, 0, 4.68),
         &Planet::Jupiter => s = jupiter::eq_semdiameter(1.0),
         &Planet::Saturn => s = saturn::eq_semdiameter(1.0),
-        &Planet::Uranus => s = angle::DegFrmDMS(0, 0, 35.02),
-        &Planet::Neptune => s = angle::DegFrmDMS(0, 0, 33.5),
+        &Planet::Uranus => s = angle::deg_frm_dms(0, 0, 35.02),
+        &Planet::Neptune => s = angle::deg_frm_dms(0, 0, 33.5),
     };
 
     s / planet_earth_dist
@@ -166,7 +166,7 @@ referred to the **mean equinox of the date**
 * ```JD```: Julian (Ephemeris) day
 **/
 pub fn orb_elements(planet: &Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
-    let T = time::JulCent(JD);
+    let T = time::julian_cent(JD);
     let TT = T * T;
     let TTT = TT * T;
 
@@ -244,13 +244,13 @@ pub fn orb_elements(planet: &Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, 
         },
     };
 
-    (angle::LimitTo360(L).to_radians(),
+    (angle::limit_to_360(L).to_radians(),
      a, e,
-     angle::LimitTo360(i).to_radians(),
-     angle::LimitTo360(omega).to_radians(),
-     angle::LimitTo360(pi).to_radians(),
-     angle::LimitTo360(L - pi).to_radians(),
-     angle::LimitTo360(pi - omega).to_radians()
+     angle::limit_to_360(i).to_radians(),
+     angle::limit_to_360(omega).to_radians(),
+     angle::limit_to_360(pi).to_radians(),
+     angle::limit_to_360(L - pi).to_radians(),
+     angle::limit_to_360(pi - omega).to_radians()
     )
 }
 
@@ -288,7 +288,7 @@ pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
     let mut B = 0.0;
     let mut R = 0.0;
 
-    let JM = time::JulMill(JD);
+    let JM = time::julian_mill(JD);
 
     let mut n: u8 = 1; // L, then B, then R
     for i in VSOPD87_Terms.iter() { // L or B or R
@@ -315,8 +315,8 @@ pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
 
     }
 
-    L = angle::LimitTo360(L.to_degrees()).to_radians();
-    B = angle::LimitTo360(B.to_degrees()).to_radians();
+    L = angle::limit_to_360(L.to_degrees()).to_radians();
+    B = angle::limit_to_360(B.to_degrees()).to_radians();
 
     (L, B, R)
 }
@@ -487,11 +487,11 @@ system
                 referred to the mean equinox of the date *| in radians*
 **/
 pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
-    let JC = time::JulCent(JD);
+    let JC = time::julian_cent(JD);
     let lambda1 = ecl_long - JC*(1.397 + JC*0.00031).to_radians();
-    let x = angle::DegFrmDMS(0, 0, 0.03916).to_radians();
+    let x = angle::deg_frm_dms(0, 0, 0.03916).to_radians();
 
-    let ecl_long_correction = - angle::DegFrmDMS(0, 0, 0.09033).to_radians()
+    let ecl_long_correction = - angle::deg_frm_dms(0, 0, 0.09033).to_radians()
                               + x*(lambda1.cos() + lambda1.sin())*ecl_lat.tan();
 
     (ecl_long + ecl_long_correction,
@@ -526,7 +526,7 @@ pub fn geocen_eq_pos(X: f64, Y: f64, Z: f64, semimaj_axis: f64, e: f64, i: f64, 
     let nu = Y + y;
     let et = Z + z;
 
-    let asc = angle::LimitTo360(nu.atan2(xi).to_degrees()).to_radians();
+    let asc = angle::limit_to_360(nu.atan2(xi).to_degrees()).to_radians();
     let dec = et.atan2((xi*xi + nu*nu).sqrt());
     let dist = (x*x + y*y + z*z).sqrt();
 

@@ -1,5 +1,7 @@
 //! Jupiter
 
+pub mod moon;
+
 use angle;
 use ecliptic;
 use nutation;
@@ -17,7 +19,7 @@ Returns Jupiter's **equatorial semidiameter**
 * ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
 **/
 pub fn eq_semdiameter(jup_earth_dist: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 98.44) / jup_earth_dist
+    angle::deg_frm_dms(0, 0, 98.44) / jup_earth_dist
 }
 
 /**
@@ -32,7 +34,7 @@ Returns Jupiter's **polar semidiameter**
 * ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
 **/
 pub fn pol_semdiameter(jup_earth_dist: f64) -> f64 {
-    angle::DegFrmDMS(0, 0, 92.06) / jup_earth_dist
+    angle::deg_frm_dms(0, 0, 92.06) / jup_earth_dist
 }
 
 /**
@@ -55,8 +57,8 @@ pub fn ephemeris(JD: f64,
     let asc0 = (268.0 + 0.1061*T1).to_radians();
     let dec0 = (64.5  - 0.0164*T1).to_radians();
 
-    let W1 = angle::LimitTo360(17.710 + 877.90003539*d).to_radians();
-    let W2 = angle::LimitTo360(16.838 + 870.27003539*d).to_radians();
+    let W1 = angle::limit_to_360(17.710 + 877.90003539*d).to_radians();
+    let W2 = angle::limit_to_360(16.838 + 870.27003539*d).to_radians();
 
     let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
@@ -98,8 +100,8 @@ pub fn ephemeris(JD: f64,
 
     let D_e = (-dec0.sin()*dec.sin() - dec0.cos()*dec.cos()*(asc0 - asc).cos()).asin();
 
-    let mut w1 = angle::LimitTo360(W1.to_degrees() - zeta.to_degrees() - 5.07033*jup_earth_dist);
-    let mut w2 = angle::LimitTo360(W2.to_degrees() - zeta.to_degrees() - 5.02626*jup_earth_dist);
+    let mut w1 = angle::limit_to_360(W1.to_degrees() - zeta.to_degrees() - 5.07033*jup_earth_dist);
+    let mut w2 = angle::limit_to_360(W2.to_degrees() - zeta.to_degrees() - 5.02626*jup_earth_dist);
 
     let mut C = 57.2958 * (2.0*r*jup_earth_dist + R*R - r*r - jup_earth_dist*jup_earth_dist)
                 / (4.0*r*jup_earth_dist);
@@ -131,20 +133,4 @@ pub fn ephemeris(JD: f64,
             .atan2(dec01.sin()*dec1.cos() - dec01.cos()*dec1.sin()*(asc01 - asc1).cos());
 
     (D_e, D_s, w1, w2, P)
-}
-
-fn Io() {
-
-}
-
-fn Europa() {
-
-}
-
-fn Ganymede() {
-
-}
-
-fn Callisto() {
-
 }

@@ -68,7 +68,7 @@ pub fn elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
         i += 1;
     }
 
-    let JC = time::JulCent(JD);
+    let JC = time::julian_cent(JD);
     let inc = inc(JC);
     let ascend_node = ascend_node(JC);
 
@@ -76,7 +76,7 @@ pub fn elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
     let B = (  inc.sin() * beta.cos() * (lambda - ascend_node).sin()
              - inc.cos() * beta.sin()
             ).asin();
-    let semi_maj = angle::DegFrmDMS(0, 0, 375.35).to_radians() / saturn_earth_dist;
+    let semi_maj = angle::deg_frm_dms(0, 0, 375.35).to_radians() / saturn_earth_dist;
     let semi_min = semi_maj * B.abs().sin();
 
     let N = (113.6655 + 0.8771*JC).to_radians();

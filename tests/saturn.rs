@@ -8,14 +8,14 @@ fn ring_elements() {
     let (mut B, mut B1, mut P, mut deltaU, mut a, mut b) = planet::saturn::ring::elements(
         2448972.50068,
 
-        angle::DegFrmDMS(0, 0, 16.86).to_radians(),
+        angle::deg_frm_dms(0, 0, 16.86).to_radians(),
         23.43971_f64.to_radians()
     );
 
-    B = util::RoundUptoDigits(B.to_degrees(), 3);
-    B1 = util::RoundUptoDigits(B1.to_degrees(), 3);
-    P = util::RoundUptoDigits(angle::LimitTo360(P.to_degrees()), 3);
-    deltaU = util::RoundUptoDigits(deltaU.to_degrees(), 3);
+    B = util::round_upto_digits(B.to_degrees(), 3);
+    B1 = util::round_upto_digits(B1.to_degrees(), 3);
+    P = util::round_upto_digits(angle::limit_to_360(P.to_degrees()), 3);
+    deltaU = util::round_upto_digits(deltaU.to_degrees(), 3);
 }
 
 #[test]
@@ -38,8 +38,8 @@ fn moons() {
             &tuple.2
         );
 
-        assert_eq!(util::RoundUptoDigits(X, 3), tuple.0);
-        assert_eq!(util::RoundUptoDigits(Y, 3), tuple.1);
+        assert_eq!(util::round_upto_digits(X, 3), tuple.0);
+        assert_eq!(util::round_upto_digits(Y, 3), tuple.1);
     }
 
 }

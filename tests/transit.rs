@@ -4,7 +4,7 @@ use astro::*;
 
 #[test]
 fn time() {
-    let deltaT = time::ApproxDelT(1988, 3);println!("deltaT = {:?}", deltaT);
+    let deltaT = time::approx_delta_t(1988, 3);
     let eq_point1 = coords::EqPoint{
         asc: 40.68021_f64.to_radians(),
         dec: 18.04761_f64.to_radians()

@@ -63,7 +63,7 @@ pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
     let (lambda0, beta0) = precess::precess_ecl_coords(
         lambda0, beta0,
         JD,
-        time::JulDay(&time::Date{year: 1950, month: 1, decimal_day: 1.5, cal_type: time::CalType::Gregorian})
+        time::julian_day(&time::Date{year: 1950, month: 1, decimal_day: 1.5, cal_type: time::CalType::Gregorian})
     );
 
     info.lambda0 = lambda0;

@@ -33,12 +33,12 @@ the equatorial coordinates to the new epoch.
             the old epoch.
 **/
 pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
-    let JC = time::JulCent(JD);
+    let JC = time::julian_cent(JD);
 
-    let m = (     angle::DegFrmHMS(0, 0, 3.07496)
-             + JC*angle::DegFrmHMS(0, 0, 0.00186)).to_radians();
-    let n = (     angle::DegFrmHMS(0, 0, 1.33621)
-             - JC*angle::DegFrmHMS(0, 0, 0.00057)).to_radians();
+    let m = (     angle::deg_frm_hms(0, 0, 3.07496)
+             + JC*angle::deg_frm_hms(0, 0, 0.00186)).to_radians();
+    let n = (     angle::deg_frm_hms(0, 0, 1.33621)
+             - JC*angle::deg_frm_hms(0, 0, 0.00057)).to_radians();
 
     (m + n*asc.sin()*dec.tan(), n*asc.cos())
 }
@@ -63,25 +63,25 @@ Returns **equatorial** coordinates **reduced** to a different epoch
 * ```JD2```: Julian (Ephemeris) day corresponding to the new epoch
 **/
 pub fn precess_eq_coords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
-    let T = time::JulCent(JD1);
+    let T = time::julian_cent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
-    let x = t * (angle::DegFrmDMS(0, 0, 2306.2181) +
-                  T * (angle::DegFrmDMS(0, 0, 1.39656) -
-                       T*angle::DegFrmDMS(0, 0, 0.000139)));
-    let xi = (x + t*t*((angle::DegFrmDMS(0, 0, 0.30188) -
-                       T*angle::DegFrmDMS(0, 0, 0.000344)) +
-                      t*angle::DegFrmDMS(0, 0, 0.017998))).to_radians();
+    let x = t * (angle::deg_frm_dms(0, 0, 2306.2181) +
+                  T * (angle::deg_frm_dms(0, 0, 1.39656) -
+                       T*angle::deg_frm_dms(0, 0, 0.000139)));
+    let xi = (x + t*t*((angle::deg_frm_dms(0, 0, 0.30188) -
+                       T*angle::deg_frm_dms(0, 0, 0.000344)) +
+                      t*angle::deg_frm_dms(0, 0, 0.017998))).to_radians();
 
-    let zeta = (x + t*t*((angle::DegFrmDMS(0, 0, 1.09468) -
-                       T*angle::DegFrmDMS(0, 0, 0.000066)) +
-                      t*angle::DegFrmDMS(0, 0, 0.018203))).to_radians();
+    let zeta = (x + t*t*((angle::deg_frm_dms(0, 0, 1.09468) -
+                       T*angle::deg_frm_dms(0, 0, 0.000066)) +
+                      t*angle::deg_frm_dms(0, 0, 0.018203))).to_radians();
 
-    let y = T * angle::DegFrmDMS(0, 0, 0.000217);
-    let theta = (t * (angle::DegFrmDMS(0, 0, 2004.3109) +
-                   T * (angle::DegFrmDMS(0, 0, 0.8533) - y) -
-                  t * ((angle::DegFrmDMS(0, 0, 0.42665) + y) +
-                       t*angle::DegFrmDMS(0, 0, 0.041833)))).to_radians();
+    let y = T * angle::deg_frm_dms(0, 0, 0.000217);
+    let theta = (t * (angle::deg_frm_dms(0, 0, 2004.3109) +
+                   T * (angle::deg_frm_dms(0, 0, 0.8533) - y) -
+                  t * ((angle::deg_frm_dms(0, 0, 0.42665) + y) +
+                       t*angle::deg_frm_dms(0, 0, 0.041833)))).to_radians();
 
     let A = old_dec.cos() * (old_asc + xi).sin();
     let B = theta.cos()*old_dec.cos()*(old_asc + xi).cos() - theta.sin()*old_dec.sin();
@@ -114,13 +114,13 @@ pub fn precess_eq_coords_FK5(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> 
     let T = (JD1 - 2415020.3135) / 36524.2199;
     let t = (JD2 - JD1) / 36524.2199;
 
-    let xi = t*(angle::DegFrmDMS(0, 0, 2304.25) + T*angle::DegFrmDMS(0, 0, 1.396)
-                + t*(angle::DegFrmDMS(0, 0, 0.302) + t*angle::DegFrmDMS(0, 0, 0.018)));
+    let xi = t*(angle::deg_frm_dms(0, 0, 2304.25) + T*angle::deg_frm_dms(0, 0, 1.396)
+                + t*(angle::deg_frm_dms(0, 0, 0.302) + t*angle::deg_frm_dms(0, 0, 0.018)));
 
-    let zeta = xi + t*t*(angle::DegFrmDMS(0, 0, 0.791) + t*angle::DegFrmDMS(0, 0, 0.001));
+    let zeta = xi + t*t*(angle::deg_frm_dms(0, 0, 0.791) + t*angle::deg_frm_dms(0, 0, 0.001));
 
-    let theta = t*(angle::DegFrmDMS(0, 0, 2004.682) - T*angle::DegFrmDMS(0, 0, 0.853)
-                   - t*(angle::DegFrmDMS(0, 0, 0.426) + t*angle::DegFrmDMS(0, 0, 0.042)));
+    let theta = t*(angle::deg_frm_dms(0, 0, 2004.682) - T*angle::deg_frm_dms(0, 0, 0.853)
+                   - t*(angle::deg_frm_dms(0, 0, 0.426) + t*angle::deg_frm_dms(0, 0, 0.042)));
 
 
     let A = old_dec.cos() * (old_asc + xi).sin();
@@ -148,7 +148,7 @@ Returns **ecliptic** coordinates **reduced** to a different epoch
 * ```JD_new```: Julian (Ephemeris) day corresponding to the new epoch
 **/
 pub fn precess_ecl_coords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f64) -> (f64, f64) {
-    let T = time::JulCent(JD_old);
+    let T = time::julian_cent(JD_old);
     let t = (JD_new - JD_old) / 36525.0;
 
     let (nu, Pi, rho) = angles_for_ecl_change(t, T);
@@ -161,23 +161,23 @@ pub fn precess_ecl_coords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f64)
 }
 
 fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
-    let x = T * angle::DegFrmDMS(0, 0, 0.000598);
-    let nu = (t * (angle::DegFrmDMS(0, 0, 47.0029) -
-                   T * (angle::DegFrmDMS(0, 0, 0.06603) - x) +
-                  t * ((angle::DegFrmDMS(0, 0, -0.03302) + x) +
-                       t * angle::DegFrmDMS(0, 0, 0.00006)))).to_radians();
+    let x = T * angle::deg_frm_dms(0, 0, 0.000598);
+    let nu = (t * (angle::deg_frm_dms(0, 0, 47.0029) -
+                   T * (angle::deg_frm_dms(0, 0, 0.06603) - x) +
+                  t * ((angle::deg_frm_dms(0, 0, -0.03302) + x) +
+                       t * angle::deg_frm_dms(0, 0, 0.00006)))).to_radians();
 
-    let Pi = (174.876384 + T * (angle::DegFrmDMS(0, 0, 3289.4789) +
-                              T * angle::DegFrmDMS(0, 0, 0.60622)) -
-             t * ((angle::DegFrmDMS(0, 0, 869.8089) +
-                   T * angle::DegFrmDMS(0, 0, 0.50491)) -
-                  t * angle::DegFrmDMS(0, 0, 0.03536))).to_radians();
+    let Pi = (174.876384 + T * (angle::deg_frm_dms(0, 0, 3289.4789) +
+                              T * angle::deg_frm_dms(0, 0, 0.60622)) -
+             t * ((angle::deg_frm_dms(0, 0, 869.8089) +
+                   T * angle::deg_frm_dms(0, 0, 0.50491)) -
+                  t * angle::deg_frm_dms(0, 0, 0.03536))).to_radians();
 
-    let y = T * angle::DegFrmDMS(0, 0, 0.000042);
-    let rho = (t * (angle::DegFrmDMS(0, 0, 5029.0966) +
-                  T * (angle::DegFrmDMS(0, 0, 2.22226) - y) +
-                 t * ((angle::DegFrmDMS(0, 0, 1.11113) - y) -
-                      t * angle::DegFrmDMS(0, 0, 0.000006)))).to_radians();
+    let y = T * angle::deg_frm_dms(0, 0, 0.000042);
+    let rho = (t * (angle::deg_frm_dms(0, 0, 5029.0966) +
+                  T * (angle::deg_frm_dms(0, 0, 2.22226) - y) +
+                 t * ((angle::deg_frm_dms(0, 0, 1.11113) - y) -
+                      t * angle::deg_frm_dms(0, 0, 0.000006)))).to_radians();
 
     (nu, Pi, rho)
 }
@@ -203,7 +203,7 @@ Returns **orbital elements reduced** to a different equinox
 **/
 pub fn precess_orb_elements(old_inc: f64, old_arg_perih: f64, old_long_ascend_node: f64,
                          JD1: f64, JD2: f64) -> (f64, f64, f64) {
-    let T = time::JulCent(JD1);
+    let T = time::julian_cent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
     let (nu, Pi, rho) = angles_for_ecl_change(t, T);

@@ -3,7 +3,6 @@
 use angle;
 use ecliptic;
 use nutation;
-use util;
 
 /// Represents a calendar type
 pub enum CalType {
@@ -44,34 +43,37 @@ pub struct DayOfMonth {
     /// Second of minute
     ///
     /// range: *0.0 - 60.0*
-    pub sec: f64
+    pub sec: f64,
+    /// Time zone offset *| in decimal days*
+    pub time_zone: f64,
 }
 
 /**
-Returns the decimal day for a ```DayOfMonth```
+Returns **decimal day** for a ```DayOfMonth```
 
-* ```day_of_month```: A ```day_of_month``` struct
+* ```day_of_month```: A ```DayOfMonth``` struct
 **/
-pub fn DecimalDay(day: &DayOfMonth) -> f64 {
+pub fn decimal_day(day: &DayOfMonth) -> f64 {
       (day.day as f64)
     + (day.hr as f64)/24.0
     + (day.min as f64)/60.0
     +  day.sec/60.0
+    -  day.time_zone/24.0
 }
 
 /**
-Returns the decimal year for a ```Date```
+Returns **decimal year** for a ```Date```
 
-* ```date```: A ```date``` struct
+* ```date```: A ```Date``` struct
 **/
-pub fn DecimalYear(date: &Date) -> f64 {
+pub fn decimal_year(date: &Date) -> f64 {
     let mut y = 0;
     let mut days = 365.0;
 
     if date.month > 1 { y += 31; }
     if date.month > 2 {
         y += 28;
-        if IsLeapYear(date.year, &date.cal_type) {
+        if is_leap_year(date.year, &date.cal_type) {
             y += 1;
             days += 1.0;
         }
@@ -90,16 +92,16 @@ pub fn DecimalYear(date: &Date) -> f64 {
 }
 
 /**
-Checks if a year is a leap year
+Checks if a year is a **leap year**
 
 # Arguments
 
 * ```year```: Year
 * ```cal_type```: ```CalType``` enum
 **/
-pub fn IsLeapYear(year: i32, cal_type: &CalType) -> (bool) {
+pub fn is_leap_year(year: i32, cal_type: &CalType) -> (bool) {
     match cal_type {
-        &CalType::Julian => year % 4 == 0,
+        &CalType::Julian    => year % 4 == 0,
         &CalType::Gregorian => {
             if year % 100 == 0 { year % 400 == 0 }
             else               { year % 4 == 0   }
@@ -110,35 +112,35 @@ pub fn IsLeapYear(year: i32, cal_type: &CalType) -> (bool) {
 }
 
 /**
-Returns the Julian century for a Julian day
+Returns Julian century for a Julian day
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn JulCent(JD: f64) -> f64 {
+pub fn julian_cent(JD: f64) -> f64 {
     (JD - 2451545.0) / 36525.0
 }
 
 /**
-Returns the Julian millennium for a Julian day
+Returns Julian millennium for a Julian day
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn JulMill(JD: f64) -> f64 {
+pub fn julian_mill(JD: f64) -> f64 {
     (JD - 2451545.0) / 365250.0
 }
 
 /**
-Returns the Julian day from a date
+Returns Julian day for a ```Date```
 
 # Arguments
 
-```date```: A ```date``` struct
+```date```: A ```Date``` struct
 **/
-pub fn JulDay(date: &Date) -> f64 {
+pub fn julian_day(date: &Date) -> f64 {
     let mut y = date.year;
     let mut m = date.month;
     if m == 1 || m == 2 {
@@ -146,14 +148,14 @@ pub fn JulDay(date: &Date) -> f64 {
         m += 12;
     }
 
-    let a = util::int((y as f64) / 100.0) as f64;
+    let a = ((y as f64) / 100.0).floor();
     let b = match date.cal_type {
-        CalType::Gregorian => 2.0 - a + (util::int(a/4.0) as f64),
+        CalType::Gregorian => 2.0 - a + (a/4.0).floor(),
         CalType::Julian    => 0.0,
     };
 
-      (util::int(365.25  * ((y as f64) + 4716.0)) as f64)
-    + (util::int(30.6001 * ((m as f64) + 1.0)) as f64)
+      (365.25  * ((y as f64) + 4716.0)).floor()
+    + (30.6001 * ((m as f64) + 1.0   )).floor()
     + (date.decimal_day as f64)
     + (b as f64)
     - 1524.5
@@ -165,14 +167,14 @@ Returns the Julian Ephemeris day
 # Arguments
 
 * ```JD```: Julian day
-* ```delT```: Delta T
+* ```delta_t```: Delta T
 **/
-pub fn JulEphmDay(JD: f64, delT: f64) -> f64 {
-    delT/86400.0 + JD
+pub fn julian_emph_day(JD: f64, delta_t: f64) -> f64 {
+    delta_t/86400.0 + JD
 }
 
 /**
-Returns a ```Date``` equivalent to a given Julian day
+Returns a year, month and decimal day equivalent to a given Julian day
 
 # Returns
 
@@ -186,9 +188,9 @@ Returns a ```Date``` equivalent to a given Julian day
 
 ```JD```: Julian Day. **Can't be a negative value.**
 **/
-pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
+pub fn date_frm_julian_day(mut JD: f64) -> (i16, i8, f64) {
     if JD < 0.0 {
-        panic!("A negative value for JD was passed to time::DateFrmJulDay()")
+        panic!("A negative value for JD was passed to time::date_frm_julian_day()");
     }
 
     JD += 0.5;
@@ -200,16 +202,16 @@ pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
         A = Z;
     }
     else {
-        let alpha = util::int(((Z as f64) - 1867216.25) / 36524.25);
-        A = Z + 1 + alpha - util::int((alpha as f64)/4.0);
+        let alpha = (((Z as f64) - 1867216.25) / 36524.25).floor() as i64;
+        A = Z + 1 + alpha - (((alpha as f64)/4.0).floor() as i64);
     }
 
     let B = A + 1524;
-    let C = util::int(((B as f64) - 122.1) / 365.25);
-    let D = util::int(365.25 * (C as f64));
-    let E = util::int(((B - D) as f64)/30.6001);
+    let C = (((B as f64) - 122.1) / 365.25).floor()  as i64;
+    let D = (365.25 * (C as f64)).floor() as i64;
+    let E = (((B - D) as f64)/30.6001).floor() as i64;
 
-    let day = ((B - D) as f64) - (util::int(30.6001 * (E as f64)) as f64) + F;
+    let day = ((B - D) as f64) - (30.6001 * (E as f64)).floor() + F;
 
     let month = if E < 14 {
                     E - 1
@@ -226,63 +228,62 @@ pub fn DateFrmJulDay(mut JD: f64) -> (i16, i8, f64) {
                };
 
     (year as i16, month as i8, day)
-
 }
 
 /**
-Returns the apparent sidereal time from mean sidereal time
+Returns **apparent sidereal** time from the mean sidereal time
 
 # Returns
 
-* ```apparent_sidereal_time```: Apparent sidereal time *| in radians*
+* ```apprnt_sidr```: Apparent sidereal time *| in radians*
 
 # Arguments
 
-* ```mean_sidreal  ```: Mean sidereal time *| in radians*
+* ```mn_sidr  ```: Mean sidereal time *| in radians*
 * ```nut_in_long```: Nutatation in longitude *| in radians*
 * ```true_oblq```: True obliquity of the ecliptic *| in radians*
 **/
-pub fn AppSidr(mean_sidreal: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
-    mean_sidreal + nut_in_long*true_oblq.cos()
+pub fn apprnt_sidr(mn_sidr: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
+    mn_sidr + nut_in_long*true_oblq.cos()
 }
 
 /**
-Returns the apparent sidereal time for a Julian day
+Returns **apparent sidereal time** for a Julian day
 
-This functions uses J. Laskar's formula for computing
+This functions uses internally J. Laskar's formula for computing
 the obliquity of the ecliptic.
 
 # Returns
 
-* ```app_sidereal_time```: Apparent sidereal time *| in radians*
+* ```apprnt_sidr```: Apparent sidereal time *| in radians*
 
 # Arguments
 
 * ```$JD```: Julian day
 **/
 #[macro_export]
-macro_rules! AppSidr {
+macro_rules! apprnt_sidr {
     ($JD: expr) => {{
         let (nut_in_long, nut_in_oblq) = astro::nutation::nutation($JD);
         let eclip_oblq = astro::ecliptic::mn_oblq_laskar($JD);
-        astro::time::AppSidr(astro::time::MnSidr($JD), nut_in_long, eclip_oblq + nut_in_oblq)
+        astro::time::apprnt_sidr(astro::time::mn_sidr($JD), nut_in_long, eclip_oblq + nut_in_oblq)
     }};
 }
 
 /**
-Returns the mean sidereal time for a Julian day
+Returns **mean sidereal** time for a Julian day
 
 # Returns
 
-* ```mean_sidereal_time```: Mean sidereal time *| in radians*
+* ```mn_sidr```: Mean sidereal time *| in radians*
 
 # Arguments
 
 * ```JD```: Julian day
 **/
-pub fn MnSidr(JD: f64) -> f64 {
-    let JC = JulCent(JD);
-    let angle = angle::LimitTo360(  280.46061837
+pub fn mn_sidr(JD: f64) -> f64 {
+    let JC = julian_cent(JD);
+    let angle = angle::limit_to_360(  280.46061837
                                     + 360.98564736629 * (JD - 2451545.0)
                                     + JC*JC * (0.000387933 - JC/38710000.0)
                                    );
@@ -301,9 +302,9 @@ it covers a far wider time range, and is more accurate.
 # Arguments
 
 * ```year```: Year
-* ```month```: Month (*range: 1 - 12*)
+* ```month```: Month *range: 1 - 12*
 **/
-pub fn ApproxDelT(year: i32, month: u8) -> f64 {
+pub fn approx_delta_t(year: i32, month: u8) -> f64 {
     let y = (year as f64) + ((month as f64) - 0.5) / 12.0;
 
     if y < -500.0 {

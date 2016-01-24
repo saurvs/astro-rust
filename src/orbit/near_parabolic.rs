@@ -79,7 +79,7 @@ pub fn true_anom_and_rad_vec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) ->
     let mut v = 2.0 * s.atan();
     let r = q * (1.0 + ecc)/(1.0 + ecc*v.cos());
 
-    v = angle::LimitTo360(v.to_degrees()).to_radians();
+    v = angle::limit_to_360(v.to_degrees()).to_radians();
 
     (v, r)
 }

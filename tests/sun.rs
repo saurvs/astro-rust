@@ -8,9 +8,9 @@ fn ephemeris() {
                                                199.90234_f64.to_radians(),
                                                199.906759_f64.to_radians(),
                                                23.440144_f64.to_radians());
-    P = util::RoundUptoDigits(P.to_degrees(), 2);
-    B = util::RoundUptoDigits(B.to_degrees(), 2);
-    L = util::RoundUptoDigits(L.to_degrees(), 2);
+    P = util::round_upto_digits(P.to_degrees(), 2);
+    B = util::round_upto_digits(B.to_degrees(), 2);
+    L = util::round_upto_digits(L.to_degrees(), 2);
     assert_eq!((P, B, L), (26.27, 5.99, 238.63));
 }
 
@@ -19,17 +19,17 @@ fn ecl_coords_to_FK5() {
     let (FK5_long, FK5_lat) = sun::ecl_coords_to_FK5(
         2448908.5,
         199.907372_f64.to_radians(),
-        angle::DegFrmDMS(0, 0, 0.644).to_radians()
+        angle::deg_frm_dms(0, 0, 0.644).to_radians()
     );
 
     assert_eq!(
-        util::RoundUptoDigits(FK5_long.to_degrees(), 6),
+        util::round_upto_digits(FK5_long.to_degrees(), 6),
         199.907347
     );
 
-    let (d, m, s) = angle::DMSFrmDeg(FK5_lat.to_degrees());
+    let (d, m, s) = angle::dms_frm_deg(FK5_lat.to_degrees());
     assert_eq!(
-        (0, 0, util::RoundUptoDigits(s, 2)),
+        (0, 0, util::round_upto_digits(s, 2)),
         (0, 0, 0.62)
     );
 }
@@ -41,20 +41,20 @@ fn geocen_ecl_pos() {
     );
 
     assert_eq!(
-        util::RoundUptoDigits(sun_eq_point.long.to_degrees(), 6),
+        util::round_upto_digits(sun_eq_point.long.to_degrees(), 6),
         199.907297
     );
     assert_eq!(
-        util::RoundUptoDigits(sun_eq_point.lat.to_degrees(), 6),
+        util::round_upto_digits(sun_eq_point.lat.to_degrees(), 6),
         0.000207
     );
     assert_eq!(
-        util::RoundUptoDigits(rad_vec, 8),
+        util::round_upto_digits(rad_vec, 8),
         0.99760852
     );
 }
 
 #[test]
 fn carring_synd_rot() {
-    assert_eq!(util::RoundUptoDigits(sun::carring_synd_rot(1699), 2), 2444480.72);
+    assert_eq!(util::round_upto_digits(sun::carring_synd_rot(1699), 2), 2444480.72);
 }
