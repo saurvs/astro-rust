@@ -130,6 +130,7 @@ It includes things such as  planetary, solar and lunar positioning, corrections 
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
+  
 ## Algorithms
 
 For information on the modules and functions available, see the
