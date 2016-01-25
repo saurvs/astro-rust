@@ -7,7 +7,6 @@
 
 * [About](#about)
 * [Usage](#usage)
-* [Why](#why)
 * [Algorithms](#algorithms)
 * [Contributing](#contributing)
 * [References](#references)
@@ -18,7 +17,7 @@ Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
 
-It include things such as  planetary, solar and lunar positioning, corrections of precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, finding the elements of rings of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit for bodies on the celestial sphere. Even Pluto's position and orbit can be calculated accurately.
+It includes things such as  planetary, solar and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, calculating the elements for the ring of Saturn, and finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies. Even Pluto's real-time position can be calculated accurately.
 
 ## Usage
 
@@ -47,21 +46,21 @@ It include things such as  planetary, solar and lunar positioning, corrections o
 
   let julian_day = time::julian_day(&date);
 
-  // to be super accurate, get the Julian Ephemeris day;
-  // calculate delta T, or get an observed value of
-  // delta T from the Astronomical Almanac
+  // if you want to be super accurate, find the Julian Ephemeris day;
+  // calculate delta T using a built-in function, or get an observed
+  // value from the Astronomical Almanac
 
-  let deltaT = time::approx_delta_t(date.year, date.month);
+  let delta_t = time::approx_delta_t(date.year, date.month);
 
-  let julian_ephm_day = time::julian_emph_day(julian_day, deltaT);
+  let julian_ephm_day = time::julian_emph_day(julian_day, delta_t);
   ```
 
-* Find the *geocentric* ecliptic coordinates and radius vector of the Sun
+* Find the *geocentric* ecliptic point and radius vector for the Sun
   ```rust
-  let (sun_eq_point, rad_vec) = sun::geocen_ecl_pos(julian_day);
+  let (sun_ecl_point, rad_vec) = sun::geocen_ecl_pos(julian_day);
 
-  // sun_eq_point.long    - ecliptic longitude (radians)
-  // sun_eq_point.lat     - ecliptic latitude (radians)
+  // sun_ecl_point.long    - ecliptic longitude (radians)
+  // sun_ecl_point.lat     - ecliptic latitude (radians)
   // rad_vec - distance between the Sun and the Earth (AU)
   ```
 
@@ -70,7 +69,7 @@ It include things such as  planetary, solar and lunar positioning, corrections o
   let (long, lat, rad_vec) = lunar::geocen_ecl_pos(julian_day);
   ```
 
-* Find the *heliocentric* coordinates and radius vector of Jupiter
+* Find the *heliocentric* coordinates and radius vector for Jupiter
   ```rust
   let (long, lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Jupiter, julian_day);
   ```
@@ -92,7 +91,7 @@ It include things such as  planetary, solar and lunar positioning, corrections o
                                            lat : angle::deg_frm_dms(38, 55, 17.0).to_radians()};
 
 	// angle::deg_frm_dms() converts degrees expressed in degrees,
-	// minutes and seconds into degrees with decimals
+	// minutes and seconds into a fractional degree
 
     let distance = planet::earth::geodesic_dist(&paris, &washington); // in meters
   ```
@@ -108,7 +107,7 @@ It include things such as  planetary, solar and lunar positioning, corrections o
 
     let oblq_eclip = 23.4392911_f64.to_radians();
 
-    // you can also get oblq_eclip from ecliptic::MnOblq_IAU(julian_day)
+    // you can also get oblq_eclip from ecliptic::mn_oblq_IAU(julian_day)
     // for the same Julian day when the coordinates of the star
     // were observed
 
@@ -131,20 +130,14 @@ It include things such as  planetary, solar and lunar positioning, corrections o
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
-
-## Why
-
-Most of the algorithms implemented here are those described in *Astronomical Algorithms by Jean Meeus*, a book that has long been a well-respected and comprehensive source of astronomical algorithms. [Several](http://www.naughter.com/aa.html) [code libraries](http://mhuss.com/AstroLib/docs/Overview.html) based off the book have existed for a long time, being implemented in popular languages like [C/C++](http://www.projectpluto.com/source.htm), [Python](https://pypi.python.org/pypi/astronomia/0.4.1) and [Java](http://celestjava.sourceforge.net/), which have had well-tested coverage of various algorithms, although sometimes distributed with slightly restrictive licenses.
-
-This library however is written in the [Rust programming language](https://www.rust-lang.org/); a modern systems programming language which is fast, safe and expressive. It presents several improvements over other low level languages like C and C++, like excellent memory safety without a garbage collector, strong typing, better concurrency support, better module system, and a [blazingly fast](http://benchmarksgame.alioth.debian.org/u64q/rust.html) runtime. This new language with it's attractive features justifies a new astronomical library for use in the future.
-
-Moreover, the [MIT license](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md) adopted here is as liberal as open source licenses get, with the permission to do pretty much anything imaginable as long as due credit is given to the original authors(s) and the same license is passed along to derived works.
-
 ## Algorithms
 
-Algorithms implemented in this library allow you to calculate or perform the following:
+For information on the modules and functions available, see the
+[Rust API Documentation](https://saurvs.github.io/astro-rust/).
 
-(For information related to the programming aspects of this library, such as descriptions of the modules and functions available, see the [Rust API Documentation](https://saurvs.github.io/astro-rust/))
+The following is a categorical high level listing of all the physical
+quantities you can calculate or actions you can perform, using the
+algorithms that have been implemented so far:
 
 **The 8 Solar System Planets**
 
@@ -201,9 +194,9 @@ Algorithms implemented in this library allow you to calculate or perform the fol
 
 **Saturn**
 
-* rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
-Titan, Hyperion, and Iapetus, with respect to Saturn
-* elements of the ring
+* apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
+Titan, Hyperion, and Iapetus with respect to Saturn as seen from Earth
+* elements of Saturn's ring system
 
 **Transit**
 
@@ -286,21 +279,14 @@ Titan, Hyperion, and Iapetus, with respect to Saturn
 
 **Asteroids**
 
-* true diameter, from absolute magnitude and albedo
-* apparent diameter, from true diameter and distance to the
-  Earth
+* true diameter (from absolute magnitude and albedo)
+* apparent diameter (from true diameter and distance to the Earth)
 
 ## Contributing
 
-Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. Tests along with good documentation need to be written for them as well.
+Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. Documentation and tests need to be written for them as well. Refactored code and minor optimizations for the existing code are also welcome.
 
-A good start would be to go through Meeus's book, then browse this library's [API documentation](https://saurvs.github.io/astro-rust/astro/index.html), read through the code, and submit a pull request for a new algorithm or modification of an existing one. Refactored code and minor optimizations are also accepted.
-
-An important fact worth mentioning is that the 2nd edition of the book was published in 1998, with only corrections for typos published since. And so, some of the algorithms (and physical constants) used in the book may differ from those used in this library, in favour of those which were adopted by NASA and the IAU recently. Papers published by internationally recognized authorities (like the IAU) ought to be considered as sources for algorithms as well.
-
-The end of goal of this project is to build a modern, well-tested, production-quality code library of algorithms for astronomy.
-
-One fun suggestion in that direction is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
+A fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
 ## References
 * [Astronomical Algorithms, by Jean Meeus (2nd edition)](http://www.willbell.com/math/mc1.htm)

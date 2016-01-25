@@ -81,12 +81,12 @@ Returns a planet's **phase angle**
 * ```delta```: Planet-Earth distance *| in AU*
 * ```R```: Sun-Earth distance *| in AU*
 **/
-pub fn phase_angle(r: f64, delta: f64, R: f64) -> f64 {
+pub fn phase_angl(r: f64, delta: f64, R: f64) -> f64 {
     (r*r + delta*delta - R*R) / (2.0 * r * delta)
 }
 
 /**
-Returns the position angle of the **bright limb** of a planet
+Returns the **position angle** of the **bright limb** of a planet
 
 # Returns
 
@@ -122,7 +122,7 @@ Returns a planet's **equatorial semidiameter**
                 The function ```panic!()```s if ```Planet::Earth``` is passed.
 * ```planet_earth_dist```: Planet-Earth distance *| in AU*
 **/
-pub fn semdiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
+pub fn semidiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
     let mut s: f64;
 
     match planet {
@@ -131,8 +131,8 @@ pub fn semdiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
         &Planet::Earth => panic!("Planet::Earth was passed to the function
                                  planet::Semidiameter()."),
         &Planet::Mars => s = angle::deg_frm_dms(0, 0, 4.68),
-        &Planet::Jupiter => s = jupiter::eq_semdiameter(1.0),
-        &Planet::Saturn => s = saturn::eq_semdiameter(1.0),
+        &Planet::Jupiter => s = jupiter::eq_semidiameter(1.0),
+        &Planet::Saturn => s = saturn::eq_semidiameter(1.0),
         &Planet::Uranus => s = angle::deg_frm_dms(0, 0, 35.02),
         &Planet::Neptune => s = angle::deg_frm_dms(0, 0, 33.5),
     };

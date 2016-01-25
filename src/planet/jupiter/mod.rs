@@ -18,7 +18,7 @@ Returns Jupiter's **equatorial semidiameter**
 
 * ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
 **/
-pub fn eq_semdiameter(jup_earth_dist: f64) -> f64 {
+pub fn eq_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 98.44) / jup_earth_dist
 }
 
@@ -33,12 +33,12 @@ Returns Jupiter's **polar semidiameter**
 
 * ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
 **/
-pub fn pol_semdiameter(jup_earth_dist: f64) -> f64 {
+pub fn pol_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 92.06) / jup_earth_dist
 }
 
 /**
-Return quantites used in the **ephemeris** for **physical observations**
+Return quantites used in the **ephemeris for physical observations**
 of Jupiter
 
 # Arguments
@@ -49,7 +49,7 @@ of Jupiter
 * ```nut_in_oblq```: Nutation in obliquity of the ecliptic on ```JD``` *| in radians*
 **/
 pub fn ephemeris(JD: f64,
-                mn_oblq_eclip: f64,
+                mn_oblq: f64,
                 nut_in_long: f64, nut_in_oblq: f64) -> (f64, f64, f64, f64, f64) {
     let d = JD - 2433282.5;
     let T1 = d / 36525.0;
@@ -62,8 +62,8 @@ pub fn ephemeris(JD: f64,
 
     let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
-    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
-    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
+    let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
+    let (mut x, mut y, mut z) = (0.0, 0.0, 0.0);
     let mut jup_earth_dist = 0.0;
     let mut light_time = 0.0;
 
@@ -86,13 +86,13 @@ pub fn ephemeris(JD: f64,
     let (x, y, z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
     jup_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
 
-    let asc_s = (mn_oblq_eclip.cos()*l.sin() - mn_oblq_eclip.sin()*b.tan()).atan2(l.cos());
-    let dec_s = (mn_oblq_eclip.cos()*b.sin() + mn_oblq_eclip.sin()*b.cos()*l.sin()).asin();
+    let asc_s = (mn_oblq.cos()*l.sin() - mn_oblq.sin()*b.tan()).atan2(l.cos());
+    let dec_s = (mn_oblq.cos()*b.sin() + mn_oblq.sin()*b.cos()*l.sin()).asin();
 
     let D_s = (-dec0.sin()*dec_s.sin() - dec0.cos()*dec_s.cos()*(asc0 - asc_s).cos()).asin();
 
-    let u = y*mn_oblq_eclip.cos() - z*mn_oblq_eclip.sin();
-    let v = y*mn_oblq_eclip.sin() + z*mn_oblq_eclip.cos();
+    let u = y*mn_oblq.cos() - z*mn_oblq.sin();
+    let v = y*mn_oblq.sin() + z*mn_oblq.cos();
     let mut asc = u.atan2(x);
     let mut dec = v.atan2((x*x + u*u).sqrt());
     let zeta = (dec0.sin()*dec.cos()*(asc0 - asc).cos() - dec.sin()*dec0.cos())
@@ -111,21 +111,21 @@ pub fn ephemeris(JD: f64,
     w1 = (w1 + C).to_radians();
     w2 = (w2 + C).to_radians();
 
-    let tru_oblq_eclip = mn_oblq_eclip + nut_in_oblq;
+    let tru_oblq = mn_oblq + nut_in_oblq;
 
     let q = 0.005693_f64.to_radians();
-    asc += q * (asc.cos()*l0.cos()*tru_oblq_eclip.cos() + asc.sin()*l0.sin()) / dec.cos();
-    dec += q * (  l0.cos()*tru_oblq_eclip.cos()*(tru_oblq_eclip.tan()*dec.cos()
+    asc += q * (asc.cos()*l0.cos()*tru_oblq.cos() + asc.sin()*l0.sin()) / dec.cos();
+    dec += q * (  l0.cos()*tru_oblq.cos()*(tru_oblq.tan()*dec.cos()
                 - asc.sin()*asc.cos())
                 + asc.cos()*dec.sin()*l0.sin());
 
     let (asc_nut, dec_nut) = nutation::nutation_in_eq_coords(asc, dec, nut_in_long,
-                                                          nut_in_oblq, tru_oblq_eclip);
+                                                          nut_in_oblq, tru_oblq);
     let asc1 = asc + asc_nut;
     let dec1 = dec + dec_nut;
 
     let (asc0_nut, dec0_nut) = nutation::nutation_in_eq_coords(asc0, dec0, nut_in_long,
-                                                            nut_in_oblq, tru_oblq_eclip);
+                                                            nut_in_oblq, tru_oblq);
     let asc01 = asc0 + asc0_nut;
     let dec01 = dec0 + dec0_nut;
 

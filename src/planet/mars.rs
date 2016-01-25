@@ -61,7 +61,7 @@ pub fn ecl_coords_of_north_pol(JC: f64) -> coords::EclPoint {
 }
 
 /**
-Return quantites used in the **ephemeris** for **physical observations**
+Return quantites used in the **ephemeris for physical observations**
 of Mars
 
 # Returns
@@ -95,8 +95,8 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
 
     let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
-    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
-    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
+    let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
+    let (mut x, mut y, mut z) = (0.0, 0.0, 0.0);
     let mut mars_earth_dist = 0.0;
     let mut light_time = 0.0;
 
@@ -148,12 +148,12 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
 
     lambda += nut_in_long;
     lambda0 += nut_in_long;
-    let tru_oblq_eclip = mn_oblq + nut_in_oblq;
+    let true_oblq = mn_oblq + nut_in_oblq;
 
-    let asc01 = coords::AscFrmEcl(lambda0, beta0, tru_oblq_eclip);
-    let dec01 = coords::DecFrmEcl(lambda0, beta0, tru_oblq_eclip);
-    let asc1 = coords::AscFrmEcl(lambda, beta, tru_oblq_eclip);
-    let dec1 = coords::DecFrmEcl(lambda, beta, tru_oblq_eclip);
+    let asc01 = coords::AscFrmEcl(lambda0, beta0, true_oblq);
+    let dec01 = coords::DecFrmEcl(lambda0, beta0, true_oblq);
+    let asc1 = coords::AscFrmEcl(lambda, beta, true_oblq);
+    let dec1 = coords::DecFrmEcl(lambda, beta, true_oblq);
 
     let P = (dec01.cos() * (asc01 - asc1).sin())
             .atan2(dec01.sin()*dec1.cos() - dec01.cos()*dec1.sin()*(asc01 - asc1).cos());

@@ -6,7 +6,7 @@ use time;
 use planet;
 
 /**
-Returns the flattening factor factor of the Earth
+Returns the **flattening factor** of the Earth
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -15,7 +15,7 @@ pub fn flat_fac() -> f64 {
 }
 
 /**
-Returns the equatorial radius of the Earth (*kilometers*)
+Returns the **equatorial radius** of the Earth *| in kilometers*
 
 Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 **/
@@ -25,7 +25,7 @@ pub fn eq_rad() -> f64 {
 
 /**
 
-Returns the polar radius of the Earth (*kilometers*)
+Returns the **polar radius** of the Earth *| in kilometers*
 
 Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html) and
 [```eq_radius()```](./fn.eq_radius.html)
@@ -35,17 +35,16 @@ pub fn pol_rad() -> f64 {
 }
 
 /**
-Returns the eccentricity of the Earth's meridian
+Returns the **eccentricity** of the Earth's **meridian**
 
-Calculated using [```FlatteningFactor()```](./fn.FlatteningFactor.html)
 **/
 pub fn ecc_of_meridian() -> f64 {
     ((2.0 - flat_fac()) * flat_fac()).sqrt()
 }
 
 /**
-Returns a low accuracy distance between two points on the Earth's
-surface (*kilometers*)
+Returns a **low accuracy geodesic distance** between two points on the Earth's
+surface *| in kilometers*
 
 Assumes that the Earth is a sphere.
 
@@ -59,8 +58,8 @@ pub fn approx_geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoi
 }
 
 /**
-Returns a high accuracy distance between two points on the Earth's
-surface (*kilometers*)
+Returns a **high accuracy geodesic distance** between two points on the Earth's
+surface *| in kilometers*
 
 # Arguments
 
@@ -117,8 +116,8 @@ pub fn rho_sin_cos_phi(geograph_lat: f64, height: f64) -> (f64, f64) {
 }
 
 /**
-Returns the distance from the Earth's center to a point
-on the ellipsoid
+Returns the **distance** from the Earth's **center to a point
+on the ellipsoid**
 
 # Returns
 
@@ -135,17 +134,17 @@ pub fn rho(geograph_lat: f64) -> f64 {
     - 0.0000035 * (4.0*geograph_lat).cos()
 }
 
-/// Returns the rotational angular velocity of the Earth (*radian per second*)
+/// Returns the **rotational angular velocity** of the Earth *| in radian per second*
 pub fn rot_angular_velocity() -> f64 {
     0.00007292114992
 }
 
 /**
-Returns the radius of the parallel of a latitude
+Returns the **radius of the parallel of a latitude**
 
 # Returns
 
-* ```rad```: Radius of the parallel of the latitude (*kilometers*)
+* ```rad```: Radius of the parallel of the latitude *| in kilometers*
 
 # Arguments
 
@@ -158,7 +157,7 @@ pub fn rad_of_parll_lat(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the linear velocity of a point at a latitude
+Returns the **linear velocity of a point at a latitude**
 
 # Returns
 
@@ -173,13 +172,13 @@ pub fn linear_velocity_at_lat(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the radius of curvature of the Earth's meridian
-at a latitude
+Returns the **radius of curvature** of the Earth's **meridian
+at a latitude**
 
 # Returns
 
 * ```rad```: Radius of curvature of the Earth's meridian at the
-latitude (*kilometers*)
+latitude *| in kilometers*
 
 # Arguments
 
@@ -192,8 +191,8 @@ pub fn rad_curv_of_meridian(lat: f64) -> f64 {
 }
 
 /**
-Returns the difference between the geographic latitude and
-geocentric latitude
+Returns the **difference** between the **geographic latitude** and
+**geocentric latitude**
 
 # Returns
 
@@ -209,7 +208,7 @@ pub fn geograph_geocen_lat_diff(geograph_lat: f64) -> f64 {
 }
 
 /**
-Returns the equation of time *| in radians*
+Returns the **equation of time** *| in radians*
 
 # Arguments
 
@@ -236,11 +235,11 @@ pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> 
 }
 
 /**
-Returns the angle between diurnal path and the horizon
+Returns the **angle between diurnal path** and the **horizon**
 
 # Returns
 
-* ```angle```: Angle between the diurnal path of a celestial body
+* ```angl```: Angle between the diurnal path of a celestial body
 and the horizon *| in radians*
 
 # Arguments

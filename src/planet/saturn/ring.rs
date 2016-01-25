@@ -1,4 +1,4 @@
-//! Ring of Saturn
+//! The ring system of Saturn
 
 use angle;
 use coords;
@@ -20,7 +20,7 @@ pub fn ascend_node(JC: f64) -> f64 {
 }
 
 /**
-Returns the **elements** for the **ring** of Saturn
+Returns the **elements** for the **ring system** of Saturn
 
 # Returns
 
@@ -43,13 +43,13 @@ Returns the **elements** for the **ring** of Saturn
 
 * ```JD```: Julian (Ephemeris) day
 * ```nut_in_long```: Nutation in longitude on ```JD``` *| in radians*
-* ```tru_oblq_eclip```: True obliquity of the ecliptic on ```JD``` *| in radians*
+* ```true_oblq```: True obliquity of the ecliptic on ```JD``` *| in radians*
 **/
-pub fn elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f64, f64, f64, f64) {
+pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> (f64, f64, f64, f64, f64, f64) {
     let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
-    let mut l = 0.0; let mut b = 0.0; let mut r = 0.0;
-    let mut x = 0.0; let mut y = 0.0; let mut z = 0.0;
+    let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
+    let (mut x, mut y, mut z) = (0.0, 0.0, 0.0);
     let mut saturn_earth_dist = 0.0;
     let mut light_time = 0.0;
 
@@ -103,10 +103,10 @@ pub fn elements(JD: f64, nut_in_long: f64, tru_oblq_eclip: f64) -> (f64, f64, f6
     lambda0 += nut_in_long;
     lambda += nut_in_long;
 
-    let asc0 = coords::AscFrmEcl(lambda0, beta0, tru_oblq_eclip);
-    let dec0 = coords::DecFrmEcl(lambda0, beta0, tru_oblq_eclip);
-    let asc = coords::AscFrmEcl(lambda, beta, tru_oblq_eclip);
-    let dec = coords::DecFrmEcl(lambda, beta, tru_oblq_eclip);
+    let asc0 = coords::AscFrmEcl(lambda0, beta0, true_oblq);
+    let dec0 = coords::DecFrmEcl(lambda0, beta0, true_oblq);
+    let asc = coords::AscFrmEcl(lambda, beta, true_oblq);
+    let dec = coords::DecFrmEcl(lambda, beta, true_oblq);
 
     let P = (dec0.cos() * (asc0 - asc).sin())
             .atan2(dec0.sin()*dec.cos() - dec0.cos()*dec.sin()*(asc0 - asc).cos());

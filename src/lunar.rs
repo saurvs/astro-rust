@@ -9,11 +9,11 @@ Returns the **equatorial horizontal parallax** of the Moon
 
 # Returns
 
-* ```eq_hz_parllx```: Equatorial horizontal parallax *| in radians*
+* ```eq_hz_parllx```: Equatorial horizontal parallax of the Moon *| in radians*
 
 # Arguments
 
-* ```earth_moon_dist```: Earth-Moon distance (*kilometers*)
+* ```earth_moon_dist```: Earth-Moon distance *| in kilometers*
 **/
 pub fn eq_hz_parllx(earth_moon_dist: f64) -> f64 {
     (6378.14 / earth_moon_dist).asin()
@@ -29,14 +29,14 @@ Returns the **equatorial semidiameter** of the Moon
 
 # Arguments
 
-* ```earth_moon_dist```: Earth-Moon distance *| in kilometers
+* ```earth_moon_dist```: Earth-Moon distance *| in kilometers*
 **/
-pub fn semdiameter(earth_moon_dist: f64) -> f64 {
+pub fn semidiameter(earth_moon_dist: f64) -> f64 {
     0.272481 * eq_hz_parllx(earth_moon_dist).sin()
 }
 
 /**
-Returns the inclination of the mean lunar equator with the
+Returns the **inclination** of the **mean lunar equator** with the
 ecliptic
 
 # Returns
@@ -116,40 +116,40 @@ fn rho_sig(D: f64, M: f64, M1: f64, F: f64) -> (f64, f64) {
 }
 
 /**
-Returns the optical librations of the Moon in longitude and
+Returns the **optical librations** of the Moon in longitude and
 latitude
 
 # Returns
 
-```(optical_libration_in_longitude, optical_libration_in_longitude)```
+```(optical_libr_in_long, optical_libr_in_lat)```
 
-* ```optical_libration_in_longitude```: The optical libration in
+* ```optical_libr_in_long```: The optical libration in
 longitude *| in radians*
-* ```optical_libration_in_longitude```: The optical libration in
+* ```optical_libr_in_lat```: The optical libration in
 latitude *| in radians*
 
 # Arguments
 
-* ```mean_geocen_moon_long```: The mean geocentric longitude of the
+* ```mn_geocen_moon_long```: The mean geocentric longitude of the
 Moon *| in radians*, i.e, *without* the correction for nutation
-* ```app_geocen_moon_lat```: The apparent geocentric longitude of the
+* ```apprnt_geocen_moon_lat```: The apparent geocentric longitude of the
 Moon *| in radians*, i.e, *with* the correction for nutation
-* ```JED```: Julian (Ephemeris) day
+* ```JD```: Julian (Ephemeris) day
 **/
-pub fn optical_libr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
-                         JED: f64) -> (f64, f64) {
-    let JC = time::julian_cent(JED);
+pub fn optical_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
+                         JD: f64) -> (f64, f64) {
+    let JC = time::julian_cent(JD);
     let F = F(JC);
     let I = inc_of_mn_lunar_eq();
 
-    let longitude_of_mean_ascen_node = mn_ascend_node(JC);
-    let W = mean_geocen_moon_long - longitude_of_mean_ascen_node;
+    let long_of_mn_ascend_node = mn_ascend_node(JC);
+    let W = mn_geocen_moon_long - long_of_mn_ascend_node;
 
-    let A = A(mean_geocen_moon_long, app_geocen_moon_lat,
-              longitude_of_mean_ascen_node);
+    let A = A(mn_geocen_moon_long, apprnt_geocen_moon_lat,
+              long_of_mn_ascend_node);
 
-    let b1 = ( - W.sin() * app_geocen_moon_lat.cos() * I.sin()
-               - app_geocen_moon_lat.sin() * I.cos()
+    let b1 = ( - W.sin() * apprnt_geocen_moon_lat.cos() * I.sin()
+               - apprnt_geocen_moon_lat.sin() * I.cos()
              ).asin();
 
     (angle::limit_to_360((A - F).to_degrees()).to_radians(),
@@ -157,34 +157,34 @@ pub fn optical_libr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
 }
 
 /**
-Returns the physical librations of the Moon in longitude and
+Returns the **physical librations** of the Moon in longitude and
 latitude
 
 # Returns
 
-```(physical_libration_in_longitude, physical_libration_in_longitude)```
+```(physical_libr_in_long, physical_libr_in_lat)```
 
-* ```physical_libration_in_longitude```: The physical libration in
+* ```physical_libr_in_long```: The physical libration in
 longitude *| in radians*
-* ```physical_libration_in_longitude```: The physical libration in
+* ```physical_libr_in_lat```: The physical libration in
 latitude *| in radians*
 
 # Arguments
 
-* ```mean_geocen_moon_long```: The mean geocentric longitude of the
+* ```mn_geocen_moon_long```: The mean geocentric longitude of the
 Moon *| in radians*, i.e, *without* the correction for nutation
-* ```app_geocen_moon_lat```: The apparent geocentric longitude of the
+* ```apprnt_geocen_moon_lat```: The apparent geocentric longitude of the
 Moon *| in radians*, i.e, *with* the correction for nutation
 * ```optical_lib_lat```: The optical libration in latitude *| in radians*
-* ```JED```: Julian (Ephemeris) day
+* ```JD```: Julian (Ephemeris) day
 **/
-pub fn physical_libr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
-                          JED: f64, optical_lib_lat: f64) -> (f64, f64) {
-    let JC = time::julian_cent(JED);
+pub fn physical_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
+                          JD: f64, optical_lib_lat: f64) -> (f64, f64) {
+    let JC = time::julian_cent(JD);
     let K1 = (119.75 + 131.849*JC).to_radians();
     let K2 = (72.56 + 20.186*JC).to_radians();
 
-    let longitude_of_mean_ascen_node = mn_ascend_node(JC);
+    let long_of_mn_ascend_node = mn_ascend_node(JC);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
     let E = E(JC);
@@ -199,7 +199,7 @@ pub fn physical_libr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
                - 0.00467 * M1.sin()
                + 0.00396 * K1.sin()
                + 0.00276 * (2.0*M1 - x2D).sin()
-               + 0.00196 * longitude_of_mean_ascen_node.sin()
+               + 0.00196 * long_of_mn_ascend_node.sin()
                - 0.00183 * (M1 - F).cos()
                + 0.00115 * (M1 - x2D).sin()
                - 0.00096 * (M1 - D).sin()
@@ -217,92 +217,91 @@ pub fn physical_libr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
                + 0.00011 * (2.0*(M1 - M - D)).sin()
               ).to_radians();
 
-    let W = mean_geocen_moon_long - longitude_of_mean_ascen_node;
-    let A = A(mean_geocen_moon_long, app_geocen_moon_lat,
-              longitude_of_mean_ascen_node);
+    let W = mn_geocen_moon_long - long_of_mn_ascend_node;
+    let A = A(mn_geocen_moon_long, apprnt_geocen_moon_lat,
+              long_of_mn_ascend_node);
 
     (-tau + optical_lib_lat.tan()*(rho*A.cos() + sig*A.sin()),
       sig*A.cos() - rho*A.sin())
 }
 
 /**
-Returns the total librations of the Moon in longitude and
+Returns the **total librations** of the Moon in longitude and
 latitude
 
 # Returns
 
-```(total_libration_in_longitude, total_libration_in_longitude)```
+```(total_libr_in_long, total_libr_in_lat)```
 
-* ```total_libration_in_longitude```: The total libration in
+* ```total_libr_in_long```: The total libration in
 longitude *| in radians*
-* ```total_libration_in_longitude```: The total libration in
+* ```total_libr_in_lat```: The total libration in
 latitude *| in radians*
 
 # Arguments
 
-* ```mean_geocen_moon_long```: The mean geocentric longitude of the
+* ```mn_geocen_moon_long```: The mean geocentric longitude of the
 Moon *| in radians*, i.e, *without* the correction for nutation
-* ```app_geocen_moon_lat```: The apparent geocentric longitude of the
+* ```apprnt_geocen_moon_lat```: The apparent geocentric longitude of the
 Moon *| in radians*, i.e, *with* the correction for nutation
-* ```optical_lib_lat```: The optical libration in latitude *| in radians*
-* ```JED```: Julian (Ephemeris) day
+* ```JD```: Julian (Ephemeris) day
 **/
-pub fn total_libr(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
-                         JED: f64, optical_lib_lat: f64) -> (f64, f64) {
-    let (opt_long, opt_lat) = optical_libr(mean_geocen_moon_long,
-                                                app_geocen_moon_lat, JED);
-    let (phys_long, phys_lat) = physical_libr(mean_geocen_moon_long,
-                                                app_geocen_moon_lat, JED, optical_lib_lat);
+pub fn total_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
+                         JD: f64) -> (f64, f64) {
+    let (opt_long, opt_lat) = optical_libr(mn_geocen_moon_long,
+                                                apprnt_geocen_moon_lat, JD);
+    let (phys_long, phys_lat) = physical_libr(mn_geocen_moon_long,
+                                                apprnt_geocen_moon_lat, JD, opt_lat);
 
     (opt_long + phys_long,
      opt_lat + phys_lat)
 }
 
 /**
-Returns the position angle of the axis of rotation of the Moon
+Returns the **position angle** of the **axis of rotation** of the Moon
 
 # Returns
 
-* ```position_angle_of_axis_of_rotation```: The position angle of the axis
+* ```pos_angl_of_axis_of_rot```: The position angle of the axis
                                             of rotation of the Moon *| in radians*
 
 # Arguments
 
-* ```mean_ascen_node_long```: Longitude of the mean ascending node of the Moon *| in radians*
+* ```mn_ascen_node_long```: Longitude of the mean ascending node of the Moon *| in radians*
 * ```total_lib_lat```: Total libration of the Moon in latitude *| in radians*
 * ```nut_in_long```: Nutation correction for longitude *| in radians*
-* ```true_oblq_eclip```: True obliquity of the ecliptic *| in radians*
-* ```app_moon_asc```: Apparent geocentric right ascension of the Moon *| in radians*
+* ```true_oblq```: True obliquity of the ecliptic *| in radians*
+* ```apprnt_moon_asc```: Apparent geocentric right ascension of the Moon *| in radians*
 * ```JED```: Julian (Ephemeris) day
 **/
-pub fn pos_angl_of_axis_of_rot(mean_ascen_node_long: f64, total_lib_lat: f64,
-                                     nut_in_long: f64, true_oblq_eclip: f64,
-                                     app_moon_asc: f64, JED: f64) -> f64 {
+pub fn pos_angl_of_axis_of_rot(mn_ascen_node_long: f64, total_lib_lat: f64,
+                                     nut_in_long: f64, true_oblq: f64,
+                                     apprnt_moon_asc: f64, JED: f64) -> f64 {
     let JC = time::julian_cent(JED);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
     let (rho, sig) = rho_sig(D, M, M1, F);
 
     let I = inc_of_mn_lunar_eq();
-    let V = mean_ascen_node_long + nut_in_long + sig/I.sin();
+    let V = mn_ascen_node_long + nut_in_long + sig/I.sin();
     let X = (I + rho).sin() * V.sin();
-    let Y =   (I + rho).sin()*V.cos()*true_oblq_eclip.cos()
-            - (I + rho).cos()*true_oblq_eclip.sin();
+    let Y =   (I + rho).sin()*V.cos()*true_oblq.cos()
+            - (I + rho).cos()*true_oblq.sin();
     let w = X.atan2(Y);
 
-    ( (((X*X + Y*Y).sqrt()*(app_moon_asc - w).cos()) / total_lib_lat.cos()).asin() )
+    ( (((X*X + Y*Y).sqrt()*(apprnt_moon_asc - w).cos()) / total_lib_lat.cos()).asin() )
 }
 
 /**
-Returns the topocentric librations of the Moon
+Returns the **topocentric librations** of the Moon
 
 # Returns
 
-```(topocentric_libration_in_long, topocentric_libration_in_lat, topocentric_libration_in_P)```
+```(topocen_libr_in_long, topocen_libr_in_lat, topocen_libr_in_P)```
 
-* ```topocentric_libration_in_long```: Topocentric libration in longitude *| in radians*
-* ```topocentric_libration_in_lat```: Topocentric libration in latitude *| in radians*
-* ```topocentric_libration_in_P```: Topocentric libration in position angle of the axis
+* ```topocen_libr_in_long```: Topocentric libration in longitude *| in radians*
+* ```topocen_libr_in_lat```: Topocentric libration in latitude *| in radians*
+* ```topocen_libr_in_P```: Topocentric libration in position angle of the axis
                                             of rotation *| in radians*
 
 # Arguments
@@ -334,11 +333,11 @@ Returns the **geocentric** ecliptic coordinates of the Moon
 
 # Returns
 
-```(longitude, latitude, distance)```
+```(long, lat, dist)```
 
-* ```longitude```: Ecliptic longitude of the Moon *| in radians*
-* ```latitude```: Ecliptic latitude of the Moon *| in radians*
-* ```distance```: Distance between the Moon and the Earth *(kilometers)*
+* ```long```: Ecliptic longitude of the Moon *| in radians*
+* ```lat```: Ecliptic latitude of the Moon *| in radians*
+* ```dist```: Distance between the Moon and the Earth *(kilometers)*
 
 # Arguments
 
@@ -538,11 +537,11 @@ pub fn geocen_ecl_coords(JED: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns the longitude of the mean ascending node of the Moon
+Returns the **longitude** of the **mean ascending node** of the Moon
 
 # Returns
 
-* ```longitude_mean_ascending_node```: Longitude of the mean ascending
+* ```long_mn_ascend_node```: Longitude of the mean ascending
                                        node *| in radians*
 
 # Arguments
@@ -557,11 +556,11 @@ pub fn mn_ascend_node(JC: f64) -> f64 {
 }
 
 /**
-Returns the longitude of the true ascending node of the Moon
+Returns the **longitude** of the **true ascending node** of the Moon
 
 # Returns
 
-* ```longitude_true_ascending_node```: Longitude of the true ascending
+* ```long_true_ascend_node```: Longitude of the true ascending
                                        node *| in radians*
 
 # Arguments
@@ -582,11 +581,11 @@ pub fn true_ascend_node(JC: f64) -> f64 {
 }
 
 /**
-Returns the longitude of the mean perigee of the Moon
+Returns the **longitude** of the **mean perigee** of the Moon
 
 # Returns
 
-* ```longitude_mean_perigee```: Longitude of mean perigee *| in radians*
+* ```long_mn_perigee```: Longitude of mean perigee *| in radians*
 
 # Arguments
 
@@ -600,11 +599,11 @@ pub fn mn_perigee(JC: f64) -> f64 {
 }
 
 /**
-Returns the position angle of the bright limb of the Moon
+Returns the **position angle** of the Moon's **bright limb**
 
 # Returns
 
-* ```position_angle_of_bright_limb```: The position angle of the midpoint
+* ```pos_angl_of_bright_limb```: The position angle of the midpoint
                                        of the illuminated limb of the Moon
                                        *| in radians*
 
@@ -624,15 +623,15 @@ pub fn bright_limb(sun_eq_point: coords::EqPoint,
 }
 
 /**
-Returns the illuminated fraction of the Moon, using equatorial coordinates
+Returns the **illuminated fraction** of the lunar **disk**, using equatorial coordinates
 
 # Arguments
 
 * ```sun_eq_point```: Equatorial coordinate of the Sun *| in radians*
 * ```moon_eq_point```: Equatorial coordinate of the Moon *| in radians*
-* ```earth_moon_dist```: Distance between the Earth and it's Moon
+* ```earth_moon_dist```: Earth-Moon distance
                          (in any unit, but same as that of ```earth_sun_dist```)
-* ```earth_sun_dist```: Distance between the Earth and the Sun
+* ```earth_sun_dist```: Earth-Sun distance
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
 pub fn illum_frac_frm_eq_coords(sun_eq_point: &coords::EqPoint,
@@ -643,16 +642,16 @@ pub fn illum_frac_frm_eq_coords(sun_eq_point: &coords::EqPoint,
 }
 
 /**
-Returns the illuminated fraction of the Moon, using eclipctical coordinates
+Returns the **illuminated fraction** of the lunar **disk**, using eclipctic coordinates
 
 # Arguments
 
-* ```moon_long```: Eclipctical longitude of the Moon *| in radians*
-* ```moon_lat```: Eclipctical latitude of the Moon *| in radians*
-* ```sun_long```: Eclipctical longitude of the Sun *| in radians*
-* ```earth_moon_dist```: Distance between the Earth and it's Moon
+* ```moon_long```: Eclipctic longitude of the Moon *| in radians*
+* ```moon_lat```: Eclipctic latitude of the Moon *| in radians*
+* ```sun_long```: Eclipctic longitude of the Sun *| in radians*
+* ```earth_moon_dist```: Earth-Moon distance
                          (in any unit, but same as that of ```earth_sun_dist```)
-* ```earth_sun_dist```: Distance between the Earth and the Sun
+* ```earth_sun_dist```: Earth-Sun distance
                         (in any unit, but same as that of ```earth_moon_dist```)
 **/
 pub fn illum_frac_frm_ecl_coords(moon_long: f64, moon_lat: f64, sun_long: f64,
@@ -667,15 +666,15 @@ fn illuminated_frac(moon_geocen_elong: f64, earth_moon_dist: f64, earth_sun_dist
 }
 
 /**
-Returns the times of passage of the Moon through the ascending
-and descending nodes, close to a given date
+Returns the **times of passage** of the Moon through the **ascending**
+and **descending nodes**, close to a given date
 
 # Returns
 
-```(time_of_ascending_node, time_of_descending_node)```
+```(time_of_ascend_node, time_of_descend_node)```
 
-* ```time_of_ascending_node```: Time of passage through the ascending node
-* ```time_of_descending_node```: Time of passage through the descending node
+* ```time_of_ascend_node```: Time of passage through the ascending node
+* ```time_of_descend_node```: Time of passage through the descending node
 
 # Arguments
 

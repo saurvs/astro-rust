@@ -3,7 +3,7 @@
 use angle;
 
 /**
-Returns the combined magnitude of two stars
+Returns the **combined magnitude** of two stars
 
 # Arguments
 
@@ -15,7 +15,7 @@ pub fn combined_mag(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the combined magnitude of two or more stars
+Returns the **combined magnitude** of two or more stars
 
 # Arguments
 
@@ -30,7 +30,7 @@ pub fn combined_mag_of_many(m: &[f64]) -> f64 {
 }
 
 /**
-Returns the brightness ratio of two stars
+Returns the **brightness ratio** of two stars
 
 # Arguments
 
@@ -42,7 +42,7 @@ pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
 }
 
 /**
-Returns the difference in magnitude of two stars
+Returns the **difference in magnitude** of two stars
 
 # Arguments
 
@@ -53,7 +53,7 @@ pub fn mag_diff(br: f64) -> f64 {
 }
 
 /**
-Returns the absolute magnitude of a star from its parallax
+Returns the **absolute magnitude** of a star from its parallax
 
 # Arguments
 
@@ -66,7 +66,7 @@ pub fn abs_mag_frm_parallax(mut par: f64, am: f64) -> f64 {
 }
 
 /**
-Returns the absolute magnitude of a star from its distance from earth
+Returns the **absolute magnitude** of a star from its distance from earth
 
 # Arguments
 
@@ -100,7 +100,7 @@ pub fn angl_between_north_celes_and_eclip_pole(eclip_long: f64, eclip_lat: f64, 
 
 /**
 Returns the equatorial coordinates of a star at
-at a different time from it's motion in space
+at a different time from it's **motion in space**
 
 This function returns the equatorial coordinates
 of a star at a different time by taking into account
