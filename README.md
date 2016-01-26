@@ -3,6 +3,8 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md)
 [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
+**Sections**
+
 [API Docs](https://saurvs.github.io/astro-rust/) | [About](#about) | [Usage](#usage) | [Algorithms](#algorithms) | [Contributing](#contributing) | [References](#references)
 
 ## About
