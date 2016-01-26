@@ -1,10 +1,15 @@
+#[macro_use]
+pub mod util;
+
+#[macro_use]
+pub mod coords;
+
 pub mod aberr;
 pub mod angle;
 pub mod asteroid;
 pub mod atmos;
 pub mod binary_star;
 pub mod consts;
-pub mod coords;
 pub mod ecliptic;
 pub mod interpol;
 pub mod lunar;
@@ -19,4 +24,3 @@ pub mod star;
 pub mod sun;
 pub mod time;
 pub mod transit;
-pub mod util;

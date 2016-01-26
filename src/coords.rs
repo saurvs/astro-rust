@@ -148,9 +148,9 @@ Returns **ecliptic coordinates** from **equatorial** coordinates
                      nutation, then *true* obliquity. If not, then
                      *mean* obliquity. *| in radians*
 **/
-#[macro_export]
+
 macro_rules! EclFrmEq {
-    ($asc: expr, $dec: expr, $z: expr) => {{
+    ($asc: expr, $dec: expr, $oblq_eclip: expr) => {{
         (astro::coords::EclLongFrmEq($asc, $dec, $oblq_eclip),
          astro::coords::EclLatFrmEq($asc, $dec, $oblq_eclip))
     }};
@@ -219,9 +219,9 @@ Returns **equatorial** coordinates from **ecliptic** coordinates
                      nutation, then *true* obliquity. If not, then
                      *mean* obliquity. *| in radians*
 **/
-#[macro_export]
+
 macro_rules! EqFrmEcl {
-    ($ecl_long: expr, $y: expr, $z: expr) => {{
+    ($ecl_long: expr, $y: expr, $oblq_eclip: expr) => {{
         (astro::coords::AscFrmEcl($ecl_long, $ecl_lat, $oblq_eclip),
          astro::coords::DecFrmEcl($ecl_long, $ecl_lat, $oblq_eclip))
     }};
@@ -285,7 +285,7 @@ Returns **local horizontal** coordinates from **equatorial** coordinates
 * ```$dec```: Declination *| in radians*
 * ```$observer_lat```: Observer's geographical latitude *| in radians*
 **/
-#[macro_export]
+
 macro_rules! LocHzFrmEq {
     ($hour_angle: expr, $dec: expr, $observer_lat: expr) => {{
         (astro::coords::AzFrmEqCoords($hour_angle, $dec, $observer_lat),
@@ -400,7 +400,7 @@ Returns **galactic** coordinates from **equatorial** coordinates
 The equatorial coordinates passed are assumed to be referred to the
 standard equinox of B1950.0.
 **/
-#[macro_export]
+
 macro_rules! GalFrmEq {
     ($asc: expr, $dec: expr) => {{
         (astro::coords::GalLongFrmEq($asc, $dec),
@@ -473,7 +473,7 @@ equinox of  B1950.0.
 * ```$gal_long```: Galactic longitude *| in radians*
 * ```$gal_lat```: Galactic latitude *| in radians*
 **/
-#[macro_export]
+
 macro_rules! EqFrmGal {
     ($gal_long: expr, $gal_lat: expr) => {{
         (astro::coords::AscFrmGal($gal_long, $gal_lat),

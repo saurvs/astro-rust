@@ -43,7 +43,7 @@ along with it's **radius vector** at that time
 * ```rad_vec```: Radius vector of the body at the time of passage *| in AU*
 
 # Arguments
-
+E
 * ```w```: Argument of the perihelion *| in radians*
 * ```q```: Perihelion distance *| in AU*
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
