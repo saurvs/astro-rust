@@ -13,19 +13,20 @@ Evaluates polynomials using Horner's method
 # Arguments
 
 * `$x`: The independent variable
-* `$($a),*`: Sequence of coefficients. The first term in this
-sequence of arguments should be the constant term, and
-followed by the terms for `$x` in ascending powers of `$x`
+* `$c`: The constant term
+* `$($a),*`: Sequence of coefficient terms for `$x`
+in ascending powers of `$x`
 **/
+#[macro_use]
 macro_rules! Horner_eval {
-    ($x:expr, $($a:expr),*) => {
+    ($x:expr, $c:expr, $($a:expr),*) => {
         {
-            let mut y = 0_f64;
+            let mut y = $c;
             let mut u = 1.0;
 
             $(
-                y += u * $a;
                 u *= $x;
+                y += u * $a;
             )*
 
             y
