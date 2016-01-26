@@ -64,9 +64,14 @@ It includes things such as  planetary, solar and lunar positioning, corrections 
   // rad_vec - distance between the Sun and the Earth (AU)
   ```
 
-* Similarly for the Moon
+* Similarly, for the Moon
   ```rust
-  let (long, lat, rad_vec) = lunar::geocen_ecl_pos(julian_day);
+  let (moon_ecl_point, rad_vec) = lunar::geocen_ecl_pos(julian_day);
+
+  // moon_ecl_point.long    - ecliptic longitude (radians)
+  // moon_ecl_point.lat     - ecliptic latitude (radians)
+  // rad_vec - distance between the Moon and the Earth (AU)
+
   ```
 
 * Find the *heliocentric* coordinates and radius vector for Jupiter
