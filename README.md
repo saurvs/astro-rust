@@ -5,13 +5,7 @@
 
 **Contents**
 
-* [About](#about)
-* [Usage](#usage)
-* [Algorithms](#algorithms)
-* [Contributing](#contributing)
-* [References](#references)
-
-Also see the [API Docs](https://saurvs.github.io/astro-rust/)
+[API Docs](https://saurvs.github.io/astro-rust/) | [About](#about) | [Usage](#usage) | [Algorithms](#algorithms) | [Contributing](#contributing) | [References](#references)
 
 ## About
 
@@ -55,22 +49,16 @@ It includes things such as  planetary, solar and lunar positioning, corrections 
   let julian_ephm_day = time::julian_emph_day(julian_day, delta_t);
   ```
 
-* Find the *geocentric* ecliptic point and radius vector for the Sun
+* Find the *geocentric* ecliptic point and radius vector for the Sun and the Moon
   ```rust
-  let (sun_ecl_point, rad_vec) = sun::geocen_ecl_pos(julian_day);
+  let (sun_ecl_point, rad_vec_sun) = sun::geocen_ecl_pos(julian_day);
 
   // sun_ecl_point.long    - ecliptic longitude (radians)
   // sun_ecl_point.lat     - ecliptic latitude (radians)
-  // rad_vec - distance between the Sun and the Earth (AU)
-  ```
+  // rad_vec_sun - distance between the Sun and the Earth (AU)
 
-* Similarly, for the Moon
-  ```rust
-  let (moon_ecl_point, rad_vec) = lunar::geocen_ecl_pos(julian_day);
-
-  // moon_ecl_point.long    - ecliptic longitude (radians)
-  // moon_ecl_point.lat     - ecliptic latitude (radians)
-  // rad_vec - distance between the Moon and the Earth (AU)
+  // similarly for the Moon
+  let (moon_ecl_point, rad_vec_moon) = lunar::geocen_ecl_pos(julian_day);
 
   ```
 
