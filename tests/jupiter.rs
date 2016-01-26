@@ -29,10 +29,10 @@ fn ephemeris() {
 
 #[test]
 fn moons() {
-/*
+
     let data = [
-        (-3.41 /* Meeus gives -3.44 */, 0.21, planet::jupiter::moon::Moon::Io),
-        (7.49  /* Meeus gives 7.44 */, 0.25, planet::jupiter::moon::Moon::Europa),
+        (-3.44, 0.21, planet::jupiter::moon::Moon::Io),
+        (7.44, 0.25, planet::jupiter::moon::Moon::Europa),
         (1.24, 0.65, planet::jupiter::moon::Moon::Ganymede),
         (7.08, 1.1, planet::jupiter::moon::Moon::Callisto),
     ];
@@ -46,5 +46,5 @@ fn moons() {
         assert_eq!(util::round_upto_digits(X, 2), tuple.0);
         assert_eq!(util::round_upto_digits(Y, 2), tuple.1);
     }
-*/
+
 }

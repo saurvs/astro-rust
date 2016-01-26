@@ -40,7 +40,7 @@ coordinates are measured from the center of the disk of Saturn, in units
 of Saturn's equatorial radius.
 
 ```X``` is measued positively to the west of Saturn, and negatively to the
-east. The x-axis coincides with the Saturn's equator.
+east. The x-axis coincides with Saturn's equator.
 
 ```Y``` is measured positively to the north of Saturn, and negatively to
 the south. The y-axis coincides with Saturn's axis of rotation.

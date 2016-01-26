@@ -78,7 +78,7 @@ pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
 }
 
 //#[macro_export]
-macro_rules! ApprntGeocenEclPos {
+macro_rules! GeocenApprntEclPos {
     ($planet: expr, $JD: expr) => {{
         3
     }};

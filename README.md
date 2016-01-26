@@ -17,7 +17,7 @@ Also see the [API Docs](https://saurvs.github.io/astro-rust/)
 
 ```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
 
-It includes things such as  planetary, solar and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, calculating the elements for the ring of Saturn, and finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies. Even Pluto's real-time position can be calculated accurately.
+It includes things such as  planetary, solar and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, calculating the elements of the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and much more. Even Pluto's real-time position can be calculated accurately.
 
 ## Usage
 
@@ -47,7 +47,7 @@ It includes things such as  planetary, solar and lunar positioning, corrections 
   let julian_day = time::julian_day(&date);
 
   // if you want to be super accurate, find the Julian Ephemeris day;
-  // calculate delta T using a built-in function, or get an observed
+  // calculate delta T using the built-in function, or get an observed
   // value from the Astronomical Almanac
 
   let delta_t = time::approx_delta_t(date.year, date.month);
@@ -130,7 +130,7 @@ It includes things such as  planetary, solar and lunar positioning, corrections 
 
     let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
   ```
-  
+
 ## Algorithms
 
 For information on the modules and functions available, see the
@@ -159,7 +159,7 @@ algorithms that have been implemented so far:
 **The Sun**
 
 * geocentric ecliptic coordinates
-* geocentric rectangular coordinates
+* geocentric rectangular coordinates referred to the mean equinox of the date
 * ephemeris for physical observations
 * time of the beginning of Carrington's synodic rotation
 
@@ -167,7 +167,7 @@ algorithms that have been implemented so far:
 
 * geocentric ecliptic coordinates
 * optical, physical and topocentric liberations
-* time of passage through the nodes
+* times of passage through the nodes
 * illuminated fraction of the lunar disk
 * equatorial horizontal parallax
 
@@ -191,12 +191,14 @@ algorithms that have been implemented so far:
 
 **Jupiter**
 
+* apparent rectangular coordinates of Io, Europa, Ganymede, Callisto,
+with respect to Jupiter as seen from Earth
 * ephemeris for physical observations
 
 **Saturn**
 
 * apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
-Titan, Hyperion, and Iapetus with respect to Saturn as seen from Earth
+Titan, Hyperion, and Iapetus, with respect to Saturn as seen from Earth
 * elements of Saturn's ring system
 
 **Transit**

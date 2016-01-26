@@ -333,17 +333,16 @@ Returns the **geocentric** ecliptic coordinates of the Moon
 
 # Returns
 
-```(long, lat, dist)```
+```(moon_ecl_point, rad_vec)```
 
-* ```long```: Ecliptic longitude of the Moon *| in radians*
-* ```lat```: Ecliptic latitude of the Moon *| in radians*
-* ```dist```: Distance between the Moon and the Earth *(kilometers)*
+* ```moon_ecl_point```: Ecliptic point of the Moon *| in radians*
+* ```rad_vec```: Moon-Earth distance *| in kilometers*
 
 # Arguments
 
 * ```JD```: Julian (Ephemeris) day
 **/
-pub fn geocen_ecl_coords(JED: f64) -> (f64, f64, f64) {
+pub fn geocen_ecl_coords(JED: f64) -> (coords::EclPoint, f64) {
     let JC = time::julian_cent(JED);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
@@ -531,9 +530,14 @@ pub fn geocen_ecl_coords(JED: f64) -> (f64, f64, f64) {
     l = l.to_radians();
     b = b.to_radians();
 
-    (L1 + l/1000000.0,
-     b/1000000.0,
-     385000.56 + r/1000.0)
+    let ecl_point = coords::EclPoint {
+        long: L1 + l/1000000.0,
+        lat: b/1000000.0
+    };
+
+    let rad_vec = 385000.56 + r/1000.0;
+
+    (ecl_point, rad_vec)
 }
 
 /**
