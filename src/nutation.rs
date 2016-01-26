@@ -8,15 +8,15 @@ Returns **nutation** in **ecliptic longitude** and **obliquity**
 
 # Returns
 
-```(nut_in_long, nut_in_oblq)```
+`(nut_in_long, nut_in_oblq)`
 
-* ```nut_in_long```: Nutation in ecliptic longitude *| in radians*
-* ```nut_in_oblq```: Nutation in obliquity of the ecliptic
+* `nut_in_long`: Nutation in ecliptic longitude *| in radians*
+* `nut_in_oblq`: Nutation in obliquity of the ecliptic
                      *| in radians*
 
 # Arguments
 
-```JD```: Julian (Ephemeris) day
+`JD`: Julian (Ephemeris) day
 **/
 pub fn nutation(JD: f64) -> (f64, f64) {
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
@@ -117,18 +117,18 @@ Returns **nutation** in **equatorial coordinates**
 
 # Returns
 
-```(nut_in_asc, nut_in_dec)```
+`(nut_in_asc, nut_in_dec)`
 
-* ```nut_in_asc```: Nutation in right ascension *| in radians*
-* ```nut_in_dec```: Nutation in declination *| in radians*
+* `nut_in_asc`: Nutation in right ascension *| in radians*
+* `nut_in_dec`: Nutation in declination *| in radians*
 
 # Arguments
 
-* ```asc```        : Right ascension *| in radians*
-* ```dec```        : Declination *| in radians*
-* ```nut_in_long```: Nutation in longitude *| in radians*
-* ```nut_in_oblq```: Nutation in obliquity *| in radians*
-* ```tru_oblq```   : True obliquity of the ecliptic *| in radians*
+* `asc`        : Right ascension *| in radians*
+* `dec`        : Declination *| in radians*
+* `nut_in_long`: Nutation in longitude *| in radians*
+* `nut_in_oblq`: Nutation in obliquity *| in radians*
+* `tru_oblq`   : True obliquity of the ecliptic *| in radians*
 
 The declination passed should not be close to either of the two of
 the celestial poles, as the values of nutation returned here are

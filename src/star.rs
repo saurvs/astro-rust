@@ -7,8 +7,8 @@ Returns the **combined magnitude** of two stars
 
 # Arguments
 
-* ```m1```: Magnitude of star 1
-* ```m2```: Magnitude of star 2
+* `m1`: Magnitude of star 1
+* `m2`: Magnitude of star 2
 **/
 pub fn combined_mag(m1: f64, m2: f64) -> f64 {
     m2 - 2.5*(brightness_ratio(m1, m2) + 1.0)
@@ -19,7 +19,7 @@ Returns the **combined magnitude** of two or more stars
 
 # Arguments
 
-* ```m```: Array of magnitudes of stars
+* `m`: Array of magnitudes of stars
 **/
 pub fn combined_mag_of_many(m: &[f64]) -> f64 {
     let mut sum = 0.0;
@@ -34,8 +34,8 @@ Returns the **brightness ratio** of two stars
 
 # Arguments
 
-* ```m1```: Magnitude of star 1
-* ```m2```: Magnitude of star 2
+* `m1`: Magnitude of star 1
+* `m2`: Magnitude of star 2
 **/
 pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
     10.0_f64.powf(0.4 * (m2-m1))
@@ -46,7 +46,7 @@ Returns the **difference in magnitude** of two stars
 
 # Arguments
 
-* ```br```: Brightness ratio of two stars
+* `br`: Brightness ratio of two stars
 **/
 pub fn mag_diff(br: f64) -> f64 {
     2.5 * br.log10()
@@ -57,8 +57,8 @@ Returns the **absolute magnitude** of a star from its parallax
 
 # Arguments
 
-* ```par```: Parallax of the star
-* ```am```: Apparent magnitude of the star
+* `par`: Parallax of the star
+* `am`: Apparent magnitude of the star
 **/
 pub fn abs_mag_frm_parallax(mut par: f64, am: f64) -> f64 {
     par = par.to_degrees() * 3600.0;
@@ -70,8 +70,8 @@ Returns the **absolute magnitude** of a star from its distance from earth
 
 # Arguments
 
-* ```d```: The star's to earth *(parsecs)*
-* ```am```: Apparent magnitude of the star
+* `d`: The star's to earth *(parsecs)*
+* `am`: Apparent magnitude of the star
 **/
 pub fn abs_mag_frm_dist(d: f64, am: f64) -> f64 {
     am + 5.0 - 5.0*d.log10()
@@ -84,13 +84,13 @@ same star to the north pole of the ecliptic
 
 # Returns
 
-* ```angle```: The desired angle *| in radians*
+* `angle`: The desired angle *| in radians*
 
 # Arguments
 
-* ```eclip_long```: The star's ecliptical longitude *| in radians*
-* ```eclip_lat```: The star's ecliptical latitude *| in radians*
-* ```oblq_eclip```: Obliquity of the ecliptic *| in radians*
+* `eclip_long`: The star's ecliptical longitude *| in radians*
+* `eclip_lat`: The star's ecliptical latitude *| in radians*
+* `oblq_eclip`: Obliquity of the ecliptic *| in radians*
 **/
 pub fn angl_between_north_celes_and_eclip_pole(eclip_long: f64, eclip_lat: f64, oblq_eclip: f64) -> f64 {
     (eclip_long.cos() * oblq_eclip.tan())
@@ -108,24 +108,24 @@ it's proper motion, distance and radial velocity.
 
 # Returns
 
-```(new_asc, new_dec)```
+`(new_asc, new_dec)`
 
-* ```new_asc```: Right ascension at the different
+* `new_asc`: Right ascension at the different
                  time *| in radians*
-* ```new_dec```: Declination at the different
+* `new_dec`: Declination at the different
                  time *| in radians*
 
 # Arguments
 
-* ```asc0```: Right ascension of the star initially *| in radians*
-* ```dec0```: Declination of the star initially *| in radians*
-* ```r```: Distance of the star (*parsecs*)
-* ```delta_r```: Radial velocity of the star (*parsecs/second*)
-* ```proper_motion_asc```: Proper motion of the star in right ascension
+* `asc0`: Right ascension of the star initially *| in radians*
+* `dec0`: Declination of the star initially *| in radians*
+* `r`: Distance of the star (*parsecs*)
+* `delta_r`: Radial velocity of the star (*parsecs/second*)
+* `proper_motion_asc`: Proper motion of the star in right ascension
                            *| in radians*
-* ```proper_motion_dec```: Proper motion of the star in declination
+* `proper_motion_dec`: Proper motion of the star in declination
                            *| in radians*
-* ```t```: Decimal years from the inital time; negative in the past
+* `t`: Decimal years from the inital time; negative in the past
           and positive in the future
 **/
 pub fn eq_coords_frm_motion(asc0: f64, dec0: f64, r: f64, delta_r: f64,

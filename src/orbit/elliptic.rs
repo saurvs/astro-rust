@@ -67,7 +67,7 @@ Returns the **eccentric anomaly** of a body in an elliptic orbit
 
 * ```mean_anom```: Mean anomaly of the body *| in radians*
 * ```ecc```: Eccentricity of the orbit
-* ```accuracy```: Desired accuracy for the eccentric anomaly. *Eg: 0.000001 radians*
+* ```accuracy```: Desired accuracy for the eccentric anomaly. Eg: 0.000001 radians
 **/
 pub fn ecc_anom(mean_anom: f64, ecc: f64, accuracy: f64) -> f64 {
     let mut prev_E = 0.0;

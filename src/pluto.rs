@@ -9,12 +9,12 @@ Returns Pluto's geocentric **equatorial semidiameter**
 
 # Returns
 
-* ```semidiameter```: Geocentric equatorial semidiameter
+* `semidiameter`: Geocentric equatorial semidiameter
                       *| in radians per AU*
 
 # Arguments
 
-* ```pluto_earth_dist```: Pluto-Earth distance *| in AU*
+* `pluto_earth_dist`: Pluto-Earth distance *| in AU*
 **/
 pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 2.07).to_radians() / pluto_earth_dist
@@ -26,13 +26,13 @@ Almanac's method adopted in 1984
 
 # Returns
 
-* ```app_mag```: Apparent magnitude of Pluto
+* `app_mag`: Apparent magnitude of Pluto
 
 # Arguments
 
-* ```i```: Phase angle of Pluto *| in radians*
-* ```delta```: Pluto-Earth distance *| in AU*
-* ```r```: Pluto-Sun distance *| in AU*
+* `i`: Phase angle of Pluto *| in radians*
+* `delta`: Pluto-Earth distance *| in AU*
+* `r`: Pluto-Sun distance *| in AU*
 **/
 pub fn apparent_mag_84(i: f64, delta: f64, r: f64) -> f64 {
     5.0*(r*delta).log10() - 1.0
@@ -47,21 +47,21 @@ This function is valid only for the years
 
 # Returns
 
-```(long, lat, rad_vec)```
+`(long, lat, rad_vec)`
 
-* ```long```: Heliocentric longitude of Pluto *| in radians*
-* ```lat```: Heliocentric latitude of Pluto *| in radians*
-* ```rad_vec```: Heliocentric radius vector of Pluto *| in AU*
+* `long`: Heliocentric longitude of Pluto *| in radians*
+* `lat`: Heliocentric latitude of Pluto *| in radians*
+* `rad_vec`: Heliocentric radius vector of Pluto *| in AU*
 
 The error in
 
-* ```long``` is less than 0.07 arcseconds
-* ```lat``` is less than 0.02 arcseconds
-* ```rad_vec``` is less than 0.000006 AU
+* `long` is less than 0.07 arcseconds
+* `lat` is less than 0.02 arcseconds
+* `rad_vec` is less than 0.000006 AU
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn heliocen_pos(JD: f64) -> (f64, f64, f64) {
     let JC = time::julian_cent(JD);
@@ -138,14 +138,14 @@ Returns Pluto's **mean orbital elements** near 2000 AD
 
 # Returns
 
-```(a, e, i, omega, w)```
+`(a, e, i, omega, w)`
 
-* ```a```: Semimajor axis of the orbit *| in AU*
-* ```e```: Eccentricity of the orbit
-* ```i```: Inclination of the plane of Pluto's orbit with the plane of
+* `a`: Semimajor axis of the orbit *| in AU*
+* `e`: Eccentricity of the orbit
+* `i`: Inclination of the plane of Pluto's orbit with the plane of
            the Earth's ecliptic *| in radians*
-* ```omega```: Longitude of the ascending node *| in radians*
-* ```w```: Argument of the perihelion *| in radians*
+* `omega`: Longitude of the ascending node *| in radians*
+* `w`: Argument of the perihelion *| in radians*
 **/
 pub fn mean_orb_elements_J2000() -> (f64, f64, f64, f64, f64) {
     (39.543, 0.249,

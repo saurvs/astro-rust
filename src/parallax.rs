@@ -9,12 +9,12 @@ Returns the **equatorial horizontal parallax** of a celestial body
 
 # Returns
 
-* ```eq_hz_parllx```: Equatorial horizontal parallax of the celestial
+* `eq_hz_parllx`: Equatorial horizontal parallax of the celestial
                       body *| in radians*
 
 # Arguments
 
-* ```dist_to_earth```: The celestial body's distance to the Earth *| in AU*
+* `dist_to_earth`: The celestial body's distance to the Earth *| in AU*
 **/
 pub fn eq_hz_parallax(dist_to_earth: f64) -> f64 {
     (angle::deg_frm_dms(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
@@ -25,16 +25,16 @@ Returns the **topocentric equatorial coordinates** of a celestial body
 
 # Returns
 
-* ```topocen_eq_point```: Topocentric equatorial point of the
+* `topocen_eq_point`: Topocentric equatorial point of the
                      celestial body *| in radians*
 
 # Arguments
 
-* ```eq_point```: Equatorial point of the celestial body *| in radians*
-* ```dist_to_earth```: The celestial body's distance to the Earth *| in AU*
-* ```geograph_point```: Geographic point of the observer *| in radians*
-* ```observer_ht```: Height of the observer above sea level *| in meters*
-* ```greenwhich_sidreal```: Sidereal time at Greenwhich *| in radians*
+* `eq_point`: Equatorial point of the celestial body *| in radians*
+* `dist_to_earth`: The celestial body's distance to the Earth *| in AU*
+* `geograph_point`: Geographic point of the observer *| in radians*
+* `observer_ht`: Height of the observer above sea level *| in meters*
+* `greenwhich_sidreal`: Sidereal time at Greenwhich *| in radians*
 **/
 pub fn topocen_eq_coords(
     eq_point: &coords::EqPoint,
@@ -63,21 +63,21 @@ Returns the **topocentric ecliptic coordinates** of a celestial body
 
 # Returns
 
-```(topocen_ecl_point, topocen_geocen_semidia)```
+`(topocen_ecl_point, topocen_geocen_semidia)`
 
-* ```topocen_ecl_point```: Topocentric ecliptic point of the
+* `topocen_ecl_point`: Topocentric ecliptic point of the
                      celestial body *| in radians*
-* ```topocen_geocen_semidia```: Topocentric geocentric semidiameter of the celestial body *| in radians*
+* `topocen_geocen_semidia`: Topocentric geocentric semidiameter of the celestial body *| in radians*
 
 # Arguments
 
-* ```ecl_point```: Ecliptic point of the celestial body *| in radians*
-* ```eq_hz_parllx```: Equatorial horizontal parallax of the celestial body *| in radians*
-* ```geograph_point```: Geographic point of the observer *| in radians*
-* ```observer_ht```: Height of the observer above sea level *| in meters*
-* ```loc_sidr```: Local sidereal time *| in radians*
-* ```eclip_oblq```: Obliquity of the ecliptic *| in radians*
-* ```geocen_semdia```: Geocentric semidiameter of the celestial body *| in radians*
+* `ecl_point`: Ecliptic point of the celestial body *| in radians*
+* `eq_hz_parllx`: Equatorial horizontal parallax of the celestial body *| in radians*
+* `geograph_point`: Geographic point of the observer *| in radians*
+* `observer_ht`: Height of the observer above sea level *| in meters*
+* `loc_sidr`: Local sidereal time *| in radians*
+* `eclip_oblq`: Obliquity of the ecliptic *| in radians*
+* `geocen_semdia`: Geocentric semidiameter of the celestial body *| in radians*
 **/
 pub fn topopcen_ecl_coords(
     ecl_point: &coords::EclPoint,

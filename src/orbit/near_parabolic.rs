@@ -20,7 +20,7 @@ near-parabolic orbit
 * ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
 * ```ecc```: Eccentricity of the orbit
 * ```q```: Perihelion distance *| in AU*
-* ```accuracy```: Desired accuracy for the results. *Eg: 0.000001 radians*
+* ```accuracy```: Desired accuracy for the results. Eg: 0.000001 radians
 **/
 pub fn true_anom_and_rad_vec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) -> (f64, f64) {
     let days_frm_perih = t - T;

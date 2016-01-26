@@ -11,7 +11,7 @@ Returns the Sun's **equatorial semidiameter**
 
 # Arguments
 
-* ```sun_earth_dist```: Sun-Earth distance *| in AU*
+* `sun_earth_dist`: Sun-Earth distance *| in AU*
 **/
 pub fn semidiameter(sun_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 959.63) / sun_earth_dist
@@ -23,14 +23,14 @@ referred to the **mean equinox of the date**
 
 # Returns
 
-```(sun_ecl_point, sun_earth_dist)```
+`(sun_ecl_point, sun_earth_dist)`
 
-* ```sun_ecl_point```: Ecliptic point of the Sun *| in radians*
-* ```sun_earth_dist```: Sun-Earth distance *| in AU*
+* `sun_ecl_point`: Ecliptic point of the Sun *| in radians*
+* `sun_earth_dist`: Sun-Earth distance *| in AU*
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
     let (L, B, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
@@ -52,20 +52,20 @@ converted to the **FK5** system
 
 # Returns
 
-```(ecl_long_FK5, ecl_lat_FK5)```
+`(ecl_long_FK5, ecl_lat_FK5)`
 
-* ```ecl_long_FK5```: Ecliptic longitude of the Sun *| in radians*,
+* `ecl_long_FK5`: Ecliptic longitude of the Sun *| in radians*,
                       converted to the FK5 system
-* ```ecl_lat_FK5```: Ecliptic latitude of the Sun *| in radians*,
+* `ecl_lat_FK5`: Ecliptic latitude of the Sun *| in radians*,
                      converted to the FK5 system
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```ecl_long```: Ecliptic longitude of the Sun on ```JD```
+* `JD`: Julian (Ephemeris) day
+* `ecl_long`: Ecliptic longitude of the Sun on `JD`
                   *| in radians*, referred to the mean equinox
                   of the date
-* ```ecl_lat```: Ecliptic latitude of the Sun ```JD```
+* `ecl_lat`: Ecliptic latitude of the Sun `JD`
                  *| in radians*, referred to the mean equinox
                  of the date
 **/
@@ -90,11 +90,11 @@ referred to the **mean equinox of the date**
 
 # Returns
 
-```(x, y z)```
+`(x, y z)`
 
-* ```x```: The X coordinate *| in AU*
-* ```y```: The Y coordinate *| in AU*
-* ```z```: The Z coordinate *| in AU*
+* `x`: The X coordinate *| in AU*
+* `y`: The Y coordinate *| in AU*
+* `z`: The Z coordinate *| in AU*
 
 * The positive x-axis is directed towards the Earth's vernal equinox
 (0 degrees longitude)
@@ -105,12 +105,12 @@ celestial pole
 
 # Arguments
 
-* ```sun_geo_long```: The Sun's geometric longitude *| in radians*,
+* `sun_geo_long`: The Sun's geometric longitude *| in radians*,
                       *without* corrections for nutation and abberation
-* ```sun_geo_lat```: The Sun's geometric latitude *| in radians*,
+* `sun_geo_lat`: The Sun's geometric latitude *| in radians*,
                      *without* corrections for nutation and abberation
-* ```sun_rad_vec```: The Sun's geometric radius vector *| in AU*
-* ```mean_oblq```: Mean obliquity of the ecliptic
+* `sun_rad_vec`: The Sun's geometric radius vector *| in AU*
+* `mean_oblq`: Mean obliquity of the ecliptic
 **/
 pub fn geocen_rect_coords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_oblq: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
@@ -125,26 +125,26 @@ of the Sun
 
 # Returns
 
-```(P, B0, L0)```
+`(P, B0, L0)`
 
-* ```P```: Position angle of the northern extremity of the axis of
+* `P`: Position angle of the northern extremity of the axis of
            rotation, measured eastwards from the North point of the
            solar disk *| in radians*
-* ```B0```: Heliographic latitude of the center of the solar
+* `B0`: Heliographic latitude of the center of the solar
             disk *| in radians*
-* ```L0```: Heliographic longitude of the center of the solar
+* `L0`: Heliographic longitude of the center of the solar
             disk *| in radians*
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```app_long```: Apparent longitude of the Sun *| in radians*,
+* `JD`: Julian (Ephemeris) day
+* `app_long`: Apparent longitude of the Sun *| in radians*,
                   including the effect of abberation and *not* that
                   of nutation
-* ```app_long_with_nut```: Apparent longitude of the Sun *| in radians*,
+* `app_long_with_nut`: Apparent longitude of the Sun *| in radians*,
                   including the effect of abberation *and* that
                   of nutation
-* ```oblq_eclip```: True obliquity of the ecliptic *| in radians*
+* `oblq_eclip`: True obliquity of the ecliptic *| in radians*
 **/
 pub fn ephemeris(JD: f64, app_long: f64, app_long_with_nut: f64, oblq_eclip: f64) -> (f64, f64, f64) {
     let theta = angle::limit_to_360((JD - 2398220.0) * (360.0/25.38)).to_radians();
