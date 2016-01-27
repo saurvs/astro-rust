@@ -11,7 +11,7 @@
 
 ```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
 
-It includes things such as  planetary, solar and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculating the physical ephemeris of Mars and Jupiter, calculating the elements of the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and much more. Even Pluto's real-time position can be calculated accurately.
+These include things such as  planetary, solar and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and much more. Even Pluto's real-time position can be calculated accurately.
 
 ## Usage
 
