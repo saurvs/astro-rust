@@ -217,7 +217,7 @@ pub fn precess_orb_elements(old_inc: f64, old_arg_perih: f64, old_long_ascend_no
         new_long_ascend_node = phi + std::f64::consts::PI;
     }
     else {
-        let A = old_inc.sin() * (old_long_ascend_node - Pi).sin();println!("A = {:?}", A);
+        let A = old_inc.sin() * (old_long_ascend_node - Pi).sin();
         let B = - nu.sin() * old_inc.cos()
                 + nu.cos() * old_inc.sin() * (old_long_ascend_node - Pi).cos();
 

@@ -1,5 +1,5 @@
 //! The four Galilean moons
-use angle;use util;use planet;
+use angle;use util;use planet;use time;
 /*
 
 Meeus referrs to the moons as Satellites I, II, III and IV.

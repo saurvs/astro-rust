@@ -40,7 +40,8 @@ These include things such as  planetary, solar and lunar positioning, correction
 
   let julian_day = time::julian_day(&date);
 
-  // if you want to be super accurate, find the Julian Ephemeris day;
+  // for higher accuracy in specifying the time of interest,
+  // find the Julian Ephemeris day;
   // calculate delta T using the built-in function, or get an observed
   // value from the Astronomical Almanac
 
@@ -105,7 +106,7 @@ These include things such as  planetary, solar and lunar positioning, correction
     let oblq_eclip = 23.4392911_f64.to_radians();
 
     // you can also get oblq_eclip from ecliptic::mn_oblq_IAU(julian_day)
-    // for the same Julian day when the coordinates of the star
+    // for the Julian day on which the coordinates of the star
     // were observed
 
     // also make sure to type #[macro_use] before including the crate
@@ -144,8 +145,7 @@ algorithms that have been implemented so far:
 
 **The Solar System Planets excluding Earth**
 
-* geocentric ecliptic coordinates
-* geocentric equatorial coordinates
+* geocentric ecliptic and equatorial coordinates from heliocentric coordinates
 * apparent visual magnitude
 * equatorial semidiameter
 * polar semidiameter for Saturn and Jupiter
@@ -158,7 +158,7 @@ algorithms that have been implemented so far:
 * geocentric ecliptic coordinates
 * geocentric rectangular coordinates referred to the mean equinox of the date
 * ephemeris for physical observations
-* time of the beginning of Carrington's synodic rotation
+* start of different Carrington's synodic rotation cycles
 
 **The Moon**
 
@@ -188,25 +188,25 @@ algorithms that have been implemented so far:
 
 **Jupiter**
 
-* apparent rectangular coordinates of Io, Europa, Ganymede, Callisto,
+* apparent rectangular coordinates of Io, Europa, Ganymede and Callisto
 with respect to Jupiter as seen from Earth
 * ephemeris for physical observations
 
 **Saturn**
 
 * apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
-Titan, Hyperion, and Iapetus, with respect to Saturn as seen from Earth
+Titan, Hyperion, and Iapetus with respect to Saturn as seen from Earth
 * elements of Saturn's ring system
 
 **Transit**
 
-* Times of rise, transit and set for the stars, the planets, the Sun, and the Moon
+* Times of rise, transit and set for the stars, planets, Sun, and Moon
 
 **Ecliptic**
 
-* mean obliquity, using the IAU and Laskar methods
-* angle between the ecliptic and the horizon
-* longitudes of the two ecliptic points on the horizon
+* mean obliquity, using the IAU and Laskar formulae
+* angle between the ecliptic and the horizon from Earth
+* longitudes of the two ecliptic points on the horizon from Earth
 
 **Nutation** in
 
@@ -216,7 +216,8 @@ Titan, Hyperion, and Iapetus, with respect to Saturn as seen from Earth
 
 **Atmospheric refraction**
 
-* apparent altitude from true altitude, and vice-versa
+* refraction correction for true altitude to
+obtain apparent altitude, and vice-versa
 * effect of local pressure and temperature
 
 **Aberration**

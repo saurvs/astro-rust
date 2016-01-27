@@ -67,18 +67,18 @@ surface *| in kilometers*
 * ```p2```: ```GeographPoint``` 2
 **/
 pub fn geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
-    let f = (p1.lat + p2.lat) / 2.0;println!("{:?}", f.to_degrees());
-    let g = (p1.lat - p2.lat) / 2.0;println!("{:?}", g.to_degrees());
-    let lam = (p1.long - p2.long) / 2.0;println!("{:?}", lam.to_degrees());
+    let f = (p1.lat + p2.lat) / 2.0;
+    let g = (p1.lat - p2.lat) / 2.0;
+    let lam = (p1.long - p2.long) / 2.0;
     let s = (g.sin() * lam.cos()).powi(2) +
-            (f.cos() * lam.sin()).powi(2);println!("{:?}", s);
+            (f.cos() * lam.sin()).powi(2);
     let c = (g.cos() * lam.cos()).powi(2) +
-            (f.sin() * lam.sin()).powi(2);println!("{:?}", c);
-    let om = ((s / c).sqrt()).atan();println!("{:?}", om);
-    let r = (s * c).sqrt() / om;println!("{:?}", r);
-    let d = 2.0 * om * eq_rad();println!("{:?}", d);
-    let h1 = (3.0*r - 1.0) / (2.0 * c);println!("{:?}", h1);
-    let h2 = (3.0*r + 1.0) / (2.0 * s);println!("{:?}", h2);
+            (f.sin() * lam.sin()).powi(2);
+    let om = ((s / c).sqrt()).atan();
+    let r = (s * c).sqrt() / om;
+    let d = 2.0 * om * eq_rad();
+    let h1 = (3.0*r - 1.0) / (2.0 * c);
+    let h2 = (3.0*r + 1.0) / (2.0 * s);
 
     d * (  1.0
          + flat_fac() * h1 * (f.sin() * g.cos()).powi(2)

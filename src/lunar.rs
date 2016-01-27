@@ -66,7 +66,7 @@ fn F(JC: f64) -> f64 {
 }
 
 fn E(JC: f64) -> f64 {
-    1.0 - JC*(0.002516 + JC*0.0000074)
+    1.0 - JC*(0.002_516 + JC*0.000_0074)
 }
 
 fn DMM1(JC: f64) -> (f64, f64, f64) {
@@ -130,26 +130,26 @@ latitude *| in radians*
 
 # Arguments
 
-* `mn_geocen_moon_long`: The mean geocentric longitude of the
+* `mn_ecl_long_moon`: The mean ecliptic longitude of the
 Moon *| in radians*, i.e, *without* the correction for nutation
-* `apprnt_geocen_moon_lat`: The apparent geocentric longitude of the
+* `apprnt_ecl_lat_moon`: The apparent ecliptic latitude of the
 Moon *| in radians*, i.e, *with* the correction for nutation
 * `JD`: Julian (Ephemeris) day
 **/
-pub fn optical_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
+pub fn optical_libr(mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64,
                          JD: f64) -> (f64, f64) {
     let JC = time::julian_cent(JD);
     let F = F(JC);
     let I = inc_of_mn_lunar_eq();
 
     let long_of_mn_ascend_node = mn_ascend_node(JC);
-    let W = mn_geocen_moon_long - long_of_mn_ascend_node;
+    let W = mn_ecl_long_moon - long_of_mn_ascend_node;
 
-    let A = A(mn_geocen_moon_long, apprnt_geocen_moon_lat,
+    let A = A(mn_ecl_long_moon, apprnt_ecl_lat_moon,
               long_of_mn_ascend_node);
 
-    let b1 = ( - W.sin() * apprnt_geocen_moon_lat.cos() * I.sin()
-               - apprnt_geocen_moon_lat.sin() * I.cos()
+    let b1 = ( - W.sin() * apprnt_ecl_lat_moon.cos() * I.sin()
+               - apprnt_ecl_lat_moon.sin() * I.cos()
              ).asin();
 
     (angle::limit_to_360((A - F).to_degrees()).to_radians(),
@@ -171,15 +171,15 @@ latitude *| in radians*
 
 # Arguments
 
-* `mn_geocen_moon_long`: The mean geocentric longitude of the
+* `mn_ecl_long_moon`: The mean ecliptic longitude of the
 Moon *| in radians*, i.e, *without* the correction for nutation
-* `apprnt_geocen_moon_lat`: The apparent geocentric longitude of the
+* `apprnt_ecl_lat_moon`: The apparent ecliptic latitude of the
 Moon *| in radians*, i.e, *with* the correction for nutation
 * `optical_lib_lat`: The optical libration in latitude *| in radians*
 * `JD`: Julian (Ephemeris) day
 **/
-pub fn physical_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
-                          JD: f64, optical_lib_lat: f64) -> (f64, f64) {
+pub fn physical_libr(mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64,
+                          optical_lib_lat: f64, JD: f64) -> (f64, f64) {
     let JC = time::julian_cent(JD);
     let K1 = (119.75 + 131.849*JC).to_radians();
     let K2 = (72.56 + 20.186*JC).to_radians();
@@ -217,8 +217,8 @@ pub fn physical_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
                + 0.00011 * (2.0*(M1 - M - D)).sin()
               ).to_radians();
 
-    let W = mn_geocen_moon_long - long_of_mn_ascend_node;
-    let A = A(mn_geocen_moon_long, apprnt_geocen_moon_lat,
+    let W = mn_ecl_long_moon - long_of_mn_ascend_node;
+    let A = A(mn_ecl_long_moon, apprnt_ecl_lat_moon,
               long_of_mn_ascend_node);
 
     (-tau + optical_lib_lat.tan()*(rho*A.cos() + sig*A.sin()),
@@ -240,18 +240,18 @@ latitude *| in radians*
 
 # Arguments
 
-* `mn_geocen_moon_long`: The mean geocentric longitude of the
+* `mn_ecl_long_moon`: The mean ecliptic longitude of the
 Moon *| in radians*, i.e, *without* the correction for nutation
-* `apprnt_geocen_moon_lat`: The apparent geocentric longitude of the
+* `apprnt_ecl_lat_moon`: The apparent ecliptic latitude of the
 Moon *| in radians*, i.e, *with* the correction for nutation
 * `JD`: Julian (Ephemeris) day
 **/
-pub fn total_libr(mn_geocen_moon_long: f64, apprnt_geocen_moon_lat: f64,
+pub fn total_libr(mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64,
                          JD: f64) -> (f64, f64) {
-    let (opt_long, opt_lat) = optical_libr(mn_geocen_moon_long,
-                                                apprnt_geocen_moon_lat, JD);
-    let (phys_long, phys_lat) = physical_libr(mn_geocen_moon_long,
-                                                apprnt_geocen_moon_lat, JD, opt_lat);
+    let (opt_long, opt_lat) = optical_libr(mn_ecl_long_moon,
+                                                apprnt_ecl_lat_moon, JD);
+    let (phys_long, phys_lat) = physical_libr(mn_ecl_long_moon,
+                                                apprnt_ecl_lat_moon, JD, opt_lat);
 
     (opt_long + phys_long,
      opt_lat + phys_lat)
@@ -272,12 +272,12 @@ Returns the **position angle** of the **axis of rotation** of the Moon
 * `nut_in_long`: Nutation correction for longitude *| in radians*
 * `true_oblq`: True obliquity of the ecliptic *| in radians*
 * `apprnt_moon_asc`: Apparent geocentric right ascension of the Moon *| in radians*
-* `JED`: Julian (Ephemeris) day
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn pos_angl_of_axis_of_rot(mn_ascen_node_long: f64, total_lib_lat: f64,
                                      nut_in_long: f64, true_oblq: f64,
-                                     apprnt_moon_asc: f64, JED: f64) -> f64 {
-    let JC = time::julian_cent(JED);
+                                     apprnt_moon_asc: f64, JD: f64) -> f64 {
+    let JC = time::julian_cent(JD);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
     let (rho, sig) = rho_sig(D, M, M1, F);
@@ -329,7 +329,7 @@ pub fn topocen_libr_by_diff_corrections(observer_lat: f64, geocen_dec_moon: f64,
 }
 
 /**
-Returns the **geocentric** ecliptic coordinates of the Moon,
+Returns the **geocentric ecliptic** position of the Moon,
 referred to the **mean equinox of the date**
 
 # Returns
@@ -340,7 +340,7 @@ referred to the **mean equinox of the date**
 * `rad_vec`: Moon-Earth distance *| in kilometers*
 
 This function uses the partial Chapront ELP-2000/82
-lunar theory, and so the error in:
+lunar theory, so the accruacy of:
 
 * `moon_ecl_point.long`: is `10` arcseconds
 * `moon_ecl_point.lat`: is `4` arcseconds
@@ -349,8 +349,8 @@ lunar theory, and so the error in:
 
 * `JD`: Julian (Ephemeris) day
 **/
-pub fn geocen_ecl_pos(JED: f64) -> (coords::EclPoint, f64) {
-    let JC = time::julian_cent(JED);
+pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
+    let JC = time::julian_cent(JD);
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
     let E = E(JC);
@@ -560,10 +560,16 @@ Returns the **longitude** of the **mean ascending node** of the Moon
 * `JC`: Julian century
 **/
 pub fn mn_ascend_node(JC: f64) -> f64 {
-    angle::limit_to_360(125.0445479 - JC*(1934.1362891 -
-                                          JC*(0.0020754 +
-                                          JC*(1.0/467441.0 -
-                                          JC/60616000.0)))).to_radians()
+    angle::limit_to_360(
+        Horner_eval!(
+            JC,
+            125.0445479,
+            -1934.1362891,
+            0.0020754,
+            1.0/467441.0,
+            -1.0/60616000.0
+        )
+    ).to_radians()
 }
 
 /**
@@ -603,10 +609,16 @@ Returns the **longitude** of the **mean perigee** of the Moon
 * `JC`: Julian century
 **/
 pub fn mn_perigee(JC: f64) -> f64 {
-    angle::limit_to_360(83.3532465 + JC*(4069.0137287 -
-                                         JC*(0.01032 +
-                                         JC*(1.0/80053.0 -
-                                         JC/18999000.0)))).to_radians()
+    angle::limit_to_360(
+        Horner_eval!(
+            JC,
+            83.3532465,
+            4069.0137287,
+            -0.01032,
+            -1.0/80053.0,
+            1.0/18999000.0
+        )
+    ).to_radians()
 }
 
 /**
@@ -731,4 +743,275 @@ fn time_of_passage_through_node(k: f64, T: f64) -> f64 {
      0.0004 * (D_times_2 - M + M1).sin() +
      0.0003 * (-1.0 * (2.0 * (D - M)).sin() +
                (2.0*D_times_2 - M).sin() + V.sin() + P.sin()))
+}
+
+/// Represents a phase of the Moon
+pub enum Phase {
+    /// New Moon
+    New,
+    /// First Quarter
+    First,
+    /// Full Moon
+    Full,
+    /// Last Quarter
+    Last
+}
+
+/**
+Returns the Julian (Ephemeris) day corresponding to one of the four
+phases of the Moon
+
+# Returns
+
+* `JD`: Julian (Ephemeris) day corresponding the exact time of the phase
+
+The error in `JD` may go upto a few seconds.
+
+Meeus says the mean error in `JD` between 1980 AD and mid-2020 AD
+was 3.8 seconds.
+
+# Arguments
+
+* `date`: Date of interest
+* `phase`: The [Phase](./enum.Phase.html)
+**/
+pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
+    let K = (((time::decimal_year(&date) - 2000.0)*12.3685) as i64) as f64;
+    let k = match phase {
+        &Phase::New   => K,
+        &Phase::First => K + 0.25,
+        &Phase::Full  => K + 0.5,
+        &Phase::Last  => K + 0.75,
+    };
+    let T = k/1236.85;
+
+    let mut JDE =
+        2451550.09766
+        + k*29.530588861
+        + T*Horner_eval!(
+            T, 0.0,
+            0.000_154_37,
+            -0.000_000_15,
+            0.000_000_000_73
+        );
+    let E = E(T);
+    let M = (
+        2.5534
+        + k*29.105_356_7
+        + T*Horner_eval!(
+            T, 0.0,
+            -0.000_0014,
+            -0.000_000_11
+        )).to_radians();
+    let M1 = (
+        201.5643
+        + k*385.816_935_28
+        + T*Horner_eval!(
+            T, 0.0,
+            0.010_7582,
+            0.000_012_38,
+            -0.000_000_058
+        )).to_radians();
+    let F = (
+        160.7108
+        + k*390.670_502_84
+        + T*Horner_eval!(
+            T, 0.0,
+            -0.001_6118,
+            -0.000_002_27,
+            0.000_000_011
+        )).to_radians();
+    let omega = (
+        124.7746
+        - k*1.563_755_88
+        + T*Horner_eval!(
+            T, 0.0,
+            0.002_0672,
+            0.000_002_15
+        )).to_radians();
+
+    let A1  = (299.77 +  0.107_408*k - 0.009_173*T*T).to_radians();
+    let A2  = (251.88 +  0.016_321*k).to_radians();
+    let A3  = (251.83 + 26.651_886*k).to_radians();
+    let A4  = (349.42 + 36.412_478*k).to_radians();
+    let A5  = ( 84.66 + 18.206_239*k).to_radians();
+    let A6  = (141.74 + 53.303_771*k).to_radians();
+    let A7  = (207.14 +  2.453_732*k).to_radians();
+    let A8  = (154.84 +  7.306_860*k).to_radians();
+    let A9  = ( 34.52 + 27.261_239*k).to_radians();
+    let A10 = (207.19 +  0.121_824*k).to_radians();
+    let A11 = (291.34 +  1.844_379*k).to_radians();
+    let A12 = (161.72 + 24.198_154*k).to_radians();
+    let A13 = (239.56 + 25.513_099*k).to_radians();
+    let A14 = (331.55 +  3.592_518*k).to_radians();
+
+    let is_quarter = match phase {
+        &Phase::New   => false,
+        &Phase::First => true,
+        &Phase::Full  => false,
+        &Phase::Last  => true,
+    };
+
+    if is_quarter {
+        let W =
+            0.003_06
+            - 0.000_38*E*M.cos()
+            + 0.000_26*M1.cos();
+            - 0.000_02*((M1 - M).cos() - (M1 + M).cos() - (2.0*F).cos());
+        JDE += match phase {
+            &Phase::New   => 0.0,
+            &Phase::First => W,
+            &Phase::Full  => 0.0,
+            &Phase::Last  => -W,
+        };
+
+        let corrections = [
+            [-0.62801, M1],
+            [0.17172*E, M],
+            [-0.01183*E, M1 + M],
+            [0.00862, 2.0*M1],
+            [0.00804, 2.0*F],
+            [0.00454*E, M1 - M],
+            [0.00204*E*E, 2.0*M],
+            [-0.0018, M1 - 2.0*F],
+            [-0.0007, M1 + 2.0*F],
+            [-0.0004, 3.0*M1],
+            [-0.00034, 2.0*M1 - M],
+            [0.00032*E, M + 2.0*F],
+            [0.00032*E, M - 2.0*F],
+            [-0.00028*E*E, M1 + 2.0*M],
+            [0.00027*E, 2.0*M1 + M],
+            [-0.00017, omega],
+            [-0.00005, M1 - M - 2.0*F],
+            [0.00004, 2.0*(M1 + F)],
+            [-0.00004, M1 + M + 2.0*F],
+            [0.00004, M1 - 2.0*M],
+            [0.00003, M1 + M - 2.0*F],
+            [0.00003, 3.0*M],
+            [0.00002, 2.0*(M1 - F)],
+            [0.00002, M1 - M + 2.0*F],
+            [-0.00002, 3.0*M1 + M],
+        ];
+        for &x in corrections.iter() {
+            JDE += x[0]*x[1].sin();
+        }
+    }
+    else {
+        let is_new = match phase {
+            &Phase::New   => true,
+            &Phase::First => false,
+            &Phase::Full  => false,
+            &Phase::Last  => false,
+        };
+
+        let sine_arguments = [
+            M1,
+            M,
+            2.0*M1,
+            2.0*F,
+            M1 - M,
+            M1 + M,
+            2.0*M,
+            M1 - 2.0*F,
+            M1 + 2.0*F,
+            2.0*M1 + M,
+            3.0*M1,
+            M + 2.0*F,
+            M - 2.0*F,
+            2.0*M1 - M,
+            omega,
+            M1 + 2.0*M,
+            2.0*(M1 - F),
+            3.0*M,
+            M1 + M - 2.0*F,
+            2.0*(M1 + F),
+            M1 + M + 2.0*F,
+            M1 - M + 2.0*F,
+            M1 - M - 2.0*F,
+            3.0*M1 + M,
+            4.0*M1
+        ];
+
+        let multipliers = if is_new {
+            [-0.4072,
+            0.17241*E,
+            0.01608,
+            0.01039,
+            0.00739*E,
+            -0.00514*E,
+            0.00208*E*E,
+            -0.00111,
+            -0.00057,
+            0.00056*E,
+            -0.00042,
+            0.00042*E,
+            0.00038*E,
+            -0.00024*E,
+            -0.00017,
+            -0.00007,
+            0.00004,
+            0.00004,
+            0.00003,
+            0.00003,
+            -0.00003,
+            0.00003,
+            -0.00002,
+            -0.00002,
+            0.00002]
+        }
+        else {
+            [-0.40614,
+            0.17302*E,
+            0.01614,
+            0.01043,
+            0.00734*E,
+            -0.00515*E,
+            0.00209*E*E,
+            -0.00111,
+            -0.00057,
+            0.00056*E,
+            -0.00042,
+            0.00042*E,
+            0.00038*E,
+            -0.00024*E,
+            -0.00017,
+            -0.00007,
+            0.00004,
+            0.00004,
+            0.00003,
+            0.00003,
+            -0.00003,
+            0.00003,
+            -0.00002,
+            -0.00002,
+            0.00002]
+        };
+
+        for mx in multipliers.iter().zip(sine_arguments.iter()) {
+            JDE += mx.0*(mx.1).sin();
+        }
+
+    }
+
+    let additional_corrections = [
+        [0.000_325, A1],
+        [0.000_165, A2],
+        [0.000_164, A3],
+        [0.000_126, A4],
+        [0.000_110, A5],
+        [0.000_062, A6],
+        [0.000_06, A7],
+        [0.000_056, A8],
+        [0.000_047, A9],
+        [0.000_042, A10],
+        [0.000_04, A11],
+        [0.000_037, A12],
+        [0.000_035, A13],
+        [0.000_023, A14],
+    ];
+    for &x in additional_corrections.iter() {
+        JDE += x[0]*x[1].sin();
+    }
+
+    JDE
 }
