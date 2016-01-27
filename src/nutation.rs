@@ -2,9 +2,10 @@
 
 use angle;
 use time;
+use coords;
 
 /**
-Returns **nutation** in **ecliptic longitude** and **obliquity**
+Returns nutation in **ecliptic longitude** and **obliquity**
 
 # Returns
 
@@ -113,7 +114,7 @@ pub fn nutation(JD: f64) -> (f64, f64) {
 }
 
 /**
-Returns **nutation** in **equatorial coordinates**
+Returns nutation in **equatorial coordinates**
 
 # Returns
 
@@ -124,8 +125,7 @@ Returns **nutation** in **equatorial coordinates**
 
 # Arguments
 
-* `asc`        : Right ascension *| in radians*
-* `dec`        : Declination *| in radians*
+* `eq_point`   : Equatorial point uncorrected for nutation *| in radians*
 * `nut_in_long`: Nutation in longitude *| in radians*
 * `nut_in_oblq`: Nutation in obliquity *| in radians*
 * `tru_oblq`   : True obliquity of the ecliptic *| in radians*
@@ -134,8 +134,9 @@ The declination passed should not be close to either of the two of
 the celestial poles, as the values of nutation returned here are
 only first-order corrections.
 **/
-pub fn nutation_in_eq_coords(asc: f64, dec: f64, nut_in_long: f64,
+pub fn nutation_in_eq_coords(eq_point: &coords::EqPoint, nut_in_long: f64,
                           nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {
+    let (asc, dec) = (eq_point.asc, eq_point.dec);
     let nut_asc =   (  tru_oblq.cos()
                      + tru_oblq.sin()*asc.sin()*dec.tan()
                     )*nut_in_long

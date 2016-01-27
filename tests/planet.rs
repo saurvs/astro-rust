@@ -52,7 +52,8 @@ fn ecl_coords_to_FK5() {
 
 #[test]
 fn geocen_apprnt_ecl_pos() {
-    let (mut L, mut B, mut R) = planet::geocen_apprnt_ecl_pos(&planet::Planet::Venus, 2448976.5);
+    let (planet_ecl_point, mut R) = planet::geocen_apprnt_ecl_pos(&planet::Planet::Venus, 2448976.5);
+    let (mut L, mut B) = (planet_ecl_point.long, planet_ecl_point.lat);
     L = util::round_upto_digits(angle::limit_to_360(L.to_degrees()), 2);
     B = util::round_upto_digits(B.to_degrees(), 2);
     R = util::round_upto_digits(R, 4);

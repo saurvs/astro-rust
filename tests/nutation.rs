@@ -16,10 +16,13 @@ fn nutation() {
 #[test]
 fn nutation_in_eq_coords() {
     let d = time::Date{year: 2028, month: 11, decimal_day: 13.19, cal_type: time::CalType::Gregorian};
+    let eq_point = coords::EqPoint{asc: 41.5555635_f64.to_radians(), dec: 49.3503415_f64.to_radians()};
     let (a, b) = nutation::nutation_in_eq_coords(
-                        41.5555635_f64.to_radians(), 49.3503415_f64.to_radians(),
-                        angle::deg_frm_dms(0, 0, 14.861).to_radians(), angle::deg_frm_dms(0, 0, 2.705).to_radians(),
-                        23.436_f64.to_radians());
+        &eq_point,
+        angle::deg_frm_dms(0, 0, 14.861).to_radians(),
+        angle::deg_frm_dms(0, 0, 2.705).to_radians(),
+        23.436_f64.to_radians()
+    );
 
     assert_eq!(util::round_upto_digits(a.to_degrees(), 7), 0.0044011);
     assert_eq!(util::round_upto_digits(b.to_degrees(), 7), 0.001727);

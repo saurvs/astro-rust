@@ -6,6 +6,7 @@ use angle;
 use ecliptic;
 use nutation;
 use planet;
+use coords;
 
 /**
 Returns Jupiter's **equatorial semidiameter**
@@ -119,13 +120,21 @@ pub fn ephemeris(JD: f64,
                 - asc.sin()*asc.cos())
                 + asc.cos()*dec.sin()*l0.sin());
 
-    let (asc_nut, dec_nut) = nutation::nutation_in_eq_coords(asc, dec, nut_in_long,
-                                                          nut_in_oblq, tru_oblq);
+    let (asc_nut, dec_nut) = nutation::nutation_in_eq_coords(
+        &coords::EqPoint{asc: asc, dec: dec},
+        nut_in_long,
+        nut_in_oblq,
+        tru_oblq
+    );
     let asc1 = asc + asc_nut;
     let dec1 = dec + dec_nut;
 
-    let (asc0_nut, dec0_nut) = nutation::nutation_in_eq_coords(asc0, dec0, nut_in_long,
-                                                            nut_in_oblq, tru_oblq);
+    let (asc0_nut, dec0_nut) = nutation::nutation_in_eq_coords(
+        &coords::EqPoint{asc: asc0, dec: dec0},
+        nut_in_long,
+        nut_in_oblq,
+        tru_oblq
+    );
     let asc01 = asc0 + asc0_nut;
     let dec01 = dec0 + dec0_nut;
 

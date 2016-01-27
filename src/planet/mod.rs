@@ -37,12 +37,12 @@ it's phase angle
 
 # Returns
 
-* ```illum_frac```: Illuminated fraction of the planet's
+* `illum_frac`: Illuminated fraction of the planet's
                     disk
 
 # Arguments
 
-* ```i```: Phase angle of the planet *| in radians*
+* `i`: Phase angle of the planet *| in radians*
 **/
 pub fn illum_frac_frm_phase_angl(i: f64) -> f64 {
     (1.0 + i.cos()) / 2.0
@@ -54,14 +54,14 @@ it's distance to the Sun and Earth
 
 # Returns
 
-* ```illum_frac```: Illuminated fraction of the planet's
+* `illum_frac`: Illuminated fraction of the planet's
                     disk
 
 # Arguments
 
-* ```r```: Planet-Sun distance *| in AU*
-* ```delta```: Planet-Earth distance *| in AU*
-* ```R```: Sun-Earth distance *| in AU*
+* `r`: Planet-Sun distance *| in AU*
+* `delta`: Planet-Earth distance *| in AU*
+* `R`: Sun-Earth distance *| in AU*
 **/
 pub fn illum_frac_frm_dist(r: f64, delta: f64, R: f64) -> f64 {
     let x = r + delta;
@@ -73,13 +73,13 @@ Returns a planet's **phase angle**
 
 # Returns
 
-* ```phase_angl```: Phase angle of the planet *| in radians*
+* `phase_angl`: Phase angle of the planet *| in radians*
 
 # Arguments
 
-* ```r```: Planet-Sun distance *| in AU*
-* ```delta```: Planet-Earth distance *| in AU*
-* ```R```: Sun-Earth distance *| in AU*
+* `r`: Planet-Sun distance *| in AU*
+* `delta`: Planet-Earth distance *| in AU*
+* `R`: Sun-Earth distance *| in AU*
 **/
 pub fn phase_angl(r: f64, delta: f64, R: f64) -> f64 {
     (r*r + delta*delta - R*R) / (2.0 * r * delta)
@@ -90,14 +90,14 @@ Returns the **position angle** of the **bright limb** of a planet
 
 # Returns
 
-* ```pos_angl_of_bright_limb```: The position angle of the midpoint
+* `pos_angl_of_bright_limb`: The position angle of the midpoint
                                        of the illuminated limb of a planet
                                        *| in radians*
 
 # Arguments
 
-* ```sun_eq_point```: Equatorial point of the Sun *| in radians*
-* ```planet_eq_point```: Equatorial point of the planet *| in radians*
+* `sun_eq_point`: Equatorial point of the Sun *| in radians*
+* `planet_eq_point`: Equatorial point of the planet *| in radians*
 **/
 pub fn pos_angle_of_bright_limb(sun_eq_point: coords::EqPoint,
                   planet_eq_point: coords::EqPoint) -> f64 {
@@ -114,13 +114,13 @@ Returns a planet's **equatorial semidiameter**
 
 # Returns
 
-* ```semidiameter```: Equatorial semidiameter *| in radians*
+* `semidiameter`: Equatorial semidiameter *| in radians*
 
 # Arguments
 
-* ```planet```: The [Planet](./enum.Planet.html).
-                The function ```panic!()```s if ```Planet::Earth``` is passed.
-* ```planet_earth_dist```: Planet-Earth distance *| in AU*
+* `planet`: The [Planet](./enum.Planet.html).
+                The function `panic!()`s if `Planet::Earth` is passed.
+* `planet_earth_dist`: Planet-Earth distance *| in AU*
 **/
 pub fn semidiameter(planet: &Planet, planet_earth_dist: f64) -> f64 {
     let mut s: f64;
@@ -146,24 +146,24 @@ referred to the **mean equinox of the date**
 
 # Returns
 
-```(L, a, e, i, omega, pi, M, w)```
+`(L, a, e, i, omega, pi, M, w)`
 
-* ```L```: Mean longitude *| in radians*
-* ```a```: Semimajor axis of the orbit *| in AU*
-* ```e```: Eccentricity of the orbit
-* ```i```: Inclination of the plane of the orbit with the plane of
+* `L`: Mean longitude *| in radians*
+* `a`: Semimajor axis of the orbit *| in AU*
+* `e`: Eccentricity of the orbit
+* `i`: Inclination of the plane of the orbit with the plane of
            the Earth's ecliptic *| in radians*
-* ```omega```: Longitude of the ascending node *| in radians*.
-               An undefined value is returned for ```Planet::Earth```.
-* ```pi```: Longitude of the perihelion *| in radians*
-* ```M```: Mean anomaly *| in radians*
-* ```w```: Argument of the perihelion *| in radians*.
-            An undefined value is returned for ```Planet::Earth```.
+* `omega`: Longitude of the ascending node *| in radians*.
+               An undefined value is returned for `Planet::Earth`.
+* `pi`: Longitude of the perihelion *| in radians*
+* `M`: Mean anomaly *| in radians*
+* `w`: Argument of the perihelion *| in radians*.
+            An undefined value is returned for `Planet::Earth`.
 
 # Arguments
 
-* ```planet```: The [Planet](./enum.Planet.html)
-* ```JD```: Julian (Ephemeris) day
+* `planet`: The [Planet](./enum.Planet.html)
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn orb_elements(planet: &Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, f64, f64) {
     let T = time::julian_cent(JD);
@@ -260,16 +260,16 @@ referred to the **mean equinox of the date**
 
 # Returns
 
-```(long, lat, rad_vec)```
+`(long, lat, rad_vec)`
 
-* ```long```: Heliocentric longitude *| in radians*
-* ```lat```: Heliocentric latitude *| in radians*
-* ```rad_vec```: Heliocentric radius vector *| in AU*
+* `long`: Heliocentric longitude *| in radians*
+* `lat`: Heliocentric latitude *| in radians*
+* `rad_vec`: Heliocentric radius vector *| in AU*
 
 # Arguments
 
-* ```planet```: The [Planet](./enum.Planet.html)
-* ```JD```: Julian (Ephemeris) day
+* `planet`: The [Planet](./enum.Planet.html)
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
 
@@ -331,12 +331,12 @@ uncorrected for light-time
 
 # Returns
 
-```(ecl_long, ecl_lat, rad_vec, light_time)```
+`(ecl_long, ecl_lat, rad_vec, light_time)`
 
-* ```ecl_long```: Geometric longitude of the planet *| in radians*
-* ```ecl_lat```: Geometric latitude of the planet *| in radians*
-* ```rad_vec```: Geometric radius vector of the planet *| in AU*
-* ```light_time```: Time taken by light to travel to the Earth
+* `ecl_long`: Geometric longitude of the planet *| in radians*
+* `ecl_lat`: Geometric latitude of the planet *| in radians*
+* `rad_vec`: Geometric radius vector of the planet *| in AU*
+* `light_time`: Time taken by light to travel to the Earth
                     from the planet's current position, in days of
                     dynamical time
 
@@ -346,12 +346,12 @@ are not corrected for the effect of light-time.
 
 # Arguments
 
-* ```L0```: Heliocentric longitude of the Earth *| in radians*
-* ```B0```: Heliocentric latitude of the Earth *| in radians*
-* ```R0```: Heliocentric radius vector of the Earth *| in radians*
-* ```L```: Heliocentric longitude of the planet *| in radians*
-* ```B```: Heliocentric latitude of the planet *| in radians*
-* ```R```: Heliocentric radius vector of the planet *| in radians*
+* `L0`: Heliocentric longitude of the Earth *| in radians*
+* `B0`: Heliocentric latitude of the Earth *| in radians*
+* `R0`: Heliocentric radius vector of the Earth *| in radians*
+* `L`: Heliocentric longitude of the planet *| in radians*
+* `B`: Heliocentric latitude of the planet *| in radians*
+* `R`: Heliocentric radius vector of the planet *| in radians*
 **/
 pub fn geocen_geomet_ecl_pos(
     L0: f64, B0: f64, R0: f64,
@@ -372,16 +372,16 @@ from it's heliocentric position
 
 # Returns
 
-```(X, Y, Z)```
+`(X, Y, Z)`
 
 # Arguments
 
-* ```L0```: Heliocentric longitude of the Earth *| in radians*
-* ```B0```: Heliocentric latitude of the Earth *| in radians*
-* ```R0```: Heliocentric radius vector of the Earth *| in radians*
-* ```L```: Heliocentric longitude of the planet *| in radians*
-* ```B```: Heliocentric latitude of the planet *| in radians*
-* ```R```: Heliocentric radius vector of the planet *| in radians*
+* `L0`: Heliocentric longitude of the Earth *| in radians*
+* `B0`: Heliocentric latitude of the Earth *| in radians*
+* `R0`: Heliocentric radius vector of the Earth *| in radians*
+* `L`: Heliocentric longitude of the planet *| in radians*
+* `B`: Heliocentric latitude of the planet *| in radians*
+* `R`: Heliocentric radius vector of the planet *| in radians*
 **/
 fn geocen_ecl_rect_coords(
     L0: f64, B0: f64, R0: f64,
@@ -401,14 +401,14 @@ from it's geocentric ecliptic **rectangular** coordinates
 
 # Returns
 
-* ```ecl_long```: Ecliptic longitude of the planet *| in radians*
-* ```ecl_lat```: Ecliptic latitude of the planet *| in radians*
+* `ecl_long`: Ecliptic longitude of the planet *| in radians*
+* `ecl_lat`: Ecliptic latitude of the planet *| in radians*
 
 # Arguments
 
-* ```X```
-* ```Y```
-* ```Z```
+* `X`
+* `Y`
+* `Z`
 **/
 fn ecl_coords_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> (f64, f64) {
     (y.atan2(x), z.atan2((x*x + y*y).sqrt()))
@@ -420,13 +420,13 @@ from it's geocentric ecliptic **rectangular** coordinates
 
 # Returns
 
-* ```planet_earth_dist```: Planet-Earth distance *| in AU*
+* `planet_earth_dist`: Planet-Earth distance *| in AU*
 
 # Arguments
 
-* ```X```
-* ```Y```
-* ```Z```
+* `X`
+* `Y`
+* `Z`
 **/
 fn dist_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> f64 {
     (x*x + y*y + z*z).sqrt()
@@ -438,11 +438,10 @@ for light-time
 
 # Returns
 
-```(ecl_long, ecl_lat, rad_vec)```
+`(ecl_long, ecl_lat, rad_vec)`
 
-* ```ecl_long```: Geocentric longitude of the planet *| in radians*
-* ```ecl_lat```: Geocentric latitude of the planet *| in radians*
-* ```rad_vec```: Geocentric radius vector of the planet *| in AU*
+* `planet_ecl_point`: Ecliptic point of the planet *| in radians*
+* `rad_vec`: Geocentric radius vector of the planet *| in AU*
 
 The coordinates returned here refer to the apparent position (from Earth)
 of the planet at the time of interest by correcting the true
@@ -450,10 +449,10 @@ coordinates for the effect of light-time.
 
 # Arguments
 
-* ```planet```: The [Planet](./enum.Planet.html)
-* ```JD```: Julian (Ephemeris) day
+* `planet`: The [Planet](./enum.Planet.html)
+* `JD`: Julian (Ephemeris) day
 **/
-pub fn geocen_apprnt_ecl_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
+pub fn geocen_apprnt_ecl_pos(planet: &Planet, JD: f64) -> (coords::EclPoint, f64) {
     let (L0, B0, R0) = heliocen_pos(&Planet::Earth, JD);
 
     let (L1, B1, R1) = heliocen_pos(&planet, JD);
@@ -462,7 +461,12 @@ pub fn geocen_apprnt_ecl_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
     let (L2, B2, R2) = heliocen_pos(&planet, JD - t);
     let (l2, b2, r2, t2) = geocen_geomet_ecl_pos(L0, B0, R0, L2, B2, R2);
 
-    (l2, b2, r2)
+    let ecl_point = coords::EclPoint {
+        long:l2,
+        lat: b2
+    };
+
+    (ecl_point, r2)
 }
 
 /**
@@ -471,19 +475,19 @@ system
 
 # Returns
 
-```(ecl_long_FK5, ecl_lat_FK5)```
+`(ecl_long_FK5, ecl_lat_FK5)`
 
-* ```ecl_long_FK5```: Ecliptic longitude of the planet,
+* `ecl_long_FK5`: Ecliptic longitude of the planet,
                       converted to the FK5 system *| in radians*
-* ```ecl_lat_FK5```: Ecliptic latitude of the planet,
+* `ecl_lat_FK5`: Ecliptic latitude of the planet,
                      converted to the FK5 system *| in radians*
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```ecl_long```: Ecliptic longitude of the planet on ```JD```
+* `JD`: Julian (Ephemeris) day
+* `ecl_long`: Ecliptic longitude of the planet on `JD`
                   referred to the mean equinox of the date *| in radians*
-* ```ecl_lat```: Ecliptic latitude of the planet on ```JD```,
+* `ecl_lat`: Ecliptic latitude of the planet on `JD`,
                 referred to the mean equinox of the date *| in radians*
 **/
 pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
@@ -548,14 +552,14 @@ Returns a planet's **apparent magnitude** using G. Muller's formulae
 
 # Returns
 
-* ```app_mag```: Apparent magnitude of the planet
+* `app_mag`: Apparent magnitude of the planet
 
 # Arguments
 
-* ```planet```: The [Planet](./enum.Planet.html)
-* ```i```: Phase angle of the planet *| in radians*
-* ```delta```: Planet-Earth distance *| in AU*
-* ```r```: Planet-Sun distance *| in AU*
+* `planet`: The [Planet](./enum.Planet.html)
+* `i`: Phase angle of the planet *| in radians*
+* `delta`: Planet-Earth distance *| in AU*
+* `r`: Planet-Sun distance *| in AU*
 **/
 pub fn apprnt_mag_muller(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();
@@ -581,14 +585,14 @@ Almanac's method adopted in 1984
 
 # Returns
 
-* ```app_mag```: Apparent magnitude of the planet
+* `app_mag`: Apparent magnitude of the planet
 
 # Arguments
 
-* ```planet```: The [Planet](./enum.Planet.html)
-* ```i```: Phase angle of the planet *| in radians*
-* ```delta```: Planet-Earth distance *| in AU*
-* ```r```: Planet-Sun distance *| in AU*
+* `planet`: The [Planet](./enum.Planet.html)
+* `i`: Phase angle of the planet *| in radians*
+* `delta`: Planet-Earth distance *| in AU*
+* `r`: Planet-Sun distance *| in AU*
 **/
 pub fn apprnt_mag_84(planet: &Planet, i: f64, delta: f64, r: f64) -> f64 {
     let x = 5.0*(r*delta).log10();
