@@ -162,6 +162,7 @@ algorithms that have been implemented so far:
 
 **The Moon**
 
+* times of New Moon, Full Moon, First Quarter and Last Quarter
 * geocentric ecliptic coordinates
 * optical, physical and topocentric liberations
 * times of passage through the nodes
