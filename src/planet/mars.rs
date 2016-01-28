@@ -1,4 +1,4 @@
-//! Mars
+//! mars
 
 use angle;
 use planet;
@@ -15,10 +15,10 @@ for the epoch **J1950.0**
 
 # Returns
 
-* ```eq_coords```: Equatorial coordinates of Mars's north pole
+* `eq_coords`: Equatorial coordinates of Mars's north pole
                                 for the epoch J1950.0 *| in radians*
 **/
-pub fn eq_coords_of_north_pol_J1950() -> coords::EqPoint {
+pub fn north_pol_eq_coords_J1950() -> coords::EqPoint {
     coords::EqPoint {
         asc: 317.342_f64.to_radians(),
         dec: 52.711_f64.to_radians()
@@ -31,10 +31,10 @@ for the epoch **J2000.0**
 
 # Returns
 
-* ```eq_coords```: Equatorial coordinates of Mars's north pole
+* `eq_coords`: Equatorial coordinates of Mars's north pole
                                 for the epoch J2000.0 *| in radians*
 **/
-pub fn eq_coords_of_north_pol_J2000() -> coords::EqPoint {
+pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
     coords::EqPoint {
         asc: 317.681_f64.to_radians(),
         dec: 52.886_f64.to_radians()
@@ -47,17 +47,37 @@ referred to the **mean equinox of the date**
 
 # Returns
 
-* ```ecl_coords```: Ecliptic coordinates of Mars's north pole *| in radians*
+* `ecl_coords`: Ecliptic coordinates of Mars's north pole *| in radians*
 
 # Arguments
 
-* ```JC```: Julian (Ephemeris) century
+* `JC`: Julian (Ephemeris) century
 **/
-pub fn ecl_coords_of_north_pol(JC: f64) -> coords::EclPoint {
+pub fn north_pol_ecl_coords(JC: f64) -> coords::EclPoint {
     coords::EclPoint {
         long: (352.9065 + 1.1733*JC).to_radians(),
         lat:  (63.2818 - 0.00394*JC).to_radians()
     }
+}
+
+/// Holds Mar's ephemeris values for physical observations
+pub struct Ephemeris {
+    /// Mars-centric declination of the Earth
+    pub De: f64,
+    /// Mars-centric declination of the Sun
+    pub Ds: f64,
+    /// Geocentric position angle of Mars's northern
+    /// rotation pole, or also called, position angle
+    /// of the axis
+    pub P : f64,
+    /// Angular amount of the greatest defect of
+    /// illumination
+    pub q : f64,
+    /// Longitude of the central meridian, as seen from
+    /// the Earth
+    pub w : f64,
+    /// Apparent diameter of Mars
+    pub d : f64,
 }
 
 /**
@@ -66,30 +86,19 @@ of Mars
 
 # Returns
 
-```(De, Ds, P, q, Q, w, d)```
-
-* ```De```: Mars-centric declination of the Earth *| in radians*
-* ```Ds```: Mars-centric declination of the Sun *| in radians*
-* ```P```: Geocentric position angle of Mars' northern
-           rotation pole, or also called, position angle
-           of the axis *| in radians*
-* ```q```: Angular amount of the greatest defect of
-           illumination *| in radians*
-* ```w```: Longitude of the central meridian, as seen from
-           the Earth *| in radians*
-* ```d```: Apparent diameter of Mars *| in radians*
+* `ephemeris`: Mar's ephemeris. *All angles are in radians*
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```north_pole_ecl_coords```: Ecliptic coordinates of Mars's north pole on ```JD``` *| in radians*
-* ```mn_oblq```: Mean obliquity of the ecliptic on ```JD``` *| in radians*
-* ```nut_in_long```: Nutation in ecliptic longitude on ```JD``` *| in radians*
-* ```nut_in_oblq```: Nutation in obliquity of the ecliptic on ```JD``` *| in radians*
+* `JD`: Julian (Ephemeris) day
+* `north_pole_ecl_coords`: Ecliptic coordinates of Mars's north pole on `JD` *| in radians*
+* `mn_oblq`: Mean obliquity of the ecliptic on `JD` *| in radians*
+* `nut_in_long`: Nutation in ecliptic longitude on `JD` *| in radians*
+* `nut_in_oblq`: Nutation in obliquity of the ecliptic on `JD` *| in radians*
 **/
 pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
                  mn_oblq: f64,
-                 nut_in_long: f64, nut_in_oblq: f64) -> (f64, f64, f64, f64, f64, f64) {
+                 nut_in_long: f64, nut_in_oblq: f64) -> Ephemeris {
 
     let (mut lambda0, mut beta0) = (north_pole_ecl_coords.long, north_pole_ecl_coords.lat);
 
@@ -162,5 +171,12 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
     let k = planet::illum_frac_frm_dist(r, mars_earth_dist, R);
     let q = (1.0 - k)*d;
 
-    (D_e, D_s, P, q, w, d)
+    Ephemeris {
+        De: D_e,
+        Ds: D_s,
+        P: P,
+        q: q,
+        w: w,
+        d: d
+    }
 }

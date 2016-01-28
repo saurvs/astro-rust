@@ -758,21 +758,20 @@ pub enum Phase {
 }
 
 /**
-Returns the Julian (Ephemeris) day corresponding to one of the four
-phases of the Moon
+Returns the Julian day corresponding to one of the four
+**phases** of the Moon
 
 # Returns
 
-* `JD`: Julian (Ephemeris) day corresponding the exact time of the phase
+* `JD`: Julian day corresponding the exact time of the phase,
+        closest to `date`
 
-The error in `JD` may go upto a few seconds.
-
-Meeus says the mean error in `JD` between 1980 AD and mid-2020 AD
-was 3.8 seconds.
+The error in `JD` may go upto a few seconds. *Meeus* says the mean error in
+`JD` between 1980 AD and mid-2020 AD is 3.8 seconds.
 
 # Arguments
 
-* `date`: Date of interest
+* `date`: Date of interest, close to the phase
 * `phase`: The [Phase](./enum.Phase.html)
 **/
 pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
@@ -846,10 +845,9 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
     let A14 = (331.55 +  3.592_518*k).to_radians();
 
     let is_quarter = match phase {
-        &Phase::New   => false,
-        &Phase::First => true,
-        &Phase::Full  => false,
         &Phase::Last  => true,
+        &Phase::First => true,
+        &_  => false,
     };
 
     if is_quarter {
@@ -859,10 +857,9 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
             + 0.000_26*M1.cos();
             - 0.000_02*((M1 - M).cos() - (M1 + M).cos() - (2.0*F).cos());
         JDE += match phase {
-            &Phase::New   => 0.0,
-            &Phase::First => W,
-            &Phase::Full  => 0.0,
             &Phase::Last  => -W,
+            &Phase::First => W,
+            &_  => 0.0,
         };
 
         let corrections = [
@@ -899,9 +896,7 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
     else {
         let is_new = match phase {
             &Phase::New   => true,
-            &Phase::First => false,
-            &Phase::Full  => false,
-            &Phase::Last  => false,
+            &_ => false,
         };
 
         let sine_arguments = [

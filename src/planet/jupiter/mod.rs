@@ -38,9 +38,29 @@ pub fn pol_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 92.06) / jup_earth_dist
 }
 
+/// Holds Jupiter's ephemeris values for physical observations
+pub struct Ephemeris {
+    /// Jupiter-centric declination of the Earth
+    pub De : f64,
+    /// Jupiter-centric declination of the Sun
+    pub Ds : f64,
+    /// Geocentric position angle of Jupiter's northern
+    /// rotation pole, or also called, position angle
+    /// of the axis
+    pub P  : f64,
+    /// Longitude of the central meridian for Rotational System I
+    pub w1 : f64,
+    /// Longitude of the central meridian for Rotational System II
+    pub w2 : f64,
+}
+
 /**
 Return quantites used in the **ephemeris for physical observations**
 of Jupiter
+
+# Returns
+
+* `ephemeris`: Jupiter's ephemeris. *All angles are in radians*
 
 # Arguments
 
@@ -51,7 +71,7 @@ of Jupiter
 **/
 pub fn ephemeris(JD: f64,
                 mn_oblq: f64,
-                nut_in_long: f64, nut_in_oblq: f64) -> (f64, f64, f64, f64, f64) {
+                nut_in_long: f64, nut_in_oblq: f64) -> Ephemeris {
     let d = JD - 2433282.5;
     let T1 = d / 36525.0;
 
@@ -141,5 +161,11 @@ pub fn ephemeris(JD: f64,
     let P = (dec01.cos() * (asc01 - asc1).sin())
             .atan2(dec01.sin()*dec1.cos() - dec01.cos()*dec1.sin()*(asc01 - asc1).cos());
 
-    (D_e, D_s, w1, w2, P)
+    Ephemeris {
+        De: D_e,
+        Ds: D_s,
+        P : P,
+        w1: w1,
+        w2: w2
+    }
 }

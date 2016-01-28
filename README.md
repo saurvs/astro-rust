@@ -3,15 +3,13 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md)
 [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-**Sections**
+**Jump to**
 
 [API Docs](https://saurvs.github.io/astro-rust/) | [About](#about) | [Usage](#usage) | [Algorithms](#algorithms) | [Contributing](#contributing) | [References](#references)
 
 ## About
 
-```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
-
-These include things such as  planetary, solar and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and much more. Even Pluto's real-time position can be calculated accurately.
+```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations. These include things such as  planetary, solar, lunar and planetary satellite positioning, corrections for precession, nutation, parallax, and aberration, calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and much more. Even Pluto's position can be calculated accurately.
 
 ## Usage
 

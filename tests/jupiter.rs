@@ -5,7 +5,7 @@ use astro::*;
 #[test]
 fn ephemeris() {
 
-    let (mut D_e, mut D_s, mut w1, mut w2, mut P) = planet::jupiter::ephemeris(
+    let mut ephemeris = planet::jupiter::ephemeris(
         2448972.50068,
 
         23.4402069_f64.to_radians(),
@@ -14,17 +14,17 @@ fn ephemeris() {
         angle::deg_frm_dms(0, 0, -1.79).to_radians(),
     );
 
-    D_e = util::round_upto_digits(D_e.to_degrees(), 2);
-    D_s = util::round_upto_digits(D_s.to_degrees(), 2);
-    P = util::round_upto_digits(angle::limit_to_360(P.to_degrees()), 2);
-    w1 = util::round_upto_digits(w1.to_degrees(), 0);
-    w2 = util::round_upto_digits(w2.to_degrees(), 2);
+    ephemeris.De = util::round_upto_digits(ephemeris.De.to_degrees(), 2);
+    ephemeris.Ds = util::round_upto_digits(ephemeris.Ds.to_degrees(), 2);
+    ephemeris.P = util::round_upto_digits(angle::limit_to_360(ephemeris.P.to_degrees()), 2);
+    ephemeris.w1 = util::round_upto_digits(ephemeris.w1.to_degrees(), 0);
+    ephemeris.w2 = util::round_upto_digits(ephemeris.w2.to_degrees(), 2);
 
-    assert_eq!(D_e, -2.48);
-    assert_eq!(D_s, -2.20);
-    assert_eq!(P, 24.80);
-    assert_eq!(w1, 268.0);
-    assert_eq!(w2, 72.74);
+    assert_eq!(ephemeris.De, -2.48);
+    assert_eq!(ephemeris.Ds, -2.20);
+    assert_eq!(ephemeris.P, 24.80);
+    assert_eq!(ephemeris.w1, 268.0);
+    assert_eq!(ephemeris.w2, 72.74);
 }
 
 #[test]
