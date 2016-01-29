@@ -142,7 +142,7 @@ pub fn nutation_in_eq_coords(eq_point: &coords::EqPoint, nut_in_long: f64,
                     )*nut_in_long
                   - asc.cos()*dec.tan()*nut_in_oblq;
 
-    let nut_dec =   tru_oblq.sin()*asc.cos()*nut_in_long
+    let nut_dec = tru_oblq.sin()*asc.cos()*nut_in_long
                   + asc.sin()*nut_in_oblq;
 
     (nut_asc, nut_dec)

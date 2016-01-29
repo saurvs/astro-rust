@@ -9,18 +9,18 @@ near-parabolic orbit
 
 # Returns
 
-```(true_anom, rad_vec)```
+`(true_anom, rad_vec)`
 
-* ```true_anom```: True anomaly of the body *| in radians*
-* ```rad_vec```: Radius vector of the body *| in AU*
+* `true_anom`: True anomaly of the body *| in radians*
+* `rad_vec`: Radius vector of the body *| in AU*
 
 # Arguments
 
-* ```t```: The time of interest, in Julian (Ephemeris) day
-* ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
-* ```ecc```: Eccentricity of the orbit
-* ```q```: Perihelion distance *| in AU*
-* ```accuracy```: Desired accuracy for the results. Eg: 0.000001 radians
+* `t`: The time of interest, in Julian (Ephemeris) day
+* `T`: Time of passage in perihelion, in Julian (Ephemeris) day
+* `ecc`: Eccentricity of the orbit
+* `q`: Perihelion distance *| in AU*
+* `accuracy`: Desired accuracy for the results. Eg: 0.000001 radians
 **/
 pub fn true_anom_and_rad_vec(t: f64, T: f64, ecc: f64, q: f64, accuracy: f64) -> (f64, f64) {
     let days_frm_perih = t - T;

@@ -30,23 +30,23 @@ respect to Jupiter"*
 
 # Returns
 
-```(X, Y)```
+`(X, Y)`
 
 The rectangular coordinates returned give the apparent position of a moon,
-with respect to Jupiter, as seen from Earth. The ```X``` and ```Y```
+with respect to Jupiter, as seen from Earth. The `X` and `Y`
 coordinates are measured from the center of the disk of Jupiter, in units
 of Saturn's equatorial radius.
 
-```X``` is measued positively to the west of Jupiter, and negatively to the
+`X` is measued positively to the west of Jupiter, and negatively to the
 east. The x-axis coincides with Jupiter's equator.
 
-```Y``` is measured positively to the north of Jupiter, and negatively to
+`Y` is measured positively to the north of Jupiter, and negatively to
 the south. The y-axis coincides with Jupiter's axis of rotation.
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```moon```: The [Moon](./enum.Moon.html)
+* `JD`: Julian (Ephemeris) day
+* `moon`: The [Moon](./enum.Moon.html)
 **/
 pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64) {
     let d = JD - 2451545.0;

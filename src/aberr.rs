@@ -9,15 +9,15 @@ Returns **stellar aberration** in equatorial coordinates
 
 # Returns
 
-```(abrr_in_asc, abrr_in_dec)```
+`(abrr_in_asc, abrr_in_dec)`
 
-* ```abrr_in_asc```: Aberration in right ascension *| in radians*
-* ```abrr_in_dec```: Aberration in declination *| in radians*
+* `abrr_in_asc`: Aberration in right ascension *| in radians*
+* `abrr_in_dec`: Aberration in declination *| in radians*
 
 # Arguments
 
-* ```stell_eq_point```: Equatorial coordinates of the star *| in radians*
-* ```JD``` : Julian (Ephemeris) day
+* `stell_eq_point`: Equatorial coordinates of the star *| in radians*
+* `JD` : Julian (Ephemeris) day
 **/
 pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
     let t = time::julian_cent(JD);
@@ -308,12 +308,12 @@ Returns **solar aberration** in ecliptic longitude
 
 # Returns
 
-* ```abrr```: Solar aberration in ecliptic
+* `abrr`: Solar aberration in ecliptic
               longitude *| in radians*
 
 # Arguments
 
-* ```R```: Sun-Earth distance *| in AU*
+* `R`: Sun-Earth distance *| in AU*
 **/
 pub fn sol_aberr(R: f64) -> f64 {
     -angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R

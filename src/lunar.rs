@@ -59,10 +59,27 @@ fn A(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
 }
 
 fn F(JC: f64) -> f64 {
-    angle::limit_to_360(93.272095 + JC*(483202.0175233 -
-                                        JC*(0.0036539 +
-                                        JC*(1.0/3526000.0 -
-                                        JC/863310000.0)))).to_radians()
+    println!("JC = {:?}", JC);
+    let y = Horner_eval!(
+         JC,
+         93.272095,
+         483202.0175233
+        -0.0036539,
+        -1.0/3526000.0,
+         1.0/863310000.0
+    );
+    //let z = 93.272095 + JC*(483202.0175233 - JC*(0.0036539 + JC*(1.0/3526000.0 - JC/863310000.0)));
+    let z = 93.272095 + JC*483202.0175233 - JC*JC*0.0036539 - JC*JC*JC*1.0/3526000.0 + JC*JC*JC*JC*1.0/863310000.0;
+                                    println!("y = {:?}", y);
+                                    println!("z = {:?}", z);
+    angle::limit_to_360(Horner_eval!(
+             JC,
+             93.272095,
+             483202.0175233,
+             -0.0036539,
+             -1.0/3526000.0,
+             1.0/863310000.0
+        )).to_radians()
 }
 
 fn E(JC: f64) -> f64 {
@@ -763,11 +780,11 @@ Returns the Julian day corresponding to one of the four
 
 # Returns
 
-* `JD`: Julian day corresponding the exact time of the phase,
-        closest to `date`
+* `JD`: Julian day corresponding to the exact time of the phase
+        that is closest to `date`
 
-The error in `JD` may go upto a few seconds. *Meeus* says the mean error in
-`JD` between 1980 AD and mid-2020 AD is 3.8 seconds.
+*Meeus* says the mean error in `JD` for phases between 1980 AD
+and mid-2020 AD is 3.8 seconds.
 
 # Arguments
 
@@ -784,7 +801,7 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
     };
     let T = k/1236.85;
 
-    let mut JDE =
+    let mut JD =
         2451550.09766
         + k*29.530588861
         + T*Horner_eval!(
@@ -856,12 +873,11 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
             - 0.000_38*E*M.cos()
             + 0.000_26*M1.cos();
             - 0.000_02*((M1 - M).cos() - (M1 + M).cos() - (2.0*F).cos());
-        JDE += match phase {
+        JD += match phase {
             &Phase::Last  => -W,
             &Phase::First => W,
             &_  => 0.0,
         };
-
         let corrections = [
             [-0.62801, M1],
             [0.17172*E, M],
@@ -889,9 +905,7 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
             [0.00002, M1 - M + 2.0*F],
             [-0.00002, 3.0*M1 + M],
         ];
-        for &x in corrections.iter() {
-            JDE += x[0]*x[1].sin();
-        }
+        for &x in corrections.iter() { JD += x[0]*x[1].sin(); }
     }
     else {
         let is_new = match phase {
@@ -981,11 +995,7 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
             -0.00002,
             0.00002]
         };
-
-        for mx in multipliers.iter().zip(sine_arguments.iter()) {
-            JDE += mx.0*(mx.1).sin();
-        }
-
+        for mx in multipliers.iter().zip(sine_arguments.iter()) { JD += mx.0*(mx.1).sin(); }
     }
 
     let additional_corrections = [
@@ -1004,9 +1014,7 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
         [0.000_035, A13],
         [0.000_023, A14],
     ];
-    for &x in additional_corrections.iter() {
-        JDE += x[0]*x[1].sin();
-    }
+    for &x in additional_corrections.iter() { JD += x[0]*x[1].sin(); }
 
-    JDE
+    JD
 }

@@ -13,11 +13,11 @@ Returns Jupiter's **equatorial semidiameter**
 
 # Returns
 
-* ```eq_semidia```: Equatorial semidiameter *| in radians per AU*
+* `eq_semidia`: Equatorial semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
+* `jup_earth_dist`: Jupiter-Earth distance *| in AU*
 **/
 pub fn eq_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 98.44) / jup_earth_dist
@@ -28,11 +28,11 @@ Returns Jupiter's **polar semidiameter**
 
 # Returns
 
-* ```pol_semidia```: Polar semidiameter *| in radians per AU*
+* `pol_semidia`: Polar semidiameter *| in radians per AU*
 
 # Arguments
 
-* ```jup_earth_dist```: Jupiter-Earth distance *| in AU*
+* `jup_earth_dist`: Jupiter-Earth distance *| in AU*
 **/
 pub fn pol_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 92.06) / jup_earth_dist
@@ -64,10 +64,10 @@ of Jupiter
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```mn_oblq```: Mean obliquity of the ecliptic on ```JD``` *| in radians*
-* ```nut_in_long```: Nutation in ecliptic longitude on ```JD``` *| in radians*
-* ```nut_in_oblq```: Nutation in obliquity of the ecliptic on ```JD``` *| in radians*
+* `JD`: Julian (Ephemeris) day
+* `mn_oblq`: Mean obliquity of the ecliptic on `JD` *| in radians*
+* `nut_in_long`: Nutation in ecliptic longitude on `JD` *| in radians*
+* `nut_in_oblq`: Nutation in obliquity of the ecliptic on `JD` *| in radians*
 **/
 pub fn ephemeris(JD: f64,
                 mn_oblq: f64,

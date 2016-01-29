@@ -5,14 +5,14 @@ Returns the **parallactic angle** of a celestial body
 
 # Returns
 
-* ```parallac_angle```: The parallactic angle of the celestial
+* `parallac_angle`: The parallactic angle of the celestial
                         body *| in radians*
 
 # Arguments
 
-* ```observer_lat```: The observer's geographical latitude *| in radians*
-* ```hour_angle```: Local hour angle *| in radians*
-* ```dec```: Declination of the celestial body *| in radians*
+* `observer_lat`: The observer's geographical latitude *| in radians*
+* `hour_angle`: Local hour angle *| in radians*
+* `dec`: Declination of the celestial body *| in radians*
 **/
 pub fn ParllcAngl(observer_lat: f64, hour_angle: f64, dec: f64) -> f64 {
     hour_angle.sin()
@@ -27,13 +27,13 @@ Returns the **parallactic angle** of a celestial body on the
 
 # Returns
 
-* ```parallac_angle```: The parallactic angle of the celestial body
+* `parallac_angle`: The parallactic angle of the celestial body
                         on the horizon *| in radians*
 
 # Arguments
 
-* ```observer_lat```: The observer's geographical latitude *| in radians*
-* ```dec```: Declination of the celestial body *| in radians*
+* `observer_lat`: The observer's geographical latitude *| in radians*
+* `dec`: Declination of the celestial body *| in radians*
 **/
 pub fn ParllcAnglOnHz(observer_lat: f64, dec: f64) -> f64 {
     (observer_lat.sin() / dec.cos()).acos()

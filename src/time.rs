@@ -49,9 +49,9 @@ pub struct DayOfMonth {
 }
 
 /**
-Returns **decimal day** for a ```DayOfMonth```
+Returns **decimal day** for a `DayOfMonth`
 
-* ```day_of_month```: A ```DayOfMonth``` struct
+* `day_of_month`: A `DayOfMonth` struct
 **/
 pub fn decimal_day(day: &DayOfMonth) -> f64 {
       (day.day as f64)
@@ -62,9 +62,9 @@ pub fn decimal_day(day: &DayOfMonth) -> f64 {
 }
 
 /**
-Returns **decimal year** for a ```Date```
+Returns **decimal year** for a `Date`
 
-* ```date```: A ```Date``` struct
+* `date`: A `Date` struct
 **/
 pub fn decimal_year(date: &Date) -> f64 {
     let mut y = 0;
@@ -96,8 +96,8 @@ Checks if a year is a **leap year**
 
 # Arguments
 
-* ```year```: Year
-* ```cal_type```: ```CalType``` enum
+* `year`: Year
+* `cal_type`: `CalType` enum
 **/
 pub fn is_leap_year(year: i32, cal_type: &CalType) -> (bool) {
     match cal_type {
@@ -116,7 +116,7 @@ Returns Julian century for a Julian day
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn julian_cent(JD: f64) -> f64 {
     (JD - 2451545.0) / 36525.0
@@ -127,18 +127,18 @@ Returns Julian millennium for a Julian day
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
+* `JD`: Julian (Ephemeris) day
 **/
 pub fn julian_mill(JD: f64) -> f64 {
     (JD - 2451545.0) / 365250.0
 }
 
 /**
-Returns Julian day for a ```Date```
+Returns Julian day for a `Date`
 
 # Arguments
 
-```date```: A ```Date``` struct
+`date`: A `Date` struct
 **/
 pub fn julian_day(date: &Date) -> f64 {
     let mut y = date.year;
@@ -166,8 +166,8 @@ Returns the Julian Ephemeris day
 
 # Arguments
 
-* ```JD```: Julian day
-* ```delta_t```: Delta T
+* `JD`: Julian day
+* `delta_t`: Delta T
 **/
 pub fn julian_emph_day(JD: f64, delta_t: f64) -> f64 {
     delta_t/86400.0 + JD
@@ -178,17 +178,17 @@ Returns a year, month and decimal day equivalent to a given Julian day
 
 # Returns
 
-```(year, month, decimal_day)```
+`(year, month, decimal_day)`
 
-* ```year```: Year
-* ```month```: Month
-* ```decimal_day```: Decimal day
+* `year`: Year
+* `month`: Month
+* `decimal_day`: Decimal day
 
 # Arguments
 
-```JD```: Julian Day. **Can't be a negative value.**
+`JD`: Julian Day. **Can't be a negative value.**
 **/
-pub fn date_frm_julian_day(mut JD: f64) -> (i16, i8, f64) {
+pub fn date_frm_julian_day(mut JD: f64) -> (i16, u8, f64) {
     if JD < 0.0 {
         panic!("A negative value for JD was passed to time::date_frm_julian_day()");
     }
@@ -227,7 +227,7 @@ pub fn date_frm_julian_day(mut JD: f64) -> (i16, i8, f64) {
                0
                };
 
-    (year as i16, month as i8, day)
+    (year as i16, month as u8, day)
 }
 
 /**
@@ -235,13 +235,13 @@ Returns **apparent sidereal** time from the mean sidereal time
 
 # Returns
 
-* ```apprnt_sidr```: Apparent sidereal time *| in radians*
+* `apprnt_sidr`: Apparent sidereal time *| in radians*
 
 # Arguments
 
-* ```mn_sidr  ```: Mean sidereal time *| in radians*
-* ```nut_in_long```: Nutatation in longitude *| in radians*
-* ```true_oblq```: True obliquity of the ecliptic *| in radians*
+* `mn_sidr  `: Mean sidereal time *| in radians*
+* `nut_in_long`: Nutatation in longitude *| in radians*
+* `true_oblq`: True obliquity of the ecliptic *| in radians*
 **/
 pub fn apprnt_sidr(mn_sidr: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
     mn_sidr + nut_in_long*true_oblq.cos()
@@ -255,11 +255,11 @@ the obliquity of the ecliptic.
 
 # Returns
 
-* ```apprnt_sidr```: Apparent sidereal time *| in radians*
+* `apprnt_sidr`: Apparent sidereal time *| in radians*
 
 # Arguments
 
-* ```$JD```: Julian day
+* `$JD`: Julian day
 **/
 #[macro_export]
 macro_rules! apprnt_sidr {
@@ -275,11 +275,11 @@ Returns **mean sidereal** time for a Julian day
 
 # Returns
 
-* ```mn_sidr```: Mean sidereal time *| in radians*
+* `mn_sidr`: Mean sidereal time *| in radians*
 
 # Arguments
 
-* ```JD```: Julian day
+* `JD`: Julian day
 **/
 pub fn mn_sidr(JD: f64) -> f64 {
     let JC = julian_cent(JD);
@@ -301,8 +301,8 @@ it covers a far wider time range, and is more accurate.
 
 # Arguments
 
-* ```year```: Year
-* ```month```: Month *range: 1 - 12*
+* `year`: Year
+* `month`: Month *range: 1 - 12*
 **/
 pub fn approx_delta_t(year: i32, month: u8) -> f64 {
     let y = (year as f64) + ((month as f64) - 0.5) / 12.0;

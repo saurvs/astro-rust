@@ -19,33 +19,41 @@ pub fn ascend_node(JC: f64) -> f64 {
     ).to_radians()
 }
 
+/// Holds the elements for the ring system of Saturn
+pub struct Elements {
+    /// Saturnicentric latitude of the Earth,
+    /// referred to the plane of the ring
+    pub B : f64,
+    /// Saturnicentric latitude of the Sun,
+    /// referred to the plane of the ring
+    pub B1 : f64,
+    /// Geocentric position angle of the northern semiminor
+    /// axis of the apparent ellipse of the ring
+    /// of the axis
+    pub P  : f64,
+    /// Difference between Saturnicentric longitudes of the
+    /// Sun and the Earth, measured in the plane of the ring
+    pub deltaU : f64,
+    /// Major axis of the outer edge of the outer ring
+    pub a : f64,
+    /// Minor axis of the outer edge of the outer ring
+    pub b : f64
+}
+
 /**
 Returns the **elements** for the **ring system** of Saturn
 
 # Returns
 
-```(B, B1, P, deltaU, a, b)```
-
-* ```B```: Saturnicentric latitude of the Earth,
-           referred to the plane of the ring *| in radians*
-* ```B1```: Saturnicentric latitude of the Sun,
-            referred to the plane of the ring *| in radians*
-* ```P```: Geocentric position angle of the northern
-           semiminor axis of the apparent ellipse of the
-           ring *| in radians*
-* ```deltaU```: Difference between Saturnicentric
-                longitudes of the Sun and the Earth,
-                measured in the plane of the ring *| in radians*
-* ```a```: Major axis of the outer edge of the outer ring *| in radians*
-* ```b```: Minor axis of the outer edge of the outer ring *| in radians*
+`elements`: Elements for the ring system. *All angles are in radians*
 
 # Arguments
 
-* ```JD```: Julian (Ephemeris) day
-* ```nut_in_long```: Nutation in longitude on ```JD``` *| in radians*
-* ```true_oblq```: True obliquity of the ecliptic on ```JD``` *| in radians*
+* `JD`: Julian (Ephemeris) day
+* `nut_in_long`: Nutation in longitude on `JD` *| in radians*
+* `true_oblq`: True obliquity of the ecliptic on `JD` *| in radians*
 **/
-pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> (f64, f64, f64, f64, f64, f64) {
+pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
     let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
 
     let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
@@ -101,7 +109,7 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> (f64, f64, f64, f6
     beta += q * (l0 - lambda).sin() * beta.sin();
 
     lambda0 += nut_in_long;
-    lambda += nut_in_long;
+    lambda  += nut_in_long;
 
     let asc0 = coords::AscFrmEcl(lambda0, beta0, true_oblq);
     let dec0 = coords::DecFrmEcl(lambda0, beta0, true_oblq);
@@ -111,7 +119,14 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> (f64, f64, f64, f6
     let P = (dec0.cos() * (asc0 - asc).sin())
             .atan2(dec0.sin()*dec.cos() - dec0.cos()*dec.sin()*(asc0 - asc).cos());
 
-    (B, B1, P, deltaU, semi_maj, semi_min)
+    Elements {
+        B      : B,
+        B1     : B1,
+        P      : P,
+        deltaU : deltaU,
+        a      : semi_maj,
+        b      : semi_min
+    }
 }
 
 pub fn inn_edge_outer_ring(a: f64, b: f64) -> (f64, f64) {

@@ -134,8 +134,8 @@ pub fn eq_coords_frm_motion(asc0: f64, dec0: f64, r: f64, delta_r: f64,
     let y = r*dec0.cos()*asc0.sin();
     let z = r*dec0.sin();
 
-    let delta_asc = angle::TimeSecFrmDeg(proper_motion_asc.to_degrees()) / 13751.0;
-    let delta_dec = angle::ArcSecFrmDeg(proper_motion_dec.to_degrees()) / 206265.0;
+    let delta_asc = 3600.0*proper_motion_asc.to_degrees() / 13751.0;
+    let delta_dec = 3600.0*proper_motion_dec.to_degrees() / 206265.0;
 
     let delta_x = (x/r)*delta_r - z*delta_dec*asc0.cos() - y*delta_asc;
     let delta_y = (y/r)*delta_r - z*delta_dec*asc0.sin() + x*delta_asc;

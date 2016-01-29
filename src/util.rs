@@ -8,7 +8,7 @@ pub fn round_upto_digits(float: f64, decimal_digits: i32) -> f64 {
 }
 
 /**
-Evaluates polynomials using Horner's method
+Evaluates a polynomial using Horner's method
 
 # Arguments
 
@@ -23,12 +23,10 @@ macro_rules! Horner_eval {
         {
             let mut y = $c;
             let mut u = 1.0;
-
             $(
                 u *= $x;
                 y += u * $a;
             )*
-
             y
         }
     }

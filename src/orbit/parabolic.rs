@@ -9,16 +9,16 @@ parabolic orbit
 
 # Returns
 
-```(tru_anom, rad_vec)```
+`(tru_anom, rad_vec)`
 
-* ```tru_anom```: True anomaly of the body *| in radians*
-* ```rad_vec```: Radius vector of the body *| in AU*
+* `tru_anom`: True anomaly of the body *| in radians*
+* `rad_vec`: Radius vector of the body *| in AU*
 
 # Arguments
 
-* ```t```: The time of interest, in Julian (Ephemeris) day
-* ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
-* ```q```: Perihelion distance *| in AU*
+* `t`: The time of interest, in Julian (Ephemeris) day
+* `T`: Time of passage in perihelion, in Julian (Ephemeris) day
+* `q`: Perihelion distance *| in AU*
 **/
 pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
     let W = 0.03649116245 * (t - T) / q.powf(1.5);
@@ -37,17 +37,17 @@ along with it's **radius vector** at that time
 
 # Returns
 
-```(time_of_pass, rad_vec)```
+`(time_of_pass, rad_vec)`
 
-* ```time_of_pass```: Time of passage through the node, in Julian (Ephemeris) day
-* ```rad_vec```: Radius vector of the body at the time of passage *| in AU*
+* `time_of_pass`: Time of passage through the node, in Julian (Ephemeris) day
+* `rad_vec`: Radius vector of the body at the time of passage *| in AU*
 
 # Arguments
 E
-* ```w```: Argument of the perihelion *| in radians*
-* ```q```: Perihelion distance *| in AU*
-* ```T```: Time of passage in perihelion, in Julian (Ephemeris) day
-* ```node```: ```Ascend``` or ```Descend``` node
+* `w`: Argument of the perihelion *| in radians*
+* `q`: Perihelion distance *| in AU*
+* `T`: Time of passage in perihelion, in Julian (Ephemeris) day
+* `node`: `Ascend` or `Descend` node
 **/
 pub fn passage_through_node(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
     match node {
