@@ -295,7 +295,7 @@ Anyone interested to contribute in any way possible is encouraged to do so. Not 
 A fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
 ## References
-1. Main: [Astronomical Algorithms, 2nd edition (Meeus)](http://www.willbell.com/math/mc1.htm)
+1. Most algorithms: [Astronomical Algorithms, 2nd edition (Meeus)](http://www.willbell.com/math/mc1.htm)
 2. Planetary heliocentric positioning: [VSOP87-D](http://cdsarc.u-strasbg.fr/viz-bin/qcat?VI/81/)
 3. Approximating ΔT: [Five Millennium Canon of Solar Eclipses (Espenak and Meeus)](http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html)
 4. Some physical constants: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
