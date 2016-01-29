@@ -15,7 +15,7 @@ Implemented algorithms include things like planetary, solar, lunar and planetary
 
 The main reference taken as the source of algorithms is the famous book *Astronomical Algorithms by Jean Meeus*, whose almost every chapter has been addressed here; although in some cases, such as approximating ΔT and planetary heliocentric positioning, the library uses far more accurate methods taken from sources mentioned in the [references](#references) section.
 
-The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And doing it all in Rust is definitely a large part of that.
+The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And, doing it all in Rust is definitely a large part of that.
 
 ## Usage
 
