@@ -59,19 +59,6 @@ fn A(mean_geocen_moon_long: f64, app_geocen_moon_lat: f64,
 }
 
 fn F(JC: f64) -> f64 {
-    println!("JC = {:?}", JC);
-    let y = Horner_eval!(
-         JC,
-         93.272095,
-         483202.0175233
-        -0.0036539,
-        -1.0/3526000.0,
-         1.0/863310000.0
-    );
-    //let z = 93.272095 + JC*(483202.0175233 - JC*(0.0036539 + JC*(1.0/3526000.0 - JC/863310000.0)));
-    let z = 93.272095 + JC*483202.0175233 - JC*JC*0.0036539 - JC*JC*JC*1.0/3526000.0 + JC*JC*JC*JC*1.0/863310000.0;
-                                    println!("y = {:?}", y);
-                                    println!("z = {:?}", z);
     angle::limit_to_360(Horner_eval!(
              JC,
              93.272095,
@@ -79,7 +66,7 @@ fn F(JC: f64) -> f64 {
              -0.0036539,
              -1.0/3526000.0,
              1.0/863310000.0
-        )).to_radians()
+    )).to_radians()
 }
 
 fn E(JC: f64) -> f64 {
@@ -87,17 +74,33 @@ fn E(JC: f64) -> f64 {
 }
 
 fn DMM1(JC: f64) -> (f64, f64, f64) {
-    (angle::limit_to_360(297.8501921 + JC*(445267.1114034 -
-                                                  JC*(0.0018819 -
-                                                  JC*(1.0/545868.0 +
-                                                  JC/113065000.0)))).to_radians(),
-     angle::limit_to_360(357.5291092 + JC*(35999.0502909 -
-                                                  JC*(0.0001536 -
-                                                  JC/24490000.0))).to_radians(),
-     angle::limit_to_360(134.9633964 + JC*(477198.8675055 +
-                                                   JC*(0.0087414 +
-                                                   JC*(1.0/69699.0 -
-                                                   JC/14712000.0)))).to_radians())
+    let D = angle::limit_to_360(Horner_eval!(
+             JC,
+             297.8501921,
+             445267.1114034,
+             -0.0018819,
+             1.0/545868.0,
+             -1.0/113065000.0
+    )).to_radians();
+
+    let M = angle::limit_to_360(Horner_eval!(
+             JC,
+             357.5291092,
+             35999.0502909,
+             -0.0001536,
+             1.0/24490000.0
+    )).to_radians();
+
+    let M1 = angle::limit_to_360(Horner_eval!(
+             JC,
+             134.9633964,
+             477198.8675055,
+             0.0087414,
+             1.0/69699.0,
+             -1.0/14712000.0
+    )).to_radians();
+
+    (D, M, M1)
 }
 
 fn rho_sig(D: f64, M: f64, M1: f64, F: f64) -> (f64, f64) {
@@ -371,10 +374,14 @@ pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
     let (D, M, M1) = DMM1(JC);
     let F = F(JC);
     let E = E(JC);
-    let L1 = angle::limit_to_360(218.3164477 + JC*(481267.88123421 -
-                                                   JC*(0.0015786 -
-                                                   JC*(1.0/538841.0 +
-                                                   JC/65194000.0)))).to_radians();
+    let L1 = angle::limit_to_360(Horner_eval!(
+             JC,
+             218.3164477,
+             481267.88123421,
+             -0.0015786,
+             1.0/538841.0,
+             -1.0/65194000.0
+    )).to_radians();
 
     let A1 = angle::limit_to_360(119.75 + 131.849*JC).to_radians();
     let A2 = angle::limit_to_360(53.09 + 479264.29*JC).to_radians();
