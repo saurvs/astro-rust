@@ -7,15 +7,11 @@
 
 [API Docs](https://saurvs.github.io/astro-rust/)
 
-[About](#about)
-
-[Usage](#usage)
-
-[Algorithms](#algorithms)
-
-[Contributing](#contributing)
-
-[References](#references)
+* [About](#about)
+* [Usage](#usage)
+* [Algorithms](#algorithms)
+* [Contributing](#contributing)
+* [References](#references)
 
 ## About
 
