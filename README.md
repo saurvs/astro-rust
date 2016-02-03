@@ -3,19 +3,25 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md)
 [![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
 
-**Jump to**
+**Contents**
 
-[API Docs](https://saurvs.github.io/astro-rust/) | [About](#about) | [Usage](#usage) | [Algorithms](#algorithms) | [Contributing](#contributing) | [References](#references)
+[API Docs](https://saurvs.github.io/astro-rust/)
+
+[About](#about)
+[Usage](#usage)
+[Algorithms](#algorithms)
+[Contributing](#contributing)
+[References](#references)
 
 ## About
 
-```astro-rust``` is an MIT licensed library of algorithms useful for rigorous and accurate astronomical calculations.
+```astro-rust``` is an MIT licensed library of astronomical algorithms for the Rust programming language.
 
-Implemented algorithms include things like planetary, solar, lunar and planetary satellite positioning, corrections for precession, nutation, parallax, and aberration, calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and [much more](#algorithms).
+Implemented algorithms include planetary, solar, lunar and planetary satellite positioning, corrections for precession, nutation, parallax, and aberration, calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding position angles, illuminated fractions, visual magnitudes, and times of rise, set and transit of celestial bodies, and [much more](#algorithms).
 
 The main reference taken as the source of algorithms is the famous book *Astronomical Algorithms by Jean Meeus*, whose almost every chapter has been addressed here; although in some cases, such as approximating ΔT and planetary heliocentric positioning, the library uses far more accurate methods taken from sources mentioned in the [references](#references) section.
 
-The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And, doing it all in Rust is definitely a large part of that.
+The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And doing it all in Rust is very much a part of that.
 
 ## Usage
 
