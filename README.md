@@ -13,6 +13,9 @@
 
 [API Docs](https://saurvs.github.io/astro-rust/)
 
+> This project is currently a work in progress.
+> Some APIs may be updated occasionally.
+
 ## About
 
 ```astro-rust``` is an MIT licensed library of astronomical algorithms for the Rust programming language.
