@@ -29,6 +29,12 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
 
 ## Usage
 
+* Add the dependency ```astro``` in your ```Cargo.toml```
+  ```toml
+  [dependencies]
+  astro = "1.0.1"
+  ```
+
 * Include the crate ```astro``` in your code
   ```rust
   extern crate astro;
