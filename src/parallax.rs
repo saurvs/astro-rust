@@ -44,7 +44,7 @@ pub fn topocen_eq_coords(
     greenwhich_sidreal: f64) -> coords::EqPoint {
 
     let (rho_sin, rho_cos) = planet::earth::rho_sin_cos_phi(geograph_point.lat, observer_ht);
-    let geocen_hr_angl = coords::HrAnglFrmObserverLong(greenwhich_sidreal, geograph_point.long, eq_point.asc);
+    let geocen_hr_angl = coords::hr_angl_frm_observer_long(greenwhich_sidreal, geograph_point.long, eq_point.asc);
 
     let eq_hz_parllx_sin = eq_hz_parallax(dist_to_earth).sin();
     let del_asc = (-rho_cos*eq_hz_parllx_sin*geocen_hr_angl.sin())

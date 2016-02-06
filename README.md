@@ -216,7 +216,7 @@ with respect to Jupiter as seen from Earth
 **Saturn**
 
 * apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
-Titan, Hyperion, and Iapetus with respect to Saturn as seen from Earth
+Titan, Hyperion and Iapetus with respect to Saturn as seen from Earth
 * elements of Saturn's ring system
 
 **Transit**

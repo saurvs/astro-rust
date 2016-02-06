@@ -87,15 +87,15 @@ pub fn time(
         &TransitType::Set     => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d)
     };
 
-    let mut H = coords::HrAnglFrmObserverLong(theta0, geograph_point.long, asc).to_degrees();
+    let mut H = coords::hr_angl_frm_observer_long(theta0, geograph_point.long, asc).to_degrees();
     H = angle::limit_to_360(H);
     if H > 180.0 { H = H - 360.0; }
     H = H.to_radians();
 
     let h = match transit_type {
         &TransitType::Transit => 0.0,
-        &TransitType::Rise    => coords::AltFrmEqCoords(H, dec, geograph_point.lat),
-        &TransitType::Set     => coords::AltFrmEqCoords(H, dec, geograph_point.lat)
+        &TransitType::Rise    => coords::alt_frm_eq(H, dec, geograph_point.lat),
+        &TransitType::Set     => coords::alt_frm_eq(H, dec, geograph_point.lat)
     };
 
     m += match transit_type {
