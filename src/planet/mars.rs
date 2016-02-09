@@ -1,4 +1,4 @@
-//! mars
+//! Mars
 
 use angle;
 use planet;
@@ -141,8 +141,8 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
                               + 350.89200025*(JD - light_time - 2433282.5)
                              ).to_radians();
 
-    let asc0 = coords::AscFrmEcl(lambda0, beta0, mn_oblq);
-    let dec0 = coords::DecFrmEcl(lambda0, beta0, mn_oblq);
+    let asc0 = coords::asc_frm_ecl(lambda0, beta0, mn_oblq);
+    let dec0 = coords::dec_frm_ecl(lambda0, beta0, mn_oblq);
 
     let u = y*mn_oblq.cos() - z*mn_oblq.sin();
     let v = y*mn_oblq.sin() + z*mn_oblq.cos();
@@ -159,10 +159,10 @@ pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
     lambda0 += nut_in_long;
     let true_oblq = mn_oblq + nut_in_oblq;
 
-    let asc01 = coords::AscFrmEcl(lambda0, beta0, true_oblq);
-    let dec01 = coords::DecFrmEcl(lambda0, beta0, true_oblq);
-    let asc1 = coords::AscFrmEcl(lambda, beta, true_oblq);
-    let dec1 = coords::DecFrmEcl(lambda, beta, true_oblq);
+    let asc01 = coords::asc_frm_ecl(lambda0, beta0, true_oblq);
+    let dec01 = coords::dec_frm_ecl(lambda0, beta0, true_oblq);
+    let asc1 = coords::asc_frm_ecl(lambda, beta, true_oblq);
+    let dec1 = coords::dec_frm_ecl(lambda, beta, true_oblq);
 
     let P = (dec01.cos() * (asc01 - asc1).sin())
             .atan2(dec01.sin()*dec1.cos() - dec01.cos()*dec1.sin()*(asc01 - asc1).cos());

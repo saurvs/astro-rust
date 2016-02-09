@@ -93,7 +93,7 @@ Returns the **velocity** of a body in an elliptic orbit
 * `r`: Radius vector of the body *| in AU*
 * `a`: Semimajor axis of orbit *| in AU*
 **/
-pub fn velocity(r: f64, a:f64) -> f64 {
+pub fn vel(r: f64, a:f64) -> f64 {
     42.1219 * (1.0/r - 1.0/(2.0 * a)).sqrt()
 }
 
@@ -110,7 +110,7 @@ in an elliptic orbit
 * `a`: Semimajor axis of orbit *| in AU*
 * `e`: Eccentricity of orbit
 **/
-pub fn perih_velocity(a:f64, e:f64) -> f64 {
+pub fn perih_vel(a:f64, e:f64) -> f64 {
     29.7847 * ((1.0 + e) / ((1.0 - e) * a)).sqrt()
 }
 
@@ -128,7 +128,7 @@ in an elliptic orbit
 * `a`: Semimajor axis of orbit *| in AU*
 * `e`: Eccentricity of orbit
 **/
-pub fn aph_velocity(a:f64, e:f64) -> f64 {
+pub fn aph_vel(a:f64, e:f64) -> f64 {
     29.7847 * ((1.0 - e) / ((1.0 + e) * a)).sqrt()
 }
 
@@ -196,7 +196,7 @@ Returns the **semimajor axis** of an elliptic orbit
 * `perih`: Perihelion of the orbit
 * `ecc`: Eccentricity of the orbit
 **/
-pub fn semimajor_axis(perih: f64, ecc: f64) -> f64 {
+pub fn semimaj_axis(perih: f64, ecc: f64) -> f64 {
     perih / (1.0 - ecc)
 }
 

@@ -1,7 +1,8 @@
 # astro-rust
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md)
-[![Build Status](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
+[![](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md)
+[![](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust)
+[![](http://meritbadge.herokuapp.com/astro)](https://crates.io/crates/astro)
 
 **Contents**
 
@@ -12,6 +13,9 @@
 * [References](#references)
 
 [API Docs](https://saurvs.github.io/astro-rust/)
+
+> This project is currently a work in progress.
+> Some APIs may be updated occasionally.
 
 ## About
 
@@ -24,6 +28,12 @@ The main reference used as the source of algorithms is the famous book *Astronom
 The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And doing it all in Rust is very much a part of that.
 
 ## Usage
+
+* Add the dependency ```astro``` in your ```Cargo.toml```
+  ```toml
+  [dependencies]
+  astro = "1.0.1"
+  ```
 
 * Include the crate ```astro``` in your code
   ```rust
@@ -206,7 +216,7 @@ with respect to Jupiter as seen from Earth
 **Saturn**
 
 * apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
-Titan, Hyperion, and Iapetus with respect to Saturn as seen from Earth
+Titan, Hyperion and Iapetus with respect to Saturn as seen from Earth
 * elements of Saturn's ring system
 
 **Transit**

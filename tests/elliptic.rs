@@ -9,14 +9,14 @@ fn ecc_anom() {
 }
 
 #[test]
-fn velocity() {
+fn vel() {
     let a = 17.9400782;
     let e = 0.96727426;
-    let (vel_p, vel_a) = (orbit::elliptic::perih_velocity(a, e), orbit::elliptic::aph_velocity(a, e));
+    let (vel_p, vel_a) = (orbit::elliptic::perih_vel(a, e), orbit::elliptic::aph_vel(a, e));
     assert_eq!(util::round_upto_digits(vel_p, 2), 54.52);
     assert_eq!(util::round_upto_digits(vel_a, 2), 0.91);
 
-    let V = orbit::elliptic::velocity(1.0, a);
+    let V = orbit::elliptic::vel(1.0, a);
     assert_eq!(util::round_upto_digits(V, 2), 41.53);
 }
 

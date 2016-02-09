@@ -111,10 +111,10 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
     lambda0 += nut_in_long;
     lambda  += nut_in_long;
 
-    let asc0 = coords::AscFrmEcl(lambda0, beta0, true_oblq);
-    let dec0 = coords::DecFrmEcl(lambda0, beta0, true_oblq);
-    let asc = coords::AscFrmEcl(lambda, beta, true_oblq);
-    let dec = coords::DecFrmEcl(lambda, beta, true_oblq);
+    let asc0 = coords::asc_frm_ecl(lambda0, beta0, true_oblq);
+    let dec0 = coords::dec_frm_ecl(lambda0, beta0, true_oblq);
+    let asc = coords::asc_frm_ecl(lambda, beta, true_oblq);
+    let dec = coords::dec_frm_ecl(lambda, beta, true_oblq);
 
     let P = (dec0.cos() * (asc0 - asc).sin())
             .atan2(dec0.sin()*dec.cos() - dec0.cos()*dec.sin()*(asc0 - asc).cos());
