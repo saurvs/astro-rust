@@ -158,12 +158,12 @@ The following is a categorical high level listing of all the physical
 quantities you can calculate or actions you can perform, using the
 algorithms that have been implemented so far:
 
-**The 8 Solar System Planets**
+###### The 8 Solar System Planets
 
 * heliocentric coordinates (using the *full* VSOP87-D solution)
 * orbital elements referred to the mean equinox of the date
 
-**The Solar System Planets excluding Earth**
+###### The Solar System Planets excluding Earth
 
 * geocentric ecliptic and equatorial coordinates from heliocentric coordinates
 * apparent visual magnitude
@@ -173,14 +173,14 @@ algorithms that have been implemented so far:
 * position angle of the bright limb
 * phase angle
 
-**The Sun**
+###### The Sun
 
 * geocentric ecliptic coordinates
 * geocentric rectangular coordinates referred to the mean equinox of the date
 * ephemeris for physical observations
 * start of different Carrington's synodic rotation cycles
 
-**The Moon**
+###### The Moon
 
 * times of New Moon, Full Moon, First Quarter and Last Quarter
 * geocentric ecliptic coordinates
@@ -189,31 +189,31 @@ algorithms that have been implemented so far:
 * illuminated fraction of the lunar disk
 * equatorial horizontal parallax
 
-**The Earth**
+###### The Earth
 
 * high accuracy geodesic distance
 * eccentricity of the meridian
 * angle between the diurnal path and the horizon
 
-**Pluto**
+###### Pluto
 
 * heliocentric coordinates
 * mean orbital elements near 2000 AD
 * apparent visual magnitude
 * equatorial semidiameter
 
-**Mars**
+###### Mars
 
 * ecliptic coordinates of the north pole
 * ephemeris for physical observations
 
-**Jupiter**
+###### Jupiter
 
 * apparent rectangular coordinates of Io, Europa, Ganymede and Callisto
 with respect to Jupiter as seen from Earth
 * ephemeris for physical observations
 
-**Saturn**
+**Saturn
 
 * apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
 Titan, Hyperion and Iapetus with respect to Saturn as seen from Earth
