@@ -213,40 +213,40 @@ algorithms that have been implemented so far:
 with respect to Jupiter as seen from Earth
 * ephemeris for physical observations
 
-**Saturn
+###### Saturn
 
 * apparent rectangular coordinates of Mimas, Enceladus, Tethys, Dione, Rhea,
 Titan, Hyperion and Iapetus with respect to Saturn as seen from Earth
 * elements of Saturn's ring system
 
-**Transit**
+###### Transit
 
 * Times of rise, transit and set for the stars, planets, Sun, and Moon
 
-**Ecliptic**
+###### Ecliptic
 
 * mean obliquity, using the IAU and Laskar formulae
 * angle between the ecliptic and the horizon from Earth
 * longitudes of the two ecliptic points on the horizon from Earth
 
-**Nutation** in
+###### Nutation in
 
 * ecliptic longitude
 * obliquity of the ecliptic
 * right ascension and declination
 
-**Atmospheric refraction**
+###### Atmospheric refraction
 
 * refraction correction for true altitude to
 obtain apparent altitude, and vice-versa
 * effect of local pressure and temperature
 
-**Aberration**
+###### Aberration
 
 * solar aberration in ecliptic longitude
 * stellar aberration in equatorial coordinates
 
-**Transform**
+###### Transform
 
 * ecliptic coordinates to equatorial coordinates, and vice-versa
 * equatorial coordinates to local horizontal coordinates, and vice-versa
@@ -257,28 +257,28 @@ obtain apparent altitude, and vice-versa
   (due to precession)
 * orbital elements from one equinox to another
 
-**Elliptic orbits**
+###### Elliptic orbits
 
 * eccentric anomaly, true anomaly and radius vector of a body in orbit
 * times of passage through the nodes
 
-**Parabolic orbits**
+###### Parabolic orbits
 
 * true anomaly and radius vector of a body in orbit
 * times of passage through the nodes
 
-**Near-parabolic orbits**
+###### Near-parabolic orbits
 
 * true anomaly and radius vector of a body in orbit
 
-**Time**
+###### Time
 
 * Julian day from Gregorian and Julian dates, and vice-versa
 * Julian century and millennium
 * analytic approximation for ΔT, with [surprisingly good accuracy](http://eclipse.gsfc.nasa.gov/SEcat5/uncertainty.html) in recent times
 * mean and apparent Sidereal time
 
-**Stars**
+###### Stars
 
 * combined magnitude of two or more stars
 * absolute magnitude
@@ -289,7 +289,7 @@ obtain apparent altitude, and vice-versa
 * equatorial coordinates at a different time due to proper
   motion and radial velocity
 
-**Binary stars**
+###### Binary stars
 
 * angular separation
 * apparent position angle
@@ -299,7 +299,7 @@ obtain apparent altitude, and vice-versa
 * mean annual motion of the companion star
 * mean anomaly of the companion star
 
-**Asteroids**
+###### Asteroids
 
 * true diameter (from absolute magnitude and albedo)
 * apparent diameter (from true diameter and distance to the Earth)
