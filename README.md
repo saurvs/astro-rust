@@ -134,7 +134,7 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
 
     // now, convert equatorial coordinates to ecliptic coordinates
 
-    let (ecl_long, ecl_lat) = EclFrmEq!(right_ascension, declination, oblq_eclip);
+    let (ecl_long, ecl_lat) = ecl_frm_eq!(right_ascension, declination, oblq_eclip);
   ```
 
 * Convert equatorial coordinates to galactic coordinates
@@ -146,7 +146,7 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
 
     // convert to galactic coordinates
 
-    let (gal_long, gal_lat) = GalFrmEq!(right_ascension, declination);
+    let (gal_long, gal_lat) = gal_frm_eq!(right_ascension, declination);
   ```
 
 ## Algorithms
