@@ -456,7 +456,7 @@ pub fn dec_frm_gal(gal_long: f64, gal_lat: f64) -> f64 {
 }
 
 /**
-Returns **equatorial** coordinates from galactic** coordinates
+Returns **equatorial** coordinates from **galactic** coordinates
 
 # Returns
 
