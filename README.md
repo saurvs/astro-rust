@@ -70,10 +70,10 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
   let julian_ephm_day = time::julian_emph_day(julian_day, delta_t);
   ```
 
-* Find the *geocentric* ecliptic point and radius vector for the Sun and the Moon
+* Solar and Lunar positioning
   ```rust
 
-  // for the Sun
+  // find the geocentric ecliptic point and radius vector of the Sun
 
   let (sun_ecl_point, rad_vec_sun) = sun::geocen_ecl_pos(julian_day);
 
@@ -81,23 +81,27 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
   // sun_ecl_point.lat     - ecliptic latitude (radians)
   // rad_vec_sun - distance between the Sun and the Earth (AU)
 
-  // similarly for the Moon
+  // and similarly for the Moon
 
   let (moon_ecl_point, rad_vec_moon) = lunar::geocen_ecl_pos(julian_day);
 
   ```
 
-* Find the *heliocentric* coordinates and radius vector for Jupiter
+* Planetary position
   ```rust
+  // find the heliocentric point and radius vector of Jupiter
+
   let (long, lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Jupiter, julian_day);
   ```
 
-* Find the corrections for nutation in ecliptic longitude and obliquity of the ecliptic
+* Correct for nutation
   ```rust
+  // find the nutation in ecliptic longitude and obliquity of the ecliptic
+
   let (nut_in_long, nut_in_oblq) = nutation::nutation(julian_day);
   ```
 
-* Find the geodesic distance between two locations on the Earth
+* Geodesic distance between two locations on Earth
   ```rust
 	// geodesic distance between the Observatoire de Paris and
     // the US Naval Observatory at Washington DC
