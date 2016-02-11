@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `apprnt_rect_coords` fn in crate `astro`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, apprnt_rect_coords">
+
+    <title>astro::planet::saturn::moon::apprnt_rect_coords - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../../index.html'>astro</a>::<wbr><a href='../../index.html'>planet</a>::<wbr><a href='../index.html'>saturn</a>::<wbr><a href='index.html'>moon</a></p><script>window.sidebarCurrent = {name: 'apprnt_rect_coords', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='../../../index.html'>astro</a>::<wbr><a href='../../index.html'>planet</a>::<wbr><a href='../index.html'>saturn</a>::<wbr><a href='index.html'>moon</a>::<wbr><a class='fn' href=''>apprnt_rect_coords</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-1051' class='srclink' href='../../../../src/astro/src/planet/saturn/moon.rs.html#76-111' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn apprnt_rect_coords(JD: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, moon: &amp;<a class='enum' href='../../../../astro/planet/saturn/moon/enum.Moon.html' title='astro::planet::saturn::moon::Moon'>Moon</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></pre><div class='docblock'><p>Computes the apparent rectangular coordinates for a moon of Saturn</p>
+
+<h1 id='returns' class='section-header'><a href='#returns'>Returns</a></h1>
+<p><code>(X, Y, Z)</code></p>
+
+<p>The rectangular coordinates returned give the apparent position of a moon
+with respect to Saturn as seen from Earth. The <code>X</code> and <code>Y</code>
+coordinates are measured from the center of the disk of Saturn, in units
+of Saturn&#39;s equatorial radius.</p>
+
+<p><code>X</code> is measured positively to the west of Saturn, and negatively to the
+east. The x-axis coincides with Saturn&#39;s equator.</p>
+
+<p><code>Y</code> is measured positively to the north of Saturn, and negatively to
+the south. The y-axis coincides with Saturn&#39;s axis of rotation.</p>
+
+<p><code>Z</code> only matters in sign; it is positive if the Earth-moon
+distance is greater than the Earth-Saturn distance, and is negative if the
+Earth-moon distance is lesser than the Earth-Saturn distance.</p>
+
+<h1 id='arguments' class='section-header'><a href='#arguments'>Arguments</a></h1>
+<ul>
+<li><code>JD</code>  : Julian (Ephemeris) day</li>
+<li><code>moon</code>: The <a href="./enum.Moon.html">Moon</a></li>
+</ul>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../../";
+        window.currentCrate = "astro";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../../jquery.js"></script>
+    <script src="../../../../main.js"></script>
+    
+    <script defer src="../../../../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `earth` mod in crate `astro`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, earth">
+
+    <title>astro::planet::earth - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>astro</a>::<wbr><a href='../index.html'>planet</a></p><script>window.sidebarCurrent = {name: 'earth', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../../index.html'>astro</a>::<wbr><a href='../index.html'>planet</a>::<wbr><a class='mod' href=''>earth</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-801' class='srclink' href='../../../src/astro/src/planet/earth.rs.html#23-326' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>The Earth</p>
+</div><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.angl_betwn_diurnal_path_and_hz.html'
+                               title='astro::planet::earth::angl_betwn_diurnal_path_and_hz'>angl_betwn_diurnal_path_and_hz</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the angle between diurnal path and the horizon</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.approx_geodesic_dist.html'
+                               title='astro::planet::earth::approx_geodesic_dist'>approx_geodesic_dist</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a low accuracy geodesic distance between two points
+on the Earth&#39;s surface <em>| in kilometers</em></p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.ecc_of_meridian.html'
+                               title='astro::planet::earth::ecc_of_meridian'>ecc_of_meridian</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the eccentricity of the Earth&#39;s meridian</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.eq_rad.html'
+                               title='astro::planet::earth::eq_rad'>eq_rad</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the equatorial radius of the Earth <em>| in kilometers</em></p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.equation_of_time.html'
+                               title='astro::planet::earth::equation_of_time'>equation_of_time</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the equation of time <em>| in radians</em></p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.flat_fac.html'
+                               title='astro::planet::earth::flat_fac'>flat_fac</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the flattening factor of the Earth</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.geodesic_dist.html'
+                               title='astro::planet::earth::geodesic_dist'>geodesic_dist</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a high accuracy geodesic distance between two points on the Earth&#39;s
+surface <em>| in kilometers</em></p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.geograph_geocent_lat_diff.html'
+                               title='astro::planet::earth::geograph_geocent_lat_diff'>geograph_geocent_lat_diff</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the difference between the geographic latitude and
+geocentric latitude</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.linear_velocity_at_lat.html'
+                               title='astro::planet::earth::linear_velocity_at_lat'>linear_velocity_at_lat</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the linear velocity of a point at a latitude</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.pol_rad.html'
+                               title='astro::planet::earth::pol_rad'>pol_rad</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the polar radius of the Earth <em>| in kilometers</em></p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.rad_curv_of_meridian.html'
+                               title='astro::planet::earth::rad_curv_of_meridian'>rad_curv_of_meridian</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the radius of curvature of the Earth&#39;s meridian
+at a latitude</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.rad_of_parll_lat.html'
+                               title='astro::planet::earth::rad_of_parll_lat'>rad_of_parll_lat</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the radius of the parallel of a latitude</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.rho.html'
+                               title='astro::planet::earth::rho'>rho</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the distance from the Earth&#39;s center to a point on the
+ellipsoid</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.rho_sin_cos_phi.html'
+                               title='astro::planet::earth::rho_sin_cos_phi'>rho_sin_cos_phi</a></td>
+                        <td class='docblock short'>
+                             <p>Computes two quantities that are used elsewhere in the library</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.rot_angular_velocity.html'
+                               title='astro::planet::earth::rot_angular_velocity'>rot_angular_velocity</a></td>
+                        <td class='docblock short'>
+                             <p>Returns the rotational angular velocity of the Earth
+<em>| in radian per second</em></p>
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "astro";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

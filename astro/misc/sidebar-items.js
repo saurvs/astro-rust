@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["parllc_angl","Computes the parallactic angle of a celestial body"],["parllc_angl_on_hz","Computes the parallactic angle of a celestial body on the horizon"]]});

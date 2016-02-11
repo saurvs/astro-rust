@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["EARTH_MOON_MASS_RATIO","Earth-Moon mass ratio"],["GAUSS_GRAV","Gaussian gravitational constant *| in radians*"],["SPEED_OF_LIGHT","Speed of light in vaccum *| in meters per second*"],["SUN_EARTH_MASS_RATIO","Sun-Earth mass ratio"]],"mod":[["wgs72","World Geodetic System 1972"],["wgs84","World Geodetic System 1984"]]});

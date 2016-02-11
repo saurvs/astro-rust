@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["apparent_diameter","Computes the apparent diameter of an asteroid"],["diameter","Computes the diameter of an asteroid"]]});

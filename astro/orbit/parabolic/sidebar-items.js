@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["passage_through_node","Computes the time of passage of a body through a node of a parabolic orbit and it's radius vector at that time"],["true_anom_and_rad_vec","Computes the true anomaly and radius vector of a body in a parabolic orbit at a given time"]]});

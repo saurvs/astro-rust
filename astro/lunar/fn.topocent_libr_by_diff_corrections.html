@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `topocent_libr_by_diff_corrections` fn in crate `astro`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, topocent_libr_by_diff_corrections">
+
+    <title>astro::lunar::topocent_libr_by_diff_corrections - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>astro</a>::<wbr><a href='index.html'>lunar</a></p><script>window.sidebarCurrent = {name: 'topocent_libr_by_diff_corrections', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='../index.html'>astro</a>::<wbr><a href='index.html'>lunar</a>::<wbr><a class='fn' href=''>topocent_libr_by_diff_corrections</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-398' class='srclink' href='../../src/astro/src/lunar.rs.html#455-484' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn topocent_libr_by_diff_corrections(observer_lat: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, geocent_dec_moon: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, local_hour_angl: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, geocent_hz_parllx_moon: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, pos_angl_axis_of_rot: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, total_lib_lat: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></pre><div class='docblock'><p>Computes the topocentric librations of the Moon</p>
+
+<h1 id='returns' class='section-header'><a href='#returns'>Returns</a></h1>
+<p><code>(topocent_libr_in_long, topocent_libr_in_lat, topocent_libr_in_P)</code></p>
+
+<ul>
+<li><code>topocent_libr_in_long</code>: Topocentric libration in longitude <em>| in radians</em></li>
+<li><code>topocent_libr_in_lat</code> : Topocentric libration in latitude <em>| in radians</em></li>
+<li><code>topocent_libr_in_P</code>   : Topocentric libration in position angle of the axis
+                       of rotation <em>| in radians</em></li>
+</ul>
+
+<h1 id='arguments' class='section-header'><a href='#arguments'>Arguments</a></h1>
+<ul>
+<li><code>observer_lat</code>          : Latitude of the observer <em>| in radians</em></li>
+<li><code>geocent_dec_moon</code>      : Geocentric decation of the Moon <em>| in radians</em></li>
+<li><code>local_hour_angl</code>       : Local hour angle of the Moon <em>| in radians</em></li>
+<li><code>geocent_hz_parllx_moon</code>: Geocentric equatorial horizontal parallax of the
+                        Moon <em>| in radians</em></li>
+<li><code>pos_angl_axis_of_rot</code>  : Position angle of the axis of rotation of the
+                        Moon <em>| in radians</em></li>
+<li><code>total_lib_lat</code>         : Total libration of the Moon in
+                        latitude <em>| in radians</em></li>
+</ul>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "astro";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

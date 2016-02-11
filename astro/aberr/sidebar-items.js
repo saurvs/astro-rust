@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["sol_aberr","Computes solar aberration in ecliptic longitude"],["stell_aberr_in_eq_coords","Computes stellar aberration in equatorial coordinates"]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["ephemeris","Return quantites used in the ephemeris for physical observations of Jupiter"],["eq_semidiameter","Computes Jupiter's equatorial semidiameter"],["pol_semidiameter","Computes Jupiter's polar semidiameter"]],"mod":[["moon","The four Galilean moons"]],"struct":[["Ephemeris","Holds Jupiter's ephemeris values for physical observations"]]});

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `time` fn in crate `astro`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, time">
+
+    <title>astro::transit::time - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>astro</a>::<wbr><a href='index.html'>transit</a></p><script>window.sidebarCurrent = {name: 'time', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='../index.html'>astro</a>::<wbr><a href='index.html'>transit</a>::<wbr><a class='fn' href=''>time</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-1890' class='srclink' href='../../src/astro/src/transit.rs.html#74-148' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn time(transit_type: &amp;<a class='enum' href='../../astro/transit/enum.TransitType.html' title='astro::transit::TransitType'>TransitType</a>, transit_body: &amp;<a class='enum' href='../../astro/transit/enum.TransitBody.html' title='astro::transit::TransitBody'>TransitBody</a>, geograph_point: &amp;<a class='struct' href='../../astro/coords/struct.GeographPoint.html' title='astro::coords::GeographPoint'>GeographPoint</a>, eq_point1: &amp;<a class='struct' href='../../astro/coords/struct.EqPoint.html' title='astro::coords::EqPoint'>EqPoint</a>, eq_point2: &amp;<a class='struct' href='../../astro/coords/struct.EqPoint.html' title='astro::coords::EqPoint'>EqPoint</a>, eq_point3: &amp;<a class='struct' href='../../astro/coords/struct.EqPoint.html' title='astro::coords::EqPoint'>EqPoint</a>, apprnt_greenwhich_sidr: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, delta_t: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, moon_eq_hz_parallax: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a></pre><div class='docblock'><p>Computes the time of transit for a celestial body</p>
+
+<h1 id='returns' class='section-header'><a href='#returns'>Returns</a></h1>
+<ul>
+<li><code>(hour, min, sec)</code>: Time of transit on the day of interest, in UTC</li>
+</ul>
+
+<h1 id='arguments' class='section-header'><a href='#arguments'>Arguments</a></h1>
+<ul>
+<li><code>transit_type</code>  : A <code>TransitType</code></li>
+<li><code>transit_body</code>  : The <code>TransitBody</code></li>
+<li><code>geograph_point</code>: Geographic point of the observer <em>| in radians</em></li>
+</ul>
+
+<p>Let <code>JD</code> be the Julian (Ephemeris) day of interest,</p>
+
+<ul>
+<li><code>eq_point1</code>: Equatorial point of the transit body on <code>JD - 1</code> <em>| in radians</em></li>
+<li><code>eq_point2</code>: Equatorial point of the transit body on <code>JD</code> <em>| in radians</em></li>
+<li><code>eq_point3</code>: Equatorial point of the transit body on <code>JD + 1</code> <em>| in radians</em></li>
+<li><code>apprnt_greenwhich_sidr</code>: Apparent sidereal time at Greenwhich on <code>JD</code> <em>| in radians</em></li>
+<li><code>delta_t</code>: ΔT for <code>JD</code> (Julian day)</li>
+<li><code>moon_eq_hz_parallax</code>: Equatorial horizontal parallax of the Moon on <code>JD</code>
+                         <em>| in radians</em>. <em>Pass a meaningfull value here only when</em>
+                         <code>TransitBody::Moon</code> <em>is passed for</em> <code>transit_body</code>.</li>
+</ul>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "astro";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

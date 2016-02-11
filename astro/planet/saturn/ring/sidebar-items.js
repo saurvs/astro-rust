@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["ascend_node",""],["elements","Computes the elements for the ring system of Saturn"],["inc",""],["inn_edge_dusk_ring",""],["inn_edge_inner_ring",""],["inn_edge_outer_ring",""],["out_edge_inner_ing",""]],"struct":[["Elements","Holds the elements for the ring system of Saturn"]]});

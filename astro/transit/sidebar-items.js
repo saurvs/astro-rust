@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["TransitBody","Represents a celestial body in transit"],["TransitType","Represents a transit type"]],"fn":[["time","Computes the time of transit for a celestial body"]]});

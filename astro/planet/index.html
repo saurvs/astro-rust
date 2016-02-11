@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `planet` mod in crate `astro`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, planet">
+
+    <title>astro::planet - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>astro</a></p><script>window.sidebarCurrent = {name: 'planet', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>astro</a>::<wbr><a class='mod' href=''>planet</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-773' class='srclink' href='../../src/astro/src/planet/mod.rs.html#23-734' title='goto source code'>[src]</a></span></h1>
+<div class='docblock'><p>8 Planets of the Solar System</p>
+</div><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='earth/index.html'
+                               title='astro::planet::earth'>earth</a></td>
+                        <td class='docblock short'>
+                             <p>The Earth</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='jupiter/index.html'
+                               title='astro::planet::jupiter'>jupiter</a></td>
+                        <td class='docblock short'>
+                             <p>Jupiter</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='mars/index.html'
+                               title='astro::planet::mars'>mars</a></td>
+                        <td class='docblock short'>
+                             <p>Mars</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='mod' href='saturn/index.html'
+                               title='astro::planet::saturn'>saturn</a></td>
+                        <td class='docblock short'>
+                             <p>Saturn</p>
+                        </td>
+                    </tr>
+                </table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='enum' href='enum.Planet.html'
+                               title='astro::planet::Planet'>Planet</a></td>
+                        <td class='docblock short'>
+                             <p>Represents a planet</p>
+                        </td>
+                    </tr>
+                </table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table>
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.apprnt_mag_84.html'
+                               title='astro::planet::apprnt_mag_84'>apprnt_mag_84</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s apparent magnitude using the Astronomical
+Almanac&#39;s method adopted in 1984</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.apprnt_mag_muller.html'
+                               title='astro::planet::apprnt_mag_muller'>apprnt_mag_muller</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s apparent magnitude using G. Muller&#39;s formulae</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.ecl_coords_to_FK5.html'
+                               title='astro::planet::ecl_coords_to_FK5'>ecl_coords_to_FK5</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s geocentric ecliptic coordinates converted to the
+FK5 system</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.geocent_apprnt_ecl_coords.html'
+                               title='astro::planet::geocent_apprnt_ecl_coords'>geocent_apprnt_ecl_coords</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s geocentric, apparent ecliptic position, corrected
+for light-time</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.geocent_eq_coords.html'
+                               title='astro::planet::geocent_eq_coords'>geocent_eq_coords</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.geocent_geomet_ecl_coords.html'
+                               title='astro::planet::geocent_geomet_ecl_coords'>geocent_geomet_ecl_coords</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s geocentric, geometric ecliptic position,
+uncorrected for light-time</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.heliocent_coords.html'
+                               title='astro::planet::heliocent_coords'>heliocent_coords</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s heliocentric coordinates, referred to the mean
+equinox of the date</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.heliocent_coords_frm_orb_elements.html'
+                               title='astro::planet::heliocent_coords_frm_orb_elements'>heliocent_coords_frm_orb_elements</a></td>
+                        <td class='docblock short'>
+                             
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.illum_frac_frm_dist.html'
+                               title='astro::planet::illum_frac_frm_dist'>illum_frac_frm_dist</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the illuminated fraction of a planet&#39;s disk from it&#39;s distance
+to the Sun and Earth</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.illum_frac_frm_phase_angl.html'
+                               title='astro::planet::illum_frac_frm_phase_angl'>illum_frac_frm_phase_angl</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the illuminated fraction of a planet&#39;s disk from it&#39;s phase
+angle</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.orb_elements.html'
+                               title='astro::planet::orb_elements'>orb_elements</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s orbital elements, referred to the mean equinox of
+the date</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.phase_angl.html'
+                               title='astro::planet::phase_angl'>phase_angl</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s phase angle</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.pos_angle_of_bright_limb.html'
+                               title='astro::planet::pos_angle_of_bright_limb'>pos_angle_of_bright_limb</a></td>
+                        <td class='docblock short'>
+                             <p>Computes the position angle of the bright limb of a planet</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='fn' href='fn.semidiameter.html'
+                               title='astro::planet::semidiameter'>semidiameter</a></td>
+                        <td class='docblock short'>
+                             <p>Computes a planet&#39;s equatorial semidiameter</p>
+                        </td>
+                    </tr>
+                </table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "astro";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

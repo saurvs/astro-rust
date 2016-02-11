@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Moon","Represents a moon of Saturn"]],"fn":[["apprnt_rect_coords","Computes the apparent rectangular coordinates for a moon of Saturn"]]});
