@@ -18,7 +18,7 @@
 
 Implemented capabilities include planetary, solar, lunar and planetary satellite positioning, corrections for precession, nutation, parallax, and aberration, calculation of physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding times of rise, set and transit of celestial bodies (and [much more](#algorithms)).
 
-The main reference used as the source of algorithms is the famous book *Astronomical Algorithms by Jean Meeus*, whose almost every chapter has been addressed here, with functions that are well-documented and tests that use example data from the book; in some cases such as ΔT approximation and planetary heliocentric positioning, more accurate methods are used (from sources mentioned in the [references](#references) section).
+The main reference used as the source of algorithms is the famous book *Astronomical Algorithms by Jean Meeus*, whose almost every chapter has been addressed here, with functions that are well-documented and tests that use example data from the book; in some cases such as ΔT approximation and planetary heliocentric positioning, more accurate methods have been implemented (from sources mentioned in the [references](#references) section).
 
 The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And doing it all in Rust is very much a part of that.
 
