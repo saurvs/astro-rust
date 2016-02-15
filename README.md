@@ -27,7 +27,7 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
 * Add the dependency ```astro``` in your ```Cargo.toml```
   ```toml
   [dependencies]
-  astro = "1.0.2"
+  astro = "1.0.3"
   ```
 
 * Include the crate ```astro``` in your code
