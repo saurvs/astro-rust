@@ -4,7 +4,7 @@ use std::*;
 use orbit;
 
 /**
-Returns the **true anomaly** and **radius vector** of a body in a
+Returns the true anomaly and radius vector of a body in a
 parabolic orbit
 
 # Returns
@@ -12,7 +12,7 @@ parabolic orbit
 `(tru_anom, rad_vec)`
 
 * `tru_anom`: True anomaly of the body *| in radians*
-* `rad_vec`: Radius vector of the body *| in AU*
+* `rad_vec` : Radius vector of the body *| in AU*
 
 # Arguments
 
@@ -32,21 +32,24 @@ pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
 }
 
 /**
-Returns the **time of passage** of a body through a **node**,
-along with it's **radius vector** at that time
+Returns the time of passage of a body through a node,
+along with it's radius vector at that time
 
 # Returns
 
 `(time_of_pass, rad_vec)`
 
-* `time_of_pass`: Time of passage through the node, in Julian (Ephemeris) day
-* `rad_vec`: Radius vector of the body at the time of passage *| in AU*
+* `time_of_pass`: Time of passage through the node,
+                  in Julian (Ephemeris) day
+* `rad_vec`     : Radius vector of the body at the
+                  time of passage *| in AU*
 
 # Arguments
 E
-* `w`: Argument of the perihelion *| in radians*
-* `q`: Perihelion distance *| in AU*
-* `T`: Time of passage in perihelion, in Julian (Ephemeris) day
+* `w`   : Argument of the perihelion *| in radians*
+* `q`   : Perihelion distance *| in AU*
+* `T`   : Time of passage in perihelion, in Julian
+          (Ephemeris) day
 * `node`: `Ascend` or `Descend` node
 **/
 pub fn passage_through_node(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {

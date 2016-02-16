@@ -5,7 +5,23 @@ use time;
 use coords;
 
 /**
-Returns **stellar aberration** in equatorial coordinates
+Returns solar aberration in ecliptic longitude
+
+# Returns
+
+* `abrr`: Solar aberration in ecliptic
+          longitude *| in radians*
+
+# Arguments
+
+* `R`: Sun-Earth distance *| in AU*
+**/
+pub fn sol_aberr(R: f64) -> f64 {
+    -angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R
+}
+
+/**
+Returns stellar aberration in equatorial coordinates
 
 # Returns
 
@@ -17,7 +33,7 @@ Returns **stellar aberration** in equatorial coordinates
 # Arguments
 
 * `stell_eq_point`: Equatorial coordinates of the star *| in radians*
-* `JD` : Julian (Ephemeris) day
+* `JD`            : Julian (Ephemeris) day
 **/
 pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
     let t = time::julian_cent(JD);
@@ -301,20 +317,4 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
     let delta_dec = -(((x*asc.cos() + y*asc.sin())*dec.sin() - z*dec.cos())) / c;
 
     (delta_asc, delta_dec)
-}
-
-/**
-Returns **solar aberration** in ecliptic longitude
-
-# Returns
-
-* `abrr`: Solar aberration in ecliptic
-              longitude *| in radians*
-
-# Arguments
-
-* `R`: Sun-Earth distance *| in AU*
-**/
-pub fn sol_aberr(R: f64) -> f64 {
-    -angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R
 }

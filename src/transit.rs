@@ -5,7 +5,7 @@ use coords;
 use interpol;
 use std::*;
 
-/// Represents a **celestial body** in transit
+/// Represents a celestial body in transit
 pub enum TransitBody {
     /// A star or a planet
     StarOrPlanet,
@@ -15,7 +15,7 @@ pub enum TransitBody {
     Moon
 }
 
-/// Represents a **transit type**
+/// Represents a transit type
 pub enum TransitType {
     /// Rise
     Rise,
@@ -26,7 +26,7 @@ pub enum TransitType {
 }
 
 /**
-Returns the **time** of **transit** for a celestial body
+Returns the time of transit for a celestial body
 
 # Returns
 

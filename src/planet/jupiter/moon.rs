@@ -21,7 +21,7 @@ pub enum Moon {
 }
 
 /**
-Returns the apparent **rectangular** coordinates for a Galilean moon
+Returns the apparent rectangular coordinates for a Galilean moon
 
 This function implements the low accuracy method described in Meeus's
 book, that is *"sufficient for identifying the satellites at the
@@ -45,7 +45,7 @@ the south. The y-axis coincides with Jupiter's axis of rotation.
 
 # Arguments
 
-* `JD`: Julian (Ephemeris) day
+* `JD`  : Julian (Ephemeris) day
 * `moon`: The [Moon](./enum.Moon.html)
 **/
 pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64) {

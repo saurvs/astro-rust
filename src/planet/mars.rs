@@ -10,13 +10,13 @@ use coords;
 use util;
 
 /**
-Returns the equatorial coordinates of Mars's **north pole**
-for the epoch **J1950.0**
+Returns the equatorial coordinates of Mars's north pole
+for the epoch J1950.0
 
 # Returns
 
 * `eq_coords`: Equatorial coordinates of Mars's north pole
-                                for the epoch J1950.0 *| in radians*
+               for the epoch J1950.0 *| in radians*
 **/
 pub fn north_pol_eq_coords_J1950() -> coords::EqPoint {
     coords::EqPoint {
@@ -26,13 +26,13 @@ pub fn north_pol_eq_coords_J1950() -> coords::EqPoint {
 }
 
 /**
-Returns the equatorial coordinates of Mars's **north pole**
-for the epoch **J2000.0**
+Returns the equatorial coordinates of Mars's north pole
+for the epoch J2000.0
 
 # Returns
 
 * `eq_coords`: Equatorial coordinates of Mars's north pole
-                                for the epoch J2000.0 *| in radians*
+               for the epoch J2000.0 *| in radians*
 **/
 pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
     coords::EqPoint {
@@ -42,12 +42,13 @@ pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
 }
 
 /**
-Returns the ecliptic coordinates of Mars's **north pole**,
-referred to the **mean equinox of the date**
+Returns the ecliptic coordinates of Mars's north pole,
+referred to the mean equinox of the date
 
 # Returns
 
-* `ecl_coords`: Ecliptic coordinates of Mars's north pole *| in radians*
+* `ecl_coords`: Ecliptic coordinates of Mars's north
+                pole *| in radians*
 
 # Arguments
 
@@ -81,7 +82,7 @@ pub struct Ephemeris {
 }
 
 /**
-Return quantites used in the **ephemeris for physical observations**
+Return quantites used in the ephemeris for physical observations
 of Mars
 
 # Returns
@@ -90,11 +91,11 @@ of Mars
 
 # Arguments
 
-* `JD`: Julian (Ephemeris) day
+* `JD`                   : Julian (Ephemeris) day
 * `north_pole_ecl_coords`: Ecliptic coordinates of Mars's north pole on `JD` *| in radians*
-* `mn_oblq`: Mean obliquity of the ecliptic on `JD` *| in radians*
-* `nut_in_long`: Nutation in ecliptic longitude on `JD` *| in radians*
-* `nut_in_oblq`: Nutation in obliquity of the ecliptic on `JD` *| in radians*
+* `mn_oblq`              : Mean obliquity of the ecliptic on `JD` *| in radians*
+* `nut_in_long`          : Nutation in ecliptic longitude on `JD` *| in radians*
+* `nut_in_oblq`          : Nutation in obliquity of the ecliptic on `JD` *| in radians*
 **/
 pub fn ephemeris(JD: f64, north_pole_ecl_coords: &coords::EclPoint,
                  mn_oblq: f64,

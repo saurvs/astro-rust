@@ -131,7 +131,7 @@ pub fn ecl_lat_frm_eq(asc: f64, dec: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns **ecliptic coordinates** from **equatorial** coordinates
+Returns ecliptic coordinates from equatorial coordinates
 
 # Returns
 
@@ -202,7 +202,7 @@ pub fn dec_frm_ecl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
 }
 
 /**
-Returns **equatorial** coordinates from **ecliptic** coordinates
+Returns equatorial coordinates from ecliptic coordinates
 
 # Returns
 
@@ -270,7 +270,7 @@ pub fn alt_frm_eq(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
 }
 
 /**
-Returns **local horizontal** coordinates from **equatorial** coordinates
+Returns local horizontal coordinates from equatorial coordinates
 
 # Returns
 
@@ -383,7 +383,7 @@ pub fn gal_lat_frm_eq(asc: f64, dec: f64) -> f64 {
 }
 
 /**
-Returns **galactic** coordinates from **equatorial** coordinates
+Returns galactic coordinates from equatorial coordinates
 
 # Returns
 
@@ -456,7 +456,7 @@ pub fn dec_frm_gal(gal_long: f64, gal_lat: f64) -> f64 {
 }
 
 /**
-Returns **equatorial** coordinates from **galactic** coordinates
+Returns equatorial coordinates from galactic coordinates
 
 # Returns
 

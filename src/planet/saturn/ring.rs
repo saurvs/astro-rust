@@ -41,7 +41,7 @@ pub struct Elements {
 }
 
 /**
-Returns the **elements** for the **ring system** of Saturn
+Returns the elements for the ring system of Saturn
 
 # Returns
 
@@ -49,9 +49,9 @@ Returns the **elements** for the **ring system** of Saturn
 
 # Arguments
 
-* `JD`: Julian (Ephemeris) day
+* `JD`         : Julian (Ephemeris) day
 * `nut_in_long`: Nutation in longitude on `JD` *| in radians*
-* `true_oblq`: True obliquity of the ecliptic on `JD` *| in radians*
+* `true_oblq`  : True obliquity of the ecliptic on `JD` *| in radians*
 **/
 pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
     let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);

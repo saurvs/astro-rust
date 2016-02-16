@@ -1,4 +1,4 @@
-//! Functions for interpolation
+//! Interpolation of intermediate values of functions
 
 use util;
 

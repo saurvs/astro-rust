@@ -6,8 +6,8 @@ use time;
 use std;
 
 /**
-Returns the **mean obliquity** of the ecliptic using
-**J. Laskar's** formula
+Returns the mean obliquity of the ecliptic using
+J. Laskar's formula
 
 # Returns
 
@@ -40,7 +40,8 @@ pub fn mn_oblq_laskar(JD: f64) -> (f64) {
 }
 
 /**
-Returns the **mean obliquity** of the ecliptic using the **IAU** formula
+Returns the mean obliquity of the ecliptic using
+the IAU formula
 
 # Returns
 
@@ -66,8 +67,8 @@ pub fn mn_oblq_IAU(JD: f64) -> (f64) {
 }
 
 /**
-Returns the **longitudes** of the two **ecliptic points** on
-a **horizon** on Earth
+Returns the longitudes of the two ecliptic points on
+a horizon on Earth
 
 # Returns
 
@@ -91,7 +92,7 @@ pub fn eclip_points_on_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) 
 }
 
 /**
-Returns the **angle** between the **ecliptic** and a **horizon**
+Returns the angle between the ecliptic and a horizon
 on Earth
 
 # Returns
@@ -100,9 +101,9 @@ on Earth
 
 # Arguments
 
-* `oblq_eclip`: Obliquity of the ecliptic *| in radians*
+* `oblq_eclip`  : Obliquity of the ecliptic *| in radians*
 * `observer_lat`: The observer's geographical latitude *| in radians*
-* `loc_sidreal`: Local sidereal time *| in radians*
+* `loc_sidreal` : Local sidereal time *| in radians*
 **/
 pub fn angl_betwn_eclip_and_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
     (   oblq_eclip.cos()*observer_lat.sin()

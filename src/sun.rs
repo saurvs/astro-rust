@@ -7,7 +7,7 @@ use planet;
 use coords;
 
 /**
-Returns the Sun's **equatorial semidiameter**
+Returns the Sun's equatorial semidiameter
 
 # Arguments
 
@@ -18,14 +18,14 @@ pub fn semidiameter(sun_earth_dist: f64) -> f64 {
 }
 
 /**
-Returns the Sun's **geocentric ecliptic position**,
-referred to the **mean equinox of the date**
+Returns the Sun's geocentric ecliptic position,
+referred to the mean equinox of the date
 
 # Returns
 
 `(sun_ecl_point, sun_earth_dist)`
 
-* `sun_ecl_point`: Ecliptic point of the Sun *| in radians*
+* `sun_ecl_point` : Ecliptic point of the Sun *| in radians*
 * `sun_earth_dist`: Sun-Earth distance *| in AU*
 
 # Arguments
@@ -48,26 +48,26 @@ pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
 
 /**
 Returns the Sun's geocentric ecliptic coordinates
-converted to the **FK5** system
+converted to the FK5 system
 
 # Returns
 
 `(ecl_long_FK5, ecl_lat_FK5)`
 
 * `ecl_long_FK5`: Ecliptic longitude of the Sun *| in radians*,
-                      converted to the FK5 system
-* `ecl_lat_FK5`: Ecliptic latitude of the Sun *| in radians*,
-                     converted to the FK5 system
+                  converted to the FK5 system
+* `ecl_lat_FK5` : Ecliptic latitude of the Sun *| in radians*,
+                  converted to the FK5 system
 
 # Arguments
 
-* `JD`: Julian (Ephemeris) day
+* `JD`      : Julian (Ephemeris) day
 * `ecl_long`: Ecliptic longitude of the Sun on `JD`
-                  *| in radians*, referred to the mean equinox
-                  of the date
-* `ecl_lat`: Ecliptic latitude of the Sun `JD`
-                 *| in radians*, referred to the mean equinox
-                 of the date
+              *| in radians*, referred to the mean equinox
+              of the date
+* `ecl_lat` : Ecliptic latitude of the Sun `JD`
+              *| in radians*, referred to the mean equinox
+              of the date
 **/
 pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
     let JC = time::julian_cent(JD);
@@ -77,7 +77,6 @@ pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
      ecl_lat  + angle::deg_frm_dms(0, 0, 0.03916).to_radians()*(lambda1.cos() - lambda1.sin()))
 }
 
-//#[macro_export]
 macro_rules! GeocenApprntEclPos {
     ($planet: expr, $JD: expr) => {{
         3
@@ -85,8 +84,8 @@ macro_rules! GeocenApprntEclPos {
 }
 
 /**
-Returns the Sun's **geocentric rectangular coordinates**,
-referred to the **mean equinox of the date**
+Returns the Sun's geocentric rectangular coordinates,
+referred to the mean equinox of the date
 
 # Returns
 
@@ -107,33 +106,33 @@ celestial pole
 
 * `sun_geo_long`: The Sun's geometric longitude *| in radians*,
                       *without* corrections for nutation and abberation
-* `sun_geo_lat`: The Sun's geometric latitude *| in radians*,
+* `sun_geo_lat` : The Sun's geometric latitude *| in radians*,
                      *without* corrections for nutation and abberation
-* `sun_rad_vec`: The Sun's geometric radius vector *| in AU*
-* `mean_oblq`: Mean obliquity of the ecliptic
+* `sun_rad_vec` : The Sun's geometric radius vector *| in AU*
+* `mn_oblq`     : Mean obliquity of the ecliptic
 **/
-pub fn geocen_rect_coords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mean_oblq: f64) -> (f64, f64, f64) {
+pub fn geocen_rect_coords(sun_geo_long: f64, sun_geo_lat: f64, sun_rad_vec: f64, mn_oblq: f64) -> (f64, f64, f64) {
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
-    let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_oblq.cos() - sun_geo_lat.sin()*mean_oblq.sin());
-    let z = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mean_oblq.sin() + sun_geo_lat.sin()*mean_oblq.cos());
+    let y = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mn_oblq.cos() - sun_geo_lat.sin()*mn_oblq.sin());
+    let z = sun_rad_vec * (sun_geo_lat.cos()*sun_geo_long.sin()*mn_oblq.sin() + sun_geo_lat.sin()*mn_oblq.cos());
     (x, y, z)
 }
 
 /**
-Return quantites used in the **ephemeris for physical observations**
+Return quantites used in the ephemeris for physical observations
 of the Sun
 
 # Returns
 
 `(P, B0, L0)`
 
-* `P`: Position angle of the northern extremity of the axis of
-           rotation, measured eastwards from the North point of the
-           solar disk *| in radians*
+* `P` : Position angle of the northern extremity of the axis of
+        rotation, measured eastwards from the North point of the
+        solar disk *| in radians*
 * `B0`: Heliographic latitude of the center of the solar
-            disk *| in radians*
+        disk *| in radians*
 * `L0`: Heliographic longitude of the center of the solar
-            disk *| in radians*
+        disk *| in radians*
 
 # Arguments
 

@@ -8,7 +8,7 @@ pub mod moon;
 pub mod ring;
 
 /**
-Returns Saturn's **apparent magnitude** using G. Muller's formula
+Returns Saturn's apparent magnitude using G. Muller's formula
 
 # Returns
 
@@ -16,13 +16,13 @@ Returns Saturn's **apparent magnitude** using G. Muller's formula
 
 # Arguments
 
-* `i`: Phase angle of Saturn *| in radians*
-* `delta`: Saturn-Earth distance *| in AU*
-* `r`: Saturn-Sun distance *| in AU*
-* `deltaU`: Difference between Saturnicentric
-                longitudes of the Sun and the Earth,
-                measured in the plane of Saturn's ring *| in radians*
-* `B`: Saturnicentric latitude of the Earth *| in radians*
+* `i`     : Phase angle of Saturn *| in radians*
+* `delta` : Saturn-Earth distance *| in AU*
+* `r`     : Saturn-Sun distance *| in AU*
+* `deltaU`: Difference between Saturnicentric longitudes of
+            the Sun and the Earth, measured in the plane of
+            Saturn's ring *| in radians*
+* `B`     : Saturnicentric latitude of the Earth *| in radians*
 **/
 pub fn apprnt_mag_muller(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     - 8.68
@@ -33,7 +33,7 @@ pub fn apprnt_mag_muller(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
 }
 
 /**
-Returns Saturn's **apparent magnitude** using the Astronomical
+Returns Saturn's apparent magnitude using the Astronomical
 Almanac's formula adopted in 1984
 
 # Returns
@@ -42,13 +42,13 @@ Almanac's formula adopted in 1984
 
 # Arguments
 
-* `i`: Phase angle of Saturn *| in radians*
-* `delta`: Saturn-Earth distance *| in AU*
-* `r`: Saturn-Sun distance *| in AU*
-* `deltaU`: Difference between Saturnicentric
-                longitudes of the Sun and the Earth,
-                measured in the plane of Saturn's ring *| in radians*
-* `B`: Saturnicentric latitude of the Earth *| in radians*
+* `i`     : Phase angle of Saturn *| in radians*
+* `delta` : Saturn-Earth distance *| in AU*
+* `r`     : Saturn-Sun distance *| in AU*
+* `deltaU`: Difference between Saturnicentric longitudes of
+            the Sun and the Earth, measured in the plane of
+            Saturn's ring *| in radians*
+* `B`     : Saturnicentric latitude of the Earth *| in radians*
 **/
 pub fn apprnt_mag_84(i: f64, delta: f64, r: f64, delU: f64, B: f64) -> f64 {
     - 8.88
@@ -62,7 +62,7 @@ fn equatorial_unit_semidiameter() -> f64 { angle::deg_frm_dms(0, 0, 82.73) }
 fn polar_unit_semidiameter() -> f64 { angle::deg_frm_dms(0, 0, 73.82) }
 
 /**
-Returns Saturn's **polar semidiameter**
+Returns Saturn's polar semidiameter
 
 # Returns
 
@@ -71,7 +71,7 @@ Returns Saturn's **polar semidiameter**
 # Arguments
 
 * `saturn_earth_dist`: Saturn-Earth distance *| in AU*
-* `earth_lat`: Saturnicentric latitude of Earth *| in radians*
+* `earth_lat`        : Saturnicentric latitude of Earth *| in radians*
 **/
 pub fn pol_semidiameter(saturn_earth_dist: f64, earth_lat: f64) -> f64 {
     let a = equatorial_unit_semidiameter();
@@ -81,7 +81,7 @@ pub fn pol_semidiameter(saturn_earth_dist: f64, earth_lat: f64) -> f64 {
 }
 
 /**
-Returns Saturn's **equatorial semidiameter**
+Returns Saturn's equatorial semidiameter
 
 # Returns
 

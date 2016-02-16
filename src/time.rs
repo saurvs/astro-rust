@@ -49,7 +49,7 @@ pub struct DayOfMonth {
 }
 
 /**
-Returns **decimal day** for a `DayOfMonth`
+Returns decimal day for a `DayOfMonth`
 
 * `day_of_month`: A `DayOfMonth` struct
 **/
@@ -62,7 +62,7 @@ pub fn decimal_day(day: &DayOfMonth) -> f64 {
 }
 
 /**
-Returns **decimal year** for a `Date`
+Returns decimal year for a `Date`
 
 * `date`: A `Date` struct
 **/
@@ -92,11 +92,11 @@ pub fn decimal_year(date: &Date) -> f64 {
 }
 
 /**
-Checks if a year is a **leap year**
+Checks if a year is a leap year
 
 # Arguments
 
-* `year`: Year
+* `year`    : Year
 * `cal_type`: `CalType` enum
 **/
 pub fn is_leap_year(year: i32, cal_type: &CalType) -> (bool) {
@@ -166,7 +166,7 @@ Returns the Julian Ephemeris day
 
 # Arguments
 
-* `JD`: Julian day
+* `JD`     : Julian day
 * `delta_t`: Delta T
 **/
 pub fn julian_emph_day(JD: f64, delta_t: f64) -> f64 {
@@ -180,8 +180,8 @@ Returns a year, month and decimal day equivalent to a given Julian day
 
 `(year, month, decimal_day)`
 
-* `year`: Year
-* `month`: Month
+* `year`       : Year
+* `month`      : Month
 * `decimal_day`: Decimal day
 
 # Arguments
@@ -213,25 +213,25 @@ pub fn date_frm_julian_day(mut JD: f64) -> (i16, u8, f64) {
 
     let day = ((B - D) as f64) - (30.6001 * (E as f64)).floor() + F;
 
-    let month = if E < 14 {
-                    E - 1
-                }
+    let month =      if E < 14             { E - 1  }
                 else if E == 14 || E == 15 { E - 13 }
-                else {// panic
-                0
+                else {
+                    panic!("Internal error in time::date_frm_julian_day()");
+                    0
                 };
 
-    let year = if month > 2 { C - 4716 }
+    let year =      if month > 2                { C - 4716 }
                else if month == 1 || month == 2 { C - 4715 }
-               else {// panic
-               0
+               else {
+                   panic!("Internal error in time::date_frm_julian_day()");
+                   0
                };
 
     (year as i16, month as u8, day)
 }
 
 /**
-Returns **apparent sidereal** time from the mean sidereal time
+Returns apparent sidereal time from the mean sidereal time
 
 # Returns
 
@@ -239,19 +239,19 @@ Returns **apparent sidereal** time from the mean sidereal time
 
 # Arguments
 
-* `mn_sidr  `: Mean sidereal time *| in radians*
+* `mn_sidr`    : Mean sidereal time *| in radians*
 * `nut_in_long`: Nutatation in longitude *| in radians*
-* `true_oblq`: True obliquity of the ecliptic *| in radians*
+* `true_oblq`  : True obliquity of the ecliptic *| in radians*
 **/
 pub fn apprnt_sidr(mn_sidr: f64, nut_in_long: f64, true_oblq: f64) -> f64 {
     mn_sidr + nut_in_long*true_oblq.cos()
 }
 
 /**
-Returns **apparent sidereal time** for a Julian day
+Returns apparent sidereal time for a Julian day
 
-This functions uses internally J. Laskar's formula for computing
-the obliquity of the ecliptic.
+This functions uses internally J. Laskar's formula for
+computing the obliquity of the ecliptic.
 
 # Returns
 
@@ -271,7 +271,7 @@ macro_rules! apprnt_sidr {
 }
 
 /**
-Returns **mean sidereal** time for a Julian day
+Returns mean sidereal time for a Julian day
 
 # Returns
 
@@ -292,7 +292,7 @@ pub fn mn_sidr(JD: f64) -> f64 {
 }
 
 /**
-Returns an approximate value of **ΔT** for a given year and month
+Returns an approximate value of ΔT for a given year and month
 
 This function approximates ΔT from polynomial expressions using a
 method different from that given in the *Meeus* book. The method
@@ -301,7 +301,7 @@ it covers a far wider time range, and is more accurate.
 
 # Arguments
 
-* `year`: Year
+* `year` : Year
 * `month`: Month *range: 1 - 12*
 **/
 pub fn approx_delta_t(year: i32, month: u8) -> f64 {

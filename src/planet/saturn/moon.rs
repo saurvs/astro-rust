@@ -28,7 +28,7 @@ pub enum Moon {
 }
 
 /**
-Returns the apparent **rectangular** coordinates for a moon of Saturn
+Returns the apparent rectangular coordinates for a moon of Saturn
 
 # Returns
 
@@ -51,7 +51,7 @@ Earth-moon distance is lesser than the Earth-Saturn distance.
 
 # Arguments
 
-* `JD`: Julian (Ephemeris) day
+* `JD`  : Julian (Ephemeris) day
 * `moon`: The [Moon](./enum.Moon.html)
 **/
 

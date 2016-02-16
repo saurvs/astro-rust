@@ -3,7 +3,7 @@
 use angle;
 
 /**
-Returns the **refraction term** for true altitudes greater than
+Returns the refraction term for true altitudes greater than
 15 degrees
 
 # Returns
@@ -22,7 +22,7 @@ pub fn refrac_frm_apprnt_alt_15(apprnt_alt: f64) -> f64 {
 }
 
 /**
-Returns the **refraction term** for apparent altitudes greater than
+Returns the refraction term for apparent altitudes greater than
 15 degrees
 
 # Returns
@@ -40,7 +40,7 @@ pub fn refrac_frm_true_alt_15(true_alt: f64) -> f64 {
 }
 
 /**
-Returns the **refraction term** for true altitude
+Returns the refraction term for true altitude
 
 # Returns
 
@@ -65,7 +65,7 @@ pub fn refrac_frm_apprnt_alt(apprnt_alt: f64) -> f64 {
 }
 
 /**
-Returns the **refraction term** for apparent altitude
+Returns the refraction term for apparent altitude
 
 This function is consistent with `RefracFrmApprntAlt()` to within
 4 arcseconds.
@@ -90,7 +90,7 @@ pub fn refrac_frm_true_alt(true_alt: f64) -> f64 {
 }
 
 /**
-Returns the **refraction term modifier** for local **pressure**
+Returns the refraction term modifier for local pressure
 
 # Returns
 
@@ -106,7 +106,7 @@ pub fn refrac_due_to_pressr(pressure: f64) -> f64 {
 }
 
 /**
-Returns the **refraction term modifier** for local **temperature**
+Returns the refraction term modifier for local temperature
 
 # Returns
 

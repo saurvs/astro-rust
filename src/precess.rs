@@ -5,17 +5,17 @@ use std;
 use time;
 
 /**
-Returns **annual precession** in **equatorial coordinates**
-towards a new epoch
+Returns annual precession in equatorial coordinates towards a new
+epoch
 
 # Returns
 
 `(ann_precess_asc, ann_precess_dec)`
 
 * `ann_precess_asc`: Annual precession in right ascension towards
-                         the new epoch *| in radians*
-* `ann_precess_dec`: Annual precession in declination towards the
-                         new epoch *| in radians*
+                     the new epoch *| in radians*
+* `ann_precess_dec`: Annual precession in declination towards
+                     the new epoch *| in radians*
 
 In the case of a star, the precession returned here does not take
 into account it's annual proper motion. The annual proper motion
@@ -26,11 +26,11 @@ the equatorial coordinates to the new epoch.
 # Arguments
 
 * `asc`: Right ascension for the old epoch *| in radians*
-* `dec`: Declination for the old epoch *| in radians*. Should
-             not be too close to the celestial poles.
-* `JD`: Julian (Ephemeris) day corresponding to the new epoch.
-            Should not be more than a few hundred years away from
-            the old epoch.
+* `dec`: Declination for the old epoch *| in radians*. Shouldn't
+         be too close to the celestial poles of the Earth.
+* `JD` : Julian (Ephemeris) day corresponding to the new epoch.
+         Shouldn't be more than a few hundred years away from
+         the old epoch.
 **/
 pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     let JC = time::julian_cent(JD);
@@ -44,7 +44,7 @@ pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
 }
 
 /**
-Returns **equatorial** coordinates **reduced** to a different epoch
+Returns equatorial coordinates reduced to a different epoch
 
 # Returns
 
@@ -56,11 +56,11 @@ Returns **equatorial** coordinates **reduced** to a different epoch
 # Arguments
 
 * `old_asc`: Right ascension in the old epoch *| in radians*,
-                 referred to the FK5 system
+             referred to the FK5 system
 * `old_dec`: Declination in the old epoch *| in radians*,
-                 referred to the FK5 system
-* `JD1`: Julian (Ephemeris) day corresponding to the old epoch
-* `JD2`: Julian (Ephemeris) day corresponding to the new epoch
+             referred to the FK5 system
+* `JD1`    : Julian (Ephemeris) day corresponding to the old epoch
+* `JD2`    : Julian (Ephemeris) day corresponding to the new epoch
 **/
 pub fn precess_eq_coords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
     let T = time::julian_cent(JD1);
@@ -91,8 +91,8 @@ pub fn precess_eq_coords(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64
 }
 
 /**
-Returns **equatorial** coordinates, from coordinates referred to the
-**FK4** system, **reduced** to a different epoch
+Returns equatorial coordinates, from coordinates referred to the
+FK4 system, reduced to a different epoch
 
 # Returns
 
@@ -104,11 +104,11 @@ Returns **equatorial** coordinates, from coordinates referred to the
 # Arguments
 
 * `old_asc`: Right ascension in the old epoch *| in radians*,
-                 referred to the FK4 system
+             referred to the FK4 system
 * `old_dec`: Declination for in old epoch *| in radians*,
-                 referred to the FK4 system
-* `JD1`: Julian (Ephemeris) day corresponding to the old epoch
-* `JD2`: Julian (Ephemeris) day corresponding to the new epoch
+             referred to the FK4 system
+* `JD1`    : Julian (Ephemeris) day corresponding to the old epoch
+* `JD2`    : Julian (Ephemeris) day corresponding to the new epoch
 **/
 pub fn precess_eq_coords_FK5(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
     let T = (JD1 - 2415020.3135) / 36524.2199;
@@ -131,21 +131,21 @@ pub fn precess_eq_coords_FK5(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> 
 }
 
 /**
-Returns **ecliptic** coordinates **reduced** to a different epoch
+Returns ecliptic coordinates reduced to a different epoch
 
 # Returns
 
 `(new_long, new_lat)`
 
 * `new_long`: Ecliptic longitude in the new epoch *| in radians*
-* `new_lat`: Ecliptic latitude in the new epoch *| in radians*
+* `new_lat` : Ecliptic latitude in the new epoch *| in radians*
 
 # Arguments
 
 * `old_long`: Ecliptic longitude in the old epoch *| in radians*
-* `old_lat`: Ecliptic latitude in the old epoch *| in radians*
-* `JD_old`: Julian (Ephemeris) day corresponding to the old epoch
-* `JD_new`: Julian (Ephemeris) day corresponding to the new epoch
+* `old_lat` : Ecliptic latitude in the old epoch *| in radians*
+* `JD_old`  : Julian (Ephemeris) day corresponding to the old epoch
+* `JD_new`  : Julian (Ephemeris) day corresponding to the new epoch
 **/
 pub fn precess_ecl_coords(old_long: f64, old_lat: f64, JD_old: f64, JD_new: f64) -> (f64, f64) {
     let T = time::julian_cent(JD_old);
@@ -183,15 +183,18 @@ fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
 }
 
 /**
-Returns **orbital elements reduced** to a different equinox
+Returns orbital elements reduced to a different equinox
 
 # Returns
 
 `(new_inc, new_arg_perih, new_long_ascend_node)`
 
-* `new_inc`: Inclination in the new equinox *| in radians*
-* `new_arg_perih`: Argument of perihelion in the new equinox *| in radians*
-* `new_long_ascend_node`: Longitude of ascending node in the new equinox *| in radians*
+* `new_inc`             : Inclination in the new equinox
+                          *| in radians*
+* `new_arg_perih`       : Argument of perihelion in the
+                          new equinox *| in radians*
+* `new_long_ascend_node`: Longitude of ascending node in
+                          the new equinox *| in radians*
 
 # Arguments
 

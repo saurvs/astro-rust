@@ -5,7 +5,7 @@ use time;
 use coords;
 
 /**
-Returns nutation in **ecliptic longitude** and **obliquity**
+Returns nutation in ecliptic longitude and obliquity
 
 # Returns
 
@@ -89,14 +89,14 @@ pub fn nutation(JD: f64) -> (f64, f64) {
 
     let t = time::julian_cent(JD);
 
-    let M1 = angle::limit_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 +  t/56250.0)))).to_radians();
+    let M1 = angle::limit_to_360((134.96298 + t*(477198.867398 + t*(0.0086972 + t/56250.0 )))).to_radians();
     let M  = angle::limit_to_360((357.52772 + t*(35999.05034   - t*(0.0001603 + t/300000.0)))).to_radians();
     let D  = angle::limit_to_360((297.85036 + t*(445267.11148  - t*(0.0019142 - t/189474.0)))).to_radians();
     let F  = angle::limit_to_360((93.27191  + t*(483202.017538 - t*(0.0036825 - t/327270.0)))).to_radians();
     let om = angle::limit_to_360((125.04452 - t*(1934.136261   - t*(0.0020708 + t/450000.0)))).to_radians();
 
     let mut nut_in_long = 0.0;
-    let mut nut_in_obl = 0.0;
+    let mut nut_in_oblq = 0.0;
 
     let div = 0.0001/3600.0;
 
@@ -107,14 +107,14 @@ pub fn nutation(JD: f64) -> (f64, f64) {
                   (x.3 as f64) * F  +
                   (x.4 as f64) * om;
         nut_in_long += ((x.5 as f64) + t*(x.6 as f64)/10.0) * arg.sin() * div;
-        nut_in_obl  += ((x.7 as f64) + t*(x.8 as f64)/10.0) * arg.cos() * div;
+        nut_in_oblq += ((x.7 as f64) + t*(x.8 as f64)/10.0) * arg.cos() * div;
     }
 
-    (nut_in_long.to_radians(), nut_in_obl.to_radians())
+    (nut_in_long.to_radians(), nut_in_oblq.to_radians())
 }
 
 /**
-Returns nutation in **equatorial coordinates**
+Returns nutation in equatorial coordinates
 
 # Returns
 
@@ -130,9 +130,9 @@ Returns nutation in **equatorial coordinates**
 * `nut_in_oblq`: Nutation in obliquity *| in radians*
 * `tru_oblq`   : True obliquity of the ecliptic *| in radians*
 
-The declination passed should not be close to either of the two of
-the celestial poles, as the values of nutation returned here are
-only first-order corrections.
+The declination in `eq_point` should not be close to either of
+the two of the celestial poles, as the values of nutation returned
+here are only first-order corrections.
 **/
 pub fn nutation_in_eq_coords(eq_point: &coords::EqPoint, nut_in_long: f64,
                           nut_in_oblq: f64, tru_oblq: f64) -> (f64, f64) {

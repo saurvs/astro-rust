@@ -5,11 +5,12 @@ use coords;
 use time;
 
 /**
-Returns the **equatorial horizontal parallax** of the Moon
+Returns the equatorial horizontal parallax of the Moon
 
 # Returns
 
-* `eq_hz_parllx`: Equatorial horizontal parallax of the Moon *| in radians*
+* `eq_hz_parllx`: Equatorial horizontal parallax of the
+                  Moon *| in radians*
 
 # Arguments
 
@@ -20,12 +21,12 @@ pub fn eq_hz_parllx(earth_moon_dist: f64) -> f64 {
 }
 
 /**
-Returns the **equatorial semidiameter** of the Moon
+Returns the equatorial semidiameter of the Moon
 
 # Returns
 
 * `eq_semidiameter`: Geocentric equatorial semidiameter
-                         *| in radians per kilometers*
+                     *| in radians per kilometers*
 
 # Arguments
 
@@ -36,13 +37,13 @@ pub fn semidiameter(earth_moon_dist: f64) -> f64 {
 }
 
 /**
-Returns the **inclination** of the **mean lunar equator** with the
+Returns the inclination of the mean lunar equator with the
 ecliptic
 
 # Returns
 
 * `inc`: Inclination of the mean lunar equator with the
-             ecliptic *| in radians*
+         ecliptic *| in radians*
 **/
 pub fn inc_of_mn_lunar_eq() -> f64 {
     angle::deg_frm_dms(1, 32, 32.7).to_radians()
@@ -136,7 +137,7 @@ fn rho_sig(D: f64, M: f64, M1: f64, F: f64) -> (f64, f64) {
 }
 
 /**
-Returns the **optical librations** of the Moon in longitude and
+Returns the optical librations of the Moon in longitude and
 latitude
 
 # Returns
@@ -144,9 +145,9 @@ latitude
 `(optical_libr_in_long, optical_libr_in_lat)`
 
 * `optical_libr_in_long`: The optical libration in
-longitude *| in radians*
-* `optical_libr_in_lat`: The optical libration in
-latitude *| in radians*
+                          longitude *| in radians*
+* `optical_libr_in_lat` : The optical libration in
+                          latitude *| in radians*
 
 # Arguments
 
@@ -177,7 +178,7 @@ pub fn optical_libr(mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64,
 }
 
 /**
-Returns the **physical librations** of the Moon in longitude and
+Returns the physical librations of the Moon in longitude and
 latitude
 
 # Returns
@@ -185,9 +186,9 @@ latitude
 `(physical_libr_in_long, physical_libr_in_lat)`
 
 * `physical_libr_in_long`: The physical libration in
-longitude *| in radians*
+                           longitude *| in radians*
 * `physical_libr_in_lat`: The physical libration in
-latitude *| in radians*
+                          latitude *| in radians*
 
 # Arguments
 
@@ -246,7 +247,7 @@ pub fn physical_libr(mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64,
 }
 
 /**
-Returns the **total librations** of the Moon in longitude and
+Returns the total librations of the Moon in longitude and
 latitude
 
 # Returns
@@ -254,9 +255,9 @@ latitude
 `(total_libr_in_long, total_libr_in_lat)`
 
 * `total_libr_in_long`: The total libration in
-longitude *| in radians*
+                        longitude *| in radians*
 * `total_libr_in_lat`: The total libration in
-latitude *| in radians*
+                       latitude *| in radians*
 
 # Arguments
 
@@ -278,7 +279,7 @@ pub fn total_libr(mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64,
 }
 
 /**
-Returns the **position angle** of the **axis of rotation** of the Moon
+Returns the position angle of the axis of rotation of the Moon
 
 # Returns
 
@@ -313,7 +314,7 @@ pub fn pos_angl_of_axis_of_rot(mn_ascen_node_long: f64, total_lib_lat: f64,
 }
 
 /**
-Returns the **topocentric librations** of the Moon
+Returns the topocentric librations of the Moon
 
 # Returns
 
@@ -349,8 +350,8 @@ pub fn topocen_libr_by_diff_corrections(observer_lat: f64, geocen_dec_moon: f64,
 }
 
 /**
-Returns the **geocentric ecliptic** position of the Moon,
-referred to the **mean equinox of the date**
+Returns the geocentric ecliptic position of the Moon,
+referred to the mean equinox of the date
 
 # Returns
 
@@ -572,12 +573,12 @@ pub fn geocen_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
 }
 
 /**
-Returns the **longitude** of the **mean ascending node** of the Moon
+Returns the longitude of the mean ascending node of the Moon
 
 # Returns
 
 * `long_mn_ascend_node`: Longitude of the mean ascending
-                                       node *| in radians*
+                         node *| in radians*
 
 # Arguments
 
@@ -597,12 +598,12 @@ pub fn mn_ascend_node(JC: f64) -> f64 {
 }
 
 /**
-Returns the **longitude** of the **true ascending node** of the Moon
+Returns the longitude of the true ascending node of the Moon
 
 # Returns
 
 * `long_true_ascend_node`: Longitude of the true ascending
-                                       node *| in radians*
+                           node *| in radians*
 
 # Arguments
 
@@ -622,11 +623,12 @@ pub fn true_ascend_node(JC: f64) -> f64 {
 }
 
 /**
-Returns the **longitude** of the **mean perigee** of the Moon
+Returns the longitude of the mean perigee of the Moon
 
 # Returns
 
-* `long_mn_perigee`: Longitude of mean perigee *| in radians*
+* `long_mn_perigee`: Longitude of mean perigee
+                     *| in radians*
 
 # Arguments
 
@@ -646,13 +648,13 @@ pub fn mn_perigee(JC: f64) -> f64 {
 }
 
 /**
-Returns the **position angle** of the Moon's **bright limb**
+Returns the position angle of the Moon's bright limb
 
 # Returns
 
 * `pos_angl_of_bright_limb` The position angle of the midpoint
-                                       of the illuminated limb of the Moon
-                                       *| in radians*
+                            of the illuminated limb of the Moon
+                            *| in radians*
 
 # Arguments
 
@@ -670,16 +672,17 @@ pub fn bright_limb(sun_eq_point: coords::EqPoint,
 }
 
 /**
-Returns the **illuminated fraction** of the lunar **disk**, using equatorial coordinates
+Returns the illuminated fraction of the lunar disk, using equatorial
+coordinates
 
 # Arguments
 
-* `sun_eq_point`: Equatorial coordinate of the Sun *| in radians*
-* `moon_eq_point`: Equatorial coordinate of the Moon *| in radians*
-* `earth_moon_dist`: Earth-Moon distance
-                         (in any unit, but same as that of `earth_sun_dist`)
-* `earth_sun_dist`: Earth-Sun distance
-                        (in any unit, but same as that of `earth_moon_dist`)
+* `sun_eq_point`   : Equatorial coordinate of the Sun *| in radians*
+* `moon_eq_point`  : Equatorial coordinate of the Moon *| in radians*
+* `earth_moon_dist`: Earth-Moon distance (in any unit, but same as
+                     that of `earth_sun_dist`)
+* `earth_sun_dist` : Earth-Sun distance (in any unit, but same as
+                     that of `earth_moon_dist`)
 **/
 pub fn illum_frac_frm_eq_coords(sun_eq_point: &coords::EqPoint,
                                                moon_eq_point: &coords::EqPoint,
@@ -689,17 +692,18 @@ pub fn illum_frac_frm_eq_coords(sun_eq_point: &coords::EqPoint,
 }
 
 /**
-Returns the **illuminated fraction** of the lunar **disk**, using eclipctic coordinates
+Returns the illuminated fraction of the lunar disk, using eclipctic
+coordinates
 
 # Arguments
 
-* `moon_long`: Eclipctic longitude of the Moon *| in radians*
-* `moon_lat`: Eclipctic latitude of the Moon *| in radians*
-* `sun_long`: Eclipctic longitude of the Sun *| in radians*
-* `earth_moon_dist`: Earth-Moon distance
-                         (in any unit, but same as that of `earth_sun_dist`)
-* `earth_sun_dist`: Earth-Sun distance
-                        (in any unit, but same as that of `earth_moon_dist`)
+* `moon_long`      : Eclipctic longitude of the Moon *| in radians*
+* `moon_lat`       : Eclipctic latitude of the Moon *| in radians*
+* `sun_long`       : Eclipctic longitude of the Sun *| in radians*
+* `earth_moon_dist`: Earth-Moon distance (in any unit, but same as
+                     that of `earth_sun_dist`)
+* `earth_sun_dist` : Earth-Sun distance (in any unit, but same as
+                     that of `earth_moon_dist`)
 **/
 pub fn illum_frac_frm_ecl_coords(moon_long: f64, moon_lat: f64, sun_long: f64,
                                                earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
@@ -713,14 +717,14 @@ fn illuminated_frac(moon_geocen_elong: f64, earth_moon_dist: f64, earth_sun_dist
 }
 
 /**
-Returns the **times of passage** of the Moon through the **ascending**
-and **descending nodes**, close to a given date
+Returns the times of passage of the Moon through the ascending and
+descending nodes, close to a given date
 
 # Returns
 
 `(time_of_ascend_node, time_of_descend_node)`
 
-* `time_of_ascend_node`: Time of passage through the ascending node
+* `time_of_ascend_node` : Time of passage through the ascending node
 * `time_of_descend_node`: Time of passage through the descending node
 
 # Arguments
@@ -782,8 +786,8 @@ pub enum Phase {
 }
 
 /**
-Returns the Julian day corresponding to one of the four
-**phases** of the Moon
+Returns the Julian day corresponding to one of the four phases
+of the Moon
 
 # Returns
 
@@ -795,7 +799,7 @@ and mid-2020 AD is 3.8 seconds.
 
 # Arguments
 
-* `date`: Date of interest, close to the phase
+* `date` : Date of interest, close to the phase
 * `phase`: The [Phase](./enum.Phase.html)
 **/
 pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
