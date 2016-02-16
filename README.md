@@ -86,9 +86,11 @@ Implemented capabilities include planetary, solar, lunar and planetary satellite
   let (nep_long, nep_lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Neptune, julian_day);
 
   // all eight planets (and (the dwarf planet) Pluto) are supported
+
+  let (plut_long, plut_lat, rad_vec) = pluto::heliocen_pos(julian_day);
   ```
 
-* Geodesic distance between two locations on Earth
+* Find the geodesic distance between two locations on Earth
   ```rust
 	// geodesic distance between the Observatoire de Paris and
     // the US Naval Observatory at Washington DC
