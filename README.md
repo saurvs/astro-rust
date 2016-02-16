@@ -23,7 +23,7 @@ Implemented capabilities include planetary, solar, lunar and planetary satellite
 * Add the dependency ```astro``` in your ```Cargo.toml```
   ```toml
   [dependencies]
-  astro = "1.0.3"
+  astro = "1.0.4"
   ```
 
 * Include the crate ```astro``` in your code
