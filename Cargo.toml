@@ -9,5 +9,5 @@ license = "MIT"
 repository = "https://www.github.com/saurvs/astro-rust"
 homepage = "https://saurvs.github.io/astro-rust"
 
-description = "An MIT licensed library of astronomical algorithms for the Rust programming language."
+description = " Algorithms for accurate astronomy. An MIT licensed library of astronomical algorithms for the Rust programming language."
 keywords = ["astronomy", "algorithms", "ephemeris", "planet", "solar"]
