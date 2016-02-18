@@ -16,7 +16,7 @@
 
 ```astro-rust``` is an MIT licensed library of astronomical algorithms for the Rust programming language.
 
-Implemented capabilities include planetary, solar, lunar and planetary satellite positioning, corrections for precession, nutation, parallax, and aberration, calculation of physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding times of rise, set and transit of celestial bodies and [much more](https://saurvs.github.io/astro-rust/).
+Implemented capabilities include planetary, solar, lunar positioning, corrections for precession, nutation, parallax, and aberration, calculation of physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding times of rise, set and transit of celestial bodies and [much more](https://saurvs.github.io/astro-rust/).
 
 ## Usage
 
