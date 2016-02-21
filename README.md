@@ -16,7 +16,17 @@
 
 ```astro-rust``` is an MIT licensed library of astronomical algorithms for the Rust programming language.
 
-Implemented capabilities include planetary, solar, and lunar positioning, corrections for precession, nutation, parallax, and aberration, calculation of physical ephemeris of Mars, Jupiter, and the ring system of Saturn, finding times of rise, set and transit of celestial bodies and [much more](https://saurvs.github.io/astro-rust/).
+Implemented algorithms include
+
+* planetary and solar positioning by the complete set of elements of Bretagnon and Francou's VSP087 theory
+* lunar positioning by the principle elements of Chapront's ELP-2000/82 theory
+* Galilean satellite positioning by Lieske's E2x3 theory
+* finding Julian dates, sidereal time, dynamical time, equinoxes, rising and setting times
+* coordinate transformations
+* corrections for precession, nutation, parallax, aberration and atmospheric refraction
+* calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn
+* finding position angles, illuminated fractions, and visual magnitudes
+* and [much more](https://saurvs.github.io/astro-rust/).
 
 ## Usage
 
@@ -37,14 +47,14 @@ Implemented capabilities include planetary, solar, and lunar positioning, correc
   ```rust
   // for example, the time of the Apollo 11 moon landing
 
-  let day_of_month = time::DayOfMonth{day      : 20,  // 1 - 31
-				 			          hr       : 20,  // 0 - 24
-                                      min      : 18,  // 0 - 60
-                                      sec      : 4.0, // 0.0 - 60.0
+  let day_of_month = time::DayOfMonth{day      : 20,
+				 			          hr       : 20,
+                                      min      : 18,
+                                      sec      : 4.0,
                                       time_zone: 0.0  // at the Greenwhich meridian
                                      };
 
-  let date = time::Date{year       : 1969, // +ve for AD, -ve for BC
+  let date = time::Date{year       : 1969,
                         month      : 7, // July
                         decimal_day: time::decimal_day(&day_of_month),
                         cal_type   : time::CalType::Gregorian};
@@ -53,9 +63,9 @@ Implemented capabilities include planetary, solar, and lunar positioning, correc
 
   // for higher accuracy in specifying the time of interest,
   // find the Julian Ephemeris day; this slightly differs from
-  // the Julian day by usually a few seconds, denoted as ΔT.
-  // you can get a reported value of that from the Astronomical
-  // Almanac, or calculate it using a built-in function
+  // the Julian day by ΔT, which is usually a few seconds. you
+  // can get a reported value of it from the Astronomical
+  // Almanac, or calculate it using the built-in function
 
   let delta_t = time::approx_delta_t(date.year, date.month); // a good one, actually
 
@@ -85,8 +95,7 @@ Implemented capabilities include planetary, solar, and lunar positioning, correc
   // or neptune
   let (nep_long, nep_lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Neptune, julian_day);
 
-  // all eight planets (and (the dwarf planet) Pluto) are supported
-
+  // positioning for all the eight planets (and (the dwarf planet) Pluto) is supported
   let (plut_long, plut_lat, rad_vec) = pluto::heliocen_pos(julian_day);
   ```
 
@@ -160,7 +169,6 @@ The end goal (of this project) is to build a modern, well-tested, well-documente
 A fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
 ## References
-
 
 The main reference used as the source of algorithms is the famous book *Astronomical Algorithms by Jean Meeus*, whose almost every chapter has been addressed here, with functions that are well-documented and tests that use example data from the book; in some cases, such as ΔT approximation and planetary heliocentric positioning, more accurate methods have been implemented.
 
