@@ -20,12 +20,12 @@ Implemented algorithms include
 
 * planetary and solar positioning by the complete set of elements of Bretagnon and Francou's VSP087 theory
 * lunar positioning by the principle elements of Chapront's ELP-2000/82 theory
-* Galilean satellite positioning by Lieske's E2x3 theory
-* finding Julian dates, sidereal time, dynamical time, equinoxes, rising and setting times
+* satellite positioning for Saturn and Jupiter
+* finding Julian dates, sidereal time, dynamical time, equinoxes, rising and setting times, times of lunar phases
 * coordinate transformations
-* corrections for precession, nutation, parallax, aberration and atmospheric refraction
-* calculation of the physical ephemeris of Mars, Jupiter, and the ring system of Saturn
-* finding position angles, illuminated fractions, and visual magnitudes
+* corrections for precession, nutation, parallax, aberration, atmospheric refraction
+* calculation of the physical ephemeris of Mars, Jupiter, the ring system of Saturn
+* finding position angles, illuminated fractions, visual magnitudes
 * and [much more](https://saurvs.github.io/astro-rust/).
 
 ## Usage
