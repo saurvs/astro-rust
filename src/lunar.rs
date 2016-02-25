@@ -803,7 +803,9 @@ and mid-2020 AD is 3.8 seconds.
 * `phase`: The [Phase](./enum.Phase.html)
 **/
 pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
-    let K = (((time::decimal_year(&date) - 2000.0)*12.3685) as i64) as f64;
+    let mut K = 12.3685 * (time::decimal_year(&date) - 2000.0);
+    K = (K as i64) as f64;
+    
     let k = match phase {
         &Phase::New   => K,
         &Phase::First => K + 0.25,
@@ -916,7 +918,9 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
             [0.00002, M1 - M + 2.0*F],
             [-0.00002, 3.0*M1 + M],
         ];
-        for &x in corrections.iter() { JD += x[0]*x[1].sin(); }
+        for &x in corrections.iter() {
+            JD += x[0] * x[1].sin();
+        }
     }
     else {
         let is_new = match phase {
@@ -1006,7 +1010,9 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
             -0.00002,
             0.00002]
         };
-        for mx in multipliers.iter().zip(sine_arguments.iter()) { JD += mx.0*(mx.1).sin(); }
+        for mx in multipliers.iter().zip(sine_arguments.iter()) {
+            JD += mx.0 * (mx.1).sin();
+        }
     }
 
     let additional_corrections = [
@@ -1025,7 +1031,9 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
         [0.000_035, A13],
         [0.000_023, A14],
     ];
-    for &x in additional_corrections.iter() { JD += x[0]*x[1].sin(); }
+    for &x in additional_corrections.iter() {
+        JD += x[0] * x[1].sin();
+    }
 
     JD
 }

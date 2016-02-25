@@ -23,7 +23,7 @@ parabolic orbit
 pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
     let W = 0.03649116245 * (t - T) / q.powf(1.5);
     let G = W / 2.0;
-    let Y = (G + (G*G + 1.0).sqrt()).powf(1.0/3.0);
+    let Y = (G + (G*G + 1.0).sqrt()).cbrt();
     let s = Y - 1.0/Y;
     let v = 2.0 * s.atan();
     let r = q * (1.0 + s*s);

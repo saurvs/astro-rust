@@ -17,7 +17,6 @@ fn true_anom_and_rad_vec() {
 
 #[test]
 fn passage_through_nodes() {
-
     let T = time::julian_day(&time::Date{
         year: 1989,
         month: 8,

@@ -24,7 +24,7 @@ Implemented algorithms include
 * finding Julian dates, sidereal time, dynamical time, equinoxes, rising and setting times, times of lunar phases
 * coordinate transformations
 * corrections for precession, nutation, parallax, aberration, atmospheric refraction
-* calculation of the physical ephemeris for Mars, Jupiter, and rings of Saturn
+* calculation of the physical ephemeris for Mars, Jupiter, and the rings of Saturn
 * finding position angles, illuminated fractions, visual magnitudes
 * and [much more](https://saurvs.github.io/astro-rust/).
 
