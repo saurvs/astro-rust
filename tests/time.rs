@@ -4,7 +4,7 @@ extern crate astro;
 use astro::*;
 
 #[test]
-fn SidrealTime() {
+fn sidreal_time() {
     let (h1, m1, s1) = angle::hms_frm_deg(time::mn_sidr(2446895.5).to_degrees());
     assert_eq!((h1, m1, util::round_upto_digits(s1, 4)), (13, 10, 46.3668));
 
