@@ -6,8 +6,8 @@ authors = ["Saurav Sachidanand"]
 
 license = "MIT"
 
-repository = "https://www.github.com/saurvs/astro-rust"
-homepage = "https://saurvs.github.io/astro-rust"
+documentation = "https://www.github.com/saurvs/astro-rust"
+repository = "https://saurvs.github.io/astro-rust"
 
 description = " Fast, powerful and accurate algorithms for fundamental astronomy."
 keywords = ["astronomy", "algorithms", "ephemeris", "planet", "solar"]
