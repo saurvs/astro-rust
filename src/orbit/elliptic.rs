@@ -1,6 +1,6 @@
 //! Elliptic orbits
 
-use std::*;
+use std;
 use orbit;
 
 /**
@@ -16,13 +16,14 @@ Returns the true anomaly of a body in an elliptic orbit
 * `ecc`     : Eccentricity of the orbit
 **/
 pub fn true_anom(ecc_anom: f64, ecc: f64) -> f64 {
-    2.0 * ((1.0 + ecc).sqrt() * (ecc_anom/2.0).tan())
-          .atan2((1.0 - ecc).sqrt())
+    2.0 * ((1.0 + ecc).sqrt() * (ecc_anom/2.0).tan()).atan2(
+        (1.0 - ecc).sqrt()
+    )
 }
 
 /**
-Returns the radius vector of a body in an elliptic orbit
-from it's eccentric anomaly
+Returns the radius vector of a body in an elliptic orbit from it's
+eccentric anomaly
 
 # Returns
 
@@ -35,12 +36,12 @@ from it's eccentric anomaly
 * `ecc`     : Eccentricity of the orbit
 **/
 pub fn rad_vec_frm_ecc_anom(ecc_anom: f64, a: f64, ecc: f64) -> f64 {
-    a*(1.0 - ecc*ecc_anom.cos())
+    a * (1.0 - ecc*ecc_anom.cos())
 }
 
 /**
-Returns the radius vector of a body in an elliptic orbit
-from it's true anomaly
+Returns the radius vector of a body in an elliptic orbit from it's
+true anomaly
 
 # Returns
 
@@ -53,7 +54,7 @@ from it's true anomaly
 * `ecc`      : Eccentricity of the orbit
 **/
 pub fn rad_vec_frm_true_anom(true_anom: f64, a: f64, ecc: f64) -> f64 {
-    a*(1.0 - ecc*ecc) / (1.0 + ecc*true_anom.cos())
+    a * (1.0 - ecc*ecc)/(1.0 + ecc*true_anom.cos())
 }
 
 /**
@@ -68,7 +69,7 @@ Returns the eccentric anomaly of a body in an elliptic orbit
 * `mean_anom`: Mean anomaly of the body *| in radians*
 * `ecc`      : Eccentricity of the orbit
 * `accuracy` : Desired accuracy for the eccentric anomaly.
-               Eg: 0.000001 radians
+               Eg: 0.000001 gives that much accuracy in radians.
 **/
 pub fn ecc_anom(mean_anom: f64, ecc: f64, accuracy: f64) -> f64 {
     let mut prev_E = 0.0;
@@ -99,10 +100,10 @@ pub fn vel(r: f64, a:f64) -> f64 {
 }
 
 /**
-Returns the velocity of a body at perihelion in an
-elliptic orbit
+Returns the velocity of a body at perihelion in an elliptic orbit
 
 # Returns
+
 * `velocity`: Velocity of the body at perihelion
               *| in kilometers per second*
 
@@ -116,8 +117,7 @@ pub fn perih_vel(a:f64, e:f64) -> f64 {
 }
 
 /**
-Returns the velocity of a body at aphelion in an
-elliptic orbit
+Returns the velocity of a body at aphelion in an elliptic orbit
 
 # Returns
 
@@ -134,8 +134,8 @@ pub fn aph_vel(a:f64, e:f64) -> f64 {
 }
 
 /**
-Returns the approximate length of an ellipse using
-the Ramanujan method
+Returns the approximate length of an ellipse using the Ramanujan
+method
 
 # Returns
 
@@ -145,7 +145,7 @@ the Ramanujan method
                    [Ramanujan](https://en.wikipedia.org/wiki/Srinivasa_Ramanujan)
                    in 1914.
 
-The error in `(approximate_length)` is:
+The error in `approx_length` is:
 
 * 0% for a = b
 * 0.4155% for e = 1
@@ -157,7 +157,8 @@ The error in `(approximate_length)` is:
 * `e`: Eccentricity of the ellipse
 **/
 pub fn length_ramanujan(a: f64, b: f64, e: f64) -> f64 {
-    f64::consts::PI * (3.0*(a + b) - ((a + 3.0*b)*(3.0*a + b)).sqrt())
+    std::f64::consts::PI *
+    (3.0*(a + b) - ((a + 3.0*b)*(3.0*a + b)).sqrt())
 }
 
 /**
@@ -169,7 +170,7 @@ Returns the approximate **length** of an **ellipse**
                               the ellipse (same unit as that of `a`
                               and `b`)
 
-The **error** in `(approximate_length)` is:
+The **error** in `approx_length` is:
 
 * less than 0.001% if e < 0.88
 * less than 0.01% if e < 0.95
@@ -186,7 +187,7 @@ pub fn length(a: f64, b: f64, e: f64) -> f64 {
     let A = (a + b)/2.0;
     let G = (a * b).sqrt();
     let H = (2.0 * a * b)/(a + b);
-    f64::consts::PI * (21.0*A - 2.0*G - 3.0*H) / 8.0
+    std::f64::consts::PI * (21.0*A - 2.0*G - 3.0*H) / 8.0
 }
 
 /**
@@ -218,16 +219,17 @@ pub fn mn_motion(semimaj_ax: f64) -> f64 {
 }
 
 /**
-Returns the time of passage of a body through a node,
-along with it's radius vector at that time
+Returns the time of passage of a body through a node of an elliptic
+orbit, and it's radius vector at that time
 
 # Returns
 
 `(time_of_pass, rad_vec)`
 
-* `time_of_pass`: Time of passage through the node, in
-                  Julian (Ephemeris) day
-* `rad_vec`     : Radius vector of the body *| in AU*
+* `time_of_pass`: Time of passage through the node, in Julian
+                  (Ephemeris) day
+* `rad_vec`     : Radius vector of the body at the time of passage
+                  *| in AU*
 
 # Arguments
 
@@ -238,10 +240,17 @@ along with it's radius vector at that time
 * `T`   : Time of passage in perihelion, in Julian (Ephemeris) day
 * `node`: `Ascend` or `Descend` node
 **/
-pub fn passage_through_node(w: f64, n: f64, a: f64, e: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
+pub fn passage_through_node(
+    w: f64,
+    n: f64,
+    a: f64,
+    e: f64,
+    T: f64,
+    node: &orbit::Node) -> (f64, f64) {
+
     match node {
         &orbit::Node::Ascend  => pass_through_node(-w, n, a, e, T),
-        &orbit::Node::Descend => pass_through_node(f64::consts::PI - w, n, a, e, T)
+        &orbit::Node::Descend => pass_through_node(std::f64::consts::PI - w, n, a, e, T)
     }
 }
 
@@ -249,5 +258,8 @@ fn pass_through_node(v: f64, n: f64, a: f64, e: f64, T: f64)  -> (f64, f64) {
     let E = 2.0 * ((1.0 - e).sqrt()*(v/2.0).tan()).atan2((1.0 + e).sqrt());
     let M = E - e*E.sin();
 
-    (T + M/n, a*(1.0 - e*E.cos()))
+    (
+        T + M/n,
+        a*(1.0 - e*E.cos())
+    )
 }

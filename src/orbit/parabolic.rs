@@ -1,6 +1,6 @@
 //! Parabolic orbits
 
-use std::*;
+use std;
 use orbit;
 
 /**
@@ -45,7 +45,7 @@ orbit, and it's radius vector at that time
                   *| in AU*
 
 # Arguments
-E
+
 * `w`   : Argument of the perihelion *| in radians*
 * `q`   : Perihelion distance *| in AU*
 * `T`   : Time of passage in perihelion, in Julian (Ephemeris) day
@@ -54,11 +54,11 @@ E
 pub fn passage_through_node(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
     match node {
         &orbit::Node::Ascend  => pass_through_node(-w, q, T),
-        &orbit::Node::Descend => pass_through_node(f64::consts::PI - w, q, T)
+        &orbit::Node::Descend => pass_through_node(std::f64::consts::PI - w, q, T)
     }
 }
 fn pass_through_node(v: f64, q: f64, T: f64) -> (f64, f64) {
-    let s = (v/2.0).tan();
+    let s = (v / 2.0).tan();
     let T_node = T + q.powf(1.5) * (s*(s*s + 3.0)) *  27.403895;
     let rad_vec = q * (1.0 + s*s);
 

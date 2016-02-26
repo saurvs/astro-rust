@@ -15,7 +15,7 @@ pub fn topocen_eq_coords() {
     };
     let topo_eq_point = parallax::topocen_eq_coords(
         &eq_point,
-        0.37276,
+        angle::deg_frm_dms(0, 0, 23.592).to_radians(),
         &geograph_point,
         1706.0,
         angle::deg_frm_hms(1, 40, 45.0).to_radians()

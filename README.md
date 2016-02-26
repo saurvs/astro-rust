@@ -164,7 +164,7 @@ Implemented algorithms include
 
 Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. Documentation and tests need to be written for them as well. Refactored code and minor optimizations for the existing code are also welcome.
 
-The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And doing it all in Rust is very much the right choice for that.
+The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And Rust is very much the right choice for building that.
 
 A fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
 
