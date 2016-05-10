@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015, 2016 Saurav Sachidanand
+Copyright (c) 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-//! Elliptic, parabolic and near-parabolic orbits
+//! Some physical constants
 
-pub mod elliptic;
-pub mod parabolic;
-pub mod near_parabolic;
+pub mod wgs72;
+pub mod wgs84;
 
-/// Represents an orbital node
-pub enum Node {
-    /// Ascending node
-    Ascend,
-    /// Descending node
-    Descend
-}
+/// Gaussian gravitational constant *| in radians*
+pub const GAUSS_GRAV: f64 = 0.01720209895;
+
+/// Speed of light in vaccum *| in meters per second*
+pub const SPEED_OF_LIGHT: f64 = 299792458.0;
+
+/// Earth-Moon mass ratio
+pub const EARTH_MOON_MASS_RATIO: f64 = 81.3007;
+
+/// Sun-Earth mass ratio
+pub const SUN_EARTH_MASS_RATIO: f64 = 332946.0;

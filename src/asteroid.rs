@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ Computes the apparent diameter of an asteroid
 
 # Returns
 
-* `apprnt_diameter`: Apparent diameter of the asteroid *| in meters*
+* `apparent_diameter`: Apparent diameter of the asteroid *| in meters*
 
 # Arguments
 
@@ -54,8 +54,8 @@ Computes the apparent diameter of an asteroid
 * `asteroid_earth_dist`: Asteroid-Earth distance *| in AU*
 **/
 #[inline]
-pub fn apprnt_diameter(true_diameter: f64, asteroid_earth_dist: f64) -> f64 {
+pub fn apparent_diameter(true_diameter: f64, asteroid_earth_dist: f64) -> f64 {
 
     1.3788 * true_diameter/asteroid_earth_dist
-
+    
 }

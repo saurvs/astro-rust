@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,8 @@ use astro::*;
 
 #[test]
 fn three_values() {
-    let y = interpol::three_values(
+
+    let y = interpol::three_values (
         0.884226,
         0.877366,
         0.870531,
@@ -34,11 +35,13 @@ fn three_values() {
     );
 
     assert_eq!(util::round_upto_digits(y, 6), 0.876125);
+
 }
 
 #[test]
 fn five_values() {
-    let y = interpol::five_values(
+
+    let y = interpol::five_values (
         36.125,
         24.606,
         15.486,
@@ -48,4 +51,5 @@ fn five_values() {
     );
 
     assert_eq!(util::round_upto_digits(y, 3), 13.369);
+
 }

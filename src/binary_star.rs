@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -95,20 +95,20 @@ Computes apparent position angle of a binary star
 
 # Arguments
 
-* `asc_node_pos`: Position angle of ascending node
+* `asc_node_coords`: Position angle of ascending node
 * `true_anom`   : True anomaly of binary star
 * `w`           : Longitude of periastron
 * `i`           : Inclination of true orbit to a
                   plane at right angles to the
                   line of sight *| in radians*
 **/
-pub fn apprnt_pos_angl(asc_node_pos: f64, true_anom: f64, w: f64, i: f64) -> f64 {
+pub fn apprnt_coords_angl(asc_node_coords: f64, true_anom: f64, w: f64, i: f64) -> f64 {
 
     let x = (
         (true_anom + w).sin() * i.cos()
     ).atan2((true_anom + w).cos());
 
-    angle::limit_to_two_PI(x + asc_node_pos)
+    angle::limit_to_two_PI(x + asc_node_coords)
 
 }
 
@@ -124,11 +124,11 @@ Computes angular separation of a binary star
                plane at right angles to the
                line of sight *| in radians*
 **/
-pub fn angular_sepr(rad_vec: f64, true_anom: f64, w: f64, i: f64) -> f64 {
+pub fn anglr_sepr(rad_vec: f64, true_anom: f64, w: f64, i: f64) -> f64 {
 
     rad_vec * (
-        ((true_anom + w).sin() * i.cos()).powi(2) +
-        (true_anom + w).cos().powi(2)
+        ((true_anom + w).sin() * i.cos()).powi(2)
+      + (true_anom + w).cos().powi(2)
     ).sqrt()
 
 }
@@ -146,10 +146,14 @@ Computes eccentricity of an apparent orbit
 **/
 pub fn ecc_of_apprnt_orb(e: f64, w: f64, i: f64) -> f64 {
 
-    let a = (1.0 - (e * w.cos()).powi(2)) * i.cos().powi(2);
-    let b = e.powi(2) * w.sin() * w.cos() * i.cos();
-    let c = 1.0 - (e * w.sin()).powi(2);
-    let d = ((a - c).powi(2) + 4.0*b.powi(2)).sqrt();
+    let i_cos = i.cos();
+    let e_w_cos = e * w.cos();
+    let e_w_cos_sqr = e_w_cos * e_w_cos;
+
+    let a = (1.0 - e_w_cos_sqr) * i_cos * i_cos;
+    let b = e * w.sin() * e_w_cos * i_cos;
+    let c = 1.0 - e_w_cos_sqr;
+    let d = ((a - c)*(a - c) + 4.0*b*b).sqrt();
 
     ((2.0 * d) / (a + c + d)).sqrt()
 

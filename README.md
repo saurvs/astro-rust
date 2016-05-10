@@ -30,7 +30,7 @@ Implemented algorithms include
 * Add the dependency ```astro``` in your ```Cargo.toml```
   ```toml
   [dependencies]
-  astro = "1.0.6"
+  astro = "1.0.7"
   ```
 
 * Include the crate ```astro``` in your code
@@ -48,8 +48,7 @@ Implemented algorithms include
 				 			          hr       : 20,
                                       min      : 18,
                                       sec      : 4.0,
-                                      time_zone: 0.0  // at the Greenwhich meridian
-                                     };
+                                      time_zone: 0.0};
 
   let date = time::Date{year       : 1969,
                         month      : 7, // July

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -94,5 +94,5 @@ pub fn five_values(y1: f64, y2: f64, y3: f64, y4: f64, y5: f64, n: f64) -> f64 {
         h_j_12,
         k
     ) / 2.0
-
+    
 }

@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -114,7 +114,7 @@ pub fn ephemeris (
     let W1 = angle::limit_to_360(17.710 + 877.90003539*d).to_radians();
     let W2 = angle::limit_to_360(16.838 + 870.27003539*d).to_radians();
 
-    let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
+    let (l0, b0, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
     let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
     let mut x;
@@ -126,10 +126,10 @@ pub fn ephemeris (
     let mut i: u8 = 1;
     while i <= 2 {
 
-        let (new_l, new_b, new_r) = planet::heliocen_pos(&planet::Planet::Jupiter, JD - light_time);
+        let (new_l, new_b, new_r) = planet::heliocent_coords(&planet::Planet::Jupiter, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        let (new_x, new_y, new_z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
+        let (new_x, new_y, new_z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
         x = new_x; y = new_y; z = new_z;
 
         jup_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
@@ -140,7 +140,7 @@ pub fn ephemeris (
     }
 
     l -= 0.01299_f64.to_radians()*jup_earth_dist / (r*r);
-    let (x, y, z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
+    let (x, y, z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
     jup_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
 
     let asc_s = (mn_oblq.cos()*l.sin() - mn_oblq.sin()*b.tan()).atan2(l.cos());

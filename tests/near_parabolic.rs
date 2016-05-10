@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,12 @@ use astro::*;
 
 #[test]
 fn true_anom_and_rad_vec() {
+
     let (tru_anom, rad_vec) = orbit::near_parabolic::true_anom_and_rad_vec (
         138.4783, 0.0, 1.0, 0.921326, 0.0000001
     ).unwrap();
+
     assert_eq!(util::round_upto_digits(tru_anom.to_degrees(), 5), 102.74426);
     assert_eq!(util::round_upto_digits(rad_vec, 6), 2.364192);
+    
 }

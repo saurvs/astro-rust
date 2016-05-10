@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -129,13 +129,18 @@ Computes the position angle of the bright limb of a planet
 * `sun_eq_point`   : Equatorial point of the Sun *| in radians*
 * `planet_eq_point`: Equatorial point of the planet *| in radians*
 **/
-pub fn pos_angle_of_bright_limb(sun_eq_point: coords::EqPoint,
-                  planet_eq_point: coords::EqPoint) -> f64 {
+pub fn pos_angle_of_bright_limb (
+
+    sun_eq_point    : coords::EqPoint,
+    planet_eq_point : coords::EqPoint
+
+) -> f64 {
 
     let a = sun_eq_point.dec.cos();
     let n = a * (sun_eq_point.asc - planet_eq_point.asc).sin();
-    let d =   sun_eq_point.dec.sin() * planet_eq_point.dec.cos()
-            - planet_eq_point.dec.sin() * (sun_eq_point.asc - planet_eq_point.asc).cos() * a;
+    let d =
+        sun_eq_point.dec.sin() * planet_eq_point.dec.cos()
+      - planet_eq_point.dec.sin() * (sun_eq_point.asc - planet_eq_point.asc).cos() * a;
 
     n.atan2(d)
 
@@ -155,8 +160,8 @@ Computes a planet's equatorial semidiameter
 **/
 pub fn semidiameter<'a> (
 
-    planet: &Planet,
-    planet_earth_dist: f64
+    planet            : &Planet,
+    planet_earth_dist : f64
 
 ) -> Result<f64, &'a str> {
 
@@ -307,7 +312,7 @@ pub fn orb_elements(planet: &Planet, JD: f64) -> (f64, f64, f64, f64, f64, f64, 
 }
 
 /**
-Computes a planet's heliocentric position, referred to the mean
+Computes a planet's heliocentric coordinates, referred to the mean
 equinox of the date
 
 # Returns
@@ -323,7 +328,7 @@ equinox of the date
 * `planet`: Any variant of [Planet](./enum.Planet.html)
 * `JD`    : Julian (Ephemeris) day
 **/
-pub fn heliocen_pos(planet: &Planet, JD: f64) -> (f64, f64, f64) {
+pub fn heliocent_coords(planet: &Planet, JD: f64) -> (f64, f64, f64) {
 
     let VSOPD87_Terms = match planet {
         &Planet::Mercury  => VSOPD_87::mercury::terms(),
@@ -386,7 +391,7 @@ fn light_time(dist: f64) -> f64 {
 }
 
 /**
-Computes a planet's geocentric geometric ecliptic position,
+Computes a planet's geocentric, geometric ecliptic position,
 uncorrected for light-time
 
 # Returns
@@ -413,14 +418,14 @@ are not corrected for the effect of light-time.
 * `B` : Heliocentric latitude of the planet *| in radians*
 * `R` : Heliocentric radius vector of the planet *| in radians*
 **/
-pub fn geocen_geomet_ecl_pos (
+pub fn geocent_geomet_ecl_coords (
 
     L0 : f64, B0 : f64, R0 : f64,
     L  : f64, B  : f64, R  : f64
 
 ) -> (f64, f64, f64, f64) {
 
-    let (x, y, z) = geocen_ecl_rect_coords(L0, B0, R0, L, B, R);
+    let (x, y, z) = geocent_ecl_rect_coords(L0, B0, R0, L, B, R);
 
     let (lambda, beta) = ecl_coords_frm_ecl_rect_coords(x, y, z);
     let planet_earth_dist = dist_frm_ecl_rect_coords(x, y, z);
@@ -447,7 +452,7 @@ it's heliocentric position
 * `B` : Heliocentric latitude of the planet *| in radians*
 * `R` : Heliocentric radius vector of the planet *| in radians*
 **/
-fn geocen_ecl_rect_coords (
+fn geocent_ecl_rect_coords (
 
     L0 : f64, B0 : f64, R0 : f64,
     L  : f64, B  : f64, R  : f64
@@ -509,7 +514,7 @@ fn dist_frm_ecl_rect_coords(x: f64, y: f64, z: f64) -> f64 {
 }
 
 /**
-Computes a planet's geocentric apparent ecliptic position, corrected
+Computes a planet's geocentric, apparent ecliptic position, corrected
 for light-time
 
 # Returns
@@ -529,15 +534,15 @@ coordinates for the effect of light-time.
 * `JD`    : Julian (Ephemeris) day
 **/
 #[allow(unused_variables)]
-pub fn geocen_apprnt_ecl_pos(planet: &Planet, JD: f64) -> (coords::EclPoint, f64) {
+pub fn geocent_apprnt_ecl_coords(planet: &Planet, JD: f64) -> (coords::EclPoint, f64) {
 
-    let (L0, B0, R0) = heliocen_pos(&Planet::Earth, JD);
+    let (L0, B0, R0) = heliocent_coords(&Planet::Earth, JD);
 
-    let (L1, B1, R1) = heliocen_pos(&planet, JD);
-    let (l1, b1, r1, t) = geocen_geomet_ecl_pos(L0, B0, R0, L1, B1, R1);
+    let (L1, B1, R1) = heliocent_coords(&planet, JD);
+    let (l1, b1, r1, t) = geocent_geomet_ecl_coords(L0, B0, R0, L1, B1, R1);
 
-    let (L2, B2, R2) = heliocen_pos(&planet, JD - t);
-    let (l2, b2, r2, t2) = geocen_geomet_ecl_pos(L0, B0, R0, L2, B2, R2);
+    let (L2, B2, R2) = heliocent_coords(&planet, JD - t);
+    let (l2, b2, r2, t2) = geocent_geomet_ecl_coords(L0, B0, R0, L2, B2, R2);
 
     let ecl_point = coords::EclPoint {
         long:l2,
@@ -582,11 +587,22 @@ pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
         ecl_long + ecl_long_correction,
         ecl_lat  + x*(lambda1.cos() - lambda1.sin())
     )
+
 }
 
-pub fn geocen_eq_pos(
-    X: f64, Y: f64, Z: f64, i: f64, w: f64, sigma: f64,
-    oblq_eclip: f64, v: f64, r: f64) -> (f64, f64, f64) {
+pub fn geocent_eq_coords (
+
+    X          : f64,
+    Y          : f64,
+    Z          : f64,
+    i          : f64,
+    w          : f64,
+    sigma      : f64,
+    oblq_eclip : f64,
+    v          : f64,
+    r          : f64
+
+) -> (f64, f64, f64) {
 
     let F = sigma.cos();
     let G = sigma.sin() * oblq_eclip.cos();
@@ -621,7 +637,7 @@ pub fn geocen_eq_pos(
 
 }
 
-pub fn heliocen_pos_frm_orb_elements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {
+pub fn heliocent_coords_frm_orb_elements(i: f64, sigma: f64, w: f64, v: f64, r: f64) -> (f64, f64) {
 
     let u = w + v;
     let x = r * (sigma.cos()*u.cos() - sigma.sin()*u.sin()*i.cos());
@@ -648,7 +664,10 @@ Computes a planet's apparent magnitude using G. Muller's formulae
 **/
 pub fn apprnt_mag_muller<'a> (
 
-    planet: &Planet, i: f64, delta: f64, r: f64
+    planet : &Planet,
+    i      : f64,
+    delta  : f64,
+    r      : f64
 
 ) -> Result<f64, &'a str> {
 
@@ -688,7 +707,10 @@ Almanac's method adopted in 1984
 **/
 pub fn apprnt_mag_84<'a> (
 
-    planet: &Planet, i: f64, delta: f64, r: f64
+    planet : &Planet,
+    i      : f64,
+    delta  : f64,
+    r      : f64
 
 ) -> Result<f64, &'a str> {
 
@@ -700,13 +722,13 @@ pub fn apprnt_mag_84<'a> (
         Planet::Earth   => {
             return Err("Planet::Earth was passed to the function planet::apprnt_mag_84()");
         },
-        Planet::Mars    => Ok(x - 1.52 + i*0.016),
-        Planet::Jupiter => Ok(x - 9.4 + i*0.005),
+        Planet::Mars    => Ok( x - 1.52 + i*0.016 ),
+        Planet::Jupiter => Ok( x - 9.4 + i*0.005 ),
         Planet::Saturn  => {
             return Err("Planet::Saturn was passed to the function planet::apprnt_mag_84(). Use the function planet::saturn::apprnt_mag_84() instead.");
         },
-        Planet::Uranus  => Ok(x - 7.19),
-        Planet::Neptune => Ok(x - 6.87),
+        Planet::Uranus  => Ok( x - 7.19 ),
+        Planet::Neptune => Ok( x - 6.87 ),
     }
 
 }

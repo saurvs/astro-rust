@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,9 @@ use astro::*;
 
 #[test]
 fn ring_elements() {
+
     let mut elements = planet::saturn::ring::elements(
         2448972.50068,
-
         angle::deg_frm_dms(0, 0, 16.86).to_radians(),
         23.43971_f64.to_radians()
     );
@@ -51,11 +51,13 @@ fn ring_elements() {
     let (d_b, m_b, s_b) = angle::dms_frm_deg(elements.b.to_degrees());
     assert_eq!((d_b, m_b), (0, 0));
     assert_eq!(util::round_upto_digits(s_b, 2), 10.15);
+
 }
 
 #[test]
 #[allow(unused_variables)]
 fn moons() {
+
     let data = [
         (3.102, -0.204, planet::saturn::moon::Moon::Mimas),
         (3.823, 0.318, planet::saturn::moon::Moon::Enceladus),
@@ -75,4 +77,5 @@ fn moons() {
         assert_eq!(util::round_upto_digits(X, 3), tuple.0);
         assert_eq!(util::round_upto_digits(Y, 3), tuple.1);
     }
+
 }

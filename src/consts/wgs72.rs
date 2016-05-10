@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015, 2016 Saurav Sachidanand
+Copyright (c) 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-//! Elliptic, parabolic and near-parabolic orbits
+//! World Geodetic System 1972
 
-pub mod elliptic;
-pub mod parabolic;
-pub mod near_parabolic;
+/// Equatorial radius of the Earth (Semimajor axis) *| in meters*
+pub const EQUATORIAL_RADIUS: f64 = 6378135.0;
 
-/// Represents an orbital node
-pub enum Node {
-    /// Ascending node
-    Ascend,
-    /// Descending node
-    Descend
-}
+/// Polar radius of the Earth (Semiminor axis) *| in meters*
+pub const POLAR_RADIUS: f64 = EQUATORIAL_RADIUS * (1.0 - FLATTENING);
+
+/// Flattening
+pub const FLATTENING: f64 = 1.0 / 298.26;
+
+/// Angular velocity of the Earth *| in radians / second*
+pub const ANGULAR_VELOCITY: f64 = 7.292115147e-5;
+
+/// Gravitational constant (including the mass of the Earth's
+/// atmosphere) *| in meters^3 / second^2*
+pub const GRAV_CONST: f64 = 3.986008e+14;

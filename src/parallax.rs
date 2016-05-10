@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ Computes the topocentric equatorial coordinates of a celestial body
 
 # Returns
 
-* `topocen_eq_point`: Topocentric equatorial point of the
+* `topocent_eq_point`: Topocentric equatorial point of the
                       celestial body *| in radians*
 
 # Arguments
@@ -64,7 +64,7 @@ Computes the topocentric equatorial coordinates of a celestial body
                         *| in meters*
 * `greenw_sidr`: Sidereal time at Greenwhich *| in radians*
 **/
-pub fn topocen_eq_coords (
+pub fn topocent_eq_coords (
 
     eq_point       : &coords::EqPoint,
     eq_hz_parllx   : f64,
@@ -78,25 +78,29 @@ pub fn topocen_eq_coords (
         geograph_point.lat, observer_ht
     );
 
-    let geocen_hr_angl = coords::hr_angl_frm_observer_long (
+    let geocent_hr_angl = coords::hr_angl_frm_observer_long (
         greenw_sidr, geograph_point.long, eq_point.asc
     );
 
     let eq_hz_parllx_sin = eq_hz_parllx.sin();
 
-    let del_asc = (-rho_cos * eq_hz_parllx_sin * geocen_hr_angl.sin()).atan2(
-        eq_point.dec.cos() -
-        rho_cos * eq_hz_parllx_sin * geocen_hr_angl.cos()
+    let del_asc = (-rho_cos * eq_hz_parllx_sin * geocent_hr_angl.sin()).atan2(
+        eq_point.dec.cos()
+      - rho_cos * eq_hz_parllx_sin * geocent_hr_angl.cos()
     );
 
     let dec_1 = (
         (eq_point.dec.sin() - rho_sin * eq_hz_parllx_sin) * del_asc.cos()
     ).atan2(
-        eq_point.dec.cos() -
-        rho_cos * eq_hz_parllx_sin * geocen_hr_angl.cos()
+        eq_point.dec.cos()
+      - rho_cos * eq_hz_parllx_sin * geocent_hr_angl.cos()
     );
 
-    coords::EqPoint { asc: eq_point.asc + del_asc, dec: dec_1 }
+    coords::EqPoint {
+        asc: eq_point.asc + del_asc,
+        dec: dec_1
+    }
+
 }
 
 /**
@@ -104,11 +108,11 @@ Computes the topocentric ecliptic coordinates of a celestial body
 
 # Returns
 
-`(topocen_ecl_point, topocen_geocen_semidia)`
+`(topocent_ecl_point, topocent_geocent_semidia)`
 
-* `topocen_ecl_point`     : Topocentric ecliptic point of the
+* `topocent_ecl_point`     : Topocentric ecliptic point of the
                             celestial body *| in radians*
-* `topocen_geocen_semidia`: Topocentric semidiameter of the
+* `topocent_geocent_semidia`: Topocentric semidiameter of the
                             celestial body *| in radians*
 
 # Arguments
@@ -120,9 +124,9 @@ Computes the topocentric ecliptic coordinates of a celestial body
 * `observer_ht`   : Height of the observer above sea level *| in meters*
 * `loc_sidr`      : Local sidereal time *| in radians*
 * `eclip_oblq`    : Obliquity of the ecliptic *| in radians*
-* `geocen_semdia` : Geocentric semidiameter of the celestial body *| in radians*
+* `geocent_semdia` : Geocentric semidiameter of the celestial body *| in radians*
 **/
-pub fn topopcen_ecl_coords (
+pub fn topopcent_ecl_coords (
 
     ecl_point      : &coords::EclPoint,
     eq_hz_parllx   : f64,
@@ -130,7 +134,7 @@ pub fn topopcen_ecl_coords (
     observer_ht    : f64,
     loc_sidr       : f64,
     eclip_oblq     : f64,
-    geocen_semdia  : f64
+    geocent_semdia : f64
 
 ) -> (coords::EclPoint, f64) {
 
@@ -147,12 +151,12 @@ pub fn topopcen_ecl_coords (
     let ecl_point_lat_cos = ecl_point.lat.cos();
 
     let N =
-        ecl_point.long.cos() * ecl_point_lat_cos -
-        rho_cos * eq_hz_parllx_sin * loc_sidr.cos();
+        ecl_point.long.cos() * ecl_point_lat_cos
+      - rho_cos * eq_hz_parllx_sin * loc_sidr.cos();
 
     let ecl_long_1 = (
-        ecl_point.long.sin() * ecl_point_lat_cos -
-        eq_hz_parllx_sin * (
+        ecl_point.long.sin() * ecl_point_lat_cos
+      - eq_hz_parllx_sin * (
             rho_sin * eclip_oblq_sin +
             rho_cos * eclip_oblq_cos * loc_sidr_sin
         )
@@ -160,16 +164,16 @@ pub fn topopcen_ecl_coords (
 
     let ecl_lat_1 = (
         ecl_long_1.cos() * (
-            ecl_point.lat.sin() -
-            eq_hz_parllx_sin * (
+            ecl_point.lat.sin()
+          - eq_hz_parllx_sin * (
                 rho_sin * eclip_oblq_cos -
                 rho_cos * eclip_oblq_sin * loc_sidr_sin
             )
         )
     ).atan2(N);
 
-    let geocen_semdia_1 = (
-        ecl_long_1.cos() * ecl_lat_1.cos() * geocen_semdia.sin() / N
+    let geocent_semdia_1 = (
+        ecl_long_1.cos() * ecl_lat_1.cos() * geocent_semdia.sin() / N
     ).asin();
 
     (
@@ -177,6 +181,7 @@ pub fn topopcen_ecl_coords (
             long: angle::limit_to_two_PI(ecl_long_1),
             lat: ecl_lat_1
         },
-        geocen_semdia_1
+        geocent_semdia_1
     )
+
 }

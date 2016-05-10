@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,8 +33,8 @@ pub struct GeographPoint {
 }
 
 impl GeographPoint {
-    pub fn angl_sepr(&self, other_point: &GeographPoint) -> f64 {
-        angle::angl_sepr (
+    pub fn anglr_sepr(&self, other_point: &GeographPoint) -> f64 {
+        angle::anglr_sepr (
             self.long, self.lat,
             other_point.long, other_point.lat
         )
@@ -50,8 +50,8 @@ pub struct EqPoint {
 }
 
 impl EqPoint {
-    pub fn angl_sepr(&self, other_point: &EqPoint) -> f64 {
-        angle::angl_sepr (
+    pub fn anglr_sepr(&self, other_point: &EqPoint) -> f64 {
+        angle::anglr_sepr (
             self.asc, self.dec,
             other_point.asc, other_point.dec
         )
@@ -67,15 +67,13 @@ pub struct EclPoint {
 }
 
 impl EclPoint {
-    pub fn angl_sepr(&self, other_point: &EclPoint) -> f64 {
-        angle::angl_sepr (
+    pub fn anglr_sepr(&self, other_point: &EclPoint) -> f64 {
+        angle::anglr_sepr (
             self.long, self.lat,
             other_point.long, other_point.lat
         )
     }
 }
-
-//-------------------------------------------------------------------
 
 /**
 Computes the hour angle from geographical longitude and Greenwhich
@@ -118,9 +116,6 @@ pub fn hr_angl_frm_loc_sidr(local_sidreal: f64, asc: f64) -> f64 {
 
 }
 
-//-------------------------------------------------------------------
-// Ecliptic coordinates to equatorial coordinates
-
 /**
 Computes the ecliptic longitude from equatorial coordinates
 
@@ -137,10 +132,12 @@ Computes the ecliptic longitude from equatorial coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn ecl_long_frm_eq(asc: f64, dec: f64, oblq_eclip: f64,) -> f64 {
+
     (
         asc.sin() * oblq_eclip.cos()
       + dec.tan() * oblq_eclip.sin()
     ).atan2(asc.cos())
+
 }
 
 /**
@@ -159,10 +156,12 @@ Computes the ecliptic latitude from equatorial coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn ecl_lat_frm_eq(asc: f64, dec: f64, oblq_eclip: f64) -> f64 {
+
     (
         dec.sin() * oblq_eclip.cos()
       - dec.cos() * oblq_eclip.sin() * asc.sin()
     ).asin()
+
 }
 
 /**
@@ -191,9 +190,6 @@ macro_rules! ecl_frm_eq {
     }};
 }
 
-//-------------------------------------------------------------------
-// Equatorial coordinates to ecliptic coordinates
-
 /**
 Computes the right ascension from ecliptic coordinates
 
@@ -210,10 +206,12 @@ Computes the right ascension from ecliptic coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn asc_frm_ecl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
+
     (
         ecl_long.sin() * oblq_eclip.cos()
       - ecl_lat.tan()  * oblq_eclip.sin()
     ).atan2(ecl_long.cos())
+
 }
 
 /**
@@ -232,10 +230,12 @@ Computes the declination from ecliptic coordinates
                     *mean* obliquity. *| in radians*
 **/
 pub fn dec_frm_ecl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
+
     (
         ecl_lat.sin() * oblq_eclip.cos()
       + ecl_lat.cos() * oblq_eclip.sin() * ecl_long.sin()
     ).asin()
+
 }
 
 /**
@@ -264,9 +264,6 @@ macro_rules! eq_frm_ecl {
     }};
 }
 
-//-------------------------------------------------------------------
-// Local horizontal coordinates from equatorial coordinates
-
 /**
 Computes the azimuth from equatorial coordinates
 
@@ -281,10 +278,12 @@ Computes the azimuth from equatorial coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn az_frm_eq(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
+
     hour_angle.sin().atan2 (
         hour_angle.cos()  * observer_lat.sin()
       - dec.tan() * observer_lat.cos()
     )
+
 }
 
 /**
@@ -301,10 +300,12 @@ Computes the altitude from equatorial coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn alt_frm_eq(hour_angle: f64, dec: f64, observer_lat: f64) -> f64 {
+
     (
         observer_lat.sin() * dec.sin()
       + observer_lat.cos() * dec.cos() * hour_angle.cos()
     ).asin()
+
 }
 
 /**
@@ -331,9 +332,6 @@ macro_rules! loc_hz_frm_eq {
     }};
 }
 
-//-------------------------------------------------------------------
-// Equatorial coordinates from local horizontal coordinates
-
 /**
 Computes the hour angle from local horizontal coordinates
 
@@ -348,10 +346,12 @@ Computes the hour angle from local horizontal coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn hr_angl_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
+
     az.sin().atan2 (
         az.cos() * observer_lat.sin()
       + alt.tan() * observer_lat.cos()
     )
+
 }
 
 /**
@@ -368,14 +368,13 @@ Computes the declination from local horizontal coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn dec_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
+
     (
         observer_lat.sin() * alt.sin()
       - observer_lat.cos() * az.cos() * az.cos()
     ).asin()
-}
 
-//-------------------------------------------------------------------
-// Equatorial coordinates to galactic coordinates
+}
 
 /**
 Computes the galactic longitude from equatorial coordinates
@@ -393,11 +392,13 @@ The equatorial coordinates passed are assumed to be referred to the
 standard equinox of B1950.0.
 **/
 pub fn gal_long_frm_eq(asc: f64, dec: f64) -> f64 {
+
     303_f64.to_radians()
   - (192.25_f64.to_radians() - asc).sin().atan2 (
         27.4_f64.to_radians().sin() * (192.25_f64.to_radians() - asc).cos()
       - 27.4_f64.to_radians().cos() * dec.tan()
     )
+
 }
 
 /**
@@ -416,10 +417,12 @@ The equatorial coordinates passed are assumed to be referred to the
 standard equinox of B1950.0.
 **/
 pub fn gal_lat_frm_eq(asc: f64, dec: f64) -> f64 {
+
     (
         dec.sin() * 27.4_f64.to_radians().sin()
       + dec.cos() * 27.4_f64.to_radians().cos() * (192.25_f64.to_radians() - asc).cos()
     ).asin()
+
 }
 
 /**
@@ -448,9 +451,6 @@ macro_rules! gal_frm_eq {
     }};
 }
 
-//-------------------------------------------------------------------
-// Galactic coordinates to equatorial coordinates
-
 /**
 Computes the right ascension from galactic coordinates
 
@@ -467,11 +467,13 @@ of  B1950.0.
 * `gal_lat`: Galactic latitude *| in radians*
 **/
 pub fn asc_frm_gal(gal_long: f64, gal_lat: f64) -> f64 {
+
       12.25_f64.to_radians()
     + (gal_long - 123_f64.to_radians()).sin().atan2 (
         27.4_f64.to_radians().sin() * (gal_long - 123_f64.to_radians()).cos()
       - 27.4_f64.to_radians().cos() * gal_lat.tan()
     )
+
 }
 
 /**
@@ -490,10 +492,14 @@ of  B1950.0.
 * `gal_lat`: Galactic latitude *| in radians*
 **/
 pub fn dec_frm_gal(gal_long: f64, gal_lat: f64) -> f64 {
+
     (
         gal_lat.sin() * 27.4_f64.to_radians().sin()
-      + gal_lat.cos() * 27.4_f64.to_radians().cos() * (gal_long - 123_f64.to_radians()).cos()
+      + gal_lat.cos() * 27.4_f64.to_radians().cos() * (
+            gal_long - 123_f64.to_radians()
+        ).cos()
     ).asin()
+
 }
 
 /**

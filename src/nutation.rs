@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -133,7 +133,6 @@ pub fn nutation(JD: f64) -> (f64, f64) {
     let div = 0.0001/3600.0;
 
     for x in terms_for_nutation.iter() {
-
         let arg =
             (x.0 as f64) * D   +
             (x.1 as f64) * M   +
@@ -143,7 +142,6 @@ pub fn nutation(JD: f64) -> (f64, f64) {
 
         nut_in_long += ((x.5 as f64) + t*(x.6 as f64)/10.0) * arg.sin() * div;
         nut_in_oblq += ((x.7 as f64) + t*(x.8 as f64)/10.0) * arg.cos() * div;
-
     }
 
     (nut_in_long.to_radians(), nut_in_oblq.to_radians())
@@ -183,14 +181,14 @@ pub fn nutation_in_eq_coords (
     let (asc, dec) = (eq_point.asc, eq_point.dec);
 
     let nut_asc = nut_in_long * (
-        tru_oblq.cos() +
-        tru_oblq.sin() * asc.sin() * dec.tan()
+        tru_oblq.cos()
+      + tru_oblq.sin() * asc.sin() * dec.tan()
     ) - asc.cos() * dec.tan() * nut_in_oblq;
 
     let nut_dec =
-        tru_oblq.sin() * asc.cos() * nut_in_long +
-        asc.sin() * nut_in_oblq;
+        tru_oblq.sin() * asc.cos() * nut_in_long
+      + asc.sin() * nut_in_oblq;
 
     (nut_asc, nut_dec)
-
+    
 }

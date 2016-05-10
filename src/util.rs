@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,13 @@ THE SOFTWARE.
 
 /// Returns a float rounded upto a certain number of decimal digits
 #[inline]
-pub fn round_upto_digits(float: f64, decimal_digits: i32) -> f64 {
+pub fn round_upto_digits(float: f64, decimal_digits: u32) -> f64 {
 
-    let d = 10_f64.powi(decimal_digits);
+    let mut d = 1.0;
+
+    for _ in 1..(decimal_digits + 1) {
+        d *= 10.0;
+    }
 
     (float * d).round() / d
 

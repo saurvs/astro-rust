@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -61,7 +61,7 @@ pub fn true_anom_and_rad_vec<'a> (
         return Ok((0.0, q))
     }
 
-    let k = consts::gauss_grav();
+    let k = consts::GAUSS_GRAV;
     let d1 = 1000.0;
 
     let q1 = k * ((1.0 + ecc)/q).sqrt() / (2.0*q);
@@ -69,7 +69,7 @@ pub fn true_anom_and_rad_vec<'a> (
 
     let q2 = q1 * days_frm_perih;
     let mut s = 2.0 / (3.0 * q2.abs());
-    s = 2.0 / (2.0*(s.atan()/2.0).tan().cbrt().atan()).tan();
+    s = 2.0 / (2.0 * (s.atan() / 2.0).tan().cbrt().atan()).tan();
 
     if days_frm_perih < 0.0 { s = -s; }
     if ecc != 1.0 {

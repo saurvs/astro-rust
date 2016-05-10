@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ use astro::*;
 
 #[test]
 fn nutation() {
+
     let (nut_in_long, nut_in_oblq) = nutation::nutation(2446895.5);
 
     let (d1, m1, s1) = angle::dms_frm_deg(nut_in_long.to_degrees());
@@ -34,11 +35,16 @@ fn nutation() {
 
     let (d2, m2, s2) = angle::dms_frm_deg(nut_in_oblq.to_degrees());
     assert_eq!((d2, m2, util::round_upto_digits(s2, 3)), (0, 0, 9.443));
+
 }
 
 #[test]
 fn nutation_in_eq_coords() {
-    let eq_point = coords::EqPoint{asc: 41.5555635_f64.to_radians(), dec: 49.3503415_f64.to_radians()};
+
+    let eq_point = coords::EqPoint {
+        asc: 41.5555635_f64.to_radians(),
+        dec: 49.3503415_f64.to_radians()
+    };
     let (a, b) = nutation::nutation_in_eq_coords(
         &eq_point,
         angle::deg_frm_dms(0, 0, 14.861).to_radians(),
@@ -48,4 +54,5 @@ fn nutation_in_eq_coords() {
 
     assert_eq!(util::round_upto_digits(a.to_degrees(), 7), 0.0044011);
     assert_eq!(util::round_upto_digits(b.to_degrees(), 7), 0.001727);
+    
 }

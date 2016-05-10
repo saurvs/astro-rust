@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -84,9 +84,8 @@ The accuracy of `refrac_term` is upto 0.07 arcminutes.
 **/
 pub fn refrac_frm_apprnt_alt(apprnt_alt: f64) -> f64 {
 
-    if apprnt_alt == PI {
-        0.0
-    } else {
+    if apprnt_alt == PI { 0.0 }
+    else {
         let a = apprnt_alt.to_degrees() + 7.31/(apprnt_alt.to_degrees() + 4.4);
         let R = 1.0 / a.to_radians().tan();
 
@@ -113,9 +112,8 @@ within 4 arcseconds.
 **/
 pub fn refrac_frm_true_alt(true_alt: f64) -> f64 {
 
-    if true_alt == PI {
-        0.0
-    } else {
+    if true_alt == PI { 0.0 }
+    else {
         let a = true_alt.to_degrees() + 10.3/(true_alt.to_degrees() + 5.11);
         let R = 1.02 / a.to_radians().tan();
 

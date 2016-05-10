@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 use std;
 
-pub static TWO_PI: f64 = 2.0 * std::f64::consts::PI;
+pub const TWO_PI: f64 = 2.0 * std::f64::consts::PI;
 
 /**
 Computes the angular separation between two angular points
@@ -40,7 +40,7 @@ Angle 1 may be right ascension or longitude.
 Angle 2 may be declination or latitude.
 **/
 #[inline]
-pub fn angl_sepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
+pub fn anglr_sepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
 
     (
           p1a2.sin() * p2a2.sin()

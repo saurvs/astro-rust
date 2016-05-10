@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -67,7 +67,7 @@ Computes the brightness ratio of two stars
 #[inline]
 pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
 
-    10.0_f64.powf( 0.4 * (m2-m1) )
+    10.0_f64.powf(0.4 * (m2 - m1))
 
 }
 
@@ -141,10 +141,11 @@ pub fn angl_between_north_celes_and_eclip_pole (
 
 ) -> f64 {
 
-    (eclip_long.cos() * oblq_eclip.tan()).atan2(
-        eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan() -
-        eclip_lat.cos()
+    (eclip_long.cos() * oblq_eclip.tan()).atan2 (
+        eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan()
+      - eclip_lat.cos()
     )
+
 }
 
 /**
@@ -179,21 +180,25 @@ it's proper motion, distance and radial velocity.
 **/
 pub fn eq_coords_frm_motion (
 
-    asc0: f64, dec0: f64, r: f64, delta_r: f64,
-    proper_motion_asc: f64, proper_motion_dec: f64, t: f64
+    asc0              : f64,
+    dec0              : f64,
+    r                 : f64,
+    delta_r           : f64,
+    proper_motion_asc : f64,
+    proper_motion_dec : f64, t: f64
 
 ) -> (f64, f64) {
 
-    let x = r*dec0.cos()*asc0.cos();
-    let y = r*dec0.cos()*asc0.sin();
-    let z = r*dec0.sin();
+    let x = r * dec0.cos() * asc0.cos();
+    let y = r * dec0.cos() * asc0.sin();
+    let z = r * dec0.sin();
 
-    let delta_asc = 3600.0*proper_motion_asc.to_degrees() / 13751.0;
-    let delta_dec = 3600.0*proper_motion_dec.to_degrees() / 206265.0;
+    let delta_asc = 3600.0 * proper_motion_asc.to_degrees()/13751.0;
+    let delta_dec = 3600.0 * proper_motion_dec.to_degrees()/206265.0;
 
-    let delta_x = (x/r)*delta_r - z*delta_dec*asc0.cos() - y*delta_asc;
-    let delta_y = (y/r)*delta_r - z*delta_dec*asc0.sin() + x*delta_asc;
-    let delta_z = (z/r)*delta_r + r*delta_dec*dec0.cos();
+    let delta_x = (x / r)*delta_r - z*delta_dec*asc0.cos() - y*delta_asc;
+    let delta_y = (y / r)*delta_r - z*delta_dec*asc0.sin() + x*delta_asc;
+    let delta_z = (z / r)*delta_r + r*delta_dec*dec0.cos();
 
     let x1 = x + t*delta_x;
     let y1 = y + t*delta_y;
@@ -208,21 +213,31 @@ pub fn eq_coords_frm_motion (
 
 pub fn proper_motion_in_eq_coords (
 
-    asc: f64, dec: f64, pmotion_asc: f64,
-    pmotion_dec:f64, ecl_lat: f64, oblq_eclip: f64
+    asc         : f64,
+    dec         : f64,
+    pmotion_asc : f64,
+    pmotion_dec : f64,
+    ecl_lat     : f64,
+    oblq_eclip  : f64
 
 ) -> (f64, f64) {
 
     let ecl_lat_cos = ecl_lat.cos();
 
     let pmotion_long = (
-        pmotion_dec*oblq_eclip.sin()*asc.cos()
-      + pmotion_asc*dec.cos()*(oblq_eclip.cos()*dec.cos() + oblq_eclip.sin()*dec.sin()*asc.sin())
-    ) / (ecl_lat_cos*ecl_lat_cos);
+        pmotion_dec * oblq_eclip.sin() * asc.cos()
+      + pmotion_asc * dec.cos() * (
+            oblq_eclip.cos() * dec.cos()
+          + oblq_eclip.sin() * dec.sin() * asc.sin()
+        )
+    ) / (ecl_lat_cos * ecl_lat_cos);
 
     let pmotion_lat = (
-        pmotion_dec*(oblq_eclip.cos()*dec.cos() + oblq_eclip.sin()*dec.sin()*asc.sin())
-      - pmotion_asc*oblq_eclip.sin()*asc.cos()*dec.cos()
+        pmotion_dec * (
+            oblq_eclip.cos() * dec.cos()
+          + oblq_eclip.sin() * dec.sin() * asc.sin()
+        )
+      - pmotion_asc * oblq_eclip.sin() * asc.cos() * dec.cos()
     ) / ecl_lat_cos;
 
     (pmotion_long, pmotion_lat)

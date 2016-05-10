@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,11 +28,9 @@ use astro::*;
 #[test]
 fn ephemeris() {
 
-    let mut ephemeris = planet::jupiter::ephemeris(
+    let mut ephemeris = planet::jupiter::ephemeris (
         2448972.50068,
-
         23.4402069_f64.to_radians(),
-
         angle::deg_frm_dms(0, 0, 16.86).to_radians(),
         angle::deg_frm_dms(0, 0, -1.79).to_radians(),
     );
@@ -48,6 +46,7 @@ fn ephemeris() {
     assert_eq!(ephemeris.P, 24.80);
     assert_eq!(ephemeris.w1, 268.0);
     assert_eq!(ephemeris.w2, 72.74);
+
 }
 
 #[test]
@@ -62,8 +61,7 @@ fn moons() {
 
     for tuple in data.iter() {
         let (X, Y) = planet::jupiter::moon::apprnt_rect_coords(
-            2448972.50068,
-            &tuple.2
+            2448972.50068, &tuple.2
         );
 
         assert_eq!(util::round_upto_digits(X, 2), tuple.0);

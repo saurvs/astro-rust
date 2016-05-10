@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
     let mut info = create_info_struct(JD - 0.04942);
 
     let (planet_ecl_point, saturn_earth_dist) =
-        planet::geocen_apprnt_ecl_pos(&planet::Planet::Saturn, JD);
+        planet::geocent_apprnt_ecl_coords(&planet::Planet::Saturn, JD);
     let (lambda0, beta0) = (planet_ecl_point.long, planet_ecl_point.lat);
 
     let (lambda0, beta0) = precess::precess_ecl_coords(

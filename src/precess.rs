@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -68,10 +68,7 @@ pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
         - angle::deg_frm_hms(0, 0, 0.00057) * JC
     ).to_radians();
 
-    (
-        m + n*asc.sin()*dec.tan(),
-        n * asc.cos()
-    )
+    (m + n*asc.sin()*dec.tan(), n * asc.cos())
 
 }
 
@@ -133,10 +130,7 @@ pub fn precess_eq_coords (
           theta.sin() * old_dec.cos() * (old_asc + xi).cos()
         + theta.cos() * old_dec.sin();
 
-    (
-        A.atan2(B) + zeta,
-        C.asin()
-    )
+    (A.atan2(B) + zeta, C.asin())
 
 }
 
@@ -179,12 +173,18 @@ pub fn precess_eq_coords_FK5 (
         )
     );
 
-    let zeta = xi + t*t*(angle::deg_frm_dms(0, 0, 0.791) + t*angle::deg_frm_dms(0, 0, 0.001));
+    let zeta =
+        xi
+      + t * t * (
+          angle::deg_frm_dms(0, 0, 0.791) + t*angle::deg_frm_dms(0, 0, 0.001)
+        );
 
     let theta = t * (
-          angle::deg_frm_dms(0, 0, 2004.682) - T*angle::deg_frm_dms(0, 0, 0.853)
-        - t * (
-            angle::deg_frm_dms(0, 0, 0.426) + t*angle::deg_frm_dms(0, 0, 0.042)
+        angle::deg_frm_dms(0, 0, 2004.682)
+      - T * angle::deg_frm_dms(0, 0, 0.853)
+      - t * (
+            angle::deg_frm_dms(0, 0, 0.426)
+          + t * angle::deg_frm_dms(0, 0, 0.042)
         )
     );
 
@@ -199,10 +199,7 @@ pub fn precess_eq_coords_FK5 (
           theta.sin() * old_dec.cos() * (old_asc + xi).cos()
         + theta.cos() * old_dec.sin();
 
-    (
-        A.atan2(B) + zeta,
-        C.asin()
-    )
+    (A.atan2(B) + zeta, C.asin())
 
 }
 
@@ -247,34 +244,60 @@ pub fn precess_ecl_coords (
           nu.cos() * old_lat.sin()
         + nu.sin() * old_lat.cos() * (Pi - old_long).sin();
 
-    (
-        rho + Pi - A.atan2(B),
-        C.asin()
-    )
+    let new_long = rho + Pi - A.atan2(B);
+    let new_lat = C.asin();
+
+    (new_long, new_lat)
 
 }
 
 #[inline]
 fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
 
+    // ------------------------------------------------------------calculate nu
     let x = T * angle::deg_frm_dms(0, 0, 0.000598);
+    let nu = (
+        t * (
+            angle::deg_frm_dms(0, 0, 47.0029)
+          - T * (angle::deg_frm_dms(0, 0, 0.06603) - x)
+          + t * (
+                (angle::deg_frm_dms(0, 0, -0.03302) + x)
+              + t * angle::deg_frm_dms(0, 0, 0.00006)
+            )
+        )
+    ).to_radians();
+    // ------------------------------------------------------------------------
 
-    let nu = (t * (angle::deg_frm_dms(0, 0, 47.0029) -
-                   T * (angle::deg_frm_dms(0, 0, 0.06603) - x) +
-                  t * ((angle::deg_frm_dms(0, 0, -0.03302) + x) +
-                       t * angle::deg_frm_dms(0, 0, 0.00006)))).to_radians();
+    // ------------------------------------------------------------calculate Pi
+    let Pi = (
+        174.876384
+      + T * (
+            angle::deg_frm_dms(0, 0, 3289.4789)
+          + T * angle::deg_frm_dms(0, 0, 0.60622)
+        )
+      - t * (
+                (
+                    angle::deg_frm_dms(0, 0, 869.8089)
+                  + T * angle::deg_frm_dms(0, 0, 0.50491)
+                )
+              - t * angle::deg_frm_dms(0, 0, 0.03536)
+        )
+    ).to_radians();
+    // ------------------------------------------------------------------------
 
-    let Pi = (174.876384 + T * (angle::deg_frm_dms(0, 0, 3289.4789) +
-                              T * angle::deg_frm_dms(0, 0, 0.60622)) -
-             t * ((angle::deg_frm_dms(0, 0, 869.8089) +
-                   T * angle::deg_frm_dms(0, 0, 0.50491)) -
-                  t * angle::deg_frm_dms(0, 0, 0.03536))).to_radians();
-
+    // -----------------------------------------------------------calculate rho
     let y = T * angle::deg_frm_dms(0, 0, 0.000042);
-    let rho = (t * (angle::deg_frm_dms(0, 0, 5029.0966) +
-                  T * (angle::deg_frm_dms(0, 0, 2.22226) - y) +
-                 t * ((angle::deg_frm_dms(0, 0, 1.11113) - y) -
-                      t * angle::deg_frm_dms(0, 0, 0.000006)))).to_radians();
+    let rho = (
+        t * (
+            angle::deg_frm_dms(0, 0, 5029.0966)
+          + T * (angle::deg_frm_dms(0, 0, 2.22226) - y)
+          + t * (
+                (angle::deg_frm_dms(0, 0, 1.11113) - y)
+              - t * angle::deg_frm_dms(0, 0, 0.000006)
+            )
+        )
+    ).to_radians();
+    // ------------------------------------------------------------------------
 
     (nu, Pi, rho)
 
@@ -287,8 +310,8 @@ Computes orbital elements reduced to a different equinox
 
 `(new_inc, new_arg_perih, new_long_ascend_node)`
 
-* `new_inc`             : Inclination in the new equinox
-                          *| in radians*
+* `new_inc`             : Inclination in the new
+                          equinox *| in radians*
 * `new_arg_perih`       : Argument of perihelion in the
                           new equinox *| in radians*
 * `new_long_ascend_node`: Longitude of ascending node in
@@ -296,11 +319,15 @@ Computes orbital elements reduced to a different equinox
 
 # Arguments
 
-* `old_inc`: Inclination in the old equinox *| in radians*
-* `old_arg_perih`: Argument of perihelion in the old equinox *| in radians*
-* `old_long_ascend_node`: Longitude of ascending node in the old equinox *| in radians*
-* `JD1`: Julian (Ephemeris) day corresponding to the old equinox
-* `JD2`: Julian (Ephemeris) day corresponding to the new equinox
+* `old_inc`             : Inclination in the old equinox *| in radians*
+* `old_arg_perih`       : Argument of perihelion in the old
+                          equinox *| in radians*
+* `old_long_ascend_node`: Longitude of ascending node in the old
+                          equinox *| in radians*
+* `JD1`                 : Julian (Ephemeris) day corresponding to the old
+                          equinox
+* `JD2`                 : Julian (Ephemeris) day corresponding to the new
+                          equinox
 **/
 pub fn precess_orb_elements (
 
@@ -335,12 +362,9 @@ pub fn precess_orb_elements (
         new_long_ascend_node = phi + A.atan2(B);
     }
 
-    let delta_w = (-nu.sin() * (old_long_ascend_node - Pi).sin()/new_inc.sin()).asin();
+    let delta_w =
+        (-nu.sin() * (old_long_ascend_node - Pi).sin()/new_inc.sin()).asin();
 
-    (
-        new_inc,
-        old_arg_perih + delta_w,
-        new_long_ascend_node
-    )
+    (new_inc, old_arg_perih + delta_w, new_long_ascend_node)
 
 }

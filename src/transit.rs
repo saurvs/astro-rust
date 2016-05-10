@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@ THE SOFTWARE.
 use angle;
 use coords;
 use interpol;
-use std::*;
 
 /// Represents a celestial body in transit
 pub enum TransitBody {
@@ -89,8 +88,8 @@ pub fn time (
     let h0 = match transit_body {
         &TransitBody::StarOrPlanet => -0.5667_f64.to_radians(),
         &TransitBody::Sun          => -0.8333_f64.to_radians(),
-        &TransitBody::Moon         =>  0.7275 * moon_eq_hz_parallax -
-                                       0.5667_f64.to_radians(),
+        &TransitBody::Moon         =>  0.7275 * moon_eq_hz_parallax
+                                     - 0.5667_f64.to_radians(),
     };
 
     let mut H0 = (
@@ -99,8 +98,9 @@ pub fn time (
     ).acos();
     H0 = angle::limit_to_two_PI(H0);
 
-    let rad360 = 2.0 * f64::consts::PI;
-    let mut m = m(&transit_type, H0, eq_point2.asc, geograph_point.long, apprnt_greenwhich_sidr, rad360);
+    let mut m = m(
+        &transit_type, H0, eq_point2.asc, geograph_point.long,
+        apprnt_greenwhich_sidr);
     let theta0 = apprnt_greenwhich_sidr + m*360.985647_f64.to_radians();
 
     let d = m + delta_t/86400.0;
@@ -109,11 +109,18 @@ pub fn time (
 
     let dec = match transit_type {
         &TransitType::Transit => 0.0,
-        &TransitType::Rise    => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d),
-        &TransitType::Set     => interpol::three_values(eq_point1.dec, eq_point2.dec, eq_point3.dec, d)
+
+        &TransitType::Rise    => interpol::three_values(
+                                    eq_point1.dec, eq_point2.dec,
+                                    eq_point3.dec, d),
+
+        &TransitType::Set     => interpol::three_values(
+                                    eq_point1.dec, eq_point2.dec,
+                                    eq_point3.dec, d)
     };
 
-    let mut H = coords::hr_angl_frm_observer_long(theta0, geograph_point.long, asc).to_degrees();
+    let mut H = coords::hr_angl_frm_observer_long
+        (theta0, geograph_point.long, asc).to_degrees();
     H = angle::limit_to_360(H);
     if H > 180.0 { H -= 360.0; }
     H = H.to_radians();
@@ -125,9 +132,9 @@ pub fn time (
     };
 
     m += match transit_type {
-        &TransitType::Transit => -H/rad360,
-        &TransitType::Rise    => (h - h0) / (rad360 * dec.cos() * geograph_point.lat.cos() * H.sin()),
-        &TransitType::Set     => (h - h0) / (rad360 * dec.cos() * geograph_point.lat.cos() * H.sin())
+        &TransitType::Transit => -H / angle::TWO_PI,
+        &TransitType::Rise    => (h - h0) / (angle::TWO_PI * dec.cos() * geograph_point.lat.cos() * H.sin()),
+        &TransitType::Set     => (h - h0) / (angle::TWO_PI * dec.cos() * geograph_point.lat.cos() * H.sin())
     };
 
     let h = 24.0 * m;
@@ -147,18 +154,17 @@ fn m (
     H0           : f64,
     asc          : f64,
     L            : f64,
-    Theta0       : f64,
-    rad360       : f64
+    Theta0       : f64
 
 ) -> f64 {
 
-    let mut m = (asc + L - Theta0)/rad360;
-    let p = H0/rad360;
+    let mut m = (asc + L - Theta0)/angle::TWO_PI;
+    let p = H0/angle::TWO_PI;
 
     m += match transit_type {
         &TransitType::Transit => 0.0,
-        &TransitType::Rise    =>  -p,
-        &TransitType::Set     =>   p
+        &TransitType::Rise    => -p,
+        &TransitType::Set     => p
     };
 
     if      m < 0.0 { m += 1.0 }

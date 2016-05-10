@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,36 +20,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-//! Some useful physical constants
+//! World Geodetic System 1984
 
-/// Returns the Gaussian gravitational constant *| in radians*
-#[inline(always)]
-pub fn gauss_grav() -> f64 {
+/// Equatorial radius of the Earth (Semimajor axis) *| in meters*
+pub const EQUATORIAL_RADIUS: f64 = 6378137.0;
 
-    0.01720209895
+/// Polar radius of the Earth (Semiminor axis) *| in meters*
+pub const POLAR_RADIUS: f64 = EQUATORIAL_RADIUS * (1.0 - FLATTENING);
 
-}
+/// Flattening
+pub const FLATTENING: f64 = 1.0 / 298.257223563;
 
-/// Returns the speed of light in vaccum *| in meters per second*
-#[inline(always)]
-pub fn speed_of_light() -> f64 {
+/// Angular velocity of the Earth *| in radians / second*
+pub const ANGULAR_VELOCITY: f64 = 7.292115e-5;
 
-    299_792_458.0
-
-}
-
-/// Returns the Earth-Moon mass ratio
-#[inline(always)]
-pub fn earth_moon_mass_ratio() -> f64 {
-
-    81.3007
-
-}
-
-/// Returns the Sun-Earth mass ratio
-#[inline(always)]
-pub fn sun_earth_mass_ratio() -> f64 {
-
-    332_946.0
-
-}
+/// Gravitational constant (including the mass of the Earth's
+/// atmosphere) *| in meters^3 / second^2*
+pub const GRAV_CONST: f64 = 3.986004418e+14;

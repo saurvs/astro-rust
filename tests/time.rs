@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,38 +28,47 @@ use astro::*;
 
 #[test]
 fn sidreal_time() {
+
     let (h1, m1, s1) = angle::hms_frm_deg(time::mn_sidr(2446895.5).to_degrees());
     assert_eq!((h1, m1, util::round_upto_digits(s1, 4)), (13, 10, 46.3668));
 
     let (h2, m2, s2) = angle::hms_frm_deg(apprnt_sidr!(2446895.5).to_degrees());
     assert_eq!((h2, m2, util::round_upto_digits(s2, 4)), (13, 10, 46.1351));
+
 }
 
 #[test]
 fn julian_day() {
 
-    let mut date = time::Date{year: 0, month: 0,
-                              decimal_day: 0.0,
-                              cal_type: time::CalType::Gregorian};
+    // Test taken from Meeus 2nd ed. on pages 61-62
 
-    struct TestDate(i32, u8, f64, f64, time::CalType);
-    let gregorian_dates = [TestDate(1957, 10, 4.81, 2436116.31, time::CalType::Gregorian),
-                           TestDate(2000, 1, 1.5, 2451545.0, time::CalType::Gregorian),
-                           TestDate(1999, 1, 1.0, 2451179.5, time::CalType::Gregorian),
-                           TestDate(1987, 1, 27.0, 2446822.5, time::CalType::Gregorian),
-                           TestDate(1987, 6, 19.5, 2446966.0, time::CalType::Gregorian),
-                           TestDate(1988, 1, 27.0, 2447187.5, time::CalType::Gregorian),
-                           TestDate(1988, 6, 19.5, 2447332.0, time::CalType::Gregorian),
-                           TestDate(1900, 1, 1.0, 2415020.5, time::CalType::Gregorian),
-                           TestDate(1600, 1, 1.0, 2305447.5, time::CalType::Gregorian),
-                           TestDate(1600, 12, 31.0, 2305812.5, time::CalType::Gregorian),
-                           TestDate(837, 4, 10.3, 2026871.8, time::CalType::Julian),
-                           TestDate(-123, 12, 31.0, 1676496.5, time::CalType::Julian),
-                           TestDate(-122, 1, 1.0, 1676497.5, time::CalType::Julian),
-                           TestDate(-1000, 7, 12.5, 1356001.0, time::CalType::Julian),
-                           TestDate(-1000, 2, 29.0, 1355866.5, time::CalType::Julian),
-                           TestDate(-1001, 8, 17.9, 1355671.4, time::CalType::Julian),
-                           TestDate(-4712, 1, 1.5, 0.0, time::CalType::Julian)];
+    let mut date = time::Date {
+        year        : 0,
+        month       : 0,
+        decimal_day : 0.0,
+        cal_type    : time::CalType::Gregorian
+    };
+
+    struct TestDate(i16, u8, f64, f64, time::CalType);
+    let gregorian_dates = [
+        TestDate( 1957, 10, 4.81, 2436116.31, time::CalType::Gregorian),
+        TestDate( 2000, 1,  1.5,  2451545.0,  time::CalType::Gregorian),
+        TestDate( 1999, 1,  1.0,  2451179.5,  time::CalType::Gregorian),
+        TestDate( 1987, 1,  27.0, 2446822.5,  time::CalType::Gregorian),
+        TestDate( 1987, 6,  19.5, 2446966.0,  time::CalType::Gregorian),
+        TestDate( 1988, 1,  27.0, 2447187.5,  time::CalType::Gregorian),
+        TestDate( 1988, 6,  19.5, 2447332.0,  time::CalType::Gregorian),
+        TestDate( 1900, 1,  1.0,  2415020.5,  time::CalType::Gregorian),
+        TestDate( 1600, 1,  1.0,  2305447.5,  time::CalType::Gregorian),
+        TestDate( 1600, 12, 31.0, 2305812.5,  time::CalType::Gregorian),
+        TestDate( 837,  4,  10.3, 2026871.8,  time::CalType::Julian),
+        TestDate(-123,  12, 31.0, 1676496.5,  time::CalType::Julian),
+        TestDate(-122,  1,  1.0,  1676497.5,  time::CalType::Julian),
+        TestDate(-1000, 7,  12.5, 1356001.0,  time::CalType::Julian),
+        TestDate(-1000, 2,  29.0, 1355866.5,  time::CalType::Julian),
+        TestDate(-1001, 8,  17.9, 1355671.4,  time::CalType::Julian),
+        TestDate(-4712, 1,  1.5,  0.0,        time::CalType::Julian)
+    ];
 
     for date_fields in gregorian_dates.iter() {
         date.year = date_fields.0;
@@ -70,6 +79,30 @@ fn julian_day() {
             time::CalType::Julian    => time::CalType::Julian,
         };
         assert_eq!(time::julian_day(&date), date_fields.3);
+    }
+
+}
+
+#[test]
+fn date_frm_julian_day() {
+
+    // Test taken from Meeus 2nd ed. on page 64
+
+    struct TestData(i16, u8, f64, f64);
+    let test_data = [
+        TestData( 1957, 10, 4.81,  2436116.31),
+        TestData( 333,  1,  27.5,  1842713.0),
+        TestData(-584,  5,  28.63, 1507900.13),
+    ];
+
+    for data in test_data.iter() {
+
+        let (year, month, day) = time::date_frm_julian_day(data.3).unwrap();
+
+        assert_eq!(year, data.0);
+        assert_eq!(month, data.1);
+        assert_eq!(util::round_upto_digits(day, 2), data.2);
+
     }
 
 }

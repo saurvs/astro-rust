@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,8 +40,8 @@ Computes the parallactic angle of a celestial body
 pub fn parllc_angl(observer_lat: f64, hour_angle: f64, dec: f64) -> f64 {
 
     hour_angle.sin().atan2 (
-        observer_lat.tan() * dec.cos() -
-        hour_angle.cos() * dec.sin()
+        observer_lat.tan() * dec.cos()
+      - hour_angle.cos() * dec.sin()
     )
 
 }
@@ -62,7 +62,7 @@ horizon
 **/
 #[inline]
 pub fn parllc_angl_on_hz(observer_lat: f64, dec: f64) -> f64 {
-
+    
     (observer_lat.sin() / dec.cos()).acos()
 
 }

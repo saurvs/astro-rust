@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +38,12 @@ J1950.0
 **/
 #[inline(always)]
 pub fn north_pol_eq_coords_J1950() -> coords::EqPoint {
+
     coords::EqPoint {
         asc: 317.342_f64.to_radians(),
         dec: 52.7110_f64.to_radians()
     }
+
 }
 
 /**
@@ -55,10 +57,12 @@ J2000.0
 **/
 #[inline(always)]
 pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
+
     coords::EqPoint {
         asc: 317.681_f64.to_radians(),
         dec: 52.8860_f64.to_radians()
     }
+
 }
 
 /**
@@ -76,10 +80,12 @@ the mean equinox of the date
 **/
 #[inline(always)]
 pub fn north_pol_ecl_coords(JC: f64) -> coords::EclPoint {
+
     coords::EclPoint {
         long: (352.9065 + 1.17330*JC).to_radians(),
         lat:  (63.28180 - 0.00394*JC).to_radians()
     }
+    
 }
 
 /// Holds Mar's ephemeris values for physical observations
@@ -131,7 +137,7 @@ pub fn ephemeris (
 
     let (mut lambda0, beta0) = (north_pole_ecl_coords.long, north_pole_ecl_coords.lat);
 
-    let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
+    let (l0, b0, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
     let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
     let (mut x, mut y, mut z) = (0.0, 0.0, 0.0);
@@ -141,10 +147,10 @@ pub fn ephemeris (
     let mut i: u8 = 1;
     while i <= 2 {
 
-        let (new_l, new_b, new_r) = planet::heliocen_pos(&planet::Planet::Mars, JD - light_time);
+        let (new_l, new_b, new_r) = planet::heliocent_coords(&planet::Planet::Mars, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        let (new_x, new_y, new_z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
+        let (new_x, new_y, new_z) = planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
         x = new_x; y = new_y; z = new_z;
 
         mars_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);

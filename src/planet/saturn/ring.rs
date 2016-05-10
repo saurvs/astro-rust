@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015 Saurav Sachidanand
+Copyright (c) 2015, 2016 Saurav Sachidanand
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,9 +30,12 @@ use time;
 #[inline]
 pub fn inc(JC: f64) -> f64 {
 
-    (      28.075216
-      - JC*(0.012998
-      + JC*0.000004)
+    (
+        28.075216
+      - JC * (
+            0.012998
+          + JC * 0.000004
+        )
     ).to_radians()
 
 }
@@ -40,9 +43,12 @@ pub fn inc(JC: f64) -> f64 {
 #[inline]
 pub fn ascend_node(JC: f64) -> f64 {
 
-    (      169.50847
-      + JC*(1.394681
-      + JC*0.000412)
+    (
+        169.50847
+      + JC * (
+            1.394681
+          + JC * 0.000412
+        )
     ).to_radians()
 
 }
@@ -82,7 +88,7 @@ Computes the elements for the ring system of Saturn
 **/
 pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
 
-    let (l0, b0, R) = planet::heliocen_pos(&planet::Planet::Earth, JD);
+    let (l0, b0, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
     let (mut l, mut b, mut r) = (0.0, 0.0, 0.0);
     let (mut x, mut y, mut z) = (0.0, 0.0, 0.0);
@@ -92,10 +98,12 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
     let mut i: u8 = 1;
     while i <= 2 {
 
-        let (new_l, new_b, new_r) = planet::heliocen_pos(&planet::Planet::Saturn, JD - light_time);
+        let (new_l, new_b, new_r) =
+            planet::heliocent_coords(&planet::Planet::Saturn, JD - light_time);
         l = new_l; b = new_b; r = new_r;
 
-        let (new_x, new_y, new_z) = planet::geocen_ecl_rect_coords(l0, b0, R, l, b, r);
+        let (new_x, new_y, new_z) =
+            planet::geocent_ecl_rect_coords(l0, b0, R, l, b, r);
         x = new_x; y = new_y; z = new_z;
 
         saturn_earth_dist = planet::dist_frm_ecl_rect_coords(x, y, z);
@@ -171,27 +179,27 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
 #[inline(always)]
 pub fn inn_edge_outer_ring(a: f64, b: f64) -> (f64, f64) {
 
-    (a*0.8801, b*0.8801)
+    (a * 0.8801, b * 0.8801)
 
 }
 
 #[inline(always)]
 pub fn out_edge_inner_ing(a: f64, b: f64) -> (f64, f64) {
 
-    (a*0.8599, b*0.8599)
+    (a * 0.8599, b * 0.8599)
 
 }
 
 #[inline(always)]
 pub fn inn_edge_inner_ring(a: f64, b: f64) -> (f64, f64) {
 
-    (a*0.665, b*0.665)
+    (a * 0.665, b * 0.665)
 
 }
 
 #[inline(always)]
 pub fn inn_edge_dusk_ring(a: f64, b: f64) -> (f64, f64) {
 
-    (a*0.5486, b*0.5486)
+    (a * 0.5486, b * 0.5486)
 
 }
