@@ -1,0 +1,13 @@
+[package]
+
+name = "astro"
+version = "1.0.7"
+authors = ["Saurav Sachidanand"]
+
+license = "MIT"
+
+repository = "https://www.github.com/saurvs/astro-rust"
+documentation = "https://saurvs.github.io/astro-rust"
+
+description = "Advanced algorithms for astronomy"
+keywords = ["astronomy", "algorithms", "ephemeris", "planet", "solar"]
