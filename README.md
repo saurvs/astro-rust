@@ -30,7 +30,7 @@ Implemented algorithms include
 * Add the dependency ```astro``` in your ```Cargo.toml```
   ```toml
   [dependencies]
-  astro = "1.0.7"
+  astro = "2.0.0"
   ```
 
 * Include the crate ```astro``` in your code
@@ -63,36 +63,36 @@ Implemented algorithms include
   // can get a reported value of it from the Astronomical
   // Almanac, or calculate it using the built-in function
 
-  let delta_t = time::approx_delta_t(date.year, date.month); // a good one, actually
+  let delta_t = time::delta_t(date.year, date.month);
 
-  let julian_ephm_day = time::julian_emph_day(julian_day, delta_t);
+  let julian_ephm_day = time::julian_ephemeris_day(julian_day, delta_t);
   ```
 
 * Find the position of the Sun and the Moon with respect to the Earth
   ```rust
 
   // geocentric ecliptic point and radius vector of the Sun
-  let (sun_ecl_point, rad_vec_sun) = sun::geocen_ecl_pos(julian_day);
+  let (sun_ecl_point, rad_vec_sun) = sun::geocent_ecl_pos(julian_day);
 
   // sun_ecl_point.long    - ecliptic longitude (radians)
   // sun_ecl_point.lat     - ecliptic latitude  (radians)
   // rad_vec_sun - distance between the Sun and the Earth (AU)
 
   // and similarly for the Moon
-  let (moon_ecl_point, rad_vec_moon) = lunar::geocen_ecl_pos(julian_day);
+  let (moon_ecl_point, rad_vec_moon) = lunar::geocent_ecl_pos(julian_day);
 
   ```
 
 * Find the position of a planet with respect to the Sun
   ```rust
   // the heliocentric point and radius vector of a planet, like Jupiter
-  let (jup_long, jup_lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Jupiter, julian_day);
+  let (jup_long, jup_lat, rad_vec) = planet::heliocent_pos(&planet::Planet::Jupiter, julian_day);
 
   // or neptune
-  let (nep_long, nep_lat, rad_vec) = planet::heliocen_pos(&planet::Planet::Neptune, julian_day);
+  let (nep_long, nep_lat, rad_vec) = planet::heliocent_pos(&planet::Planet::Neptune, julian_day);
 
   // positioning for all the eight planets (and (the dwarf planet) Pluto) is supported
-  let (plut_long, plut_lat, rad_vec) = pluto::heliocen_pos(julian_day);
+  let (plut_long, plut_lat, rad_vec) = pluto::heliocent_pos(julian_day);
   ```
 
 * Find the geodesic distance between two locations on Earth
