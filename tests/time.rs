@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 #[macro_use]
 extern crate astro;
+
 use astro::*;
 
 #[test]
@@ -81,6 +82,21 @@ fn julian_day() {
         assert_eq!(time::julian_day(&date), date_fields.3);
     }
 
+}
+
+#[test]
+fn weekday_frm_date()
+{
+    let date = time::Date {
+        year: 1954,
+        month: 6,
+        decimal_day: 30.0,
+        cal_type: time::CalType::Gregorian
+    };
+    match time::weekday_frm_date(&date) {
+        time::Weekday::Wednesday => {},
+        _ => panic!("time::weekday_frm_date failed")
+    }
 }
 
 #[test]

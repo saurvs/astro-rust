@@ -72,6 +72,47 @@ pub struct DayOfMonth {
     pub time_zone: f64,
 }
 
+/// Represents a day of the week
+pub enum Weekday {
+    /// Sunday
+    Sunday,
+    /// Monday
+    Monday,
+    /// Tuesday
+    Tuesday,
+    /// Wednesday
+    Wednesday,
+    /// Thursday
+    Thursday,
+    /// Friday
+    Friday,
+    /// Saturday
+    Saturday,
+}
+
+pub fn weekday_frm_date(date: &Date) -> Weekday
+{
+    let date_0UT = Date {
+        year: date.year,
+        month: date.month,
+        decimal_day: date.decimal_day.floor() as f64,
+        cal_type: CalType::Gregorian
+    };
+    let JD = julian_day(&date_0UT);
+    let wd = (JD + 1.5) as i64 % 7;
+    
+    match wd {
+        0 => Weekday::Sunday,
+        1 => Weekday::Monday,
+        2 => Weekday::Tuesday,
+        3 => Weekday::Wednesday,
+        4 => Weekday::Thursday,
+        5 => Weekday::Friday,
+        6 => Weekday::Saturday,
+        _ => panic!("Internal error in time::weekday_frm_date")
+    }
+}
+
 /**
 Computes decimal day for a `DayOfMonth`
 
