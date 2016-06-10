@@ -42,8 +42,8 @@ for 10000 years before and after 2000 AD.
 
 * `JD`: Julian (Ephemeris) day
 **/
-pub fn mn_oblq_laskar(JD: f64) -> (f64) {
-
+pub fn mn_oblq_laskar(JD: f64) -> f64
+{
     let u = time::julian_cent(JD) / 100.0;
 
     Horner_eval!(
@@ -60,7 +60,6 @@ pub fn mn_oblq_laskar(JD: f64) -> (f64) {
         angle::deg_frm_dms(0,  0,  5.79),
         angle::deg_frm_dms(0,  0,  2.45)
     ).to_radians()
-
 }
 
 /**
@@ -79,8 +78,8 @@ The error in `mn_oblq` reaches 1 arcsecond over a period of
 
 * `JD`: Julian (Ephemeris) day
 **/
-pub fn mn_oblq_IAU(JD: f64) -> (f64) {
-
+pub fn mn_oblq_IAU(JD: f64) -> f64
+{
     let u = time::julian_cent(JD) / 100.0;
 
     Horner_eval!(
@@ -90,7 +89,6 @@ pub fn mn_oblq_IAU(JD: f64) -> (f64) {
        -angle::deg_frm_dms(0,  0,  0.00059),
         angle::deg_frm_dms(0,  0,  0.001813)
     ).to_radians()
-
 }
 
 /**
@@ -110,21 +108,15 @@ a horizon on Earth
 * `observer_lat`: The observer's geographical latitude *| in radians*
 * `loc_sidreal` : Local sidereal time *| in radians*
 **/
-pub fn eclip_points_on_hz (
-
-    oblq_eclip   : f64,
-    observer_lat : f64,
-    loc_sidreal  : f64
-
- ) -> (f64, f64) {
-
+pub fn eclip_points_on_hz(oblq_eclip: f64, observer_lat: f64,
+                          loc_sidreal: f64) -> (f64, f64)
+{
     let p = (-loc_sidreal.cos()).atan2 (
         oblq_eclip.sin() * observer_lat.tan()
       + oblq_eclip.cos() * loc_sidreal.sin()
     );
 
     (p, p + PI)
-
 }
 
 /**
@@ -141,17 +133,11 @@ on Earth
 * `observer_lat`: The observer's geographical latitude *| in radians*
 * `loc_sidreal` : Local sidereal time *| in radians*
 **/
-pub fn angl_betwn_eclip_and_hz (
-
-    oblq_eclip   : f64,
-    observer_lat : f64,
-    loc_sidreal  : f64
-
-) -> f64 {
-
+pub fn angl_betwn_eclip_and_hz(oblq_eclip: f64, observer_lat: f64,
+                              loc_sidreal: f64) -> f64
+{
     (
         oblq_eclip.cos() * observer_lat.sin()
       - oblq_eclip.sin() * observer_lat.cos() * loc_sidreal.sin()
     ).acos()
-
 }

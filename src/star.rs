@@ -31,10 +31,9 @@ Computes the combined magnitude of two stars
 * `m2`: Magnitude of star 2
 **/
 #[inline]
-pub fn combined_mag(m1: f64, m2: f64) -> f64 {
-
+pub fn combined_mag(m1: f64, m2: f64) -> f64
+{
     m2 - 2.5 * (brightness_ratio(m1, m2) + 1.0)
-
 }
 
 /**
@@ -44,8 +43,8 @@ Computes the combined magnitude of two or more stars
 
 * `m`: Array of magnitudes of stars
 **/
-pub fn combined_mag_of_many(m: &[f64]) -> f64 {
-
+pub fn combined_mag_of_many(m: &[f64]) -> f64
+{
     let mut sum = 0.0;
 
     for i in m.iter() {
@@ -53,7 +52,6 @@ pub fn combined_mag_of_many(m: &[f64]) -> f64 {
     }
 
     -2.5 * sum.log10()
-
 }
 
 /**
@@ -65,10 +63,9 @@ Computes the brightness ratio of two stars
 * `m2`: Magnitude of star 2
 **/
 #[inline]
-pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
-
+pub fn brightness_ratio(m1: f64, m2: f64) -> f64
+{
     10.0_f64.powf(0.4 * (m2 - m1))
-
 }
 
 /**
@@ -79,10 +76,9 @@ Computes the difference in magnitude of two stars
 * `br`: Brightness ratio of two stars
 **/
 #[inline]
-pub fn mag_diff(br: f64) -> f64 {
-
+pub fn mag_diff(br: f64) -> f64
+{
     2.5 * br.log10()
-
 }
 
 /**
@@ -94,10 +90,9 @@ Computes the absolute magnitude of a star from its parallax
 * `am`: Apparent magnitude of the star
 **/
 #[inline]
-pub fn abs_mag_frm_parallax(par: f64, am: f64) -> f64 {
-
+pub fn abs_mag_frm_parallax(par: f64, am: f64) -> f64
+{
     am + 5.0 + 5.0*(par.to_degrees() * 3600.0).log10()
-
 }
 
 /**
@@ -110,10 +105,9 @@ Computes the absolute magnitude of a star from its distance from earth
 **/
 
 #[inline]
-pub fn abs_mag_frm_dist(d: f64, am: f64) -> f64 {
-
+pub fn abs_mag_frm_dist(d: f64, am: f64) -> f64
+{
     am + 5.0 - 5.0*d.log10()
-
 }
 
 /**
@@ -133,19 +127,14 @@ same star to the north pole of the ecliptic
 **/
 
 #[inline]
-pub fn angl_between_north_celes_and_eclip_pole (
-
-    eclip_long : f64,
-    eclip_lat  : f64,
-    oblq_eclip : f64
-
-) -> f64 {
-
+pub fn angl_between_north_celes_and_eclip_pole(eclip_long: f64,
+                                               eclip_lat: f64,
+                                               oblq_eclip: f64) -> f64
+{
     (eclip_long.cos() * oblq_eclip.tan()).atan2 (
         eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan()
       - eclip_lat.cos()
     )
-
 }
 
 /**
@@ -178,17 +167,14 @@ it's proper motion, distance and radial velocity.
 * `t`: Decimal years from the inital time; negative in the past
           and positive in the future
 **/
-pub fn eq_coords_frm_motion (
-
-    asc0              : f64,
-    dec0              : f64,
-    r                 : f64,
-    delta_r           : f64,
-    proper_motion_asc : f64,
-    proper_motion_dec : f64, t: f64
-
-) -> (f64, f64) {
-
+pub fn eq_coords_frm_motion(asc0: f64,
+                            dec0: f64,
+                            r: f64,
+                            delta_r: f64,
+                            proper_motion_asc: f64,
+                            proper_motion_dec: f64,
+                            t: f64) -> (f64, f64)
+{
     let x = r * dec0.cos() * asc0.cos();
     let y = r * dec0.cos() * asc0.sin();
     let z = r * dec0.sin();
@@ -208,20 +194,15 @@ pub fn eq_coords_frm_motion (
     let dec = z1.atan2((x1*x1 + y1*y1).sqrt());
 
     (asc, dec)
-
 }
 
-pub fn proper_motion_in_eq_coords (
-
-    asc         : f64,
-    dec         : f64,
-    pmotion_asc : f64,
-    pmotion_dec : f64,
-    ecl_lat     : f64,
-    oblq_eclip  : f64
-
-) -> (f64, f64) {
-
+pub fn proper_motion_in_eq_coords(asc: f64,
+                                  dec: f64,
+                                  pmotion_asc: f64,
+                                  pmotion_dec: f64,
+                                  ecl_lat: f64,
+                                  oblq_eclip: f64) -> (f64, f64)
+{
     let ecl_lat_cos = ecl_lat.cos();
 
     let pmotion_long = (
@@ -241,5 +222,4 @@ pub fn proper_motion_in_eq_coords (
     ) / ecl_lat_cos;
 
     (pmotion_long, pmotion_lat)
-
 }

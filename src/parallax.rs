@@ -39,10 +39,9 @@ Computes the equatorial horizontal parallax of a celestial body
 * `dist_to_earth`: The celestial body's distance to the Earth *| in AU*
 **/
 #[inline]
-pub fn eq_hz_parallax(dist_to_earth: f64) -> f64 {
-
+pub fn eq_hz_parallax(dist_to_earth: f64) -> f64
+{
     (angle::deg_frm_dms(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
-
 }
 
 /**
@@ -64,16 +63,12 @@ Computes the topocentric equatorial coordinates of a celestial body
                         *| in meters*
 * `greenw_sidr`: Sidereal time at Greenwhich *| in radians*
 **/
-pub fn topocent_eq_coords (
-
-    eq_point       : &coords::EqPoint,
-    eq_hz_parllx   : f64,
-    geograph_point : &coords::GeographPoint,
-    observer_ht    : f64,
-    greenw_sidr    : f64
-
-) -> coords::EqPoint {
-
+pub fn topocent_eq_coords(eq_point: &coords::EqPoint,
+                          eq_hz_parllx: f64,
+                          geograph_point: &coords::GeographPoint,
+                          observer_ht: f64,
+                          greenw_sidr: f64) -> coords::EqPoint
+{
     let (rho_sin, rho_cos) = planet::earth::rho_sin_cos_phi (
         geograph_point.lat, observer_ht
     );
@@ -100,7 +95,6 @@ pub fn topocent_eq_coords (
         asc: eq_point.asc + del_asc,
         dec: dec_1
     }
-
 }
 
 /**
@@ -126,18 +120,14 @@ Computes the topocentric ecliptic coordinates of a celestial body
 * `eclip_oblq`    : Obliquity of the ecliptic *| in radians*
 * `geocent_semdia` : Geocentric semidiameter of the celestial body *| in radians*
 **/
-pub fn topopcent_ecl_coords (
-
-    ecl_point      : &coords::EclPoint,
-    eq_hz_parllx   : f64,
-    geograph_point : &coords::GeographPoint,
-    observer_ht    : f64,
-    loc_sidr       : f64,
-    eclip_oblq     : f64,
-    geocent_semdia : f64
-
-) -> (coords::EclPoint, f64) {
-
+pub fn topopcent_ecl_coords(ecl_point: &coords::EclPoint,
+                            eq_hz_parllx: f64,
+                            geograph_point: &coords::GeographPoint,
+                            observer_ht: f64,
+                            loc_sidr: f64,
+                            eclip_oblq: f64,
+                            geocent_semdia: f64) -> (coords::EclPoint, f64)
+{
     let (rho_sin, rho_cos) = planet::earth::rho_sin_cos_phi (
         geograph_point.lat, observer_ht
     );
@@ -183,5 +173,4 @@ pub fn topopcent_ecl_coords (
         },
         geocent_semdia_1
     )
-
 }

@@ -37,13 +37,12 @@ Computes the parallactic angle of a celestial body
 * `dec`         : Declination of the celestial body *| in radians*
 **/
 #[inline]
-pub fn parllc_angl(observer_lat: f64, hour_angle: f64, dec: f64) -> f64 {
-
+pub fn parllc_angl(observer_lat: f64, hour_angle: f64, dec: f64) -> f64
+{
     hour_angle.sin().atan2 (
         observer_lat.tan() * dec.cos()
       - hour_angle.cos() * dec.sin()
     )
-
 }
 
 /**
@@ -61,8 +60,7 @@ horizon
 * `dec`         : Declination of the celestial body *| in radians*
 **/
 #[inline]
-pub fn parllc_angl_on_hz(observer_lat: f64, dec: f64) -> f64 {
-    
+pub fn parllc_angl_on_hz(observer_lat: f64, dec: f64) -> f64
+{
     (observer_lat.sin() / dec.cos()).acos()
-
 }

@@ -40,14 +40,13 @@ given values
 **/
 
 #[inline]
-pub fn three_values(y1: f64, y2: f64, y3: f64, n: f64) -> f64 {
-
+pub fn three_values(y1: f64, y2: f64, y3: f64, n: f64) -> f64
+{
     let a = y2 - y1;
     let b = y3 - y2;
     let c = b - a;
 
     y2 + n*(a + b + n*c)/2.0
-
 }
 
 /**
@@ -68,8 +67,8 @@ given values
 * `n` : Interpolating factor, measured from the central value
         `y3`, positively towards `y4`
 **/
-pub fn five_values(y1: f64, y2: f64, y3: f64, y4: f64, y5: f64, n: f64) -> f64 {
-
+pub fn five_values(y1: f64, y2: f64, y3: f64, y4: f64, y5: f64, n: f64) -> f64
+{
     let a = y2 - y1;
     let b = y3 - y2;
     let c = y4 - y3;
@@ -94,5 +93,4 @@ pub fn five_values(y1: f64, y2: f64, y3: f64, y4: f64, y5: f64, n: f64) -> f64 {
         h_j_12,
         k
     ) / 2.0
-    
 }

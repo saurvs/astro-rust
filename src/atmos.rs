@@ -39,11 +39,14 @@ degrees
 
 * `apprnt_alt`: Apparent altitude *| in radians*
 **/
-pub fn refrac_frm_apprnt_alt_15(apprnt_alt: f64) -> f64 {
+pub fn refrac_frm_apprnt_alt_15(apprnt_alt: f64) -> f64
+{
+    let x =
+        angle::deg_frm_dms(0, 0, 0.0668).to_radians()
+      * (PI - apprnt_alt).tan();
 
       angle::deg_frm_dms(0, 0, 58.294).to_radians() * (PI - apprnt_alt).tan()
-    - angle::deg_frm_dms(0, 0, 0.0668).to_radians() * (PI - apprnt_alt).tan().powi(3)
-
+    - x * x * x
 }
 
 /**
@@ -60,11 +63,14 @@ degrees
 
 * `true_alt`: True altitude *| in radians*
 **/
-pub fn refrac_frm_true_alt_15(true_alt: f64) -> f64 {
+pub fn refrac_frm_true_alt_15(true_alt: f64) -> f64
+{
+    let x =
+        angle::deg_frm_dms(0, 0, 0.0824).to_radians()
+      * (PI - true_alt).tan();
 
       angle::deg_frm_dms(0, 0, 58.276).to_radians() * (PI - true_alt).tan()
-    - angle::deg_frm_dms(0, 0, 0.0824).to_radians() * (PI - true_alt).tan().powi(3)
-
+    - x * x * x
 }
 
 /**
@@ -82,16 +88,16 @@ The accuracy of `refrac_term` is upto 0.07 arcminutes.
 
 * `apprnt_alt`: Apparent altitude *| in radians*
 **/
-pub fn refrac_frm_apprnt_alt(apprnt_alt: f64) -> f64 {
-
+pub fn refrac_frm_apprnt_alt(apprnt_alt: f64) -> f64
+{
     if apprnt_alt == PI { 0.0 }
     else {
-        let a = apprnt_alt.to_degrees() + 7.31/(apprnt_alt.to_degrees() + 4.4);
+        let apprnt_alt_deg = apprnt_alt.to_degrees();
+        let a = apprnt_alt_deg + 7.31/(apprnt_alt_deg + 4.4);
         let R = 1.0 / a.to_radians().tan();
 
         (R / 60.0).to_radians()
     }
-
 }
 
 /**
@@ -110,16 +116,16 @@ within 4 arcseconds.
 
 * `true_alt`: True altitude *| in radians*
 **/
-pub fn refrac_frm_true_alt(true_alt: f64) -> f64 {
-
+pub fn refrac_frm_true_alt(true_alt: f64) -> f64
+{
     if true_alt == PI { 0.0 }
     else {
-        let a = true_alt.to_degrees() + 10.3/(true_alt.to_degrees() + 5.11);
+        let true_alt_deg = true_alt.to_degrees();
+        let a = true_alt_deg + 10.3/(true_alt_deg + 5.11);
         let R = 1.02 / a.to_radians().tan();
 
         (R / 60.0).to_radians()
     }
-
 }
 
 /**
@@ -136,10 +142,9 @@ Computes the refraction term modifier for local pressure
 * `pressure`: Local pressure *| in millibars*
 **/
 #[inline(always)]
-pub fn refrac_by_pressr(pressure: f64) -> f64 {
-
+pub fn refrac_by_pressr(pressure: f64) -> f64
+{
     pressure / 1010.0
-
 }
 
 /**
@@ -156,8 +161,7 @@ Computes the refraction term modifier for local temperature
 * `temp`: Local temperature *| in kelvins*
 **/
 #[inline(always)]
-pub fn refrac_by_temp(temp: f64) -> f64 {
-
+pub fn refrac_by_temp(temp: f64) -> f64
+{
     283.0 / temp
-
 }

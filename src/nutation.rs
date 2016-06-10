@@ -40,8 +40,8 @@ Computes nutation in ecliptic longitude and obliquity
 
 `JD`: Julian (Ephemeris) day
 **/
-pub fn nutation(JD: f64) -> (f64, f64) {
-
+pub fn nutation(JD: f64) -> (f64, f64)
+{
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
     let terms_for_nutation = [
         terms( 0,  0,  0,  0,  1, -171996, -1742, 92025,  89),
@@ -145,7 +145,6 @@ pub fn nutation(JD: f64) -> (f64, f64) {
     }
 
     (nut_in_long.to_radians(), nut_in_oblq.to_radians())
-
 }
 
 /**
@@ -169,15 +168,9 @@ The declination of `eq_point` should not be close to either of the
 two of the celestial poles, as the values of nutation returned here
 are only from first-order corrections.
 **/
-pub fn nutation_in_eq_coords (
-
-    eq_point    : &coords::EqPoint,
-    nut_in_long : f64,
-    nut_in_oblq : f64,
-    tru_oblq    : f64
-
-) -> (f64, f64) {
-
+pub fn nutation_in_eq_coords(eq_point: &coords::EqPoint, nut_in_long: f64,
+                             nut_in_oblq : f64, tru_oblq: f64) -> (f64, f64)
+{
     let (asc, dec) = (eq_point.asc, eq_point.dec);
 
     let nut_asc = nut_in_long * (
@@ -190,5 +183,4 @@ pub fn nutation_in_eq_coords (
       + asc.sin() * nut_in_oblq;
 
     (nut_asc, nut_dec)
-    
 }

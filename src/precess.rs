@@ -54,8 +54,8 @@ the equatorial coordinates to the new epoch.
          Shouldn't be more than a few hundred years away from
          the old epoch.
 **/
-pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
-
+pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64)
+{
     let JC = time::julian_cent(JD);
 
     let m = (
@@ -69,7 +69,6 @@ pub fn annual_precess(asc: f64, dec: f64, JD: f64) -> (f64, f64) {
     ).to_radians();
 
     (m + n*asc.sin()*dec.tan(), n * asc.cos())
-
 }
 
 /**
@@ -91,15 +90,11 @@ Computes equatorial coordinates reduced to a different epoch
 * `JD1`    : Julian (Ephemeris) day corresponding to the old epoch
 * `JD2`    : Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn precess_eq_coords (
-
-    old_asc : f64,
-    old_dec : f64,
-    JD1     : f64,
-    JD2     : f64
-
-) -> (f64, f64) {
-
+pub fn precess_eq_coords(old_asc: f64,
+                         old_dec: f64,
+                         JD1: f64,
+                         JD2: f64) -> (f64, f64)
+{
     let T = time::julian_cent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
@@ -131,7 +126,6 @@ pub fn precess_eq_coords (
         + theta.cos() * old_dec.sin();
 
     (A.atan2(B) + zeta, C.asin())
-
 }
 
 /**
@@ -154,15 +148,11 @@ FK4 system, reduced to a different epoch
 * `JD1`    : Julian (Ephemeris) day corresponding to the old epoch
 * `JD2`    : Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn precess_eq_coords_FK5 (
-
-    old_asc : f64,
-    old_dec : f64,
-    JD1     : f64,
-    JD2     : f64
-
-) -> (f64, f64) {
-
+pub fn precess_eq_coords_FK5(old_asc: f64,
+                             old_dec: f64,
+                             JD1: f64,
+                             JD2: f64) -> (f64, f64)
+{
     let T = (JD1 - 2415020.3135) / 36524.2199;
     let t = (JD2 - JD1) / 36524.2199;
 
@@ -188,7 +178,6 @@ pub fn precess_eq_coords_FK5 (
         )
     );
 
-
     let A = old_dec.cos() * (old_asc + xi).sin();
 
     let B =
@@ -200,7 +189,6 @@ pub fn precess_eq_coords_FK5 (
         + theta.cos() * old_dec.sin();
 
     (A.atan2(B) + zeta, C.asin())
-
 }
 
 /**
@@ -220,15 +208,11 @@ Computes ecliptic coordinates reduced to a different epoch
 * `JD_old`  : Julian (Ephemeris) day corresponding to the old epoch
 * `JD_new`  : Julian (Ephemeris) day corresponding to the new epoch
 **/
-pub fn precess_ecl_coords (
-
-    old_long : f64,
-    old_lat  : f64,
-    JD_old   : f64,
-    JD_new   : f64
-
-) -> (f64, f64) {
-
+pub fn precess_ecl_coords(old_long: f64,
+                          old_lat: f64,
+                          JD_old: f64,
+                          JD_new: f64) -> (f64, f64)
+{
     let T = time::julian_cent(JD_old);
     let t = (JD_new - JD_old) / 36525.0;
 
@@ -248,13 +232,11 @@ pub fn precess_ecl_coords (
     let new_lat = C.asin();
 
     (new_long, new_lat)
-
 }
 
 #[inline]
-fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
-
-    // ------------------------------------------------------------calculate nu
+fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64)
+{
     let x = T * angle::deg_frm_dms(0, 0, 0.000598);
     let nu = (
         t * (
@@ -266,9 +248,7 @@ fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
             )
         )
     ).to_radians();
-    // ------------------------------------------------------------------------
 
-    // ------------------------------------------------------------calculate Pi
     let Pi = (
         174.876384
       + T * (
@@ -283,9 +263,7 @@ fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
               - t * angle::deg_frm_dms(0, 0, 0.03536)
         )
     ).to_radians();
-    // ------------------------------------------------------------------------
 
-    // -----------------------------------------------------------calculate rho
     let y = T * angle::deg_frm_dms(0, 0, 0.000042);
     let rho = (
         t * (
@@ -297,10 +275,8 @@ fn angles_for_ecl_change(t: f64, T: f64) -> (f64, f64, f64) {
             )
         )
     ).to_radians();
-    // ------------------------------------------------------------------------
 
     (nu, Pi, rho)
-
 }
 
 /**
@@ -329,16 +305,12 @@ Computes orbital elements reduced to a different equinox
 * `JD2`                 : Julian (Ephemeris) day corresponding to the new
                           equinox
 **/
-pub fn precess_orb_elements (
-
-    old_inc              : f64,
-    old_arg_perih        : f64,
-    old_long_ascend_node : f64,
-    JD1                  : f64,
-    JD2                  : f64
-
-) -> (f64, f64, f64) {
-
+pub fn precess_orb_elements(old_inc: f64,
+                            old_arg_perih: f64,
+                            old_long_ascend_node: f64,
+                            JD1: f64,
+                            JD2: f64) -> (f64, f64, f64)
+{
     let T = time::julian_cent(JD1);
     let t = (JD2 - JD1) / 36525.0;
 
@@ -366,5 +338,4 @@ pub fn precess_orb_elements (
         (-nu.sin() * (old_long_ascend_node - Pi).sin()/new_inc.sin()).asin();
 
     (new_inc, old_arg_perih + delta_w, new_long_ascend_node)
-
 }
