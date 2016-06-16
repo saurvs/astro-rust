@@ -2,18 +2,18 @@
 
 **Contents**
 
+[API Docs](https://saurvs.github.io/astro-rust/)
+
 * [About](#about)
 * [Usage](#usage)
 * [Contributing](#contributing)
 * [References](#references)
 
-[API Docs](https://saurvs.github.io/astro-rust/)
-
 ## About
 
-```astro-rust``` is a library of astronomical algorithms for the Rust programming language.
+```astro-rust``` is a library of advanced astronomical algorithms for the Rust programming language.
 
-Implemented algorithms include
+Implemented algorithms include:
 
 * planetary and solar positioning by the complete set of elements of Bretagnon and Francou's VSP087 theory
 * lunar positioning by the principle elements of Chapront's ELP-2000/82 theory
