@@ -30,7 +30,7 @@ fn annual_precess() {
 
     let d = time::Date {
         year        : 1978,
-        month       : 1,
+        month       : time::Month::Jan,
         decimal_day : 0.0,
         cal_type    : time::CalType::Gregorian};
 
@@ -94,7 +94,7 @@ fn precess_ecl_coords() {
         2451545.0,
         1643074.5
     );
-    
+
     assert_eq!((util::round_upto_digits(new_asc.to_degrees(), 3),
                 util::round_upto_digits(new_dec.to_degrees(), 3)), (118.704, 1.615));
 }

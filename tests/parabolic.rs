@@ -30,7 +30,7 @@ fn true_anom_and_rad_vec() {
 
     let t_date = time::Date {
         year        : 1998,
-        month       : 8,
+        month       : time::Month::Aug,
         decimal_day : 5.0,
         cal_type    : time::CalType::Gregorian
     };
@@ -38,7 +38,7 @@ fn true_anom_and_rad_vec() {
 
     let T_date = time::Date {
         year        : 1998,
-        month       : 4,
+        month       : time::Month::Apr,
         decimal_day : 14.4358,
         cal_type    : time::CalType::Gregorian
     };
@@ -49,7 +49,7 @@ fn true_anom_and_rad_vec() {
     );
     assert_eq!(util::round_upto_digits(tru_anom.to_degrees(), 5), 66.78862);
     assert_eq!(util::round_upto_digits(rad_vec, 6), 2.133911);
-    
+
 }
 
 #[test]
@@ -57,7 +57,7 @@ fn passage_through_nodes() {
 
     let T = time::julian_day(&time::Date{
         year        : 1989,
-        month       : 8,
+        month       : time::Month::Aug,
         decimal_day : 20.291,
         cal_type    : time::CalType::Gregorian
     });

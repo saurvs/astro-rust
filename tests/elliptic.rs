@@ -54,7 +54,7 @@ fn passage_through_nodes() {
     let T = time::julian_day (
         &time::Date{
             year        : 1986,
-            month       : 2,
+            month       : time::Month::Feb,
             decimal_day : 9.45891,
             cal_type    : time::CalType::Gregorian
         }

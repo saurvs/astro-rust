@@ -32,14 +32,41 @@ pub enum CalType {
     Julian
 }
 
+/// Represents a month in the Gregorian and Julian calendars
+#[derive(Copy, Clone)]
+pub enum Month {
+    /// January
+    Jan = 1,
+    /// February
+    Feb = 2,
+    /// March
+    Mar = 3,
+    /// April
+    Apr = 4,
+    /// May
+    May = 5,
+    /// June
+    June = 6,
+    /// July
+    July = 7,
+    /// August
+    Aug = 8,
+    /// September
+    Sept = 9,
+    /// October
+    Oct = 10,
+    /// November
+    Nov = 11,
+    /// December
+    Dec = 12,
+}
+
 /// Represents a date with year, month, decimal day and calendar type
 pub struct Date {
     /// Year
     pub year: i16,
     /// Month
-    ///
-    /// range: *1 - 12*
-    pub month: u8,
+    pub month: Month,
     /// Decimal day
     ///
     /// range: *1.0 - 31.0*
@@ -100,7 +127,7 @@ pub fn weekday_frm_date(date: &Date) -> Weekday
     };
     let JD = julian_day(&date_0UT);
     let wd = (JD + 1.5) as i64 % 7;
-    
+
     match wd {
         0 => Weekday::Sunday,
         1 => Weekday::Monday,
@@ -137,24 +164,25 @@ pub fn decimal_year(date: &Date) -> f64 {
 
     let mut y = 0;
     let mut days = 365.0;
+    let month = date.month as u8;
 
-    if date.month > 1 { y += 31; }
-    if date.month > 2 {
+    if month > 1 { y += 31; }
+    if month > 2 {
         y += 28;
         if is_leap_year(date.year, &date.cal_type) {
             y += 1;
             days += 1.0;
         }
     }
-    if date.month >  3 { y += 31; }
-    if date.month >  4 { y += 30; }
-    if date.month >  5 { y += 31; }
-    if date.month >  6 { y += 30; }
-    if date.month >  7 { y += 31; }
-    if date.month >  8 { y += 31; }
-    if date.month >  9 { y += 30; }
-    if date.month > 10 { y += 31; }
-    if date.month > 11 { y += 30; }
+    if month >  3 { y += 31; }
+    if month >  4 { y += 30; }
+    if month >  5 { y += 31; }
+    if month >  6 { y += 30; }
+    if month >  7 { y += 31; }
+    if month >  8 { y += 31; }
+    if month >  9 { y += 30; }
+    if month > 10 { y += 31; }
+    if month > 11 { y += 30; }
 
     (date.year as f64) + ((y as f64) + date.decimal_day)/days
 
@@ -217,11 +245,12 @@ Computes Julian day from a `Date`
 **/
 pub fn julian_day(date: &Date) -> f64 {
 
+    let month = date.month as u8;
     let (y, m) =
-        if date.month == 1 || date.month == 2 {
-            ((date.year - 1) as f64, (date.month + 12) as f64)
+        if month == 1 || month == 2 {
+            ((date.year - 1) as f64, (month + 12) as f64)
         } else {
-            (date.year as f64, date.month as f64)
+            (date.year as f64, month as f64)
         };
 
     let a = (y / 100.0).floor();

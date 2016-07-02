@@ -30,7 +30,7 @@ fn stell_aberr_in_eq_coords() {
 
     let d = time::Date {
         year        : 2028,
-        month       : 11,
+        month       : time::Month::Nov,
         decimal_day : 13.19,
         cal_type    : time::CalType::Gregorian
     };

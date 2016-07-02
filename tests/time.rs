@@ -45,30 +45,30 @@ fn julian_day() {
 
     let mut date = time::Date {
         year        : 0,
-        month       : 0,
+        month       : time::Month::Jan,
         decimal_day : 0.0,
         cal_type    : time::CalType::Gregorian
     };
 
-    struct TestDate(i16, u8, f64, f64, time::CalType);
+    struct TestDate(i16, time::Month, f64, f64, time::CalType);
     let gregorian_dates = [
-        TestDate( 1957, 10, 4.81, 2436116.31, time::CalType::Gregorian),
-        TestDate( 2000, 1,  1.5,  2451545.0,  time::CalType::Gregorian),
-        TestDate( 1999, 1,  1.0,  2451179.5,  time::CalType::Gregorian),
-        TestDate( 1987, 1,  27.0, 2446822.5,  time::CalType::Gregorian),
-        TestDate( 1987, 6,  19.5, 2446966.0,  time::CalType::Gregorian),
-        TestDate( 1988, 1,  27.0, 2447187.5,  time::CalType::Gregorian),
-        TestDate( 1988, 6,  19.5, 2447332.0,  time::CalType::Gregorian),
-        TestDate( 1900, 1,  1.0,  2415020.5,  time::CalType::Gregorian),
-        TestDate( 1600, 1,  1.0,  2305447.5,  time::CalType::Gregorian),
-        TestDate( 1600, 12, 31.0, 2305812.5,  time::CalType::Gregorian),
-        TestDate( 837,  4,  10.3, 2026871.8,  time::CalType::Julian),
-        TestDate(-123,  12, 31.0, 1676496.5,  time::CalType::Julian),
-        TestDate(-122,  1,  1.0,  1676497.5,  time::CalType::Julian),
-        TestDate(-1000, 7,  12.5, 1356001.0,  time::CalType::Julian),
-        TestDate(-1000, 2,  29.0, 1355866.5,  time::CalType::Julian),
-        TestDate(-1001, 8,  17.9, 1355671.4,  time::CalType::Julian),
-        TestDate(-4712, 1,  1.5,  0.0,        time::CalType::Julian)
+        TestDate( 1957, time::Month::Oct, 4.81, 2436116.31, time::CalType::Gregorian),
+        TestDate( 2000, time::Month::Jan,  1.5,  2451545.0,  time::CalType::Gregorian),
+        TestDate( 1999, time::Month::Jan,  1.0,  2451179.5,  time::CalType::Gregorian),
+        TestDate( 1987, time::Month::Jan,  27.0, 2446822.5,  time::CalType::Gregorian),
+        TestDate( 1987, time::Month::June,  19.5, 2446966.0,  time::CalType::Gregorian),
+        TestDate( 1988, time::Month::Jan,  27.0, 2447187.5,  time::CalType::Gregorian),
+        TestDate( 1988, time::Month::June,  19.5, 2447332.0,  time::CalType::Gregorian),
+        TestDate( 1900, time::Month::Jan,  1.0,  2415020.5,  time::CalType::Gregorian),
+        TestDate( 1600, time::Month::Jan,  1.0,  2305447.5,  time::CalType::Gregorian),
+        TestDate( 1600, time::Month::Dec, 31.0, 2305812.5,  time::CalType::Gregorian),
+        TestDate( 837,  time::Month::Apr,  10.3, 2026871.8,  time::CalType::Julian),
+        TestDate(-123,  time::Month::Dec, 31.0, 1676496.5,  time::CalType::Julian),
+        TestDate(-122,  time::Month::Jan,  1.0,  1676497.5,  time::CalType::Julian),
+        TestDate(-1000, time::Month::July,  12.5, 1356001.0,  time::CalType::Julian),
+        TestDate(-1000, time::Month::Feb,  29.0, 1355866.5,  time::CalType::Julian),
+        TestDate(-1001, time::Month::Aug,  17.9, 1355671.4,  time::CalType::Julian),
+        TestDate(-4712, time::Month::Jan,  1.5,  0.0,        time::CalType::Julian)
     ];
 
     for date_fields in gregorian_dates.iter() {
@@ -89,7 +89,7 @@ fn weekday_frm_date()
 {
     let date = time::Date {
         year: 1954,
-        month: 6,
+        month: time::Month::June,
         decimal_day: 30.0,
         cal_type: time::CalType::Gregorian
     };
