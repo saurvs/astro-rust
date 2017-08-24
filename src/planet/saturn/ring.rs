@@ -54,6 +54,7 @@ pub fn ascend_node(JC: f64) -> f64 {
 }
 
 /// Holds the elements for the ring system of Saturn
+#[derive(Debug)]
 pub struct Elements {
     /// Saturnicentric latitude of the Earth, referred to the plane
     /// of the ring

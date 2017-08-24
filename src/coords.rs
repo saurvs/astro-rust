@@ -25,6 +25,7 @@ THE SOFTWARE.
 use angle;
 
 /// Represents a point on the geographical surface of the Earth
+#[derive(Debug)]
 pub struct GeographPoint {
     /// Geographical longitude
     pub long: f64,
@@ -42,6 +43,7 @@ impl GeographPoint {
 }
 
 /// Represents a point in the equatorial coordinate system
+#[derive(Debug)]
 pub struct EqPoint {
     /// Right ascension
     pub asc: f64,
@@ -59,6 +61,7 @@ impl EqPoint {
 }
 
 /// Represents a point in the ecliptic coordinate system
+#[derive(Debug)]
 pub struct EclPoint {
     /// Ecliptic longitude
     pub long: f64,

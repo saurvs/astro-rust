@@ -89,6 +89,7 @@ pub fn north_pol_ecl_coords(JC: f64) -> coords::EclPoint {
 }
 
 /// Holds Mar's ephemeris values for physical observations
+#[derive(Debug)]
 pub struct Ephemeris {
     /// Mars-centric declination of the Earth
     pub De: f64,
