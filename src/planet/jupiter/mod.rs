@@ -66,6 +66,7 @@ pub fn pol_semidiameter(jup_earth_dist: f64) -> f64 {
 }
 
 /// Holds Jupiter's ephemeris values for physical observations
+#[derive(Debug)]
 pub struct Ephemeris {
     /// Jupiter-centric declination of the Earth
     pub De : f64,

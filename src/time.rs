@@ -25,6 +25,7 @@ THE SOFTWARE.
 use angle;
 
 /// Represents a calendar type
+#[derive(Debug)]
 pub enum CalType {
     /// Gregorian calendar
     Gregorian,
@@ -33,7 +34,7 @@ pub enum CalType {
 }
 
 /// Represents a month in the Gregorian and Julian calendars
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum Month {
     /// January
     Jan = 1,
@@ -62,6 +63,7 @@ pub enum Month {
 }
 
 /// Represents a date with year, month, decimal day and calendar type
+#[derive(Debug)]
 pub struct Date {
     /// Year
     pub year: i16,
@@ -76,6 +78,7 @@ pub struct Date {
 }
 
 /// Represents a day of a month with hours, minutes and seconds
+#[derive(Debug)]
 pub struct DayOfMonth {
     /// Day of month
     ///
@@ -100,6 +103,7 @@ pub struct DayOfMonth {
 }
 
 /// Represents a day of the week
+#[derive(Debug)]
 pub enum Weekday {
     /// Sunday
     Sunday,
