@@ -255,13 +255,13 @@ Computes equatorial coordinates from ecliptic coordinates
 
 * `$ecl_long`: Ecliptic longitude *| in radians*
 * `$ecl_lat`: Ecliptic latitude *| in radians*
-* `$oblq_eclip`: If `$x` and `$y` are corrected for
+* `$oblq_eclip`: If `$ecl_long` and `$ecl_lat` are corrected for
                      nutation, then *true* obliquity. If not, then
                      *mean* obliquity. *| in radians*
 **/
 #[macro_export]
 macro_rules! eq_frm_ecl {
-    ($ecl_long: expr, $y: expr, $oblq_eclip: expr) => {{
+    ($ecl_long: expr, $ecl_lat: expr, $oblq_eclip: expr) => {{
         (astro::coords::asc_frm_ecl($ecl_long, $ecl_lat, $oblq_eclip),
          astro::coords::dec_frm_ecl($ecl_long, $ecl_lat, $oblq_eclip))
     }};
