@@ -86,13 +86,13 @@ Implemented algorithms include:
 * Find the position of a planet with respect to the Sun
   ```rust
   // the heliocentric point and radius vector of a planet, like Jupiter
-  let (jup_long, jup_lat, rad_vec) = planet::heliocent_pos(&planet::Planet::Jupiter, julian_day);
+  let (jup_long, jup_lat, rad_vec) = planet::heliocent_coords(&planet::Planet::Jupiter, julian_day);
 
   // or neptune
-  let (nep_long, nep_lat, rad_vec) = planet::heliocent_pos(&planet::Planet::Neptune, julian_day);
+  let (nep_long, nep_lat, rad_vec) = planet::heliocent_coords(&planet::Planet::Neptune, julian_day);
 
   // positioning for all the eight planets (and (the dwarf planet) Pluto) is supported
-  let (plut_long, plut_lat, rad_vec) = pluto::heliocent_pos(julian_day);
+  let (plut_long, plut_lat, rad_vec) = pluto::heliocent_coords(julian_day);
   ```
 
 * Find the geodesic distance between two locations on Earth
