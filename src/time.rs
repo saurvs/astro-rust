@@ -121,8 +121,8 @@ pub enum Weekday {
     Saturday,
 }
 
-pub fn weekday_frm_date(date: &Date) -> Weekday
-{
+pub fn weekday_frm_date(date: &Date) -> Weekday {
+
     let date_0UT = Date {
         year: date.year,
         month: date.month,
@@ -153,8 +153,8 @@ pub fn decimal_day(day: &DayOfMonth) -> f64 {
 
     (day.day as f64)
   + (day.hr as f64) / 24.0
-  + (day.min as f64) / 60.0
-  + day.sec / 60.0
+  + (day.min as f64) / (60.0 * 24.0)
+  + day.sec / (60.0 * 60.0 * 24.0)
   - day.time_zone / 24.0
 
 }
