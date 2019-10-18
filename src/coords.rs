@@ -350,7 +350,7 @@ Computes the hour angle from local horizontal coordinates
 **/
 pub fn hr_angl_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
 
-    az.sin().atan2 (
+    - az.sin().atan2 (
         az.cos() * observer_lat.sin()
       + alt.tan() * observer_lat.cos()
     )
@@ -374,7 +374,7 @@ pub fn dec_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
 
     (
         observer_lat.sin() * alt.sin()
-      - observer_lat.cos() * az.cos() * az.cos()
+      + observer_lat.cos() * az.cos() * observer_lat.cos()
     ).asin()
 
 }
