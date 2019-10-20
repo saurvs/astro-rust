@@ -336,6 +336,31 @@ macro_rules! loc_hz_frm_eq {
 }
 
 /**
+Computes the hour angle and declination from local horizontal coordinates
+
+# Returns
+
+* `hour_angle`: Hour angle *| in radians*
+* `dec`: Declination *| in radians*
+
+# Arguments
+
+* `az`: Azimuth *| in radians*
+* `alt`: Altitude *| in radians*
+* `observer_lat`: Observer's geographical latitude *| in radians*
+**/
+pub fn hr_dec_frm_hz(az: f64, alt: f64, observer_lat: f64) -> (f64, f64) {
+    let azc = az.cos();
+    let os = observer_lat.sin();
+    let oc = observer_lat.cos();
+
+    let hr = -az.sin().atan2(azc * os + alt.tan() * os);
+    let dec = (os * alt.sin() + oc * azc * oc).asin();
+
+    (hr, dec)
+}
+
+/**
 Computes the hour angle from local horizontal coordinates
 
 # Returns
@@ -349,12 +374,7 @@ Computes the hour angle from local horizontal coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn hr_angl_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
-
-    az.sin().atan2 (
-        az.cos() * observer_lat.sin()
-      + alt.tan() * observer_lat.cos()
-    )
-
+    hr_dec_frm_hz(az, alt, observer_lat).0
 }
 
 /**
@@ -371,12 +391,7 @@ Computes the declination from local horizontal coordinates
 * `observer_lat`: Observer's geographical latitude *| in radians*
 **/
 pub fn dec_frm_hz(az: f64, alt: f64, observer_lat: f64) -> f64 {
-
-    (
-        observer_lat.sin() * alt.sin()
-      - observer_lat.cos() * az.cos() * az.cos()
-    ).asin()
-
+    hr_dec_frm_hz(az, alt, observer_lat).1
 }
 
 /**
