@@ -80,10 +80,12 @@ The error in `mn_oblq` reaches 1 arcsecond over a period of
 **/
 pub fn mn_oblq_IAU(JD: f64) -> f64
 {
-    let u = time::julian_cent(JD) / 100.0;
+    // The IAU 1980 polynomial (Meeus, eq. 22.2) is in Julian centuries,
+    // not in units of ten thousand years as Laskar's is.
+    let t = time::julian_cent(JD);
 
     Horner_eval!(
-        u,
+        t,
         angle::deg_frm_dms(23, 26, 21.448),
        -angle::deg_frm_dms(0,  0,  46.815),
        -angle::deg_frm_dms(0,  0,  0.00059),

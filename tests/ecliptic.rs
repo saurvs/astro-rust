@@ -35,3 +35,17 @@ fn mn_oblq_Laskar() {
     assert_eq!((d, m, util::round_upto_digits(s, 3)), (23, 26, 27.407));
 
 }
+
+// Meeus, *Astronomical Algorithms*, example 22.a: 1987 April 10, 0h TD.
+// The IAU 1980 formula (22.2), in Julian centuries, gives the same mean
+// obliquity as Laskar's to the milliarcsecond there: 23°26′27.407″.
+#[test]
+fn mn_oblq_IAU() {
+
+    let (d, m, s) = angle::dms_frm_deg (
+        ecliptic::mn_oblq_IAU(2446895.5).to_degrees()
+    );
+
+    assert_eq!((d, m, util::round_upto_digits(s, 3)), (23, 26, 27.407));
+
+}
