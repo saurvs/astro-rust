@@ -12,7 +12,7 @@
 //!   1951–2050;
 //! - [`instant`]: the true instant, found by iterating on the Sun's apparent
 //!   longitude from the complete VSOP87 theory (Meeus, eq. 27.1), within
-//!   about a second for the years −2000 to +6000.
+//!   about a second near the present.
 //!
 //! [`duration`] gives the length of the astronomical seasons.
 //!

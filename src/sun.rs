@@ -186,7 +186,7 @@ pub fn equation_of_center(jde: f64) -> f64 {
 }
 
 /// Longitude of the ascending node of the Moon's mean orbit, the low accuracy
-/// expression used by the corrections of chapter 25 (degrees, unreduced).
+/// expression used by the corrections of chapter 25 (radians, unreduced).
 #[inline]
 fn low_accuracy_omega(t: f64) -> f64 {
     (125.04 - 1934.136 * t).to_radians()
@@ -346,8 +346,9 @@ pub fn low_accuracy_long_to_j2000(long: f64, year: f64) -> f64 {
 pub fn geocent_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
     let (L, B, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
-    // Reduce B to [-π, π) first: planet::heliocent_coords has returned the
-    // latitude reduced to [0, 2π), so a small negative B came back as ~2π.
+    // B is a signed latitude; reducing it to [-π, π) also accepts the
+    // [0, 2π) form returned by older versions of planet::heliocent_coords
+    // (where a small negative B came back as ~2π).
     let ecl_point = coords::EclPoint {
         long: norm_two_pi(L + PI),
         lat: -norm_pi(B),
@@ -558,8 +559,10 @@ pub struct ApparentPosition {
 /// with the IAU formula (eq. 22.2) used in the book's examples to better
 /// than 0.001″ for 1900–2100 and is more accurate far from J2000.0.
 ///
-/// The accuracy is about 0.01″ near the present, limited by the nutation
-/// series; VSOP87 itself is good to about 1″ over −2000 to +6000.
+/// Near the present the result agrees with the book's values from the
+/// complete VSOP87 to 0.01″; the overall accuracy (a few hundredths of an
+/// arcsecond) is limited by the IAU 1980 nutation series. VSOP87 itself is
+/// good to about 1″ over the years −2000 to +6000.
 ///
 /// # Arguments
 ///
