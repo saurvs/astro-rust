@@ -102,16 +102,24 @@ fn polar_unit_semidiameter() -> f64 {
     angle::deg_frm_dms(0, 0, 73.82).to_radians()
 }
 
-/// Computes Saturn's polar semidiameter
+/// Computes Saturn's apparent polar semidiameter
+///
+/// Because Saturn's axis is tilted towards or away from the Earth, the
+/// apparent polar semidiameter is `s_p = s_e sqrt(1 - k cos²B)`, with
+/// `s_e = a / Δ`, `k = 1 - (b/a)² = 0.203800` and the unit-distance
+/// semidiameters `a = 82.73″`, `b = 73.82″` (Meeus, *Astronomical
+/// Algorithms*, 2nd ed., chapter 55). It equals `b / Δ` when the Earth is
+/// in the ring plane (`B = 0`) and `a / Δ` when a pole faces the Earth.
 ///
 /// # Returns
 ///
-/// * `pol_semidiameter`: Polar semidiameter *| in radians per AU*
+/// * `pol_semidiameter`: Apparent polar semidiameter *| in radians*
 ///
 /// # Arguments
 ///
 /// * `saturn_earth_dist`: Saturn-Earth distance *| in AU*
-/// * `earth_lat`        : Saturnicentric latitude of Earth *| in radians*
+/// * `earth_lat`        : Saturnicentric latitude of the Earth `B`
+///   *| in radians* (see chapter 45, `saturn::ring`)
 pub fn pol_semidiameter(saturn_earth_dist: f64, earth_lat: f64) -> f64 {
     let a = equatorial_unit_semidiameter();
     let b = polar_unit_semidiameter();
@@ -120,11 +128,13 @@ pub fn pol_semidiameter(saturn_earth_dist: f64, earth_lat: f64) -> f64 {
     (a / saturn_earth_dist) * (1.0 - k * earth_lat.cos().powi(2)).sqrt()
 }
 
-/// Computes Saturn's equatorial semidiameter
+/// Computes Saturn's apparent equatorial semidiameter
+///
+/// `82.73″ / Δ` (Meeus, chapter 55).
 ///
 /// # Returns
 ///
-/// * `eq_semidiameter`: Equatorial semidiameter *| in radians per AU*
+/// * `eq_semidiameter`: Equatorial semidiameter *| in radians*
 ///
 /// # Arguments
 ///

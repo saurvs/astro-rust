@@ -187,16 +187,39 @@ pub fn pos_angle_of_bright_limb(
     }
 }
 
-/// Computes a planet's equatorial semidiameter
+/// Computes a planet's apparent equatorial semidiameter
+///
+/// `s = s0 / Δ`, with `s0` the semidiameter at unit distance (Meeus,
+/// *Astronomical Algorithms*, 2nd ed., chapter 55). The `s0` values are
+/// those adopted in the *Astronomical Almanac* for 1984: Mercury 3.36″,
+/// Mars 4.68″, Jupiter 98.44″, Saturn 82.73″, Uranus 35.02″, Neptune
+/// 33.50″; except Venus, for which the older 8.41″ (top of the cloud
+/// layer, as seen from the Earth) is used instead of 8.34″ (the solid
+/// surface), as Meeus recommends for transits and occultations. For the
+/// polar semidiameters of Jupiter and Saturn see
+/// [`jupiter::pol_semidiameter`] and [`saturn::pol_semidiameter`]; for
+/// Pluto see `pluto::semidiameter`.
 ///
 /// # Returns
 ///
-/// * `semidiameter`: Equatorial semidiameter *| in radians*
+/// * `Ok(semidiameter)`: Equatorial semidiameter *| in radians*
+/// * `Err`: if `planet` is `Planet::Earth`
 ///
 /// # Arguments
 ///
 /// * `planet`           : The [Planet](./enum.Planet.html)
 /// * `planet_earth_dist`: Planet-Earth distance *| in AU*
+///
+/// # Example
+///
+/// ```
+/// use astro::planet::{self, Planet};
+///
+/// // Mars at 0.5 AU: 4.68″ / 0.5 = 9.36″
+/// let s = planet::semidiameter(&Planet::Mars, 0.5).unwrap();
+/// assert!((s.to_degrees() * 3600.0 - 9.36).abs() < 1e-9);
+/// assert!(planet::semidiameter(&Planet::Earth, 1.0).is_err());
+/// ```
 pub fn semidiameter<'a>(planet: &Planet, planet_earth_dist: f64) -> Result<f64, &'a str> {
     let s = match *planet {
         Planet::Mercury => angle::deg_frm_dms(0, 0, 3.360).to_radians(),

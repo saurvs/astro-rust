@@ -60,29 +60,14 @@ use crate::angle;
 use crate::time;
 use std::f64::consts::TAU;
 
-/// Computes the geocentric equatorial semidiameter of Pluto
-///
-/// # Returns
-///
-/// * `semidiameter`: Geocentric equatorial semidiameter
-///   *| in radians per AU*
-///
-/// # Arguments
-///
-/// * `pluto_earth_dist`: Pluto-Earth distance *| in AU*
-#[deprecated(since = "3.0.0", note = "misspelt; use `pluto::semidiameter`")]
-#[inline]
-pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
-    semidiameter(pluto_earth_dist)
-}
-
 /// Computes the apparent semidiameter of Pluto
 ///
-/// Uses a semidiameter of 2.07″ at a distance of 1 AU (Meeus, chapter 55).
+/// `2.07″ / Δ`, the value at 1 AU used in Meeus, *Astronomical
+/// Algorithms*, 2nd ed., chapter 55.
 ///
 /// # Returns
 ///
-/// * `semidiameter`: Apparent semidiameter of Pluto *| in radians*
+/// * `semidiameter`: Geocentric semidiameter of Pluto *| in radians*
 ///
 /// # Arguments
 ///
@@ -90,6 +75,13 @@ pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
 #[inline]
 pub fn semidiameter(pluto_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 2.07).to_radians() / pluto_earth_dist
+}
+
+/// Misspelt former name of [`semidiameter`].
+#[deprecated(since = "3.0.0", note = "misspelt; use `pluto::semidiameter`")]
+#[inline]
+pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
+    semidiameter(pluto_earth_dist)
 }
 
 /// Computes the apparent visual magnitude of Pluto

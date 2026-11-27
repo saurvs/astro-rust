@@ -66,14 +66,31 @@ use crate::precess;
 use crate::time;
 use std;
 
-/// Computes the Sun's equatorial semidiameter
+/// Computes the apparent semidiameter of the Sun
+///
+/// `s = s0 / Δ` with the Sun's semidiameter at unit distance
+/// `s0 = 959.63″` (Auwers' value, Meeus, *Astronomical Algorithms*, 2nd
+/// ed., chapter 55).
+///
+/// # Returns
+///
+/// * Semidiameter *| in radians*
 ///
 /// # Arguments
 ///
 /// * `sun_earth_dist`: Sun-Earth distance *| in AU*
+///
+/// # Example
+///
+/// ```
+/// // At 1 AU the Sun's semidiameter is 15′59.63″.
+/// let s = astro::sun::semidiameter(1.0);
+/// assert!((s.to_degrees() * 3600.0 - 959.63).abs() < 1e-9);
+/// ```
 #[inline]
 pub fn semidiameter(sun_earth_dist: f64) -> f64 {
-    angle::deg_frm_dms(0, 0, 959.63) / sun_earth_dist
+    // Bug fix: the value was returned in degrees; the crate uses radians.
+    angle::deg_frm_dms(0, 0, 959.63).to_radians() / sun_earth_dist
 }
 
 // ---------------------------------------------------------------------------

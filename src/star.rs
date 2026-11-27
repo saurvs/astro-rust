@@ -24,31 +24,65 @@ THE SOFTWARE.
 
 /// Computes the combined magnitude of two stars
 ///
+/// The light of the two stars is added: with `x = 0.4 (m2 - m1)`, the
+/// combined magnitude is `m2 - 2.5 log10(10^x + 1)` (Meeus, *Astronomical
+/// Algorithms*, 2nd ed., chapter 56).
+///
 /// # Arguments
 ///
 /// * `m1`: Magnitude of star 1
 /// * `m2`: Magnitude of star 2
+///
+/// # Example
+///
+/// ```
+/// // Castor (α Gem), Meeus example 56.a
+/// let m = astro::star::combined_mag(1.96, 2.89);
+/// assert!((m - 1.58).abs() < 0.005);
+/// ```
 #[inline]
 pub fn combined_mag(m1: f64, m2: f64) -> f64 {
-    m2 - 2.5 * (brightness_ratio(m1, m2) + 1.0)
+    // Bug fix: the logarithm was missing, which gave about -5.5 instead of
+    // 1.58 for example 56.a.
+    m2 - 2.5 * (brightness_ratio(m1, m2) + 1.0).log10()
 }
 
-/// Computes the combined magnitude of two or more stars
+/// Computes the combined magnitude of any number of stars
+///
+/// Returns `-2.5 log10(Σ 10^(-0.4 m_i))` (Meeus, chapter 56). An empty
+/// slice means no light at all and gives `f64::INFINITY`.
 ///
 /// # Arguments
 ///
-/// * `m`: Array of magnitudes of stars
+/// * `m`: Magnitudes of the stars
 pub fn combined_mag_of_many(m: &[f64]) -> f64 {
-    let mut sum = 0.0;
+    let sum: f64 = m.iter().map(|mag| 10_f64.powf(-0.4 * mag)).sum();
 
-    for i in m.iter() {
-        sum += 10_f64.powf(-0.4 * i);
-    }
+    -2.5 * sum.log10()
+}
+
+/// Computes the combined magnitude of groups of stars of equal magnitude,
+/// such as the members of a star cluster binned by magnitude
+///
+/// Each group `(n, m)` contributes `n` stars of magnitude `m`. Returns
+/// `f64::INFINITY` if the groups contain no stars (Meeus, example 56.c).
+///
+/// # Arguments
+///
+/// * `groups`: Pairs of (number of stars, magnitude of each star)
+pub fn combined_mag_of_groups(groups: &[(u32, f64)]) -> f64 {
+    let sum: f64 = groups
+        .iter()
+        .map(|&(n, mag)| f64::from(n) * 10_f64.powf(-0.4 * mag))
+        .sum();
 
     -2.5 * sum.log10()
 }
 
 /// Computes the brightness ratio of two stars
+///
+/// Returns `I1 / I2`, how many times star 1 is brighter than star 2:
+/// `10^(0.4 (m2 - m1))` (Meeus, chapter 56).
 ///
 /// # Arguments
 ///
@@ -59,11 +93,16 @@ pub fn brightness_ratio(m1: f64, m2: f64) -> f64 {
     10.0_f64.powf(0.4 * (m2 - m1))
 }
 
-/// Computes the difference in magnitude of two stars
+/// Computes the difference in magnitude of two stars from their
+/// brightness ratio
+///
+/// Returns `m2 - m1 = 2.5 log10(I1 / I2)`, the inverse of
+/// [`brightness_ratio`] (Meeus, chapter 56). A non-positive ratio gives
+/// NaN or -∞.
 ///
 /// # Arguments
 ///
-/// * `br`: Brightness ratio of two stars
+/// * `br`: Brightness ratio `I1 / I2` of star 1 to star 2
 #[inline]
 pub fn mag_diff(br: f64) -> f64 {
     2.5 * br.log10()
@@ -71,24 +110,51 @@ pub fn mag_diff(br: f64) -> f64 {
 
 /// Computes the absolute magnitude of a star from its parallax
 ///
+/// The absolute magnitude is the apparent magnitude the star would have
+/// at a distance of 10 parsecs: `M = m + 5 + 5 log10(π)`, with the annual
+/// parallax `π` in arcseconds (Meeus, chapter 56). A non-positive
+/// parallax gives NaN or -∞.
+///
 /// # Arguments
 ///
-/// * `par`: Parallax of the star
+/// * `par`: Annual (stellar) parallax of the star *| in radians*
 /// * `am`: Apparent magnitude of the star
 #[inline]
 pub fn abs_mag_frm_parallax(par: f64, am: f64) -> f64 {
     am + 5.0 + 5.0 * (par.to_degrees() * 3600.0).log10()
 }
 
-/// Computes the absolute magnitude of a star from its distance from earth
+/// Computes the absolute magnitude of a star from its distance
+///
+/// `M = m + 5 - 5 log10(d)` (Meeus, chapter 56). A non-positive distance
+/// gives NaN or +∞.
 ///
 /// # Arguments
 ///
-/// * `d`: The star's to earth *(parsecs)*
+/// * `d`: Distance of the star from the Earth *| in parsecs*
 /// * `am`: Apparent magnitude of the star
 #[inline]
 pub fn abs_mag_frm_dist(d: f64, am: f64) -> f64 {
     am + 5.0 - 5.0 * d.log10()
+}
+
+/// Computes the distance of a star from its annual parallax
+///
+/// One parsec is the distance at which the parallax is one arcsecond, so
+/// the distance in parsecs is `1 / π"` (Meeus, chapter 56). Multiply by
+/// [`consts::PARSEC_IN_LIGHT_YEARS`](crate::consts::PARSEC_IN_LIGHT_YEARS)
+/// for light-years. A zero parallax gives `f64::INFINITY`.
+///
+/// # Arguments
+///
+/// * `par`: Annual (stellar) parallax of the star *| in radians*
+///
+/// # Returns
+///
+/// * Distance *| in parsecs*
+#[inline]
+pub fn dist_frm_parallax(par: f64) -> f64 {
+    1.0 / (par.to_degrees() * 3600.0)
 }
 
 /// Computes the angle between a vector from a star to the
