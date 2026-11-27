@@ -419,10 +419,12 @@ fn orb_elements_frm_deg(
 /// chapter 31, table 31.A (from Simon et al. 1994, adjusted by Meeus to
 /// agree with VSOP87). These are *mean* elements: they describe a smoothly
 /// varying reference orbit and leave out the periodic perturbations, so a
-/// position computed from them is only approximate (errors of a few
-/// arcminutes for the inner planets up to about a degree for Jupiter and
-/// Saturn). Use [`heliocent_coords`] for accurate positions. The
-/// polynomials are intended for a few thousand years around J2000.0.
+/// Keplerian position computed from them is only approximate: over
+/// A.D. 1000–3000 it stays within about 0.05° of VSOP87 in longitude for
+/// Mercury to Mars, and within about 1.5° for the giant planets (whose
+/// mutual perturbations are large). Use [`heliocent_coords`] for accurate
+/// positions. The polynomials are intended for a few thousand years
+/// around J2000.0.
 ///
 /// For [`Planet::Earth`] the orbit lies in the ecliptic of date, so the
 /// inclination is zero and the node is undefined; by convention the
