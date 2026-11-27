@@ -231,6 +231,40 @@ fn precess_eq_coords_composes() {
     }
 }
 
+// Precessing directly between two epochs other than J2000.0 must agree
+// with going through J2000.0 (A -> J2000.0 -> B), which only uses the
+// T = 0 form of eq. 21.2. With the wrong signs of the T terms of z and θ
+// the direct route was off by about 1.7" per century of T times t.
+#[test]
+fn precess_eq_coords_between_non_j2000_epochs() {
+    let epochs = [
+        (1900.0, 2100.0),
+        (1744.0, 2300.0),
+        (2150.0, 1850.0),
+        (1600.0, 1700.0),
+    ];
+    let stars = [
+        (0.3, 0.9),
+        (2.0, -0.4),
+        (4.5, 1.2),
+        (6.0, -1.3),
+        (1.0, 1.55),
+    ];
+
+    for (a, b) in epochs {
+        let (ja, jb) = (
+            precess::jd_frm_julian_epoch(a),
+            precess::jd_frm_julian_epoch(b),
+        );
+        for (asc, dec) in stars {
+            let (a1, d1) = precess::precess_eq_coords(asc, dec, ja, jb);
+            let (a0, d0) = precess::precess_eq_coords(asc, dec, ja, precess::J2000);
+            let (a2, d2) = precess::precess_eq_coords(a0, d0, precess::J2000, jb);
+            assert!(sep_asec(a1, d1, a2, d2) < 0.01, "{a} -> {b}: {asc} {dec}");
+        }
+    }
+}
+
 #[test]
 fn precess_eq_coords_round_trip() {
     let JD = precess::jd_frm_julian_epoch(1600.0);
