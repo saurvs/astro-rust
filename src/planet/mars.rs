@@ -124,8 +124,8 @@ pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
 ///
 /// # Returns
 ///
-/// * `ecl_coords`: Ecliptic longitude `λ0` and latitude `β0` of Mars's
-///   north pole *| in radians*
+/// * `ecl_coords`: Ecliptic longitude `λ0`, in `[0, 2π)`, and latitude
+///   `β0` of Mars's north pole *| in radians*
 ///
 /// # Arguments
 ///
@@ -134,7 +134,7 @@ pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
 #[inline(always)]
 pub fn north_pol_ecl_coords(JC: f64) -> coords::EclPoint {
     coords::EclPoint {
-        long: (352.9065 + 1.17330 * JC).to_radians(),
+        long: angle::limit_to_360(352.9065 + 1.17330 * JC).to_radians(),
         lat: (63.28180 - 0.00394 * JC).to_radians(),
     }
 }

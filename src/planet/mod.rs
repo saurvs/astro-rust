@@ -117,7 +117,9 @@ pub fn illum_frac_frm_phase_angl(i: f64) -> f64 {
 ///
 /// # Returns
 ///
-/// * `illum_frac`: Illuminated fraction of the planet's disk
+/// * `illum_frac`: Illuminated fraction of the planet's disk, in `[0, 1]`
+///   (clamped: when the planet is close to opposition or to superior
+///   conjunction, rounding can otherwise put it just above 1)
 ///
 /// # Arguments
 ///
@@ -128,7 +130,7 @@ pub fn illum_frac_frm_phase_angl(i: f64) -> f64 {
 pub fn illum_frac_frm_dist(r: f64, delta: f64, R: f64) -> f64 {
     let x = r + delta;
 
-    (x * x - R * R) / (4.0 * r * delta)
+    ((x * x - R * R) / (4.0 * r * delta)).clamp(0.0, 1.0)
 }
 
 /// Computes a planet's phase angle from its distances to the Sun and the
