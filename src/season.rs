@@ -341,4 +341,17 @@ mod tests {
             assert!((e.solar_longitude() - k as f64 * std::f64::consts::FRAC_PI_2).abs() < 1e-15);
         }
     }
+
+    // Tables 27.A and 27.B meet at the year 1000: both polynomials give the
+    // same mean instants there to within a few seconds.
+    #[test]
+    fn mean_tables_agree_at_year_1000() {
+        for k in 0..4 {
+            let a = &MEAN_BEFORE_1000[k];
+            let b = &MEAN_AFTER_1000[k];
+            let at_a = Horner_eval!(1.0, a[0], a[1], a[2], a[3], a[4]);
+            let at_b = Horner_eval!(-1.0, b[0], b[1], b[2], b[3], b[4]);
+            assert!((at_a - at_b).abs() < 5e-5, "event {k}: {at_a} vs {at_b}");
+        }
+    }
 }

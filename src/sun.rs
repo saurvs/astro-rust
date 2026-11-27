@@ -1193,3 +1193,42 @@ pub fn carrington_rot_start(C: i64) -> f64 {
 
     jde
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn close(a: f64, b: f64, tol: f64) -> bool {
+        (a - b).abs() <= tol
+    }
+
+    #[test]
+    fn normalisation_helpers() {
+        assert_eq!(norm_two_pi(-1e-20), 0.0);
+        assert!(close(norm_two_pi(-0.5), TAU - 0.5, 1e-15));
+        assert!(close(norm_two_pi(7.0 * TAU + 1.0), 1.0, 1e-12));
+        assert!(close(norm_pi(PI + 0.25), -PI + 0.25, 1e-15));
+        assert!(close(norm_pi(-0.25), -0.25, 1e-15));
+        assert_eq!(norm_pi(PI), -PI);
+    }
+
+    // Meeus, example 29.a: θ = 65.8252° and K = 75.6597° on JDE 2448908.50068
+    #[test]
+    fn example_29a_carrington_angles() {
+        let jde = 2448908.50068;
+        assert!(close(carrington_theta(jde).to_degrees(), 65.8252, 5e-5));
+        assert!(close(solar_equator_node(jde).to_degrees(), 75.6597, 5e-5));
+        assert!(close(solar_equator_inclination().to_degrees(), 7.25, 1e-12));
+    }
+
+    // Meeus, example 29.b: M = 235.287° and the correction −0.1225 day
+    #[test]
+    fn example_29b_synodic_rot_terms() {
+        let c: f64 = 1699.0;
+        let m = 281.96 + 26.882476 * c;
+        assert!(close(m.rem_euclid(360.0), 235.287, 5e-4));
+        assert!(close(2398140.2270 + SYNODIC_PERIOD * c, 2444480.8455, 5e-5));
+        let correction = synodic_rot(1699) - (2398140.2270 + SYNODIC_PERIOD * c);
+        assert!(close(correction, -0.1225, 5e-5));
+    }
+}
