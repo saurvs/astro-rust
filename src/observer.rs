@@ -521,7 +521,9 @@ pub fn refracted_altitude(true_alt: f64, pressure: f64, temperature: f64) -> f64
 /// A [`RiseTransitSet`] with the first rise, transit and set in the window
 /// `[jd_start, jd_start + 1)`, each `None` if it did not happen then, and a
 /// status telling whether the body stayed above or below the altitude all
-/// day.
+/// day. Consecutive windows share no events, so iterating over days finds
+/// every event exactly once. Non-finite inputs give no events (and an
+/// unspecified status) rather than a panic.
 ///
 /// # Example
 ///
@@ -691,13 +693,12 @@ enum Track {
     /// Computed afresh at every instant (the Moon).
     Direct(Body),
     /// Interpolated from positions at the start, middle and end of the day
-    /// (the Sun and the planets, whose motion over a day is very smooth).
+    /// (the Sun, the planets and the stars, whose apparent motion over a day
+    /// is very smooth).
     Interpolated {
         mid: f64,
         pos: [ApparentPosition; 3],
     },
-    /// Constant over the day (a star).
-    Fixed(ApparentPosition),
 }
 
 impl Track {
@@ -708,7 +709,6 @@ impl Track {
         };
         match body {
             Body::Moon => Track::Direct(body),
-            Body::Star { .. } => Track::Fixed(pos_at(jd_start + 0.5)),
             _ => Track::Interpolated {
                 mid: jd_start + 0.5,
                 pos: [
@@ -727,7 +727,6 @@ impl Track {
         let nut = Nutation::at(jde);
         let pos = match self {
             Track::Direct(body) => geocentric(*body, jde, &nut),
-            Track::Fixed(pos) => *pos,
             Track::Interpolated { mid, pos } => {
                 let n = (jd_ut - mid) / 0.5;
                 let interp =
@@ -740,7 +739,11 @@ impl Track {
                         a2 + wrap_pi(pos[2].asc - a2),
                     )),
                     dec: interp(pos[0].dec, pos[1].dec, pos[2].dec),
-                    distance: interp(pos[0].distance, pos[1].distance, pos[2].distance),
+                    distance: if pos[1].distance.is_finite() {
+                        interp(pos[0].distance, pos[1].distance, pos[2].distance)
+                    } else {
+                        pos[1].distance
+                    },
                     eq_hz_parallax: interp(
                         pos[0].eq_hz_parallax,
                         pos[1].eq_hz_parallax,
