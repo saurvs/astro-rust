@@ -173,8 +173,8 @@ pub struct LunarEclipse {
 /// Instants of the contacts of a lunar eclipse *| in Julian Ephemeris Days
 /// (TD)*
 ///
-/// The penumbral contacts cannot be observed; they are of theoretical
-/// interest only.
+/// The Moon's entry into and exit from the penumbra are not visible to the
+/// eye; P1 and P4 are computed quantities only.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LunarEclipseContacts {
     /// First contact with the penumbra (P1)

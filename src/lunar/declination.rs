@@ -1,12 +1,14 @@
 //! Maximum declinations of the Moon (Meeus, *Astronomical Algorithms*, 2nd
 //! ed., chapter 52).
 //!
-//! Because the Moon moves roughly along the ecliptic, once every tropical
-//! month (about 27.3 days) it reaches a greatest northern declination and,
-//! about two weeks later, a greatest southern one. Their size varies with
-//! the 18.6-year cycle of the lunar nodes between roughly 18° and 28.6°.
-//! Meeus gives the instants and the values as a mean term plus periodic
-//! terms. The values are *geocentric*, for the centre of the Moon.
+//! The Moon's orbit is inclined by only about 5° to the ecliptic, so its
+//! declination swings between a northern and a southern extreme, about two
+//! weeks apart, in every tropical month (27.3 days). How far it swings
+//! depends on where the nodes of the orbit are in their 18.6-year cycle:
+//! the extremes range from roughly 18° to 28.6°. Meeus expresses both the
+//! instants and the extreme values as a mean term plus periodic terms. The
+//! values refer to the centre of the Moon as seen from the centre of the
+//! Earth (geocentric).
 //!
 //! # Numbering
 //!

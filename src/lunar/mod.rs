@@ -123,10 +123,13 @@ pub fn eq_hz_parllx(earth_moon_dist: f64) -> f64 {
 /// Computes the geocentric semidiameter of the Moon
 ///
 /// Rigorous form `sin s = k sin π`, with `sin π = 6378.14 / Δ` and the
-/// ratio `k = 0.272481` of the Moon's mean radius to the Earth's equatorial
-/// radius (Meeus, *Astronomical Algorithms*, 2nd ed., chapter 55). This is
+/// ratio `k = 0.272481` ([`MOON_EARTH_RADIUS_RATIO`]) of the Moon's mean
+/// radius to the Earth's equatorial radius (Meeus, *Astronomical
+/// Algorithms*, 2nd ed., chapter 55). This is
 /// the semidiameter seen from the center of the Earth; see
 /// [`topocent_semidiameter`] for an observer on the surface.
+///
+/// [`MOON_EARTH_RADIUS_RATIO`]: crate::consts::MOON_EARTH_RADIUS_RATIO
 ///
 /// # Returns
 ///
@@ -149,7 +152,7 @@ pub fn eq_hz_parllx(earth_moon_dist: f64) -> f64 {
 pub fn semidiameter(earth_moon_dist: f64) -> f64 {
     // Bug fix: returned sin s instead of s (about 0.003″ too small) and was
     // documented as "radians per kilometer".
-    (0.272481 * eq_hz_parllx(earth_moon_dist).sin()).asin()
+    (crate::consts::MOON_EARTH_RADIUS_RATIO * eq_hz_parllx(earth_moon_dist).sin()).asin()
 }
 
 /// Computes the topocentric semidiameter of the Moon (rigorous)
