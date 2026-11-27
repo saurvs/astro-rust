@@ -182,7 +182,7 @@ fn ranges_far_from_present() {
         for d in 0..40 {
             let t = jde + 9.0 * d as f64;
             let e = sun::physical_ephemeris(t);
-            let eps = sun::apparent_position(t).true_obliquity;
+            let eps = sun::apparent_position(t).true_oblq;
             assert!(e.axis_position_angle.abs() <= eps + 7.25_f64.to_radians());
             assert!(e.center_helio_lat.abs() < 7.26_f64.to_radians());
             assert!((0.0..TAU).contains(&e.center_helio_long));

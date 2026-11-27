@@ -51,8 +51,8 @@ THE SOFTWARE.
 //! let pos = sun::apparent_position(2448908.5);
 //!
 //! // apparent right ascension 13h13m30.75s, declination -7°47'01.7"
-//! let ra_hours = pos.right_ascension.to_degrees() / 15.0;
-//! let dec_deg = pos.declination.to_degrees();
+//! let ra_hours = pos.asc.to_degrees() / 15.0;
+//! let dec_deg = pos.dec.to_degrees();
 //! assert!((ra_hours - 13.225208).abs() < 1e-5);
 //! assert!((dec_deg + 7.783817).abs() < 1e-5);
 //! ```
@@ -536,30 +536,30 @@ pub fn aberration_in_longitude(jde: f64, sun_earth_dist: f64) -> f64 {
 pub struct ApparentPosition {
     /// True geometric longitude `☉`, FK5, mean equinox of the date
     /// *| in radians*, in `[0, 2π)`
-    pub geometric_longitude: f64,
+    pub geomet_long: f64,
     /// Latitude `β`, FK5 *| in radians*. The apparent and the geometric
     /// latitudes of the Sun are equal to the precision of the theory.
-    pub latitude: f64,
+    pub lat: f64,
     /// Sun-Earth distance `R` *| in AU*
-    pub radius_vector: f64,
+    pub rad_vec: f64,
     /// Nutation in longitude `Δψ` *| in radians*
-    pub nutation_in_longitude: f64,
+    pub nut_long: f64,
     /// Nutation in obliquity `Δε` *| in radians*
-    pub nutation_in_obliquity: f64,
+    pub nut_oblq: f64,
     /// Aberration in longitude *| in radians* (eq. 25.11, about −20.5″)
-    pub aberration: f64,
+    pub aberr: f64,
     /// Mean obliquity of the ecliptic `ε0` *| in radians* (Laskar,
     /// eq. 22.3)
-    pub mean_obliquity: f64,
+    pub mn_oblq: f64,
     /// True obliquity of the ecliptic `ε = ε0 + Δε` *| in radians*
-    pub true_obliquity: f64,
+    pub true_oblq: f64,
     /// Apparent longitude `λ = ☉ + Δψ + aberration`, true equinox of the
     /// date *| in radians*, in `[0, 2π)`
-    pub apparent_longitude: f64,
+    pub apprnt_long: f64,
     /// Apparent right ascension `α` *| in radians*, in `[0, 2π)`
-    pub right_ascension: f64,
+    pub asc: f64,
     /// Apparent declination `δ` *| in radians*, in `[-π/2, π/2]`
-    pub declination: f64,
+    pub dec: f64,
 }
 
 /// Computes the Sun's apparent geocentric position with high accuracy
@@ -594,10 +594,10 @@ pub struct ApparentPosition {
 /// // with the complete VSOP87 theory.
 /// let pos = sun::apparent_position(2448908.5);
 ///
-/// let lambda = pos.apparent_longitude.to_degrees();
+/// let lambda = pos.apprnt_long.to_degrees();
 /// assert!((lambda - (199.0 + 54.0 / 60.0 + 21.56 / 3600.0)).abs() < 0.02 / 3600.0);
-/// assert!((pos.latitude.to_degrees() * 3600.0 - 0.72).abs() < 0.01);
-/// assert!((pos.radius_vector - 0.99760853).abs() < 2e-8);
+/// assert!((pos.lat.to_degrees() * 3600.0 - 0.72).abs() < 0.01);
+/// assert!((pos.rad_vec - 0.99760853).abs() < 2e-8);
 /// ```
 pub fn apparent_position(jde: f64) -> ApparentPosition {
     let (geo, radius_vector) = geocent_ecl_pos_fk5(jde);
@@ -617,17 +617,17 @@ pub fn apparent_position(jde: f64) -> ApparentPosition {
     let declination = coords::dec_frm_ecl(apparent_longitude, geo.lat, true_obliquity);
 
     ApparentPosition {
-        geometric_longitude: geo.long,
-        latitude: geo.lat,
-        radius_vector,
-        nutation_in_longitude,
-        nutation_in_obliquity,
-        aberration,
-        mean_obliquity,
-        true_obliquity,
-        apparent_longitude,
-        right_ascension,
-        declination,
+        geomet_long: geo.long,
+        lat: geo.lat,
+        rad_vec: radius_vector,
+        nut_long: nutation_in_longitude,
+        nut_oblq: nutation_in_obliquity,
+        aberr: aberration,
+        mn_oblq: mean_obliquity,
+        true_oblq: true_obliquity,
+        apprnt_long: apparent_longitude,
+        asc: right_ascension,
+        dec: declination,
     }
 }
 
@@ -649,8 +649,8 @@ pub fn apparent_eq_point(jde: f64) -> coords::EqPoint {
     let pos = apparent_position(jde);
 
     coords::EqPoint {
-        asc: pos.right_ascension,
-        dec: pos.declination,
+        asc: pos.asc,
+        dec: pos.dec,
     }
 }
 
@@ -987,12 +987,7 @@ pub fn mean_longitude_vsop87(jde: f64) -> f64 {
 pub fn equation_of_time(jde: f64) -> f64 {
     let pos = apparent_position(jde);
 
-    planet::earth::equation_of_time(
-        jde,
-        pos.right_ascension,
-        pos.nutation_in_longitude,
-        pos.true_obliquity,
-    )
+    planet::earth::equation_of_time(jde, pos.asc, pos.nut_long, pos.true_oblq)
 }
 
 /// Computes the equation of time with Smart's formula (Meeus, eq. 28.3)
@@ -1143,10 +1138,10 @@ pub struct PhysicalEphemeris {
 /// ```
 pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
     let pos = apparent_position(jde);
-    let app_long = pos.geometric_longitude + pos.aberration;
-    let app_long_with_nut = app_long + pos.nutation_in_longitude;
+    let app_long = pos.geomet_long + pos.aberr;
+    let app_long_with_nut = app_long + pos.nut_long;
 
-    let (p, b0, l0) = ephemeris(jde, app_long, app_long_with_nut, pos.true_obliquity);
+    let (p, b0, l0) = ephemeris(jde, app_long, app_long_with_nut, pos.true_oblq);
 
     PhysicalEphemeris {
         axis_position_angle: p,

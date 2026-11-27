@@ -53,12 +53,8 @@ fn example_27b_first_iteration() {
     let jde0 = 2437837.38589;
     let p = sun::apparent_position(jde0);
 
-    assert_close(p.radius_vector, 1.0163018, 1e-6);
-    assert_close(
-        p.nutation_in_longitude.to_degrees() * 3600.0,
-        -12.965,
-        0.0005,
-    );
+    assert_close(p.rad_vec, 1.0163018, 1e-6);
+    assert_close(p.nut_long.to_degrees() * 3600.0, -12.965, 0.0005);
     // aberration by eq. 25.10 for this R
     assert_close(
         aberr::sol_aberr(1.0163018).to_degrees() * 3600.0,
@@ -66,8 +62,8 @@ fn example_27b_first_iteration() {
         0.0005,
     );
 
-    assert_close_deg(p.apparent_longitude.to_degrees(), 89.994045, 0.0001);
-    let correction = 58.0 * (PI / 2.0 - p.apparent_longitude).sin();
+    assert_close_deg(p.apprnt_long.to_degrees(), 89.994045, 0.0001);
+    let correction = 58.0 * (PI / 2.0 - p.apprnt_long).sin();
     assert_close(correction, 0.00603, 0.00005);
 }
 
@@ -89,7 +85,7 @@ fn apparent_longitude_at_instant() {
     for year in [-1500, -500, 0, 1000, 1582, 1962, 2000, 2024, 3000, 5000] {
         for e in Event::ALL {
             let jde = season::instant(year, e);
-            let lambda = sun::apparent_position(jde).apparent_longitude;
+            let lambda = sun::apparent_position(jde).apprnt_long;
             assert!(
                 wrap_pi(lambda - e.solar_longitude()).abs() < arcsec(0.01).to_radians(),
                 "{year} {e:?}: λ = {}°",

@@ -264,7 +264,7 @@ pub fn instant(year: i32, event: Event) -> f64 {
     let mut jde = approx_instant(year, event);
 
     for _ in 0..20 {
-        let lambda = sun::apparent_position(jde).apparent_longitude;
+        let lambda = sun::apparent_position(jde).apprnt_long;
         let correction = 58.0 * (target - lambda).sin();
         jde += correction;
         if correction.abs() < 1e-7 {

@@ -134,44 +134,32 @@ fn apparent_position_complete_vsop87() {
     let p = sun::apparent_position(JDE_1992_OCT_13);
 
     assert_close_deg(
-        deg(p.geometric_longitude),
+        deg(p.geomet_long),
         dms(false, 199, 54, 26.18),
         arcsec(0.006),
     );
     assert_close_deg(
-        deg(p.apparent_longitude),
+        deg(p.apprnt_long),
         dms(false, 199, 54, 21.56),
         arcsec(0.006),
     );
-    assert_close(deg(p.latitude) * 3600.0, 0.72, 0.005);
-    assert_close(p.radius_vector, 0.99760853, 1.5e-8);
-    assert_close_deg(
-        deg(p.right_ascension),
-        hms(13, 13, 30.749),
-        0.0006 * 15.0 / 3600.0,
-    );
-    assert_close(deg(p.declination), dms(true, 7, 47, 1.74), arcsec(0.006));
+    assert_close(deg(p.lat) * 3600.0, 0.72, 0.005);
+    assert_close(p.rad_vec, 0.99760853, 1.5e-8);
+    assert_close_deg(deg(p.asc), hms(13, 13, 30.749), 0.0006 * 15.0 / 3600.0);
+    assert_close(deg(p.dec), dms(true, 7, 47, 1.74), arcsec(0.006));
 
     // nutation and obliquity as in example 25.b
-    assert_close(deg(p.nutation_in_longitude) * 3600.0, 15.908, 0.0005);
-    assert_close(deg(p.nutation_in_obliquity) * 3600.0, -0.308, 0.0005);
-    assert_close(deg(p.true_obliquity), 23.4401443, 5e-7);
-    assert_close(
-        p.true_obliquity,
-        p.mean_obliquity + p.nutation_in_obliquity,
-        1e-15,
-    );
+    assert_close(deg(p.nut_long) * 3600.0, 15.908, 0.0005);
+    assert_close(deg(p.nut_oblq) * 3600.0, -0.308, 0.0005);
+    assert_close(deg(p.true_oblq), 23.4401443, 5e-7);
+    assert_close(p.true_oblq, p.mn_oblq + p.nut_oblq, 1e-15);
 
     // λ = ☉ + Δψ + aberration
-    assert_close_rad(
-        p.apparent_longitude,
-        p.geometric_longitude + p.nutation_in_longitude + p.aberration,
-        1e-15,
-    );
+    assert_close_rad(p.apprnt_long, p.geomet_long + p.nut_long + p.aberr, 1e-15);
 
     let eq = sun::apparent_eq_point(JDE_1992_OCT_13);
-    assert_eq!(eq.asc, p.right_ascension);
-    assert_eq!(eq.dec, p.declination);
+    assert_eq!(eq.asc, p.asc);
+    assert_eq!(eq.dec, p.dec);
 }
 
 // Bug: geocent_ecl_pos returned a latitude of about 2π instead of a small
@@ -234,12 +222,12 @@ fn low_accuracy_vs_vsop87() {
             let jde = jd0 + 10.0 * i as f64;
             let lo = sun::low_accuracy_position(jde);
             let hi = sun::apparent_position(jde);
-            assert_close_deg(deg(lo.apparent_longitude), deg(hi.apparent_longitude), tol);
-            assert_close(lo.radius_vector, hi.radius_vector, 1e-4);
+            assert_close_deg(deg(lo.apparent_longitude), deg(hi.apprnt_long), tol);
+            assert_close(lo.radius_vector, hi.rad_vec, 1e-4);
 
             let eq_lo = sun::low_accuracy_apparent_eq_point(jde);
-            assert_close_deg(deg(eq_lo.asc), deg(hi.right_ascension), 1.2 * tol);
-            assert_close(deg(eq_lo.dec), deg(hi.declination), tol);
+            assert_close_deg(deg(eq_lo.asc), deg(hi.asc), 1.2 * tol);
+            assert_close(deg(eq_lo.dec), deg(hi.dec), tol);
         }
     }
 }
@@ -328,10 +316,10 @@ fn right_ascension_quadrant() {
     for i in 0..400 {
         let jde = 2451545.0 + 0.913 * i as f64;
         let p = sun::apparent_position(jde);
-        assert!((0.0..TAU).contains(&p.right_ascension));
-        assert!((0.0..TAU).contains(&p.apparent_longitude));
-        assert!(wrap_pi(p.right_ascension - p.apparent_longitude).abs() < 2.5_f64.to_radians());
-        assert!(p.declination.abs() <= p.true_obliquity + 1e-6);
+        assert!((0.0..TAU).contains(&p.asc));
+        assert!((0.0..TAU).contains(&p.apprnt_long));
+        assert!(wrap_pi(p.asc - p.apprnt_long).abs() < 2.5_f64.to_radians());
+        assert!(p.dec.abs() <= p.true_oblq + 1e-6);
     }
 }
 
@@ -342,10 +330,10 @@ fn ancient_and_future_dates() {
     // -1000 January 1 (Julian), 1000, 1582 October 4, 3000, 6000
     for jde in [1355807.5, 2086307.5, 2299159.5, 2816787.5, 3912521.5] {
         let p = sun::apparent_position(jde);
-        assert!((0.0..TAU).contains(&p.apparent_longitude));
-        assert!((0.0..TAU).contains(&p.right_ascension));
-        assert!(p.latitude.abs() < arcsec(1.5).to_radians());
-        assert!((0.98..1.02).contains(&p.radius_vector));
+        assert!((0.0..TAU).contains(&p.apprnt_long));
+        assert!((0.0..TAU).contains(&p.asc));
+        assert!(p.lat.abs() < arcsec(1.5).to_radians());
+        assert!((0.98..1.02).contains(&p.rad_vec));
 
         let lo = sun::low_accuracy_position(jde);
         assert!((0.0..TAU).contains(&lo.apparent_longitude));

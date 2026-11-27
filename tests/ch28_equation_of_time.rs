@@ -67,14 +67,9 @@ fn wraps_near_march_equinox() {
     // 2000 March 21.0 TD
     let jde = 2451624.5;
     let pos = sun::apparent_position(jde);
-    assert!(pos.right_ascension.to_degrees() < 1.0);
+    assert!(pos.asc.to_degrees() < 1.0);
 
-    let e = planet::earth::equation_of_time(
-        jde,
-        pos.right_ascension,
-        pos.nutation_in_longitude,
-        pos.true_obliquity,
-    );
+    let e = planet::earth::equation_of_time(jde, pos.asc, pos.nut_long, pos.true_oblq);
     assert_close(minutes(e), -7.23, 0.01);
     assert_eq!(e, sun::equation_of_time(jde));
 

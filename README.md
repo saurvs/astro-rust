@@ -92,7 +92,7 @@ use astro::{lunar, planet, sun};
 
 // Apparent geocentric positions; JDE is a Julian Ephemeris Day (TT)
 let sun = sun::apparent_position(2448908.5); // 1992 October 13.0 TD
-assert!((sun.right_ascension.to_degrees() - 198.378).abs() < 0.01);
+assert!((sun.asc.to_degrees() - 198.378).abs() < 0.01);
 
 let moon = lunar::apparent_position(2448724.5); // 1992 April 12.0 TD
 assert!((moon.asc.to_degrees() - 134.688).abs() < 0.001);
