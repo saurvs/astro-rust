@@ -96,7 +96,7 @@ fn phases() {
     let date_last_quarter = time::Date {
         year: 2044,
         month: time::Month::Jan,
-        decimal_day: 0.0,
+        decimal_day: 15.0,
         cal_type: time::CalType::Gregorian,
     };
     let JD_last_quarter = lunar::time_of_phase(&date_last_quarter, &lunar::Phase::Last);
@@ -105,7 +105,7 @@ fn phases() {
     let date_new_moon = time::Date {
         year: 1977,
         month: time::Month::Feb,
-        decimal_day: 0.0,
+        decimal_day: 15.0,
         cal_type: time::CalType::Gregorian,
     };
     let JD_new_moon = lunar::time_of_phase(&date_new_moon, &lunar::Phase::New);
