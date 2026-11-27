@@ -11,7 +11,7 @@ documentation = "https://docs.rs/astro"
 description = "Advanced algorithms for astronomy"
 keywords = ["astronomy", "algorithms", "ephemeris", "planet", "solar"]
 categories = ["science", "mathematics", "algorithms"]
-exclude = ["/.github", "/progress"]
+exclude = ["/.github"]
 
 [dependencies]
 
