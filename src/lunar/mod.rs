@@ -315,6 +315,16 @@ pub fn topocent_libr_by_diff_corrections(
 /// # Arguments
 ///
 /// * `JD`: Julian Ephemeris Day (TD)
+///
+/// # Example
+///
+/// ```
+/// // Meeus, example 47.a: 1992 April 12, 0h TD
+/// let (moon, dist) = astro::lunar::geocent_ecl_pos(2448724.5);
+/// assert!((moon.long.to_degrees() - 133.162655).abs() < 1e-6);
+/// assert!((moon.lat.to_degrees() - -3.229126).abs() < 1e-6);
+/// assert!((dist - 368409.7).abs() < 0.1);
+/// ```
 pub fn geocent_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
     let p = position::geocentric_position(JD);
 
@@ -482,6 +492,7 @@ pub fn illum_frac_frm_ecl_coords(
         earth_sun_dist,
     )
 }
+
 #[inline]
 fn illuminated_frac(moon_geocent_elong: f64, earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
     let i = (earth_sun_dist * moon_geocent_elong.sin())
