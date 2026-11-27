@@ -466,3 +466,36 @@ fn parallax_in_alt() {
         );
     }
 }
+
+// An observer east of Greenwich has a negative longitude, so the hour
+// angle is θ0 + |L| − α. Check the convenience function against the vector
+// method for Sydney (151°12' E, 33°52' S, 58 m).
+#[test]
+fn topocent_eq_coords_eastern_southern_observer() {
+    let observer = coords::GeographPoint {
+        long: rad(-dms(false, 151, 12, 0.0)),
+        lat: rad(-dms(false, 33, 52, 0.0)),
+    };
+    let eq_point = coords::EqPoint {
+        asc: rad(250.0),
+        dec: rad(-20.0),
+    };
+    let theta0 = rad(80.0);
+    let p = rad(0.93);
+    let topo = parallax::topocent_eq_coords(&eq_point, p, &observer, 58.0, theta0);
+
+    let h = theta0 + rad(dms(false, 151, 12, 0.0)) - eq_point.asc;
+    let (rho_sin, rho_cos) = planet::earth::rho_sin_cos_phi(observer.lat, 58.0);
+    assert!(rho_sin < 0.0);
+    let (asc_v, dec_v, _) = topocent_by_vectors(eq_point.asc, eq_point.dec, h, p, rho_sin, rho_cos);
+    assert_close_rad(topo.asc, asc_v, 1e-11);
+    assert_close(topo.dec, dec_v, 1e-11);
+    // H = 80° + 151.2° − 250° ≈ −18.8°: the body is east of the meridian,
+    // so the parallax increases its right ascension (Δα > 0); it lies north
+    // of this southern observer's zenith, so it is displaced further north
+    // (Δδ > 0).
+    let t = parallax::topocent_eq(eq_point.asc, eq_point.dec, h, p, rho_sin, rho_cos);
+    assert_close(h.to_degrees(), -18.8, 1e-9);
+    assert!(t.del_asc > 0.0);
+    assert!(t.del_dec > 0.0);
+}

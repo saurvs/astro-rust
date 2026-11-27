@@ -601,11 +601,11 @@ pub fn heliocent_coords_frm_orb_elements(i: f64, sigma: f64, w: f64, v: f64, r: 
 /// Computes a planet's apparent visual magnitude using G. Müller's
 /// formulae
 ///
-/// The expressions based on Müller's observations of 1877–1891 (Meeus,
-/// chapter 41): `m = m0 + 5 log10(r Δ) + f(i)`. The phase term `f` is
-/// evaluated with the phase angle in degrees; for Jupiter, Uranus and
-/// Neptune it is ignored. The results should not be quoted to better than
-/// about 0.1 magnitude.
+/// Müller derived these expressions from his observations of 1877–1891
+/// (Meeus, chapter 41): `m = m0 + 5 log10(r Δ) + f(i)`. The phase term `f`
+/// is evaluated with the phase angle in degrees; Jupiter, Uranus and
+/// Neptune have none. Do not quote the result to better than about 0.1
+/// magnitude.
 ///
 /// # Returns
 ///
