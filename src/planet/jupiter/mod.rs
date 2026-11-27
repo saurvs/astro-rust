@@ -29,11 +29,13 @@ use crate::coords;
 use crate::nutation;
 use crate::planet;
 
-/// Computes Jupiter's equatorial semidiameter
+/// Computes Jupiter's apparent equatorial semidiameter
+///
+/// `98.44″ / Δ` (Meeus, *Astronomical Algorithms*, 2nd ed., chapter 55).
 ///
 /// # Returns
 ///
-/// * `eq_semidia`: Equatorial semidiameter *| in radians per AU*
+/// * `eq_semidia`: Equatorial semidiameter *| in radians*
 ///
 /// # Arguments
 ///
@@ -45,9 +47,14 @@ pub fn eq_semidiameter(jup_earth_dist: f64) -> f64 {
 
 /// Computes Jupiter's polar semidiameter
 ///
+/// `92.06″ / Δ`, the true polar semidiameter at distance Δ (Meeus,
+/// chapter 55). Because the Jovicentric latitude of the Earth never
+/// exceeds about 4°, this is also the apparent polar semidiameter to good
+/// accuracy; [`apprnt_pol_semidiameter`] gives the rigorous value.
+///
 /// # Returns
 ///
-/// * `pol_semidia`: Polar semidiameter *| in radians per AU*
+/// * `pol_semidia`: Polar semidiameter *| in radians*
 ///
 /// # Arguments
 ///
@@ -55,6 +62,31 @@ pub fn eq_semidiameter(jup_earth_dist: f64) -> f64 {
 #[inline(always)]
 pub fn pol_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 92.06).to_radians() / jup_earth_dist
+}
+
+/// Computes Jupiter's apparent polar semidiameter, allowing for the tilt
+/// of its axis towards the Earth
+///
+/// `s_p = s_e sqrt(1 - k cos²D_E)` with `k = 1 - (b/a)²`, the same
+/// procedure Meeus gives for Saturn (chapter 55). It is between
+/// [`pol_semidiameter`] (axis in the sky plane) and [`eq_semidiameter`]
+/// (pole facing the Earth).
+///
+/// # Returns
+///
+/// * Apparent polar semidiameter *| in radians*
+///
+/// # Arguments
+///
+/// * `jup_earth_dist`: Jupiter-Earth distance *| in AU*
+/// * `earth_lat`     : Jovicentric declination of the Earth `D_E`
+///   *| in radians* (see `Ephemeris::De`)
+pub fn apprnt_pol_semidiameter(jup_earth_dist: f64, earth_lat: f64) -> f64 {
+    let a = eq_semidiameter(1.0);
+    let b = pol_semidiameter(1.0);
+    let k = 1.0 - (b / a).powi(2);
+
+    (a / jup_earth_dist) * (1.0 - k * earth_lat.cos().powi(2)).sqrt()
 }
 
 /// Holds Jupiter's ephemeris values for physical observations

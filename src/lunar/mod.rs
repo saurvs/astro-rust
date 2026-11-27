@@ -44,19 +44,104 @@ pub fn eq_hz_parllx(earth_moon_dist: f64) -> f64 {
     (6378.14 / earth_moon_dist).asin()
 }
 
-/// Computes the equatorial semidiameter of the Moon
+/// Computes the geocentric semidiameter of the Moon
+///
+/// Rigorous form `sin s = k sin π`, with `sin π = 6378.14 / Δ` and the
+/// ratio `k = 0.272481` of the Moon's mean radius to the Earth's equatorial
+/// radius (Meeus, *Astronomical Algorithms*, 2nd ed., chapter 55). This is
+/// the semidiameter seen from the center of the Earth; see
+/// [`topocent_semidiameter`] for an observer on the surface.
 ///
 /// # Returns
 ///
-/// * `eq_semidiameter`: Geocentric equatorial semidiameter
-///   *| in radians per kilometers*
+/// * Geocentric semidiameter *| in radians*
 ///
 /// # Arguments
 ///
-/// * `earth_moon_dist`: Earth-Moon distance *| in kilometers*
+/// * `earth_moon_dist`: Distance between the centers of the Earth and the
+///   Moon *| in kilometers*
+///
+/// # Example
+///
+/// ```
+/// // At the mean distance of 384 400 km the Moon's semidiameter is
+/// // about 932.55″ (Meeus' approximation: 358 473 400″ km / Δ).
+/// let s = astro::lunar::semidiameter(384_400.0);
+/// assert!((s.to_degrees() * 3600.0 - 358_473_400.0 / 384_400.0).abs() < 0.0005);
+/// ```
 #[inline]
 pub fn semidiameter(earth_moon_dist: f64) -> f64 {
-    0.272481 * eq_hz_parllx(earth_moon_dist).sin()
+    // Bug fix: returned sin s instead of s (about 0.003″ too small) and was
+    // documented as "radians per kilometer".
+    (0.272481 * eq_hz_parllx(earth_moon_dist).sin()).asin()
+}
+
+/// Computes the topocentric semidiameter of the Moon (rigorous)
+///
+/// An observer on the Earth's surface is nearer to the Moon than the
+/// Earth's center (unless the Moon is on the horizon), so the Moon looks
+/// slightly larger. With `q = Δ′ / Δ` the ratio of topocentric to
+/// geocentric distance, `sin s′ = sin s / q` (Meeus, chapter 55), where `q`
+/// is found from the geocentric hour angle and declination as in Meeus'
+/// eq. 40.6 and 40.7.
+///
+/// # Returns
+///
+/// * Topocentric semidiameter *| in radians*
+///
+/// # Arguments
+///
+/// * `geocent_semidia`   : Geocentric semidiameter of the Moon
+///   *| in radians* (eg: from [`semidiameter`])
+/// * `eq_hz_parllx`      : Equatorial horizontal parallax of the Moon
+///   *| in radians* (eg: from [`eq_hz_parllx`])
+/// * `geocent_dec`       : Geocentric declination of the Moon
+///   *| in radians*
+/// * `geocent_hour_angle`: Geocentric hour angle of the Moon, measured
+///   westwards from the observer's meridian *| in radians*
+/// * `rho_sin_phi`       : `ρ sin φ′` of the observer, in Earth equatorial
+///   radii (eg: from `planet::earth::rho_sin_cos_phi`)
+/// * `rho_cos_phi`       : `ρ cos φ′` of the observer, in Earth equatorial
+///   radii
+pub fn topocent_semidiameter(
+    geocent_semidia: f64,
+    eq_hz_parllx: f64,
+    geocent_dec: f64,
+    geocent_hour_angle: f64,
+    rho_sin_phi: f64,
+    rho_cos_phi: f64,
+) -> f64 {
+    let sin_pi = eq_hz_parllx.sin();
+    let a = geocent_dec.cos() * geocent_hour_angle.sin();
+    let b = geocent_dec.cos() * geocent_hour_angle.cos() - rho_cos_phi * sin_pi;
+    let c = geocent_dec.sin() - rho_sin_phi * sin_pi;
+    let q = (a * a + b * b + c * c).sqrt();
+
+    (geocent_semidia.sin() / q).asin()
+}
+
+/// Computes the topocentric semidiameter of the Moon from its altitude
+/// (approximate)
+///
+/// `s′ ≈ s (1 + sin h sin π)` (Meeus, chapter 55). The increase is zero
+/// with the Moon on the horizon and 14″ to 18″ at the zenith. The error
+/// is a small fraction of an arcsecond; use [`topocent_semidiameter`] for
+/// the rigorous value.
+///
+/// # Returns
+///
+/// * Topocentric semidiameter *| in radians*
+///
+/// # Arguments
+///
+/// * `geocent_semidia`: Geocentric semidiameter of the Moon *| in radians*
+/// * `eq_hz_parllx`   : Equatorial horizontal parallax of the Moon
+///   *| in radians*
+/// * `alt`            : Altitude of the Moon above the observer's horizon
+///   *| in radians*
+#[inline]
+pub fn topocent_semidiameter_frm_alt(geocent_semidia: f64, eq_hz_parllx: f64, alt: f64) -> f64 {
+    geocent_semidia * (1.0 + alt.sin() * eq_hz_parllx.sin())
 }
 
 /// Computes the inclination of the mean lunar equator with the

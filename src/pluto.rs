@@ -25,19 +25,29 @@ THE SOFTWARE.
 use crate::angle;
 use crate::time;
 
-/// Computes the geocentric equatorial semidiameter of Pluto
+/// Computes the apparent semidiameter of Pluto
+///
+/// `2.07″ / Δ` (Meeus, *Astronomical Algorithms*, 2nd ed., chapter 55).
 ///
 /// # Returns
 ///
-/// * `semidiameter`: Geocentric equatorial semidiameter
-///   *| in radians per AU*
+/// * `semidiameter`: Geocentric semidiameter *| in radians*
 ///
 /// # Arguments
 ///
 /// * `pluto_earth_dist`: Pluto-Earth distance *| in AU*
 #[inline]
-pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
+pub fn semidiameter(pluto_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 2.07).to_radians() / pluto_earth_dist
+}
+
+/// Computes the apparent semidiameter of Pluto
+///
+/// Misspelt former name of [`semidiameter`].
+#[deprecated(note = "renamed to `pluto::semidiameter`")]
+#[inline]
+pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
+    semidiameter(pluto_earth_dist)
 }
 
 /// Computes the apparent magnitude of Pluto using the Astronomical
