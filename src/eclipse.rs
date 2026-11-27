@@ -66,9 +66,9 @@ pub enum SolarEclipseKind {
 /// Main circumstances of a solar eclipse
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct SolarEclipse {
-    /// Lunation number `k` of the New Moon (an integer; 0 is the New Moon
-    /// of 2000 January 6)
-    pub k: f64,
+    /// Lunation number of the New Moon (0 is the New Moon of 2000
+    /// January 6; negative before). Meeus' `k` is [`SolarEclipse::k`].
+    pub lunation: i64,
     /// Instant of greatest eclipse for the Earth as a whole
     /// *| in Julian Ephemeris Days (TD)*
     pub jde: f64,
@@ -96,6 +96,12 @@ pub struct SolarEclipse {
 }
 
 impl SolarEclipse {
+    /// Meeus' `k` for this eclipse: the lunation number (an integer for a
+    /// New Moon)
+    pub fn k(&self) -> f64 {
+        self.lunation as f64
+    }
+
     /// Radius of the Moon's penumbral cone in the fundamental plane,
     /// `u + 0.5461` *| in Earth equatorial radii*
     pub fn penumbra_radius(&self) -> f64 {
@@ -131,8 +137,10 @@ pub enum ShadowRule {
 /// Main circumstances of a lunar eclipse
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LunarEclipse {
-    /// Lunation number `k` of the Full Moon (an integer plus 0.5)
-    pub k: f64,
+    /// Lunation number of the Full Moon (0 is the lunation that begins
+    /// with the New Moon of 2000 January 6). Meeus' `k` is
+    /// [`LunarEclipse::k`], which is `lunation + 0.5`.
+    pub lunation: i64,
     /// Instant of greatest eclipse *| in Julian Ephemeris Days (TD)*
     pub jde: f64,
     /// Least distance from the center of the Moon to the axis of the
@@ -194,6 +202,11 @@ pub struct LunarEclipseContacts {
 }
 
 impl LunarEclipse {
+    /// Meeus' `k` for this eclipse: `lunation + 0.5` (a Full Moon)
+    pub fn k(&self) -> f64 {
+        self.lunation as f64 + 0.5
+    }
+
     /// Computes the instants of the contacts, as the instant of greatest
     /// eclipse plus or minus the semidurations
     pub fn contacts(&self) -> LunarEclipseContacts {
@@ -466,7 +479,7 @@ fn solar_eclipse_at(k: f64) -> Option<SolarEclipse> {
     };
 
     Some(SolarEclipse {
-        k,
+        lunation: k.floor() as i64,
         jde: c.jde,
         gamma: c.gamma,
         u,
@@ -543,7 +556,7 @@ fn lunar_eclipse_at(k: f64, rule: ShadowRule) -> Option<LunarEclipse> {
     };
 
     Some(LunarEclipse {
-        k,
+        lunation: k.floor() as i64,
         jde: c.jde,
         gamma: c.gamma,
         u,

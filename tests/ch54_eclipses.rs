@@ -61,7 +61,7 @@ fn lunar_eclipses_between(from: f64, to: f64) -> Vec<LunarEclipse> {
 #[test]
 fn solar_1993_may_21_ex54a() {
     let e = eclipse::solar_eclipse(-82).unwrap();
-    assert_eq!(e.k, -82.0);
+    assert_eq!(e.k(), -82.0);
     assert_close(e.gamma, 1.1348, 0.00005);
     assert_close(e.u, 0.0097, 0.00005);
     assert_eq!(e.kind, SolarEclipseKind::Partial);
@@ -101,7 +101,7 @@ fn solar_2009_july_22_ex54b() {
 #[test]
 fn lunar_1973_june_ex54c() {
     let e = eclipse::lunar_eclipse(-329).unwrap();
-    assert_eq!(e.k, -328.5);
+    assert_eq!(e.k(), -328.5);
     assert_close(e.jde, 2441849.3687, 0.00005);
     assert_close(e.jde, jd_hm(1973, 6, 15, 20, 51, 0.0), 0.5 * MINUTE);
     assert_close(e.gamma, -1.3249, 0.00005);
@@ -134,7 +134,7 @@ fn lunar_1973_june_ex54c() {
 #[test]
 fn lunar_1997_september_16_ex54d() {
     let e = eclipse::next_lunar_eclipse(jd(1997, 7, 1.0, true)).unwrap();
-    assert_eq!(e.k, -28.5);
+    assert_eq!(e.k(), -28.5);
     assert_eq!(eclipse::lunar_eclipse(-29), Some(e));
     // The two preceding Full Moons give no eclipse.
     assert_eq!(eclipse::lunar_eclipse(-31), None);
