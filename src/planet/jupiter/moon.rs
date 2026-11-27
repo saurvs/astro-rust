@@ -214,23 +214,15 @@ impl LowAccuracyPositions {
 /// assert!((europa.y - 0.25).abs() < 0.005);
 /// ```
 pub fn low_accuracy_positions(jde: f64) -> LowAccuracyPositions {
-    let d = jde - 2451545.0;
+    // Meeus, ch. 43, "lower accuracy": Jupiter's phase angle, equation of
+    // the centre, distance and the declinations of the Sun and the Earth
+    let ch43 = super::compute_low_accuracy(jde);
+    let B = ch43.B.to_radians();
+    let delta = ch43.delta;
+    let psi = ch43.psi.to_radians();
 
-    // Meeus, ch. 43, "lower accuracy"
-    let V = (172.74 + 0.00111588 * d).to_radians();
-    let M = (357.529 + 0.9856003 * d).to_radians();
-    let N = (20.020 + 0.0830853 * d + 0.329 * V.sin()).to_radians();
-    let J = (66.115 + 0.9025179 * d - 0.329 * V.sin()).to_radians();
-    let A = (1.915 * M.sin() + 0.020 * (2.0 * M).sin()).to_radians();
-    let B = (5.555 * N.sin() + 0.168 * (2.0 * N).sin()).to_radians();
-    let K = J + A - B;
-    let R = 1.00014 - 0.01671 * M.cos() - 0.00014 * (2.0 * M).cos();
-    let r = 5.20872 - 0.25208 * N.cos() - 0.00611 * (2.0 * N).cos();
-    let delta = (r * r + R * R - 2.0 * r * R * K.cos()).sqrt();
-    let psi = (R * K.sin() / delta).clamp(-1.0, 1.0).asin();
-
-    // Meeus, ch. 44, low accuracy
-    let dd = d - delta / 173.0;
+    // Meeus, ch. 44, low accuracy, with the light-time Δ/173 of ch. 43
+    let dd = ch43.d_light;
     let psi_minus_B = psi - B;
 
     let u1 = (163.8069 + 203.4058646 * dd).to_radians() + psi_minus_B;
@@ -257,12 +249,8 @@ pub fn low_accuracy_positions(jde: f64) -> LowAccuracyPositions {
     ];
 
     // Meeus, ch. 43: Jupiter-centric declinations of the Sun and the Earth
-    let lambda = (34.35 + 0.083091 * d + 0.329 * V.sin()).to_radians() + B;
-    let Ds = (3.12 * (lambda + 42.8_f64.to_radians()).sin()).to_radians();
-    let De = Ds
-        - (2.22 * psi.sin() * (lambda + 22.0_f64.to_radians()).cos()
-            + 1.30 * (r - delta) / delta * (lambda - 100.5_f64.to_radians()).sin())
-        .to_radians();
+    let Ds = ch43.ds.to_radians();
+    let De = ch43.de.to_radians();
 
     let uncorrected = [u1, u2, u3, u4];
     let moons = std::array::from_fn(|k| {
