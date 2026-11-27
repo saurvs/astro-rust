@@ -488,3 +488,129 @@ fn bad_input_gives_none() {
     assert_eq!(eclipse::solar_eclipse(i64::MAX), None);
     assert_eq!(eclipse::lunar_eclipse(i64::MIN), None);
 }
+
+// Meeus, chapter 54: the seven non-central total or annular eclipses of
+// 1950-2100 listed in the book. The method reproduces all of them except
+// 1957 April 30, which the book itself names as a limiting case (γ =
+// 0.9966 < 0.9972, so it is classified as central; see
+// `limiting_cases_from_the_book`). No other eclipse of the period is
+// classified as non-central total or annular.
+#[test]
+fn non_central_eclipses_1950_to_2100() {
+    let expected = [
+        ((1950, 3, 18), SolarEclipseKind::Annular),
+        ((1957, 10, 23), SolarEclipseKind::Total),
+        ((1967, 11, 2), SolarEclipseKind::Total),
+        ((2014, 4, 29), SolarEclipseKind::Annular),
+        ((2043, 4, 9), SolarEclipseKind::Total),
+        ((2043, 10, 3), SolarEclipseKind::Annular),
+    ];
+    let found: Vec<_> = solar_eclipses_between(jd(1950, 1, 1.0, true), jd(2101, 1, 1.0, true))
+        .into_iter()
+        .filter(|e| !e.central && e.kind != SolarEclipseKind::Partial)
+        .collect();
+    assert_eq!(found.len(), expected.len());
+    for (e, ((y, m, d), kind)) in found.iter().zip(expected) {
+        assert_eq!(e.kind, kind, "{y}-{m}-{d}");
+        // The date is in UT; the instants here are TD, well within a day.
+        let day = jd(y, m, d as f64, true);
+        assert!(e.jde > day && e.jde < day + 1.0, "{y}-{m}-{d}: {}", e.jde);
+        // Non-central: the axis misses the Earth, but the edge of the
+        // umbral cone reaches it.
+        assert!(e.gamma.abs() > 0.9972 && e.gamma.abs() < 0.9972 + e.u.abs());
+        assert_eq!(e.magnitude, None);
+    }
+}
+
+// Number and types of the eclipses of the 21st century (2001-2100). The
+// Five Millennium Canons of Espenak and Meeus list 224 solar eclipses (77
+// partial, 72 annular, 68 total, 7 hybrid) and 228 lunar eclipses; the
+// simple method of chapter 54 finds exactly the same solar eclipses with the
+// same types. For the Moon, limiting cases (penumbral eclipses of tiny
+// magnitude, umbral magnitudes within 0.01 of 0 or 1) may go either way.
+#[test]
+fn eclipses_of_the_21st_century() {
+    let (from, to) = (jd(2001, 1, 1.0, true), jd(2101, 1, 1.0, true));
+
+    let solar = solar_eclipses_between(from, to);
+    let count = |kind| solar.iter().filter(|e| e.kind == kind).count();
+    assert_eq!(solar.len(), 224);
+    assert_eq!(count(SolarEclipseKind::Partial), 77);
+    assert_eq!(count(SolarEclipseKind::Annular), 72);
+    assert_eq!(count(SolarEclipseKind::Total), 68);
+    assert_eq!(count(SolarEclipseKind::Hybrid), 7);
+
+    let lunar = lunar_eclipses_between(from, to);
+    assert!(
+        (225..=231).contains(&lunar.len()),
+        "{} lunar eclipses",
+        lunar.len()
+    );
+
+    // The searches neither skip nor repeat an eclipse: going through the
+    // lunations one by one gives the same lists.
+    let k0 = ((from - 2451550.1) / 29.530588861).floor() as i64 - 1;
+    let k1 = ((to - 2451550.1) / 29.530588861).ceil() as i64 + 1;
+    let by_lunation: Vec<_> = (k0..k1)
+        .filter_map(eclipse::solar_eclipse)
+        .filter(|e| e.jde >= from && e.jde < to)
+        .collect();
+    assert_eq!(by_lunation, solar);
+    let by_lunation: Vec<_> = (k0..k1)
+        .filter_map(eclipse::lunar_eclipse)
+        .filter(|e| e.jde >= from && e.jde < to)
+        .collect();
+    assert_eq!(by_lunation, lunar);
+
+    // Backwards searches find the same eclipses.
+    let mut back = Vec::new();
+    let mut t = to;
+    while let Some(e) = eclipse::prev_solar_eclipse(t) {
+        if e.jde < from {
+            break;
+        }
+        t = e.jde;
+        back.push(e);
+    }
+    back.reverse();
+    assert_eq!(back, solar);
+}
+
+// Over the five millennia -1999 to +3000 the canons list 11 898 solar and
+// 12 064 lunar eclipses (penumbral included). The method stays within 1%
+// of both, and consecutive eclipses are never more than six lunations
+// apart.
+#[test]
+fn eclipses_over_five_millennia() {
+    let (from, to) = (jd(-1999, 1, 1.0, false), jd(3001, 1, 1.0, true));
+    let k0 = ((from - 2451550.1) / 29.530588861).floor() as i64 - 1;
+    let k1 = ((to - 2451550.1) / 29.530588861).ceil() as i64 + 1;
+
+    let solar: Vec<_> = (k0..k1)
+        .filter_map(eclipse::solar_eclipse)
+        .filter(|e| e.jde >= from && e.jde < to)
+        .collect();
+    let lunar: Vec<_> = (k0..k1)
+        .filter_map(eclipse::lunar_eclipse)
+        .filter(|e| e.jde >= from && e.jde < to)
+        .collect();
+    let n = solar.len() as f64;
+    assert!((n / 11898.0 - 1.0).abs() < 0.01, "{n} solar eclipses");
+    let n = lunar.len() as f64;
+    assert!((n / 12064.0 - 1.0).abs() < 0.01, "{n} lunar eclipses");
+
+    for w in solar.windows(2) {
+        assert!(w[1].jde > w[0].jde && w[1].jde - w[0].jde < 6.1 * 29.53);
+    }
+    for w in lunar.windows(2) {
+        assert!(w[1].jde > w[0].jde && w[1].jde - w[0].jde < 6.1 * 29.53);
+    }
+}
+
+// The eclipse node is the lunar node type of chapter 51.
+#[test]
+fn eclipse_node_is_the_lunar_node() {
+    let e = eclipse::solar_eclipse(118).unwrap(); // 2009 July 22
+    let node: astro::lunar::node::Node = e.node;
+    assert_eq!(node, astro::lunar::node::Node::Descending);
+}

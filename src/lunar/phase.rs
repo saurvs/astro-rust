@@ -383,24 +383,64 @@ fn quarter_w(E: f64, M: f64, M1: f64, F: f64) -> f64 {
         + 0.00002 * (2.0 * F).cos()
 }
 
-fn terms(k: f64, phase: Phase) -> Terms {
+/// The mean phase with Meeus' `k` (an integer for New Moon, plus 0.25, 0.5
+/// or 0.75 for the other phases) and the mean arguments at that instant
+/// (eqs. 49.1 to 49.7 and 47.6). Chapter 54 (eclipses) starts from the
+/// same quantities.
+#[derive(Debug, Clone, Copy)]
+pub(crate) struct MeanArgs {
+    /// Julian centuries (TD) from J2000.0, `k / 1236.85`
+    pub T: f64,
+    /// JDE of the mean phase (eq. 49.1)
+    pub jde: f64,
+    /// Eccentricity factor E (eq. 47.6)
+    pub E: f64,
+    /// Sun's mean anomaly, radians in [0, 2π) (eq. 49.4)
+    pub M: f64,
+    /// Moon's mean anomaly, radians in [0, 2π) (eq. 49.5)
+    pub M1: f64,
+    /// Moon's argument of latitude, radians in [0, 2π) (eq. 49.6)
+    pub F: f64,
+    /// Longitude of the ascending node, radians in [0, 2π) (eq. 49.7)
+    pub omega: f64,
+}
+
+pub(crate) fn mean_args(k: f64) -> MeanArgs {
     use sequence::reduced_rad;
 
     let T = k / 1236.85;
-    let E = sequence::eccentricity_factor(T);
 
-    let M = reduced_rad(2.5534 + 29.105_356_70 * k + T * T * (-0.000_001_4 - T * 0.000_000_11));
-    let M1 = reduced_rad(
-        201.5643
-            + 385.816_935_28 * k
-            + T * T * (0.010_758_2 + T * (0.000_012_38 - T * 0.000_000_058)),
-    );
-    let F = reduced_rad(
-        160.7108
-            + 390.670_502_84 * k
-            + T * T * (-0.001_611_8 + T * (-0.000_002_27 + T * 0.000_000_011)),
-    );
-    let omega = reduced_rad(124.7746 - 1.563_755_88 * k + T * T * (0.002_067_2 + T * 0.000_002_15));
+    MeanArgs {
+        T,
+        jde: mean_jde(k, T),
+        E: sequence::eccentricity_factor(T),
+        M: reduced_rad(2.5534 + 29.105_356_70 * k + T * T * (-0.000_001_4 - T * 0.000_000_11)),
+        M1: reduced_rad(
+            201.5643
+                + 385.816_935_28 * k
+                + T * T * (0.010_758_2 + T * (0.000_012_38 - T * 0.000_000_058)),
+        ),
+        F: reduced_rad(
+            160.7108
+                + 390.670_502_84 * k
+                + T * T * (-0.001_611_8 + T * (-0.000_002_27 + T * 0.000_000_011)),
+        ),
+        omega: reduced_rad(124.7746 - 1.563_755_88 * k + T * T * (0.002_067_2 + T * 0.000_002_15)),
+    }
+}
+
+fn terms(k: f64, phase: Phase) -> Terms {
+    use sequence::reduced_rad;
+
+    let MeanArgs {
+        T,
+        jde: mean,
+        E,
+        M,
+        M1,
+        F,
+        omega,
+    } = mean_args(k);
 
     let args = [M, M1, F, omega];
     let arg = |m: &[f64; 4]| m.iter().zip(args.iter()).map(|(a, b)| a * b).sum::<f64>();
@@ -440,7 +480,7 @@ fn terms(k: f64, phase: Phase) -> Terms {
         .sum();
 
     Terms {
-        mean: mean_jde(k, T),
+        mean,
         E,
         M,
         M1,

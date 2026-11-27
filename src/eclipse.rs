@@ -39,21 +39,14 @@
 //! assert!((e.gamma - 0.4367).abs() < 0.003); // positive: northern track
 //! ```
 
-/// JDE of the mean New Moon of 2000 January 6, lunation `k = 0`
-/// (Meeus, eq. 49.1)
-const MEAN_NEW_MOON_EPOCH: f64 = 2451550.09766;
+use crate::lunar::phase;
 
-/// Mean synodic month used in Meeus' eq. 49.1 *| in days*
-const MEAN_SYNODIC_MONTH: f64 = 29.530588861;
-
-/// The node of the Moon's orbit near which an eclipse takes place
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Node {
-    /// Ascending node (the Moon's argument of latitude `F` is near 0°)
-    Ascending,
-    /// Descending node (`F` is near 180°)
-    Descending,
-}
+/// The node of the Moon's orbit near which an eclipse takes place: the
+/// ascending node when the Moon's argument of latitude `F` is near 0°, the
+/// descending node when it is near 180°
+///
+/// This is the same type as [`lunar::node::Node`](crate::lunar::node::Node).
+pub use crate::lunar::node::Node;
 
 /// Type of a solar eclipse
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -180,8 +173,8 @@ pub struct LunarEclipse {
 /// Instants of the contacts of a lunar eclipse *| in Julian Ephemeris Days
 /// (TD)*
 ///
-/// The penumbral contacts cannot be observed; they are of theoretical
-/// interest only.
+/// The Moon's entry into and exit from the penumbra are not visible to the
+/// eye; P1 and P4 are computed quantities only.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LunarEclipseContacts {
     /// First contact with the penumbra (P1)
@@ -310,13 +303,13 @@ pub fn prev_lunar_eclipse(jde: f64) -> Option<LunarEclipse> {
     )
 }
 
-/// Steps through the lunations `k = n + phase` from just before `jde`
+/// Steps through the lunations `k = n + frac` from just before `jde`
 /// (forwards) or just after it (backwards) and returns the first eclipse
 /// strictly after (or before) `jde`. Consecutive eclipses of either kind
 /// are never more than six lunations apart, so a few steps suffice.
 fn search<T>(
     jde: f64,
-    phase: f64,
+    frac: f64,
     forward: bool,
     eclipse: impl Fn(f64) -> Option<T>,
     time: impl Fn(&T) -> f64,
@@ -324,7 +317,7 @@ fn search<T>(
     if !jde.is_finite() {
         return None;
     }
-    let n = (jde - MEAN_NEW_MOON_EPOCH) / MEAN_SYNODIC_MONTH - phase;
+    let n = phase::k_from_jd(jde) - frac;
     let (start, step) = if forward {
         (n.floor() - 1.0, 1.0)
     } else {
@@ -332,7 +325,7 @@ fn search<T>(
     };
 
     (0..24)
-        .map(|i| start + step * f64::from(i) + phase)
+        .map(|i| start + step * f64::from(i) + frac)
         .filter_map(eclipse)
         .find(|e| {
             if forward {
@@ -341,44 +334,6 @@ fn search<T>(
                 time(e) < jde
             }
         })
-}
-
-/// Mean lunation quantities at lunation `k` (Meeus, eq. 49.1 to 49.7 and
-/// 47.6). Angles in radians.
-struct MeanPhase {
-    /// Julian centuries from J2000.0
-    t: f64,
-    /// JDE of the mean phase
-    jde: f64,
-    /// Sun's mean anomaly
-    m: f64,
-    /// Moon's mean anomaly
-    mp: f64,
-    /// Moon's argument of latitude
-    f: f64,
-    /// Longitude of the ascending node of the lunar orbit
-    om: f64,
-    /// Eccentricity factor of the Earth's orbit
-    e: f64,
-}
-
-fn mean_phase(k: f64) -> MeanPhase {
-    let t = k / 1236.85;
-    let t2 = t * t;
-    let t3 = t2 * t;
-    let t4 = t3 * t;
-    let deg = |x: f64| x.rem_euclid(360.0).to_radians();
-
-    MeanPhase {
-        t,
-        jde: MEAN_NEW_MOON_EPOCH + MEAN_SYNODIC_MONTH * k + 0.00015437 * t2 - 0.000000150 * t3
-            + 0.00000000073 * t4,
-        m: deg(2.5534 + 29.10535670 * k - 0.0000014 * t2 - 0.00000011 * t3),
-        mp: deg(201.5643 + 385.81693528 * k + 0.0107582 * t2 + 0.00001238 * t3 - 0.000000058 * t4),
-        f: deg(160.7108 + 390.67050284 * k - 0.0016118 * t2 - 0.00000227 * t3 + 0.000000011 * t4),
-        om: deg(124.7746 - 1.56375588 * k + 0.0020672 * t2 + 0.00000215 * t3),
-        e: 1.0 - 0.002516 * t - 0.0000074 * t2,
-    }
 }
 
 /// Quantities common to solar and lunar eclipses
@@ -399,12 +354,12 @@ struct Core {
 /// `None` if the Moon is too far from a node for any eclipse
 /// (`|sin F| > 0.36`). Meeus, chapter 54.
 fn core(k: f64, lunar: bool) -> Option<Core> {
-    let mp_ = mean_phase(k);
-    let MeanPhase {
-        t, m, mp, f, om, e, ..
-    } = mp_;
+    // Mean phase and mean arguments, as for the phases of the Moon
+    // (eqs. 49.1 to 49.7 and 47.6).
+    let mean = phase::mean_args(k);
+    let (t, m, mp, f, om, e) = (mean.T, mean.M, mean.M1, mean.F, mean.omega, mean.E);
 
-    if !mp_.jde.is_finite() || f.sin().abs() > 0.36 {
+    if !mean.jde.is_finite() || f.sin().abs() > 0.36 {
         return None;
     }
 
@@ -460,7 +415,7 @@ fn core(k: f64, lunar: bool) -> Option<Core> {
     };
 
     Some(Core {
-        jde: mp_.jde + dt,
+        jde: mean.jde + dt,
         #[cfg(test)]
         p,
         #[cfg(test)]
@@ -616,20 +571,20 @@ mod tests {
     }
 
     fn check_mean_phase(k: f64, jde: f64, m: f64, mp: f64, f: f64) {
-        let p = mean_phase(k);
+        let p = phase::mean_args(k);
         close(p.jde, jde, 0.00005);
-        close(p.m.to_degrees(), m, 0.00005);
-        close(p.mp.to_degrees(), mp, 0.00005);
-        close(p.f.to_degrees(), f, 0.00005);
+        close(p.M.to_degrees(), m, 0.00005);
+        close(p.M1.to_degrees(), mp, 0.00005);
+        close(p.F.to_degrees(), f, 0.00005);
     }
 
     // Meeus, example 54.a: solar eclipse of 1993 May 21
     #[test]
     fn example_54a_intermediate_values() {
         check_mean_phase(-82.0, 2449128.5894, 135.9142, 244.5757, 165.7296);
-        let p = mean_phase(-82.0);
-        close(p.om.to_degrees(), 253.0026, 0.00005);
-        let f1 = p.f - 0.02665_f64.to_radians() * p.om.sin();
+        let p = phase::mean_args(-82.0);
+        close(p.omega.to_degrees(), 253.0026, 0.00005);
+        let f1 = p.F - 0.02665_f64.to_radians() * p.omega.sin();
         close(f1.to_degrees(), 165.7550, 0.00005);
         let c = core(-82.0, false).unwrap();
         // The book adds the rounded 2449128.5894 and 0.5085; unrounded the
@@ -663,8 +618,8 @@ mod tests {
     #[test]
     fn example_54d_intermediate_values() {
         // The two preceding Full Moons are too far from a node.
-        close(mean_phase(-30.5).f.to_degrees(), 125.2605, 0.00005);
-        close(mean_phase(-29.5).f.to_degrees(), 155.9310, 0.00005);
+        close(phase::mean_args(-30.5).F.to_degrees(), 125.2605, 0.00005);
+        close(phase::mean_args(-29.5).F.to_degrees(), 155.9310, 0.00005);
         assert!(core(-30.5, true).is_none());
         assert!(core(-29.5, true).is_none());
 

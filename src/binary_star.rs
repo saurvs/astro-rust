@@ -58,6 +58,7 @@ THE SOFTWARE.
 //! ```
 
 use crate::angle;
+use crate::orbit;
 
 /// Computes the mean annual motion of the companion star
 ///
@@ -263,10 +264,10 @@ impl OrbitalElements {
 /// at a given time
 ///
 /// Chains the steps of Meeus' chapter 57: mean motion and mean anomaly,
-/// Kepler's equation (solved to full double precision for any
-/// eccentricity below 1), radius vector, true anomaly, then position angle
-/// (eq. 57.1) and separation. The position angle refers to the same
-/// equinox as the element `Ω`.
+/// Kepler's equation (with [`orbit::elliptic::ecc_anom_checked`], to full
+/// double precision for any eccentricity below 1), radius vector, true
+/// anomaly, then position angle (eq. 57.1) and separation. The position
+/// angle refers to the same equinox as the element `Ω`.
 ///
 /// For an eccentricity outside `[0, 1)` or non-finite input the result
 /// contains NaN.
@@ -279,7 +280,9 @@ pub fn apparent_position(elements: &OrbitalElements, t: f64) -> ApparentPosition
     let e = elements.eccentricity;
     let n = mn_ann_motion_of_compan(elements.period);
     let M = mn_anom_of_compan(n, t, elements.time_of_periastron);
-    let E = solve_kepler(M, e);
+    // The orbit module's solver converges for any 0 <= e < 1 and returns
+    // None for an eccentricity outside that range or non-finite input.
+    let E = orbit::elliptic::ecc_anom_checked(M, e).unwrap_or(f64::NAN);
     let r = rad_vec(elements.semimajor_axis, e, E);
     let v = true_anom(e, E);
     let w = elements.periastron_longitude;
@@ -288,75 +291,5 @@ pub fn apparent_position(elements: &OrbitalElements, t: f64) -> ApparentPosition
     ApparentPosition {
         position_angle: apprnt_coords_angl(elements.asc_node_position_angle, v, w, i),
         separation: anglr_sepr(r, v, w, i),
-    }
-}
-
-/// Solves Kepler's equation `E = M + e sin E` for `0 <= e < 1`
-///
-/// Bisection on the bracket `[M - e, M + e]` (where `E - e sin E - M`
-/// changes sign) followed by Newton polishing, so it converges for any
-/// eccentricity below 1. Returns NaN for an eccentricity outside `[0, 1)`
-/// or non-finite input.
-fn solve_kepler(M: f64, e: f64) -> f64 {
-    if !(0.0..1.0).contains(&e) || !M.is_finite() {
-        return f64::NAN;
-    }
-
-    // Reduce M to [-π, π]; the whole turns are added back at the end.
-    let turns = (M / angle::TWO_PI).round();
-    let m = M - turns * angle::TWO_PI;
-
-    let f = |E: f64| E - e * E.sin() - m;
-    let (mut lo, mut hi) = (m - e, m + e);
-    for _ in 0..64 {
-        let mid = 0.5 * (lo + hi);
-        if f(mid) > 0.0 {
-            hi = mid;
-        } else {
-            lo = mid;
-        }
-    }
-
-    let mut E = 0.5 * (lo + hi);
-    for _ in 0..2 {
-        let d = 1.0 - e * E.cos();
-        if d > 0.0 {
-            E -= f(E) / d;
-        }
-    }
-
-    E + turns * angle::TWO_PI
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn kepler_solver_satisfies_equation() {
-        for &e in &[0.0, 0.1, 0.2763, 0.5, 0.885, 0.97, 0.999] {
-            let mut M = -20.0;
-            while M < 20.0 {
-                let E = solve_kepler(M, e);
-                assert!((E - e * E.sin() - M).abs() < 1e-12, "M = {M}, e = {e}");
-                M += 0.173;
-            }
-        }
-    }
-
-    #[test]
-    fn kepler_solver_rejects_bad_input() {
-        assert!(solve_kepler(1.0, 1.0).is_nan());
-        assert!(solve_kepler(1.0, -0.1).is_nan());
-        assert!(solve_kepler(f64::NAN, 0.5).is_nan());
-        assert!(solve_kepler(f64::INFINITY, 0.5).is_nan());
-        assert!(solve_kepler(1.0, f64::NAN).is_nan());
-    }
-
-    // Meeus, example 57.a: E = 49.897 deg for M = 37.788 deg, e = 0.2763
-    #[test]
-    fn kepler_solver_example_57a() {
-        let E = solve_kepler(397.788_f64.to_radians(), 0.2763);
-        assert!((E.to_degrees() - 360.0 - 49.897).abs() < 0.0005);
     }
 }
