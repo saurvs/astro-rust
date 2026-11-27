@@ -312,14 +312,16 @@ pub enum HorizonStatus {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct RiseTransitSet {
     /// Julian Day (UT) at which the body rose above the altitude, if it did
-    /// during the day. For a twilight horizon this is dawn.
+    /// during the day (the first time, if it rose twice). For a twilight
+    /// horizon this is dawn.
     pub rise: Option<f64>,
     /// Julian Day (UT) of the upper transit (culmination across the local
-    /// meridian), if it happened during the day. Circumpolar bodies transit
-    /// too.
+    /// meridian), if it happened during the day (the first, if there were
+    /// two). Circumpolar bodies transit too.
     pub transit: Option<f64>,
     /// Julian Day (UT) at which the body set below the altitude, if it did
-    /// during the day. For a twilight horizon this is dusk.
+    /// during the day (the first time, if it set twice). For a twilight
+    /// horizon this is dusk.
     pub set: Option<f64>,
     /// Whether the body crossed the altitude, or stayed above or below it
     /// all day
@@ -521,8 +523,12 @@ pub fn refracted_altitude(true_alt: f64, pressure: f64, temperature: f64) -> f64
 /// `[jd_start, jd_start + 1)`, each `None` if it did not happen then, and a
 /// status telling whether the body stayed above or below the altitude all
 /// day. Consecutive windows share no events, so iterating over days finds
-/// every event exactly once. Non-finite inputs give no events (and an
-/// unspecified status) rather than a panic.
+/// each event at most once. A star or a planet keeps sidereal time, about
+/// 4 minutes a day ahead of solar time, so about once a year it rises (and
+/// transits, and sets) twice within one window, a few minutes after the
+/// start and a few minutes before the end; only the first is reported, and
+/// the second is not reported in the next window either. Non-finite inputs
+/// give no events (and an unspecified status) rather than a panic.
 ///
 /// # Example
 ///

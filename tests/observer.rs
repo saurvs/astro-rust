@@ -795,6 +795,41 @@ fn ancient_dates() {
     }
 }
 
+// A star's day is a sidereal day, so once a year it transits twice in one
+// UT day: only the first transit is reported, and the next day's window does
+// not repeat the second one. Over a year one transit is therefore missing.
+#[test]
+fn star_transits_twice_on_one_day_a_year() {
+    let greenwich = Observer::from_degrees_east(51.4769, -0.0005, 0.0);
+    let sirius = Body::Star {
+        asc: deg(101.287155),
+        dec: deg(-16.716116),
+    };
+    let start = jd0(2024, time::Month::Jan, 1);
+    let mut transits = 0;
+    let mut double_day = None;
+    for d in 0..366 {
+        let jd = start + d as f64;
+        let r = observer::rise_transit_set(sirius, &greenwich, jd, Horizon::Standard);
+        let t = r.transit.unwrap();
+        transits += 1;
+        if t - jd < 4.0 * MINUTE {
+            double_day = Some((jd, t));
+        }
+    }
+    let (jd, t) = double_day.expect("a day with a transit just after 0h UT");
+    // One sidereal day later the star is on the meridian again, still
+    // within the same window.
+    let second = t + 0.99726957;
+    assert!(second < jd + 1.0);
+    let ha = observer::topocentric_position(sirius, &greenwich, second).hour_angle;
+    assert!(ha.abs() < deg(0.01), "{}", ha.to_degrees());
+    let next = observer::rise_transit_set(sirius, &greenwich, jd + 1.0, Horizon::Standard);
+    assert!(next.transit.unwrap() > jd + 1.0 + 0.99);
+    // 366 days of 1.0027379 sidereal days: 367 transits really happen.
+    assert_eq!(transits, 366);
+}
+
 // Positions are continuous in time. ΔT used to be taken at the middle of the
 // calendar month, so it jumped at month boundaries: in antiquity, where it
 // changes by about 18 s a year, the Moon jumped by about 0.8" there.
