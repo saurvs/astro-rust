@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0 — unreleased (version bumped in `Cargo.toml`; not yet published)
+## 3.0.0 — 2026-11-27
 
 A complete overhaul. Every chapter of Meeus' *Astronomical Algorithms*
 (2nd ed.) was re-checked against the code, the crate was moved to modern
