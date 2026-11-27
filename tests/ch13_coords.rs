@@ -512,3 +512,63 @@ fn point_structs_are_copy_and_comparable() {
     };
     assert_close(c.anglr_sepr(&c), 0.0, 1e-7);
 }
+
+// Review R1: the conversion macros expanded each argument twice, so an
+// argument with side effects (or an expensive one) was evaluated twice.
+#[test]
+fn macros_evaluate_each_argument_once() {
+    use std::cell::Cell;
+    let n = Cell::new(0);
+    let arg = |x: f64| {
+        n.set(n.get() + 1);
+        x
+    };
+    let e = coords::OBLQ_J2000;
+
+    let (l, b) = astro::ecl_frm_eq!(arg(1.0), arg(0.3), arg(e));
+    assert_eq!(n.replace(0), 3);
+    assert_eq!(
+        (l, b),
+        (
+            coords::ecl_long_frm_eq(1.0, 0.3, e),
+            coords::ecl_lat_frm_eq(1.0, 0.3, e)
+        )
+    );
+
+    let (a, d) = astro::eq_frm_ecl!(arg(1.0), arg(0.3), arg(e));
+    assert_eq!(n.replace(0), 3);
+    assert_eq!(
+        (a, d),
+        (
+            coords::asc_frm_ecl(1.0, 0.3, e),
+            coords::dec_frm_ecl(1.0, 0.3, e)
+        )
+    );
+
+    let (az, alt) = astro::loc_hz_frm_eq!(arg(1.0), arg(0.3), arg(0.7));
+    assert_eq!(n.replace(0), 3);
+    assert_eq!(
+        (az, alt),
+        (
+            coords::az_frm_eq(1.0, 0.3, 0.7),
+            coords::alt_frm_eq(1.0, 0.3, 0.7)
+        )
+    );
+
+    let (l, b) = astro::gal_frm_eq!(arg(1.0), arg(0.3));
+    assert_eq!(n.replace(0), 2);
+    assert_eq!(
+        (l, b),
+        (
+            coords::gal_long_frm_eq(1.0, 0.3),
+            coords::gal_lat_frm_eq(1.0, 0.3)
+        )
+    );
+
+    let (a, d) = astro::eq_frm_gal!(arg(1.0), arg(0.3));
+    assert_eq!(n.replace(0), 2);
+    assert_eq!(
+        (a, d),
+        (coords::asc_frm_gal(1.0, 0.3), coords::dec_frm_gal(1.0, 0.3))
+    );
+}

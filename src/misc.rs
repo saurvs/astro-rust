@@ -87,7 +87,13 @@ pub fn parllc_angl(observer_lat: f64, hour_angle: f64, dec: f64) -> f64 {
     let (sin_d, cos_d) = dec.sin_cos();
     let (sin_p, cos_p) = observer_lat.sin_cos();
 
-    (sin_h * cos_p).atan2(sin_p * cos_d - cos_p * sin_d * cos_h)
+    let q = (sin_h * cos_p).atan2(sin_p * cos_d - cos_p * sin_d * cos_h);
+    // atan2(−0, x < 0) is −π; keep the result in (−π, π].
+    if q == -std::f64::consts::PI {
+        std::f64::consts::PI
+    } else {
+        q
+    }
 }
 
 /// Computes the parallactic angle of a celestial body on the

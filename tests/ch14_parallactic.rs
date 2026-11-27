@@ -345,3 +345,19 @@ fn eclip_points_on_hz_inside_polar_circle() {
     assert!(hz_of(west).az > 0.0, "western point");
     assert!(hz_of(east).az < 0.0, "eastern point");
 }
+
+// Review R1: the documented range is (−π, π], but a negative zero hour
+// angle (e.g. the result of rounding a tiny negative value) gave −π for
+// a body on the meridian north of the zenith.
+#[test]
+fn parllc_angl_range_excludes_minus_pi() {
+    let lat = rad(45.0);
+    assert_eq!(misc::parllc_angl(lat, -0.0, rad(70.0)), PI);
+    assert_eq!(misc::parllc_angl(-lat, -0.0, rad(-70.0)), 0.0);
+    for &h in &[-0.0, 0.0, -PI, PI] {
+        for dec in (-9..=9).map(|i| rad(i as f64 * 10.0)) {
+            let q = misc::parllc_angl(lat, h, dec);
+            assert!(q > -PI && q <= PI, "{h} {dec}: {q}");
+        }
+    }
+}
