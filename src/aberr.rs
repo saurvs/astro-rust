@@ -641,3 +641,19 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
 
     (delta_asc, delta_dec)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Meeus, example 23.a gives ☉ = 231.328° for 2028 November 13.19 TD,
+    // and example 25.a ☉ = 199.90988° for 1992 October 13.0 TD.
+    #[test]
+    fn sun_geom_long_low_accuracy_examples() {
+        let d = sun_geom_long_low_accuracy(2462088.69).to_degrees();
+        assert!((d - 231.328).abs() < 0.0005, "{d}");
+
+        let d = sun_geom_long_low_accuracy(2448908.5).to_degrees();
+        assert!((d - 199.90988).abs() < 0.00001, "{d}");
+    }
+}
