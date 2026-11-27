@@ -27,43 +27,69 @@ use crate::angle;
 pub mod moon;
 pub mod ring;
 
-/// Computes Saturn's apparent magnitude using G. Muller's formula
+/// Computes Saturn's apparent visual magnitude, including the ring, using
+/// G. Müller's formula
+///
+/// `m = −8.68 + 5 log10(r Δ) + 0.044 |ΔU| − 2.60 sin |B| + 1.25 sin² B`
+/// with `ΔU` in degrees (Meeus, chapter 41). `ΔU` and `B` are the ring
+/// quantities of Meeus' chapter 45 (see [`ring::elements`]). Müller's
+/// formula assumes that the Sun's elevation above the ring plane equals
+/// `B`, and ignores the case where Sun and Earth are on opposite sides of
+/// the ring. Do not quote the result to better than about 0.1 magnitude.
 ///
 /// # Returns
 ///
-/// * `app_mag`: Apparent magnitude of Saturn *| in radians*
+/// * `app_mag`: Apparent visual magnitude of Saturn
 ///
 /// # Arguments
 ///
-/// * `delta` : Saturn-Earth distance *| in AU*
-/// * `r`     : Saturn-Sun distance *| in AU*
-/// * `deltaU`: Difference between Saturnicentric longitudes of
-///   the Sun and the Earth, measured in the plane of
-///   Saturn's ring *| in radians*
-/// * `B`     : Saturnicentric latitude of the Earth *| in radians*
+/// * `delta`: Saturn-Earth distance *| in AU*
+/// * `r`    : Saturn-Sun distance *| in AU*
+/// * `delU` : Difference between the Saturnicentric longitudes of the Sun
+///   and the Earth, measured in the plane of the ring *| in radians*. Only
+///   its magnitude matters; it is reduced to `[0, π]` (as an angular
+///   difference) before use. Saturn's phase angle may be used instead as
+///   an approximation.
+/// * `B`    : Saturnicentric latitude of the Earth referred to the plane of
+///   the ring *| in radians*. Only its magnitude matters.
 pub fn apprnt_mag_muller(delta: f64, r: f64, delU: f64, B: f64) -> f64 {
-    -8.68 + 5.0 * (r * delta).log10() + 0.044 * delU.abs() - 2.6 * B.abs().sin()
-        + 1.25 * B.sin().powi(2)
+    -8.68 + 5.0 * (r * delta).log10() + ring_term(delU, B)
 }
 
-/// Computes Saturn's apparent magnitude using the Astronomical
-/// Almanac's formula adopted in 1984
+/// Computes Saturn's apparent visual magnitude, including the ring, using
+/// the *Astronomical Almanac*'s formula adopted in 1984
+///
+/// `m = −8.88 + 5 log10(r Δ) + 0.044 |ΔU| − 2.60 sin |B| + 1.25 sin² B`
+/// with `ΔU` in degrees (Meeus, chapter 41). It differs from Müller's
+/// formula ([`apprnt_mag_muller`]) only by the constant term.
 ///
 /// # Returns
 ///
-/// * `app_mag`: Apparent magnitude of Saturn *| in radians*
+/// * `app_mag`: Apparent visual magnitude of Saturn
 ///
 /// # Arguments
 ///
-/// * `delta` : Saturn-Earth distance *| in AU*
-/// * `r`     : Saturn-Sun distance *| in AU*
-/// * `deltaU`: Difference between Saturnicentric longitudes of
-///   the Sun and the Earth, measured in the plane of
-///   Saturn's ring *| in radians*
-/// * `B`     : Saturnicentric latitude of the Earth *| in radians*
+/// * `delta`: Saturn-Earth distance *| in AU*
+/// * `r`    : Saturn-Sun distance *| in AU*
+/// * `delU` : Difference between the Saturnicentric longitudes of the Sun
+///   and the Earth, measured in the plane of the ring *| in radians*. Only
+///   its magnitude matters; it is reduced to `[0, π]` (as an angular
+///   difference) before use.
+/// * `B`    : Saturnicentric latitude of the Earth referred to the plane of
+///   the ring *| in radians*. Only its magnitude matters.
 pub fn apprnt_mag_84(delta: f64, r: f64, delU: f64, B: f64) -> f64 {
-    -8.88 + 5.0 * (r * delta).log10() + 0.044 * delU.abs() - 2.6 * B.abs().sin()
-        + 1.25 * B.sin().powi(2)
+    -8.88 + 5.0 * (r * delta).log10() + ring_term(delU, B)
+}
+
+/// The ring-dependent part of Saturn's magnitude, common to both formulae
+/// of Meeus, chapter 41. `ΔU` must enter in degrees.
+fn ring_term(delU: f64, B: f64) -> f64 {
+    // |ΔU| as an angular difference in [0°, 180°].
+    let del_u = delU.to_degrees().rem_euclid(360.0);
+    let del_u = del_u.min(360.0 - del_u);
+    let sin_b = B.abs().sin();
+
+    0.044 * del_u - 2.6 * sin_b + 1.25 * sin_b * sin_b
 }
 
 #[inline(always)]
