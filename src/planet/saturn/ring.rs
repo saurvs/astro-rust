@@ -65,6 +65,7 @@ THE SOFTWARE.
 
 use core::f64::consts::{PI, TAU};
 
+use crate::angle;
 use crate::coords;
 use crate::ecliptic;
 use crate::nutation;
@@ -78,8 +79,8 @@ const LIGHT_TIME_PER_AU: f64 = 0.005_775_518_3;
 /// arcseconds.
 const MAJOR_AXIS_AT_1_AU: f64 = 375.35;
 
-/// Daily aberration constant used by Meeus for the planets, in degrees
-/// (about 20.49 arcseconds).
+/// The constant of annual aberration (about 20.49″), in degrees, as used
+/// by Meeus for the aberration of the planet in chapters 42, 43 and 45.
 const ABERRATION: f64 = 0.005_693;
 
 /// Computes the inclination of the plane of Saturn's ring
@@ -203,8 +204,8 @@ pub fn ring_elements(jde: f64) -> RingElements {
     let (nut_in_long, nut_in_oblq) = nutation::nutation(jde);
     let s = compute(
         jde,
-        helio(&planet::Planet::Earth, jde),
-        |t| helio(&planet::Planet::Saturn, t),
+        planet::heliocent_coords(&planet::Planet::Earth, jde),
+        |t| planet::heliocent_coords(&planet::Planet::Saturn, t),
         nut_in_long,
         ecliptic::mn_oblq_IAU(jde) + nut_in_oblq,
     );
@@ -239,8 +240,8 @@ pub fn ring_elements(jde: f64) -> RingElements {
 pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
     let s = compute(
         JD,
-        helio(&planet::Planet::Earth, JD),
-        |t| helio(&planet::Planet::Saturn, t),
+        planet::heliocent_coords(&planet::Planet::Earth, JD),
+        |t| planet::heliocent_coords(&planet::Planet::Saturn, t),
         nut_in_long,
         true_oblq,
     );
@@ -473,7 +474,7 @@ fn compute(
     let dec = coords::dec_frm_ecl(lambda_app, beta_ab, tru_oblq);
 
     // Step 15
-    let p = wrap_two_pi(
+    let p = angle::limit_to_two_PI(
         (dec0.cos() * (asc0 - asc).sin())
             .atan2(dec0.sin() * dec.cos() - dec0.cos() * dec.sin() * (asc0 - asc).cos()),
     );
@@ -533,25 +534,6 @@ fn ring_plane_long(inc: f64, node: f64, long: f64, lat: f64) -> f64 {
 /// 2π whenever `U1` and `U2` straddle the ±π branch cut.
 fn long_diff(U1: f64, U2: f64) -> f64 {
     ((U1 - U2 + PI).rem_euclid(TAU) - PI).abs()
-}
-
-/// The crate's VSOP87 heliocentric coordinates, with the latitude reduced
-/// to `[-π, π)`.
-///
-/// `planet::heliocent_coords` has been returning latitudes reduced to
-/// `[0, 2π)` (Saturn's is negative in the book's example); only
-/// trigonometric functions of it are used here, but the intermediate
-/// values are easier to check in the signed range, and this keeps the
-/// module correct whichever range it returns.
-fn helio(planet: &planet::Planet, jde: f64) -> (f64, f64, f64) {
-    let (l, b, r) = planet::heliocent_coords(planet, jde);
-    (l, (b + PI).rem_euclid(TAU) - PI, r)
-}
-
-/// Reduces an angle to `[0, 2π)`.
-fn wrap_two_pi(a: f64) -> f64 {
-    let x = a.rem_euclid(TAU);
-    if x < TAU { x } else { 0.0 }
 }
 
 #[cfg(test)]
@@ -698,9 +680,11 @@ mod tests {
         assert!(long_diff(u1, u2).to_degrees() < 1.2);
     }
 
+    // Saturn's heliocentric latitude is negative in example 45.a;
+    // `planet::heliocent_coords` returns it signed (no re-wrapping needed).
     #[test]
-    fn helio_latitude_is_signed() {
-        let (_, b, _) = helio(&planet::Planet::Saturn, JDE);
+    fn saturn_heliocent_latitude_is_signed() {
+        let (_, b, _) = planet::heliocent_coords(&planet::Planet::Saturn, JDE);
         assert!(b < 0.0 && b.to_degrees() > -1.1);
     }
 }

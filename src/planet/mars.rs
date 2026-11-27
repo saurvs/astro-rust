@@ -61,8 +61,9 @@ THE SOFTWARE.
 //! assert!((eph.defect_of_illum.to_degrees() * 3600.0 - 1.06).abs() < 0.005);
 //! ```
 
-use core::f64::consts::{PI, TAU};
+use core::f64::consts::PI;
 
+use crate::angle;
 use crate::coords;
 use crate::ecliptic;
 use crate::nutation;
@@ -75,8 +76,8 @@ const LIGHT_TIME_PER_AU: f64 = 0.005_775_518_3;
 /// Apparent diameter of Mars at a distance of one AU, in arcseconds.
 const DIAMETER_AT_1_AU: f64 = 9.36;
 
-/// Daily aberration constant used by Meeus for the planets, in degrees
-/// (about 20.49 arcseconds).
+/// The constant of annual aberration (about 20.49″), in degrees, as used
+/// by Meeus for the aberration of the planet in chapters 42, 43 and 45.
 const ABERRATION: f64 = 0.005_693;
 
 /// Returns the equatorial coordinates of Mars's north pole for the epoch
@@ -224,8 +225,8 @@ pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
     let s = compute(
         jde,
         (pole.long, pole.lat),
-        helio(&planet::Planet::Earth, jde),
-        |t| helio(&planet::Planet::Mars, t),
+        planet::heliocent_coords(&planet::Planet::Earth, jde),
+        |t| planet::heliocent_coords(&planet::Planet::Mars, t),
         ecliptic::mn_oblq_IAU(jde),
         nut_in_long,
         nut_in_oblq,
@@ -278,8 +279,8 @@ pub fn ephemeris(
     let s = compute(
         JD,
         (north_pole_ecl_coords.long, north_pole_ecl_coords.lat),
-        helio(&planet::Planet::Earth, JD),
-        |t| helio(&planet::Planet::Mars, t),
+        planet::heliocent_coords(&planet::Planet::Earth, JD),
+        |t| planet::heliocent_coords(&planet::Planet::Mars, t),
         mn_oblq,
         nut_in_long,
         nut_in_oblq,
@@ -412,7 +413,7 @@ fn compute(
         .atan2(dec.cos() * (asc0 - asc).sin());
 
     // Step 12
-    let omega = wrap_two_pi(w_angle - zeta);
+    let omega = angle::limit_to_two_PI(w_angle - zeta);
 
     // Step 14: both corrections use the uncorrected λ and β
     let k_ab = ABERRATION.to_radians();
@@ -428,7 +429,7 @@ fn compute(
     let dec_app = coords::dec_frm_ecl(lambda_app, beta_ab, tru_oblq);
 
     // Step 17, eq. 42.4
-    let p = wrap_two_pi(pos_angle(asc0_app, dec0_app, asc_app, dec_app));
+    let p = angle::limit_to_two_PI(pos_angle(asc0_app, dec0_app, asc_app, dec_app));
 
     // Step 18: the Sun seen from the Earth is opposite the Earth seen from
     // the Sun. It is referred to the same frame (mean equinox of date) as
@@ -437,8 +438,8 @@ fn compute(
     let sun_long = l0 + PI;
     let sun_asc = coords::asc_frm_ecl(sun_long, -b0, mn_oblq);
     let sun_dec = coords::dec_frm_ecl(sun_long, -b0, mn_oblq);
-    let bright_limb_pos_angle = wrap_two_pi(pos_angle(sun_asc, sun_dec, asc, dec));
-    let defect_pos_angle = wrap_two_pi(bright_limb_pos_angle + PI);
+    let bright_limb_pos_angle = angle::limit_to_two_PI(pos_angle(sun_asc, sun_dec, asc, dec));
+    let defect_pos_angle = angle::limit_to_two_PI(bright_limb_pos_angle + PI);
 
     // Step 19, with the illuminated fraction from eq. 41.2
     let k = (((r + delta).powi(2) - R * R) / (4.0 * r * delta)).clamp(0.0, 1.0);
@@ -554,24 +555,6 @@ fn light_time_corrected(
         pos = at(tau);
     }
     pos
-}
-
-/// The crate's VSOP87 heliocentric coordinates, with the latitude reduced
-/// to `[-π, π)`.
-///
-/// `planet::heliocent_coords` has been returning latitudes reduced to
-/// `[0, 2π)`; the trigonometry here does not mind, but the intermediate
-/// values (`b`, `b'`) are easier to check against the book in the signed
-/// range, and this keeps the module correct whichever range it returns.
-fn helio(planet: &planet::Planet, jde: f64) -> (f64, f64, f64) {
-    let (l, b, r) = planet::heliocent_coords(planet, jde);
-    (l, (b + PI).rem_euclid(TAU) - PI, r)
-}
-
-/// Reduces an angle to `[0, 2π)`.
-fn wrap_two_pi(a: f64) -> f64 {
-    let x = a.rem_euclid(TAU);
-    if x < TAU { x } else { 0.0 }
 }
 
 #[cfg(test)]
@@ -730,18 +713,13 @@ mod tests {
         assert_eq!(s.beta_ab, expected);
     }
 
+    // The Earth's heliocentric latitude of step 2 is small and negative;
+    // `planet::heliocent_coords` returns it signed, so no re-wrapping is
+    // needed before the steps that print `b0`.
     #[test]
-    fn helio_latitude_is_signed() {
-        let (_, b, _) = helio(&planet::Planet::Earth, JDE);
+    fn earth_heliocent_latitude_is_signed() {
+        let (_, b, _) = planet::heliocent_coords(&planet::Planet::Earth, JDE);
         close(b, -0.000_167, 1e-5);
         assert!(b < 0.0);
-    }
-
-    #[test]
-    fn wrap_two_pi_range() {
-        assert_eq!(wrap_two_pi(-1e-20), 0.0);
-        assert_eq!(wrap_two_pi(TAU), 0.0);
-        assert!((wrap_two_pi(-0.5) - (TAU - 0.5)).abs() < 1e-15);
-        assert!((wrap_two_pi(7.0) - (7.0 - TAU)).abs() < 1e-15);
     }
 }
