@@ -58,19 +58,17 @@ pub struct Elements {
     pub b: f64,
 }
 
-/**
-Computes the elements for the ring system of Saturn
-
-# Returns
-
-`elements`: Elements for the ring system. *All angles are in radians*
-
-# Arguments
-
-* `JD`         : Julian (Ephemeris) day
-* `nut_in_long`: Nutation in longitude on `JD` *| in radians*
-* `true_oblq`  : True obliquity of the ecliptic on `JD` *| in radians*
-**/
+/// Computes the elements for the ring system of Saturn
+///
+/// # Returns
+///
+/// `elements`: Elements for the ring system. *All angles are in radians*
+///
+/// # Arguments
+///
+/// * `JD`         : Julian (Ephemeris) day
+/// * `nut_in_long`: Nutation in longitude on `JD` *| in radians*
+/// * `true_oblq`  : True obliquity of the ecliptic on `JD` *| in radians*
 pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
     let (l0, b0, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
@@ -138,10 +136,10 @@ pub fn elements(JD: f64, nut_in_long: f64, true_oblq: f64) -> Elements {
         .atan2(dec0.sin() * dec.cos() - dec0.cos() * dec.sin() * (asc0 - asc).cos());
 
     Elements {
-        B: B,
-        B1: B1,
-        P: P,
-        deltaU: deltaU,
+        B,
+        B1,
+        P,
+        deltaU,
         a: semi_maj,
         b: semi_min,
     }

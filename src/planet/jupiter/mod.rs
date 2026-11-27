@@ -29,33 +29,29 @@ use crate::coords;
 use crate::nutation;
 use crate::planet;
 
-/**
-Computes Jupiter's equatorial semidiameter
-
-# Returns
-
-* `eq_semidia`: Equatorial semidiameter *| in radians per AU*
-
-# Arguments
-
-* `jup_earth_dist`: Jupiter-Earth distance *| in AU*
-**/
+/// Computes Jupiter's equatorial semidiameter
+///
+/// # Returns
+///
+/// * `eq_semidia`: Equatorial semidiameter *| in radians per AU*
+///
+/// # Arguments
+///
+/// * `jup_earth_dist`: Jupiter-Earth distance *| in AU*
 #[inline(always)]
 pub fn eq_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 98.44).to_radians() / jup_earth_dist
 }
 
-/**
-Computes Jupiter's polar semidiameter
-
-# Returns
-
-* `pol_semidia`: Polar semidiameter *| in radians per AU*
-
-# Arguments
-
-* `jup_earth_dist`: Jupiter-Earth distance *| in AU*
-**/
+/// Computes Jupiter's polar semidiameter
+///
+/// # Returns
+///
+/// * `pol_semidia`: Polar semidiameter *| in radians per AU*
+///
+/// # Arguments
+///
+/// * `jup_earth_dist`: Jupiter-Earth distance *| in AU*
 #[inline(always)]
 pub fn pol_semidiameter(jup_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 92.06).to_radians() / jup_earth_dist
@@ -78,21 +74,19 @@ pub struct Ephemeris {
     pub w2: f64,
 }
 
-/**
-Return quantites used in the ephemeris for physical observations
-of Jupiter
-
-# Returns
-
-* `ephemeris`: Jupiter's ephemeris. *All angles are in radians*
-
-# Arguments
-
-* `JD`         : Julian (Ephemeris) day
-* `mn_oblq`    : Mean obliquity of the ecliptic on `JD` *| in radians*
-* `nut_in_long`: Nutation in ecliptic longitude on `JD` *| in radians*
-* `nut_in_oblq`: Nutation in obliquity of the ecliptic on `JD` *| in radians*
-**/
+/// Return quantites used in the ephemeris for physical observations
+/// of Jupiter
+///
+/// # Returns
+///
+/// * `ephemeris`: Jupiter's ephemeris. *All angles are in radians*
+///
+/// # Arguments
+///
+/// * `JD`         : Julian (Ephemeris) day
+/// * `mn_oblq`    : Mean obliquity of the ecliptic on `JD` *| in radians*
+/// * `nut_in_long`: Nutation in ecliptic longitude on `JD` *| in radians*
+/// * `nut_in_oblq`: Nutation in obliquity of the ecliptic on `JD` *| in radians*
 pub fn ephemeris(JD: f64, mn_oblq: f64, nut_in_long: f64, nut_in_oblq: f64) -> Ephemeris {
     let d = JD - 2433282.5;
     let T1 = d / 36525.0;
@@ -172,7 +166,7 @@ pub fn ephemeris(JD: f64, mn_oblq: f64, nut_in_long: f64, nut_in_oblq: f64) -> E
             + asc.cos() * dec.sin() * l0.sin());
 
     let (asc_nut, dec_nut) = nutation::nutation_in_eq_coords(
-        &coords::EqPoint { asc: asc, dec: dec },
+        &coords::EqPoint { asc, dec },
         nut_in_long,
         nut_in_oblq,
         tru_oblq,
@@ -198,8 +192,8 @@ pub fn ephemeris(JD: f64, mn_oblq: f64, nut_in_long: f64, nut_in_oblq: f64) -> E
     Ephemeris {
         De: D_e,
         Ds: D_s,
-        P: P,
-        w1: w1,
-        w2: w2,
+        P,
+        w1,
+        w2,
     }
 }

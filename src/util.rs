@@ -34,16 +34,14 @@ pub fn round_upto_digits(float: f64, decimal_digits: u32) -> f64 {
     (float * d).round() / d
 }
 
-/**
-Evaluates a polynomial using Horner's algorithm
-
-# Arguments
-
-* `$x`     : The value of the independent variable `f32 or f64`
-* `$c`     : The constant term `f32 or f64`
-* `$($a),*`: Sequence of coefficient terms for `$x`, in ascending
-             powers of `$x`
-**/
+/// Evaluates a polynomial using Horner's algorithm
+///
+/// # Arguments
+///
+/// * `$x`     : The value of the independent variable `f32 or f64`
+/// * `$c`     : The constant term `f32 or f64`
+/// * `$($a),*`: Sequence of coefficient terms for `$x`, in ascending
+///   powers of `$x`
 #[macro_export]
 macro_rules! Horner_eval
 {

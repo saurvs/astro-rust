@@ -22,6 +22,7 @@ THE SOFTWARE.
 
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
+#![allow(clippy::too_many_arguments)]
 
 #[macro_use]
 pub mod util;

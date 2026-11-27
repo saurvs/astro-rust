@@ -26,38 +26,34 @@ use crate::angle;
 use crate::coords;
 use crate::time;
 
-/**
-Computes solar aberration in ecliptic longitude
-
-# Returns
-
-* `abrr`: Solar aberration in ecliptic
-          longitude *| in radians*
-
-# Arguments
-
-* `R`: Sun-Earth distance *| in AU*
-**/
+/// Computes solar aberration in ecliptic longitude
+///
+/// # Returns
+///
+/// * `abrr`: Solar aberration in ecliptic
+///   longitude *| in radians*
+///
+/// # Arguments
+///
+/// * `R`: Sun-Earth distance *| in AU*
 #[inline(always)]
 pub fn sol_aberr(R: f64) -> f64 {
     -angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R
 }
 
-/**
-Computes stellar aberration in equatorial coordinates
-
-# Returns
-
-`(abrr_in_asc, abrr_in_dec)`
-
-* `abrr_in_asc`: Aberration in right ascension *| in radians*
-* `abrr_in_dec`: Aberration in declination *| in radians*
-
-# Arguments
-
-* `stell_eq_point`: Equatorial coordinates of the star *| in radians*
-* `JD`            : Julian (Ephemeris) day
-**/
+/// Computes stellar aberration in equatorial coordinates
+///
+/// # Returns
+///
+/// `(abrr_in_asc, abrr_in_dec)`
+///
+/// * `abrr_in_asc`: Aberration in right ascension *| in radians*
+/// * `abrr_in_dec`: Aberration in declination *| in radians*
+///
+/// # Arguments
+///
+/// * `stell_eq_point`: Equatorial coordinates of the star *| in radians*
+/// * `JD`            : Julian (Ephemeris) day
 pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
     let t = time::julian_cent(JD);
 
@@ -220,8 +216,8 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
     sinA = A.sin();
     cosA = A.cos();
     x += 11.0 * sinA - cosA;
-    y += -1.0 * sinA - 10.0 * cosA;
-    z += -1.0 * sinA - 5.0 * cosA;
+    y += -sinA - 10.0 * cosA;
+    z += -sinA - 5.0 * cosA;
 
     // ROW 19
     A = 2.0 * (l2 - l3);
@@ -237,7 +233,7 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
     cosA = A.cos();
     x += -11.0 * sinA - 2.0 * cosA;
     y += -2.0 * sinA + 9.0 * cosA;
-    z += -1.0 * sinA + 4.0 * cosA;
+    z += -sinA + 4.0 * cosA;
 
     // ROW 21
     A = 4.0 * l3;
@@ -331,7 +327,7 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
     A = 3.0 * l2 - 4.0 * l3;
     sinA = A.sin();
     cosA = A.cos();
-    x += -1.0 * (sinA + cosA);
+    x += -(sinA + cosA);
     y += -2.0 * sinA - 7.0 * cosA;
     z += sinA - 4.0 * cosA;
 

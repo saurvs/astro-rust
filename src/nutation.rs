@@ -26,20 +26,18 @@ use crate::angle;
 use crate::coords;
 use crate::time;
 
-/**
-Computes nutation in ecliptic longitude and obliquity
-
-# Returns
-
-`(nut_in_long, nut_in_oblq)`
-
-* `nut_in_long`: Nutation in ecliptic longitude *| in radians*
-* `nut_in_oblq`: Nutation in obliquity of the ecliptic *| in radians*
-
-# Arguments
-
-`JD`: Julian (Ephemeris) day
-**/
+/// Computes nutation in ecliptic longitude and obliquity
+///
+/// # Returns
+///
+/// `(nut_in_long, nut_in_oblq)`
+///
+/// * `nut_in_long`: Nutation in ecliptic longitude *| in radians*
+/// * `nut_in_oblq`: Nutation in obliquity of the ecliptic *| in radians*
+///
+/// # Arguments
+///
+/// `JD`: Julian (Ephemeris) day
 pub fn nutation(JD: f64) -> (f64, f64) {
     struct terms(i8, i8, i8, i8, i8, i32, i32, i32, i16);
     let terms_for_nutation = [
@@ -140,27 +138,25 @@ pub fn nutation(JD: f64) -> (f64, f64) {
     (nut_in_long.to_radians(), nut_in_oblq.to_radians())
 }
 
-/**
-Computes nutation in equatorial coordinates
-
-# Returns
-
-`(nut_in_asc, nut_in_dec)`
-
-* `nut_in_asc`: Nutation in right ascension *| in radians*
-* `nut_in_dec`: Nutation in declination *| in radians*
-
-# Arguments
-
-* `eq_point`   : Equatorial point uncorrected for nutation *| in radians*
-* `nut_in_long`: Nutation in longitude *| in radians*
-* `nut_in_oblq`: Nutation in obliquity *| in radians*
-* `tru_oblq`   : True obliquity of the ecliptic *| in radians*
-
-The declination of `eq_point` should not be close to either of the
-two of the celestial poles, as the values of nutation returned here
-are only from first-order corrections.
-**/
+/// Computes nutation in equatorial coordinates
+///
+/// # Returns
+///
+/// `(nut_in_asc, nut_in_dec)`
+///
+/// * `nut_in_asc`: Nutation in right ascension *| in radians*
+/// * `nut_in_dec`: Nutation in declination *| in radians*
+///
+/// # Arguments
+///
+/// * `eq_point`   : Equatorial point uncorrected for nutation *| in radians*
+/// * `nut_in_long`: Nutation in longitude *| in radians*
+/// * `nut_in_oblq`: Nutation in obliquity *| in radians*
+/// * `tru_oblq`   : True obliquity of the ecliptic *| in radians*
+///
+/// The declination of `eq_point` should not be close to either of the
+/// two of the celestial poles, as the values of nutation returned here
+/// are only from first-order corrections.
 pub fn nutation_in_eq_coords(
     eq_point: &coords::EqPoint,
     nut_in_long: f64,

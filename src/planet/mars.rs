@@ -27,15 +27,13 @@ use crate::coords;
 use crate::planet;
 use crate::time;
 
-/**
-Returns the equatorial coordinates of Mars's north pole for the epoch
-J1950.0
-
-# Returns
-
-* `eq_coords`: Equatorial coordinates of Mars's north pole for the
-               epoch J1950.0 *| in radians*
-**/
+/// Returns the equatorial coordinates of Mars's north pole for the epoch
+/// J1950.0
+///
+/// # Returns
+///
+/// * `eq_coords`: Equatorial coordinates of Mars's north pole for the
+///   epoch J1950.0 *| in radians*
 #[inline(always)]
 pub fn north_pol_eq_coords_J1950() -> coords::EqPoint {
     coords::EqPoint {
@@ -44,15 +42,13 @@ pub fn north_pol_eq_coords_J1950() -> coords::EqPoint {
     }
 }
 
-/**
-Returns the equatorial coordinates of Mars's north pole for the epoch
-J2000.0
-
-# Returns
-
-* `eq_coords`: Equatorial coordinates of Mars's north pole for the
-               epoch J2000.0 *| in radians*
-**/
+/// Returns the equatorial coordinates of Mars's north pole for the epoch
+/// J2000.0
+///
+/// # Returns
+///
+/// * `eq_coords`: Equatorial coordinates of Mars's north pole for the
+///   epoch J2000.0 *| in radians*
 #[inline(always)]
 pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
     coords::EqPoint {
@@ -61,19 +57,17 @@ pub fn north_pol_eq_coords_J2000() -> coords::EqPoint {
     }
 }
 
-/**
-Computes the ecliptic coordinates of Mars's north pole, referred to
-the mean equinox of the date
-
-# Returns
-
-* `ecl_coords`: Ecliptic coordinates of Mars's north pole
-                *| in radians*
-
-# Arguments
-
-* `JC`: Julian (Ephemeris) century
-**/
+/// Computes the ecliptic coordinates of Mars's north pole, referred to
+/// the mean equinox of the date
+///
+/// # Returns
+///
+/// * `ecl_coords`: Ecliptic coordinates of Mars's north pole
+///   *| in radians*
+///
+/// # Arguments
+///
+/// * `JC`: Julian (Ephemeris) century
 #[inline(always)]
 pub fn north_pol_ecl_coords(JC: f64) -> coords::EclPoint {
     coords::EclPoint {
@@ -100,26 +94,24 @@ pub struct Ephemeris {
     pub d: f64,
 }
 
-/**
-Computes quantites used in the ephemeris for physical observations of
-Mars
-
-# Returns
-
-* `ephemeris`: Mar's ephemeris. *All angles are in radians*
-
-# Arguments
-
-* `JD`                   : Julian (Ephemeris) day
-* `north_pole_ecl_coords`: Ecliptic coordinates of Mars's north pole
-                           on `JD` *| in radians*
-* `mn_oblq`              : Mean obliquity of the ecliptic on `JD`
-                           *| in radians*
-* `nut_in_long`          : Nutation in ecliptic longitude on `JD`
-                           *| in radians*
-* `nut_in_oblq`          : Nutation in obliquity of the ecliptic on
-                           `JD` *| in radians*
-**/
+/// Computes quantites used in the ephemeris for physical observations of
+/// Mars
+///
+/// # Returns
+///
+/// * `ephemeris`: Mar's ephemeris. *All angles are in radians*
+///
+/// # Arguments
+///
+/// * `JD`                   : Julian (Ephemeris) day
+/// * `north_pole_ecl_coords`: Ecliptic coordinates of Mars's north pole
+///   on `JD` *| in radians*
+/// * `mn_oblq`              : Mean obliquity of the ecliptic on `JD`
+///   *| in radians*
+/// * `nut_in_long`          : Nutation in ecliptic longitude on `JD`
+///   *| in radians*
+/// * `nut_in_oblq`          : Nutation in obliquity of the ecliptic on
+///   `JD` *| in radians*
 pub fn ephemeris(
     JD: f64,
     north_pole_ecl_coords: &coords::EclPoint,
@@ -202,9 +194,9 @@ pub fn ephemeris(
     Ephemeris {
         De: D_e,
         Ds: D_s,
-        P: P,
-        q: q,
-        w: w,
-        d: d,
+        P,
+        q,
+        w,
+        d,
     }
 }

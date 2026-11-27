@@ -25,65 +25,59 @@ THE SOFTWARE.
 use crate::angle;
 use crate::time;
 
-/**
-Computes the geocentric equatorial semidiameter of Pluto
-
-# Returns
-
-* `semidiameter`: Geocentric equatorial semidiameter
-                  *| in radians per AU*
-
-# Arguments
-
-* `pluto_earth_dist`: Pluto-Earth distance *| in AU*
-**/
+/// Computes the geocentric equatorial semidiameter of Pluto
+///
+/// # Returns
+///
+/// * `semidiameter`: Geocentric equatorial semidiameter
+///   *| in radians per AU*
+///
+/// # Arguments
+///
+/// * `pluto_earth_dist`: Pluto-Earth distance *| in AU*
 #[inline]
 pub fn semdiameter(pluto_earth_dist: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 2.07).to_radians() / pluto_earth_dist
 }
 
-/**
-Computes the apparent magnitude of Pluto using the Astronomical
-Almanac's method adopted in 1984
-
-# Returns
-
-* `app_mag`: Apparent magnitude of Pluto
-
-# Arguments
-
-* `delta`: Pluto-Earth distance *| in AU*
-* `r`    : Pluto-Sun distance *| in AU*
-**/
+/// Computes the apparent magnitude of Pluto using the Astronomical
+/// Almanac's method adopted in 1984
+///
+/// # Returns
+///
+/// * `app_mag`: Apparent magnitude of Pluto
+///
+/// # Arguments
+///
+/// * `delta`: Pluto-Earth distance *| in AU*
+/// * `r`    : Pluto-Sun distance *| in AU*
 #[inline]
 pub fn apprnt_mag_84(delta: f64, r: f64) -> f64 {
     (r * delta).log10() * 5.0 - 1.0
 }
 
-/**
-Computes the heliocentric coordinates of Pluto, referred to the
-standard equinox of J2000.0
-
-This function is valid only for the years 1885 AD to 2099 AD.
-
-# Returns
-
-`(long, lat, rad_vec)`
-
-* `long`   : Heliocentric longitude of Pluto *| in radians*
-* `lat`    : Heliocentric latitude of Pluto *| in radians*
-* `rad_vec`: Heliocentric radius vector of Pluto *| in AU*
-
-The error in
-
-* `long` is less than 0.07 arcseconds
-* `lat` is less than 0.02 arcseconds
-* `rad_vec` is less than 0.000006 AU
-
-# Arguments
-
-* `JD`: Julian (Ephemeris) day
-**/
+/// Computes the heliocentric coordinates of Pluto, referred to the
+/// standard equinox of J2000.0
+///
+/// This function is valid only for the years 1885 AD to 2099 AD.
+///
+/// # Returns
+///
+/// `(long, lat, rad_vec)`
+///
+/// * `long`   : Heliocentric longitude of Pluto *| in radians*
+/// * `lat`    : Heliocentric latitude of Pluto *| in radians*
+/// * `rad_vec`: Heliocentric radius vector of Pluto *| in AU*
+///
+/// The error in
+///
+/// * `long` is less than 0.07 arcseconds
+/// * `lat` is less than 0.02 arcseconds
+/// * `rad_vec` is less than 0.000006 AU
+///
+/// # Arguments
+///
+/// * `JD`: Julian (Ephemeris) day
 pub fn heliocent_pos(JD: f64) -> (f64, f64, f64) {
     let JC = time::julian_cent(JD);
 
@@ -235,20 +229,18 @@ pub fn heliocent_pos(JD: f64) -> (f64, f64, f64) {
     (long, lat, r)
 }
 
-/**
-Returns the mean orbital elements of Pluto near 2000 AD
-
-# Returns
-
-`(a, e, i, omega, w)`
-
-* `a`    : Semimajor axis of the orbit *| in AU*
-* `e`    : Eccentricity of the orbit
-* `i`    : Inclination of the plane of the orbit with the
-           plane of the ecliptic *| in radians*
-* `omega`: Longitude of the ascending node *| in radians*
-* `w`    : Argument of the perihelion *| in radians*
-**/
+/// Returns the mean orbital elements of Pluto near 2000 AD
+///
+/// # Returns
+///
+/// `(a, e, i, omega, w)`
+///
+/// * `a`    : Semimajor axis of the orbit *| in AU*
+/// * `e`    : Eccentricity of the orbit
+/// * `i`    : Inclination of the plane of the orbit with the
+///   plane of the ecliptic *| in radians*
+/// * `omega`: Longitude of the ascending node *| in radians*
+/// * `w`    : Argument of the perihelion *| in radians*
 pub fn mn_orb_elements_2000AD() -> (f64, f64, f64, f64, f64) {
     (
         039.543,                  // a

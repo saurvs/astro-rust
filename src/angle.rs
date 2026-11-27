@@ -26,38 +26,34 @@ use std;
 
 pub const TWO_PI: f64 = 2.0 * std::f64::consts::PI;
 
-/**
-Computes the angular separation between two angular points
-
-# Arguments
-
-* `p1a1`: Angle 1 of point 1 *| in radians*
-* `p1a2`: Angle 2 of point 1 *| in radians*
-* `p2a1`: Angle 1 of point 2 *| in radians*
-* `p2a2`: Angle 2 of point 2 *| in radians*
-
-Angle 1 may be right ascension or longitude.
-Angle 2 may be declination or latitude.
-**/
+/// Computes the angular separation between two angular points
+///
+/// # Arguments
+///
+/// * `p1a1`: Angle 1 of point 1 *| in radians*
+/// * `p1a2`: Angle 2 of point 1 *| in radians*
+/// * `p2a1`: Angle 1 of point 2 *| in radians*
+/// * `p2a2`: Angle 2 of point 2 *| in radians*
+///
+/// Angle 1 may be right ascension or longitude.
+/// Angle 2 may be declination or latitude.
 #[inline]
 pub fn anglr_sepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
     (p1a2.sin() * p2a2.sin() + p1a2.cos() * p2a2.cos() * (p1a1 - p2a1).cos()).acos()
 }
 
-/**
-Computes an angle in degrees with decimals, from an angle
-expressed in degrees, arcminutes and arcseconds
-
-# Returns
-
-* `deg`: Angle in degrees with decimals
-
-# Arguments
-
-* `deg`: Degrees
-* `min`: Arcminutes
-* `sec`: Arcseconds
-**/
+/// Computes an angle in degrees with decimals, from an angle
+/// expressed in degrees, arcminutes and arcseconds
+///
+/// # Returns
+///
+/// * `deg`: Angle in degrees with decimals
+///
+/// # Arguments
+///
+/// * `deg`: Degrees
+/// * `min`: Arcminutes
+/// * `sec`: Arcseconds
 #[inline]
 pub fn deg_frm_dms(deg: i64, min: i64, sec: f64) -> f64 {
     let (M, S) = if deg < 0 {
@@ -69,22 +65,20 @@ pub fn deg_frm_dms(deg: i64, min: i64, sec: f64) -> f64 {
     (deg as f64) + (M as f64) / 60.0 + S / 3600.0
 }
 
-/**
-Computes an angle expressed in degrees, arcminutes and
-arcseconds, from an angle in degrees with decimals
-
-# Returns
-
-`(deg, min, sec)`
-
-* `deg`: Degrees
-* `min`: Arcminutes
-* `sec`: Arcseconds
-
-# Arguments
-
-* `deg`: Angle in degrees with decimals
-**/
+/// Computes an angle expressed in degrees, arcminutes and
+/// arcseconds, from an angle in degrees with decimals
+///
+/// # Returns
+///
+/// `(deg, min, sec)`
+///
+/// * `deg`: Degrees
+/// * `min`: Arcminutes
+/// * `sec`: Arcseconds
+///
+/// # Arguments
+///
+/// * `deg`: Angle in degrees with decimals
 #[inline]
 pub fn dms_frm_deg(deg: f64) -> (i64, i64, f64) {
     let degree = deg as i64;
@@ -97,37 +91,33 @@ pub fn dms_frm_deg(deg: f64) -> (i64, i64, f64) {
     (degree, minute, seconds)
 }
 
-/**
-Computes an angle in degrees with decimals, from an angle
-expressed in hours, minutes and seconds
-
-# Arguments
-
-* `hours`: Hours
-* `min`: Minutes
-* `sec`: Seconds
-**/
+/// Computes an angle in degrees with decimals, from an angle
+/// expressed in hours, minutes and seconds
+///
+/// # Arguments
+///
+/// * `hours`: Hours
+/// * `min`: Minutes
+/// * `sec`: Seconds
 #[inline]
 pub fn deg_frm_hms(hour: i64, min: i64, sec: f64) -> f64 {
     15.0 * ((hour as f64) + (min as f64) / 60.0 + sec / 3600.0)
 }
 
-/**
-Computes an angle expressed in hours, minutes and
-seconds, from an angle in degrees with decimals
-
-# Returns
-
-`(deg, min, sec)`
-
-* `hour`: Hours
-* `min`: Minutes
-* `sec`: Seconds
-
-# Arguments
-
-* `deg`: Angle in degrees with decimals
-**/
+/// Computes an angle expressed in hours, minutes and
+/// seconds, from an angle in degrees with decimals
+///
+/// # Returns
+///
+/// `(deg, min, sec)`
+///
+/// * `hour`: Hours
+/// * `min`: Minutes
+/// * `sec`: Seconds
+///
+/// # Arguments
+///
+/// * `deg`: Angle in degrees with decimals
 #[inline]
 pub fn hms_frm_deg(deg: f64) -> (i64, i64, f64) {
     let hours = deg / 15.0;
@@ -141,13 +131,11 @@ pub fn hms_frm_deg(deg: f64) -> (i64, i64, f64) {
     (hour, minute, seconds)
 }
 
-/**
-Computes the equivalent angle in [0, 360] degree range
-
-# Arguments
-
-* `angl`: Angle *| in degrees*
-**/
+/// Computes the equivalent angle in [0, 360] degree range
+///
+/// # Arguments
+///
+/// * `angl`: Angle *| in degrees*
 #[inline]
 pub fn limit_to_360(angl: f64) -> f64 {
     let n = (angl / 360.0) as i64;
@@ -160,13 +148,11 @@ pub fn limit_to_360(angl: f64) -> f64 {
     }
 }
 
-/**
-Computes the equivalent angle in [0, 2π] radian range
-
-# Arguments
-
-* `angl`: Angle *| in radians*
-**/
+/// Computes the equivalent angle in [0, 2π] radian range
+///
+/// # Arguments
+///
+/// * `angl`: Angle *| in radians*
 #[inline]
 pub fn limit_to_two_PI(angl: f64) -> f64 {
     let n = (angl / TWO_PI) as i64;

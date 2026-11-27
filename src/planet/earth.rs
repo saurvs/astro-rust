@@ -26,70 +26,58 @@ use crate::angle;
 use crate::coords;
 use crate::time;
 
-/**
-Returns the flattening factor of the Earth
-
-Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
-**/
+/// Returns the flattening factor of the Earth
+///
+/// Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 #[inline(always)]
 pub fn flat_fac() -> f64 {
     1.0 / 298.257223563
 }
 
-/**
-Returns the equatorial radius of the Earth *| in kilometers*
-
-Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
-**/
+/// Returns the equatorial radius of the Earth *| in kilometers*
+///
+/// Reference: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
 #[inline(always)]
 pub fn eq_rad() -> f64 {
     6378.137
 }
 
-/**
-Returns the polar radius of the Earth *| in kilometers*
-
-Calculated using [`FlatteningFactor()`](./fn.FlatteningFactor.html) and
-[`eq_radius()`](./fn.eq_radius.html)
-**/
+/// Returns the polar radius of the Earth *| in kilometers*
+///
+/// Calculated using [`FlatteningFactor()`](./fn.FlatteningFactor.html) and
+/// [`eq_radius()`](./fn.eq_radius.html)
 #[inline]
 pub fn pol_rad() -> f64 {
     eq_rad() * (1.0 - flat_fac())
 }
 
-/**
-Returns the eccentricity of the Earth's meridian
-**/
+/// Returns the eccentricity of the Earth's meridian
 #[inline]
 pub fn ecc_of_meridian() -> f64 {
     (flat_fac() * (2.0 - flat_fac())).sqrt()
 }
 
-/**
-Computes a low accuracy geodesic distance between two points
-on the Earth's surface *| in kilometers*
-
-Assumes that the Earth is a sphere.
-
-# Arguments
-
-* `p1`: `GeographPoint` 1
-* `p2`: `GeographPoint` 2
-**/
+/// Computes a low accuracy geodesic distance between two points
+/// on the Earth's surface *| in kilometers*
+///
+/// Assumes that the Earth is a sphere.
+///
+/// # Arguments
+///
+/// * `p1`: `GeographPoint` 1
+/// * `p2`: `GeographPoint` 2
 #[inline]
 pub fn approx_geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
-    6371.0 * p1.anglr_sepr(&p2)
+    6371.0 * p1.anglr_sepr(p2)
 }
 
-/**
-Computes a high accuracy geodesic distance between two points on the Earth's
-surface *| in kilometers*
-
-# Arguments
-
-* `p1`: `GeographPoint` 1
-* `p2`: `GeographPoint` 2
-**/
+/// Computes a high accuracy geodesic distance between two points on the Earth's
+/// surface *| in kilometers*
+///
+/// # Arguments
+///
+/// * `p1`: `GeographPoint` 1
+/// * `p2`: `GeographPoint` 2
 pub fn geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> f64 {
     let f = (p1.lat + p2.lat) / 2.0;
     let g = (p1.lat - p2.lat) / 2.0;
@@ -109,25 +97,23 @@ pub fn geodesic_dist(p1: &coords::GeographPoint, p2: &coords::GeographPoint) -> 
         - flat_fac() * h2 * (f.cos() * g.sin()).powi(2))
 }
 
-/**
-Computes two quantities that are used elsewhere in the library
-
-# Returns
-
-`Rho` here denotes the distance from the Earth's center to a point
-on the ellipsoid, and `Phi` here denotes the geocentric latitude,
-both of an observer on the Earth's surface.
-
-`rho_sin_phi, rho_cos_phi`
-
-* `rho_sin_phi`: Rho sin phi
-* `rho_cos_phi`: Rho cos phi
-
-# Arguments
-
-* `geograph_lat`: Observer's geographic latitude *| in radians*
-* `height`      : Observer's height above sea level *(meters)*
-**/
+/// Computes two quantities that are used elsewhere in the library
+///
+/// # Returns
+///
+/// `Rho` here denotes the distance from the Earth's center to a point
+/// on the ellipsoid, and `Phi` here denotes the geocentric latitude,
+/// both of an observer on the Earth's surface.
+///
+/// `rho_sin_phi, rho_cos_phi`
+///
+/// * `rho_sin_phi`: Rho sin phi
+/// * `rho_cos_phi`: Rho cos phi
+///
+/// # Arguments
+///
+/// * `geograph_lat`: Observer's geographic latitude *| in radians*
+/// * `height`      : Observer's height above sea level *(meters)*
 pub fn rho_sin_cos_phi(geograph_lat: f64, height: f64) -> (f64, f64) {
     let u = (geograph_lat.tan() * pol_rad() / eq_rad()).atan();
     let x = height / (eq_rad() * 1000.0);
@@ -138,20 +124,18 @@ pub fn rho_sin_cos_phi(geograph_lat: f64, height: f64) -> (f64, f64) {
     (rho_sin_phi, rho_cos_phi)
 }
 
-/**
-Computes the distance from the Earth's center to a point on the
-ellipsoid
-
-# Returns
-
-* `rho`: Distance from the Earth's center to the point on the
-         ellipsoid (*fraction of the equatorial radius*)
-
-# Arguments
-
-* `geograph_lat`: Geographic latitude of a point on the
-                  ellipsoid *| in radians*
-**/
+/// Computes the distance from the Earth's center to a point on the
+/// ellipsoid
+///
+/// # Returns
+///
+/// * `rho`: Distance from the Earth's center to the point on the
+///   ellipsoid (*fraction of the equatorial radius*)
+///
+/// # Arguments
+///
+/// * `geograph_lat`: Geographic latitude of a point on the
+///   ellipsoid *| in radians*
 pub fn rho(geograph_lat: f64) -> f64 {
     0.9983271 + 0.0016764 * (2.0 * geograph_lat).cos() - 0.0000035 * (4.0 * geograph_lat).cos()
 }
@@ -163,91 +147,81 @@ pub fn rot_angular_velocity() -> f64 {
     0.00007292114992
 }
 
-/**
-Computes the radius of the parallel of a latitude
-
-# Returns
-
-* `rad`: Radius of the parallel of the latitude
-         *| in kilometers*
-
-# Arguments
-
-* `geograph_lat`: Geographic latitude of a point
-                  on the ellipsoid *| in radians*
-**/
+/// Computes the radius of the parallel of a latitude
+///
+/// # Returns
+///
+/// * `rad`: Radius of the parallel of the latitude
+///   *| in kilometers*
+///
+/// # Arguments
+///
+/// * `geograph_lat`: Geographic latitude of a point
+///   on the ellipsoid *| in radians*
 pub fn rad_of_parll_lat(geograph_lat: f64) -> f64 {
     let e = ecc_of_meridian();
 
     eq_rad() * geograph_lat.cos() / (1.0 - (e * geograph_lat.sin()).powi(2)).sqrt()
 }
 
-/**
-Computes the linear velocity of a point at a latitude
-
-# Returns
-
-* `lin_vel`: Linear velocity at the latitude
-             (kilometers per second*)
-
-# Arguments
-
-* `geograph_lat`: Geographic latitude of a point on
-                  the ellipsoid *| in radians*
-**/
+/// Computes the linear velocity of a point at a latitude
+///
+/// # Returns
+///
+/// * `lin_vel`: Linear velocity at the latitude
+///   (kilometers per second*)
+///
+/// # Arguments
+///
+/// * `geograph_lat`: Geographic latitude of a point on
+///   the ellipsoid *| in radians*
 #[inline(always)]
 pub fn linear_velocity_at_lat(geograph_lat: f64) -> f64 {
     rot_angular_velocity() * rad_of_parll_lat(geograph_lat)
 }
 
-/**
-Computes the radius of curvature of the Earth's meridian
-at a latitude
-
-# Returns
-
-* `rad`: Radius of curvature of the Earth's meridian at the
-         latitude *| in kilometers*
-
-# Arguments
-
-* `geograph_lat`: Geographic latitude of a point on the
-                  ellipsoid *| in radians*
-**/
+/// Computes the radius of curvature of the Earth's meridian
+/// at a latitude
+///
+/// # Returns
+///
+/// * `rad`: Radius of curvature of the Earth's meridian at the
+///   latitude *| in kilometers*
+///
+/// # Arguments
+///
+/// * `geograph_lat`: Geographic latitude of a point on the
+///   ellipsoid *| in radians*
 pub fn rad_curv_of_meridian(lat: f64) -> f64 {
     let e = ecc_of_meridian();
 
     eq_rad() * (1.0 - e * e) / (1.0 - (e * lat.sin()).powi(2)).powf(1.5)
 }
 
-/**
-Computes the difference between the geographic latitude and
-geocentric latitude
-
-# Returns
-
-* `diff`: Geographic latitude minus geocentric latitude
-          *| in radians*
-
-# Arguments
-
-* `geograph_lat`: Geographic latitude *| in radians*
-**/
+/// Computes the difference between the geographic latitude and
+/// geocentric latitude
+///
+/// # Returns
+///
+/// * `diff`: Geographic latitude minus geocentric latitude
+///   *| in radians*
+///
+/// # Arguments
+///
+/// * `geograph_lat`: Geographic latitude *| in radians*
 pub fn geograph_geocent_lat_diff(geograph_lat: f64) -> f64 {
     angle::deg_frm_dms(0, 0, 692.73) * (2.0 * geograph_lat).sin()
         - angle::deg_frm_dms(0, 0, 1.16) * (4.0 * geograph_lat).sin()
 }
 
-/**
-Computes the equation of time *| in radians*
-
-# Arguments
-
-* `JD`      : Julian (Ephemeris) day
-* `sun_asc` : Right ascension of the Sun *| in radians*
-* `nut_log` : Nutation correction for longitude *| in radians*
-* `tru_oblq`: True obliquity of the ecliptic *| in radians*
-**/
+/// Computes the equation of time *| in radians*
+///
+/// # Arguments
+///
+/// * `JD`      : Julian (Ephemeris) day
+/// * `sun_asc` : Right ascension of the Sun *| in radians*
+/// * `nut_log` : Nutation correction for longitude *| in radians*
+/// * `tru_oblq`: True obliquity of the ecliptic *| in radians*
 pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> f64 {
     let t = time::julian_mill(JD);
     let L = angle::limit_to_360(
@@ -259,21 +233,19 @@ pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> 
     (L - 0.0057183 - sun_asc.to_degrees() + nut_long.to_degrees() * tru_oblq.cos()).to_radians()
 }
 
-/**
-Computes the angle between diurnal path and the horizon
-
-# Returns
-
-* `angl`: Angle between the diurnal path of a celestial
-          body and the horizon *| in radians*
-
-# Arguments
-
-* `dec`         : Declination of the celestial body
-                  *| in radians*
-* `observer_lat`: Observer's geographic latitude
-                  *| in radians*
-**/
+/// Computes the angle between diurnal path and the horizon
+///
+/// # Returns
+///
+/// * `angl`: Angle between the diurnal path of a celestial
+///   body and the horizon *| in radians*
+///
+/// # Arguments
+///
+/// * `dec`         : Declination of the celestial body
+///   *| in radians*
+/// * `observer_lat`: Observer's geographic latitude
+///   *| in radians*
 pub fn angl_betwn_diurnal_path_and_hz(dec: f64, observer_lat: f64) -> f64 {
     let B = dec.tan() * observer_lat.tan();
     let C = (1.0 - B * B).sqrt();

@@ -29,8 +29,8 @@ fn eq_coords_frm_motion() {
         -16.716108_f64.to_radians(),
         2.64,
         -0.000007773,
-        (-0.03847 / 3600.0 as f64).to_radians(),
-        (-1.20530 / 3600.0 as f64).to_radians(),
+        (-0.03847 / 3600.0_f64).to_radians(),
+        (-1.20530 / 3600.0_f64).to_radians(),
         -1000.0,
     );
 

@@ -21,6 +21,7 @@ THE SOFTWARE.
 */
 
 #![allow(non_snake_case)]
+#![allow(clippy::approx_constant)]
 
 use astro::*;
 

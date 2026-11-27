@@ -26,42 +26,38 @@ use crate::angle;
 use crate::coords;
 use crate::planet;
 
-/**
-Computes the equatorial horizontal parallax of a celestial body
-
-# Returns
-
-* `eq_hz_parllx`: Equatorial horizontal parallax of the celestial
-                  body *| in radians*
-
-# Arguments
-
-* `dist_to_earth`: The celestial body's distance to the Earth *| in AU*
-**/
+/// Computes the equatorial horizontal parallax of a celestial body
+///
+/// # Returns
+///
+/// * `eq_hz_parllx`: Equatorial horizontal parallax of the celestial
+///   body *| in radians*
+///
+/// # Arguments
+///
+/// * `dist_to_earth`: The celestial body's distance to the Earth *| in AU*
 #[inline]
 pub fn eq_hz_parallax(dist_to_earth: f64) -> f64 {
     (angle::deg_frm_dms(0, 0, 8.794).to_radians().sin() / dist_to_earth).asin()
 }
 
-/**
-Computes the topocentric equatorial coordinates of a celestial body
-
-# Returns
-
-* `topocent_eq_point`: Topocentric equatorial point of the
-                      celestial body *| in radians*
-
-# Arguments
-
-* `eq_point`          : Equatorial point of the celestial body
-                        *| in radians*
-* `eq_hz_parllx`      : Equatorial horizontal parallax of the celestial
-                        body *| in radians*
-* `geograph_point`    : Geographic point of the observer *| in radians*
-* `observer_ht`       : Height of the observer above sea level
-                        *| in meters*
-* `greenw_sidr`: Sidereal time at Greenwhich *| in radians*
-**/
+/// Computes the topocentric equatorial coordinates of a celestial body
+///
+/// # Returns
+///
+/// * `topocent_eq_point`: Topocentric equatorial point of the
+///   celestial body *| in radians*
+///
+/// # Arguments
+///
+/// * `eq_point`          : Equatorial point of the celestial body
+///   *| in radians*
+/// * `eq_hz_parllx`      : Equatorial horizontal parallax of the celestial
+///   body *| in radians*
+/// * `geograph_point`    : Geographic point of the observer *| in radians*
+/// * `observer_ht`       : Height of the observer above sea level
+///   *| in meters*
+/// * `greenw_sidr`: Sidereal time at Greenwhich *| in radians*
 pub fn topocent_eq_coords(
     eq_point: &coords::EqPoint,
     eq_hz_parllx: f64,
@@ -88,29 +84,27 @@ pub fn topocent_eq_coords(
     }
 }
 
-/**
-Computes the topocentric ecliptic coordinates of a celestial body
-
-# Returns
-
-`(topocent_ecl_point, topocent_geocent_semidia)`
-
-* `topocent_ecl_point`     : Topocentric ecliptic point of the
-                            celestial body *| in radians*
-* `topocent_geocent_semidia`: Topocentric semidiameter of the
-                            celestial body *| in radians*
-
-# Arguments
-
-* `ecl_point`     : Ecliptic point of the celestial body *| in radians*
-* `eq_hz_parllx`  : Equatorial horizontal parallax of the celestial
-                    body *| in radians*
-* `geograph_point`: Geographic point of the observer *| in radians*
-* `observer_ht`   : Height of the observer above sea level *| in meters*
-* `loc_sidr`      : Local sidereal time *| in radians*
-* `eclip_oblq`    : Obliquity of the ecliptic *| in radians*
-* `geocent_semdia` : Geocentric semidiameter of the celestial body *| in radians*
-**/
+/// Computes the topocentric ecliptic coordinates of a celestial body
+///
+/// # Returns
+///
+/// `(topocent_ecl_point, topocent_geocent_semidia)`
+///
+/// * `topocent_ecl_point`     : Topocentric ecliptic point of the
+///   celestial body *| in radians*
+/// * `topocent_geocent_semidia`: Topocentric semidiameter of the
+///   celestial body *| in radians*
+///
+/// # Arguments
+///
+/// * `ecl_point`     : Ecliptic point of the celestial body *| in radians*
+/// * `eq_hz_parllx`  : Equatorial horizontal parallax of the celestial
+///   body *| in radians*
+/// * `geograph_point`: Geographic point of the observer *| in radians*
+/// * `observer_ht`   : Height of the observer above sea level *| in meters*
+/// * `loc_sidr`      : Local sidereal time *| in radians*
+/// * `eclip_oblq`    : Obliquity of the ecliptic *| in radians*
+/// * `geocent_semdia` : Geocentric semidiameter of the celestial body *| in radians*
 pub fn topopcent_ecl_coords(
     ecl_point: &coords::EclPoint,
     eq_hz_parllx: f64,

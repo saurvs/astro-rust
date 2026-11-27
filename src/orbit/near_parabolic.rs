@@ -25,26 +25,24 @@ THE SOFTWARE.
 use crate::angle;
 use crate::consts;
 
-/**
-Computes the true anomaly and radius vector of a body in a near-parabolic
-orbit at a given time
-
-# Returns
-
-`(true_anom, rad_vec)`
-
-* `true_anom`: True anomaly of the body at time `t` *| in radians*
-* `rad_vec`  : Radius vector of the body at time `t` *| in AU*
-
-# Arguments
-
-* `t`       : Time of interest, in Julian (Ephemeris) day
-* `T`       : Time of passage through the perihelion, in Julian (Ephemeris) day
-* `ecc`     : Eccentricity of the near-parabolic orbit
-* `q`       : Perihelion distance *| in AU*
-* `accuracy`: Desired accuracy for the results. For example, passing `0.000001`
-              gives that much accuracy in radians and AU.
-**/
+/// Computes the true anomaly and radius vector of a body in a near-parabolic
+/// orbit at a given time
+///
+/// # Returns
+///
+/// `(true_anom, rad_vec)`
+///
+/// * `true_anom`: True anomaly of the body at time `t` *| in radians*
+/// * `rad_vec`  : Radius vector of the body at time `t` *| in AU*
+///
+/// # Arguments
+///
+/// * `t`       : Time of interest, in Julian (Ephemeris) day
+/// * `T`       : Time of passage through the perihelion, in Julian (Ephemeris) day
+/// * `ecc`     : Eccentricity of the near-parabolic orbit
+/// * `q`       : Perihelion distance *| in AU*
+/// * `accuracy`: Desired accuracy for the results. For example, passing `0.000001`
+///   gives that much accuracy in radians and AU.
 pub fn true_anom_and_rad_vec<'a>(
     t: f64,
     T: f64,

@@ -25,23 +25,21 @@ THE SOFTWARE.
 use crate::orbit;
 use std;
 
-/**
-Computes the true anomaly and radius vector of a body in a parabolic
-orbit at a given time
-
-# Returns
-
-`(tru_anom, rad_vec)`
-
-* `true_anom`: True anomaly of the body at time `t` *| in radians*
-* `rad_vec`  : Radius vector of the body at time `t` *| in AU*
-
-# Arguments
-
-* `t`: Time of interest, in Julian (Ephemeris) day
-* `T`: Time of passage through the perihelion, in Julian (Ephemeris) day
-* `q`: Perihelion distance *| in AU*
-**/
+/// Computes the true anomaly and radius vector of a body in a parabolic
+/// orbit at a given time
+///
+/// # Returns
+///
+/// `(tru_anom, rad_vec)`
+///
+/// * `true_anom`: True anomaly of the body at time `t` *| in radians*
+/// * `rad_vec`  : Radius vector of the body at time `t` *| in AU*
+///
+/// # Arguments
+///
+/// * `t`: Time of interest, in Julian (Ephemeris) day
+/// * `T`: Time of passage through the perihelion, in Julian (Ephemeris) day
+/// * `q`: Perihelion distance *| in AU*
 pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
     let W = 0.03649116245 * (t - T) / q.powf(1.5);
     let G = W / 2.0;
@@ -53,27 +51,24 @@ pub fn true_anom_and_rad_vec(t: f64, T: f64, q: f64) -> (f64, f64) {
     (v, r)
 }
 
-/**
-Computes the time of passage of a body through a node of a parabolic
-orbit and it's radius vector at that time
-
-# Returns
-
-`(time_of_pass, rad_vec)`
-
-* `time_of_pass`: Time of passage through the node, in Julian
-                  (Ephemeris) day
-* `rad_vec`     : Radius vector of the body at the time of passage
-                  *| in AU*
-
-# Arguments
-
-* `w`   : Argument of the perihelion *| in radians*
-* `q`   : Perihelion distance *| in AU*
-* `T`   : Time of passage in perihelion, in Julian (Ephemeris) day
-* `node`: `Ascend` or `Descend` node
-**/
-
+/// Computes the time of passage of a body through a node of a parabolic
+/// orbit and it's radius vector at that time
+///
+/// # Returns
+///
+/// `(time_of_pass, rad_vec)`
+///
+/// * `time_of_pass`: Time of passage through the node, in Julian
+///   (Ephemeris) day
+/// * `rad_vec`     : Radius vector of the body at the time of passage
+///   *| in AU*
+///
+/// # Arguments
+///
+/// * `w`   : Argument of the perihelion *| in radians*
+/// * `q`   : Perihelion distance *| in AU*
+/// * `T`   : Time of passage in perihelion, in Julian (Ephemeris) day
+/// * `node`: `Ascend` or `Descend` node
 #[inline]
 pub fn passage_through_node(w: f64, q: f64, T: f64, node: &orbit::Node) -> (f64, f64) {
     match *node {

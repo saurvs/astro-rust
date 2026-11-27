@@ -46,33 +46,31 @@ pub enum Moon {
     Iapetus,
 }
 
-/**
-Computes the apparent rectangular coordinates for a moon of Saturn
-
-# Returns
-
-`(X, Y, Z)`
-
-The rectangular coordinates returned give the apparent position of a moon
-with respect to Saturn as seen from Earth. The `X` and `Y`
-coordinates are measured from the center of the disk of Saturn, in units
-of Saturn's equatorial radius.
-
-`X` is measured positively to the west of Saturn, and negatively to the
-east. The x-axis coincides with Saturn's equator.
-
-`Y` is measured positively to the north of Saturn, and negatively to
-the south. The y-axis coincides with Saturn's axis of rotation.
-
-`Z` only matters in sign; it is positive if the Earth-moon
-distance is greater than the Earth-Saturn distance, and is negative if the
-Earth-moon distance is lesser than the Earth-Saturn distance.
-
-# Arguments
-
-* `JD`  : Julian (Ephemeris) day
-* `moon`: The [Moon](./enum.Moon.html)
-**/
+/// Computes the apparent rectangular coordinates for a moon of Saturn
+///
+/// # Returns
+///
+/// `(X, Y, Z)`
+///
+/// The rectangular coordinates returned give the apparent position of a moon
+/// with respect to Saturn as seen from Earth. The `X` and `Y`
+/// coordinates are measured from the center of the disk of Saturn, in units
+/// of Saturn's equatorial radius.
+///
+/// `X` is measured positively to the west of Saturn, and negatively to the
+/// east. The x-axis coincides with Saturn's equator.
+///
+/// `Y` is measured positively to the north of Saturn, and negatively to
+/// the south. The y-axis coincides with Saturn's axis of rotation.
+///
+/// `Z` only matters in sign; it is positive if the Earth-moon
+/// distance is greater than the Earth-Saturn distance, and is negative if the
+/// Earth-moon distance is lesser than the Earth-Saturn distance.
+///
+/// # Arguments
+///
+/// * `JD`  : Julian (Ephemeris) day
+/// * `moon`: The [Moon](./enum.Moon.html)
 pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
     let mut info = create_info_struct(JD - 0.04942);
 
@@ -107,7 +105,7 @@ pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64, f64) {
         Moon::Iapetus => Iapetus(&info),
     };
 
-    XYZ(lambda_j, gamma_j, Omega_j, r_j, &info, &moon)
+    XYZ(lambda_j, gamma_j, Omega_j, r_j, &info, moon)
 }
 
 struct Info {
@@ -285,7 +283,7 @@ fn Rhea(info: &Info) -> (f64, f64, f64, f64) {
     let Omega = (168.8034 + 0.736936 * N.sin() + 0.041 * info.W3.sin()).to_radians();
     let a = 8.725924;
 
-    funroutine(e, a, Omega, i, lambda1, p, &info)
+    funroutine(e, a, Omega, i, lambda1, p, info)
 }
 
 #[inline(always)]
@@ -324,7 +322,7 @@ fn Titan(info: &Info) -> (f64, f64, f64, f64) {
     let Omega = Omega1 + 0.031843_f64.to_radians() * s * u.sin() / i1.sin();
     let a = 20.216193;
 
-    funroutine(e, a, Omega, i, lambda1, p, &info)
+    funroutine(e, a, Omega, i, lambda1, p, info)
 }
 
 #[inline(always)]
@@ -377,7 +375,7 @@ fn Hyperion(info: &Info) -> (f64, f64, f64, f64) {
         + 0.0366 * theta1.sin())
     .to_radians();
 
-    funroutine(e, a, Omega, i, lambda1, p, &info)
+    funroutine(e, a, Omega, i, lambda1, p, info)
 }
 
 #[inline(always)]
@@ -438,7 +436,7 @@ fn Iapetus(info: &Info) -> (f64, f64, f64, f64) {
     .to_radians();
     let Omega = Omega1 + w1 / i1.sin();
 
-    funroutine(e, a, Omega, i, lambda1, p, &info)
+    funroutine(e, a, Omega, i, lambda1, p, info)
 }
 
 fn funroutine(
@@ -494,8 +492,8 @@ fn XYZ(
     let Z_9 = 1.0;
 
     // some fancy stuff
-    let (X9, Y9, Z9, D9) = D(X_9, Y_9, Z_9, 0.0, &info);
-    let (mut X, mut Y, Z, D) = D(X_j, Y_j, Z_j, D9, &info);
+    let (X9, Y9, Z9, D9) = D(X_9, Y_9, Z_9, 0.0, info);
+    let (mut X, mut Y, Z, D) = D(X_j, Y_j, Z_j, D9, info);
 
     // correct for differential light-time
     let K = match *moon {
