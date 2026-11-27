@@ -66,7 +66,9 @@ fn hour_angle_example_40a() {
         rad(hms(7, 47, 27.0)),
         rad(hms(22, 38, 7.0)),
     );
-    assert_close(h.to_degrees(), -431.2042, 5e-5);
+    // The book's raw value is -431.2042°; the crate reduces hour angles to
+    // (-180°, 180°], which gives the same direction.
+    assert!(h > -std::f64::consts::PI && h <= std::f64::consts::PI);
     assert_close_deg(h.to_degrees(), 288.7958, 5e-5);
 }
 
