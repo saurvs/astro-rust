@@ -32,8 +32,7 @@ Computes mean annual motion of companion star
 **/
 
 #[inline]
-pub fn mn_ann_motion_of_compan(P: f64) -> f64
-{
+pub fn mn_ann_motion_of_compan(P: f64) -> f64 {
     angle::TWO_PI / P
 }
 
@@ -50,8 +49,7 @@ Computes mean anomaly of companion star
 **/
 
 #[inline]
-pub fn mn_anom_of_compan(n: f64, t: f64, T: f64) -> f64
-{
+pub fn mn_anom_of_compan(n: f64, t: f64, T: f64) -> f64 {
     n * (t - T)
 }
 
@@ -66,9 +64,8 @@ Computes radius vector of a binary star
 **/
 
 #[inline]
-pub fn rad_vec(a: f64, e: f64, ecc_anom: f64) -> f64
-{
-    a * (1.0 - e*ecc_anom.cos())
+pub fn rad_vec(a: f64, e: f64, ecc_anom: f64) -> f64 {
+    a * (1.0 - e * ecc_anom.cos())
 }
 
 /**
@@ -81,11 +78,8 @@ Computes true anomaly of a binary star
 **/
 
 #[inline]
-pub fn true_anom(e: f64, ecc_anom: f64) -> f64
-{
-    2.0 * (
-        ((1.0 + e)/(1.0 - e)).sqrt() * (ecc_anom / 2.0).tan()
-    ).atan()
+pub fn true_anom(e: f64, ecc_anom: f64) -> f64 {
+    2.0 * (((1.0 + e) / (1.0 - e)).sqrt() * (ecc_anom / 2.0).tan()).atan()
 }
 
 /**
@@ -100,12 +94,8 @@ Computes apparent position angle of a binary star
                   plane at right angles to the
                   line of sight *| in radians*
 **/
-pub fn apprnt_coords_angl(asc_node_coords: f64, true_anom: f64,
-                          w: f64, i: f64) -> f64
-{
-    let x = (
-        (true_anom + w).sin() * i.cos()
-    ).atan2((true_anom + w).cos());
+pub fn apprnt_coords_angl(asc_node_coords: f64, true_anom: f64, w: f64, i: f64) -> f64 {
+    let x = ((true_anom + w).sin() * i.cos()).atan2((true_anom + w).cos());
 
     angle::limit_to_two_PI(x + asc_node_coords)
 }
@@ -122,12 +112,8 @@ Computes angular separation of a binary star
                plane at right angles to the
                line of sight *| in radians*
 **/
-pub fn anglr_sepr(rad_vec: f64, true_anom: f64, w: f64, i: f64) -> f64
-{
-    rad_vec * (
-        ((true_anom + w).sin() * i.cos()).powi(2)
-      + (true_anom + w).cos().powi(2)
-    ).sqrt()
+pub fn anglr_sepr(rad_vec: f64, true_anom: f64, w: f64, i: f64) -> f64 {
+    rad_vec * (((true_anom + w).sin() * i.cos()).powi(2) + (true_anom + w).cos().powi(2)).sqrt()
 }
 
 /**
@@ -141,8 +127,7 @@ Computes eccentricity of an apparent orbit
        of sight *| in radians*
 * `w`: Longitude of periastron
 **/
-pub fn ecc_of_apprnt_orb(e: f64, w: f64, i: f64) -> f64
-{
+pub fn ecc_of_apprnt_orb(e: f64, w: f64, i: f64) -> f64 {
     let i_cos = i.cos();
     let e_w_cos = e * w.cos();
     let e_w_cos_sqr = e_w_cos * e_w_cos;
@@ -150,7 +135,7 @@ pub fn ecc_of_apprnt_orb(e: f64, w: f64, i: f64) -> f64
     let a = (1.0 - e_w_cos_sqr) * i_cos * i_cos;
     let b = e * w.sin() * e_w_cos * i_cos;
     let c = 1.0 - e_w_cos_sqr;
-    let d = ((a - c)*(a - c) + 4.0*b*b).sqrt();
+    let d = ((a - c) * (a - c) + 4.0 * b * b).sqrt();
 
     ((2.0 * d) / (a + c + d)).sqrt()
 }

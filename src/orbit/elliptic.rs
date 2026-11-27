@@ -39,11 +39,7 @@ Computes the true anomaly of a body in an elliptic orbit
 **/
 #[inline]
 pub fn true_anom(ecc_anom: f64, ecc: f64) -> f64 {
-
-    2.0 * ((1.0 + ecc).sqrt() * (ecc_anom/2.0).tan()).atan2 (
-        (1.0 - ecc).sqrt()
-    )
-
+    2.0 * ((1.0 + ecc).sqrt() * (ecc_anom / 2.0).tan()).atan2((1.0 - ecc).sqrt())
 }
 
 /**
@@ -62,9 +58,7 @@ eccentric anomaly
 **/
 #[inline]
 pub fn rad_vec_frm_ecc_anom(ecc_anom: f64, a: f64, ecc: f64) -> f64 {
-
-    a * (1.0 - ecc*ecc_anom.cos())
-    
+    a * (1.0 - ecc * ecc_anom.cos())
 }
 
 /**
@@ -83,7 +77,7 @@ true anomaly
 **/
 #[inline]
 pub fn rad_vec_frm_true_anom(true_anom: f64, a: f64, ecc: f64) -> f64 {
-    a * (1.0 - ecc*ecc) / (1.0 + ecc*true_anom.cos())
+    a * (1.0 - ecc * ecc) / (1.0 + ecc * true_anom.cos())
 }
 
 /**
@@ -126,8 +120,8 @@ Computes the velocity of a body in an elliptic orbit
 * `a`: Semimajor axis of orbit *| in AU*
 **/
 #[inline]
-pub fn vel(r: f64, a:f64) -> f64 {
-    42.1219 * (1.0/r - 0.5/a).sqrt()
+pub fn vel(r: f64, a: f64) -> f64 {
+    42.1219 * (1.0 / r - 0.5 / a).sqrt()
 }
 
 /**
@@ -144,10 +138,8 @@ Computes the velocity of a body at perihelion in an elliptic orbit
 * `e`: Eccentricity of orbit
 **/
 #[inline]
-pub fn perih_vel(a:f64, e:f64) -> f64 {
-    29.7847 * (
-        (1.0 + e) / ((1.0 - e) * a)
-    ).sqrt()
+pub fn perih_vel(a: f64, e: f64) -> f64 {
+    29.7847 * ((1.0 + e) / ((1.0 - e) * a)).sqrt()
 }
 
 /**
@@ -164,10 +156,8 @@ Computes the velocity of a body at aphelion in an elliptic orbit
 * `e`: Eccentricity of orbit
 **/
 #[inline]
-pub fn aph_vel(a:f64, e:f64) -> f64 {
-    29.7847 * (
-        (1.0 - e) / ((1.0 + e) * a)
-    ).sqrt()
+pub fn aph_vel(a: f64, e: f64) -> f64 {
+    29.7847 * ((1.0 - e) / ((1.0 + e) * a)).sqrt()
 }
 
 /**
@@ -194,9 +184,7 @@ The error in `approx_length` is:
 **/
 #[inline]
 pub fn length_ramanujan(a: f64, b: f64) -> f64 {
-    PI * (
-        3.0*(a + b) - ((a + 3.0*b) * (3.0*a + b)).sqrt()
-    )
+    PI * (3.0 * (a + b) - ((a + 3.0 * b) * (3.0 * a + b)).sqrt())
 }
 
 /**
@@ -224,7 +212,7 @@ pub fn length(a: f64, b: f64) -> f64 {
     let G = (a * b).sqrt();
     let H = (2.0 * a * b) / (a + b);
 
-    PI * (21.0*A - 2.0*G - 3.0*H)/8.0
+    PI * (21.0 * A - 2.0 * G - 3.0 * H) / 8.0
 }
 
 /**
@@ -280,35 +268,23 @@ orbit, and it's radius vector at that time
 * `node`: `Ascend` or `Descend` node
 **/
 #[inline]
-pub fn passage_through_node (
-
-    w    : f64,
-    n    : f64,
-    a    : f64,
-    e    : f64,
-    T    : f64,
-    node : &orbit::Node
-
+pub fn passage_through_node(
+    w: f64,
+    n: f64,
+    a: f64,
+    e: f64,
+    T: f64,
+    node: &orbit::Node,
 ) -> (f64, f64) {
-
     match *node {
-        orbit::Node::Ascend  => pass_through_node(   - w, n, a, e, T),
-        orbit::Node::Descend => pass_through_node(PI - w, n, a, e, T)
+        orbit::Node::Ascend => pass_through_node(-w, n, a, e, T),
+        orbit::Node::Descend => pass_through_node(PI - w, n, a, e, T),
     }
 }
 
-fn pass_through_node (
+fn pass_through_node(v: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
+    let E = 2.0 * ((1.0 - e).sqrt() * (v / 2.0).tan()).atan2((1.0 + e).sqrt());
+    let M = E - e * E.sin();
 
-    v : f64,
-    n : f64,
-    a : f64,
-    e : f64,
-    T : f64
-
-)  -> (f64, f64) {
-
-    let E = 2.0 * ((1.0 - e).sqrt() * (v/2.0).tan()).atan2((1.0 + e).sqrt());
-    let M = E - e*E.sin();
-
-     ( T + M/n, a*(1.0 - e*E.cos()) )
+    (T + M / n, a * (1.0 - e * E.cos()))
 }

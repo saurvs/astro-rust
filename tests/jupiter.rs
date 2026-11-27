@@ -26,8 +26,7 @@ use astro::*;
 
 #[test]
 fn ephemeris() {
-
-    let mut ephemeris = planet::jupiter::ephemeris (
+    let mut ephemeris = planet::jupiter::ephemeris(
         2448972.50068,
         23.4402069_f64.to_radians(),
         angle::deg_frm_dms(0, 0, 16.86).to_radians(),
@@ -45,12 +44,10 @@ fn ephemeris() {
     assert_eq!(ephemeris.P, 24.80);
     assert_eq!(ephemeris.w1, 268.0);
     assert_eq!(ephemeris.w2, 72.74);
-
 }
 
 #[test]
 fn moons() {
-
     let data = [
         (-3.44, 0.21, planet::jupiter::moon::Moon::Io),
         (7.44, 0.25, planet::jupiter::moon::Moon::Europa),
@@ -59,12 +56,9 @@ fn moons() {
     ];
 
     for tuple in data.iter() {
-        let (X, Y) = planet::jupiter::moon::apprnt_rect_coords(
-            2448972.50068, &tuple.2
-        );
+        let (X, Y) = planet::jupiter::moon::apprnt_rect_coords(2448972.50068, &tuple.2);
 
         assert_eq!(util::round_upto_digits(X, 2), tuple.0);
         assert_eq!(util::round_upto_digits(Y, 2), tuple.1);
     }
-
 }

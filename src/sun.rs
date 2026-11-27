@@ -23,10 +23,10 @@ THE SOFTWARE.
 //! The Sun
 
 use crate::angle;
+use crate::coords;
+use crate::planet;
 use crate::time;
 use std;
-use crate::planet;
-use crate::coords;
 
 /**
 Computes the Sun's equatorial semidiameter
@@ -37,9 +37,7 @@ Computes the Sun's equatorial semidiameter
 **/
 #[inline]
 pub fn semidiameter(sun_earth_dist: f64) -> f64 {
-
     angle::deg_frm_dms(0, 0, 959.63) / sun_earth_dist
-
 }
 
 /**
@@ -58,16 +56,14 @@ equinox of the date
 * `JD`: Julian (Ephemeris) day
 **/
 pub fn geocent_ecl_pos(JD: f64) -> (coords::EclPoint, f64) {
-
     let (L, B, R) = planet::heliocent_coords(&planet::Planet::Earth, JD);
 
     let ecl_point = coords::EclPoint {
         long: angle::limit_to_two_PI(L + std::f64::consts::PI),
-        lat:  angle::limit_to_two_PI(-B)
+        lat: angle::limit_to_two_PI(-B),
     };
 
     (ecl_point, R)
-
 }
 
 /**
@@ -94,24 +90,15 @@ FK5 system
               of the date
 **/
 pub fn ecl_coords_to_FK5(JD: f64, ecl_long: f64, ecl_lat: f64) -> (f64, f64) {
+    let ecl_long_FK5 = ecl_long - angle::deg_frm_dms(0, 0, 0.09033).to_radians();
 
-    let ecl_long_FK5 =
-        ecl_long
-      - angle::deg_frm_dms(0, 0, 0.09033).to_radians();
-
-     let JC = time::julian_cent(JD);
-     let lambda1 =
-         ecl_long
-       - JC * (1.397 + JC*0.00031).to_radians();
+    let JC = time::julian_cent(JD);
+    let lambda1 = ecl_long - JC * (1.397 + JC * 0.00031).to_radians();
 
     let ecl_lat_FK5 =
-        ecl_lat
-      + angle::deg_frm_dms(0, 0, 0.03916).to_radians() * (
-          lambda1.cos() - lambda1.sin()
-        );
+        ecl_lat + angle::deg_frm_dms(0, 0, 0.03916).to_radians() * (lambda1.cos() - lambda1.sin());
 
     (ecl_long_FK5, ecl_lat_FK5)
-
 }
 
 /**
@@ -142,29 +129,23 @@ celestial pole
 * `sun_rad_vec` : The Sun's geometric radius vector *| in AU*
 * `mn_oblq`     : Mean obliquity of the ecliptic
 **/
-pub fn geocent_rect_coords (
-
-    sun_geo_long : f64,
-    sun_geo_lat  : f64,
-    sun_rad_vec  : f64,
-    mn_oblq      : f64
-
+pub fn geocent_rect_coords(
+    sun_geo_long: f64,
+    sun_geo_lat: f64,
+    sun_rad_vec: f64,
+    mn_oblq: f64,
 ) -> (f64, f64, f64) {
-
     let x = sun_rad_vec * sun_geo_lat.cos() * sun_geo_long.cos();
 
-    let y = sun_rad_vec * (
-        sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.cos()
-      - sun_geo_lat.sin() * mn_oblq.sin()
-    );
+    let y = sun_rad_vec
+        * (sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.cos()
+            - sun_geo_lat.sin() * mn_oblq.sin());
 
-    let z = sun_rad_vec * (
-        sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.sin()
-      + sun_geo_lat.sin() * mn_oblq.cos()
-    );
+    let z = sun_rad_vec
+        * (sun_geo_lat.cos() * sun_geo_long.sin() * mn_oblq.sin()
+            + sun_geo_lat.sin() * mn_oblq.cos());
 
     (x, y, z)
-
 }
 
 /**
@@ -194,18 +175,15 @@ the Sun
                   of nutation
 * `oblq_eclip`: True obliquity of the ecliptic *| in radians*
 **/
-pub fn ephemeris (
-
-    JD                : f64,
-    app_long          : f64,
-    app_long_with_nut : f64,
-    oblq_eclip        : f64
-
+pub fn ephemeris(
+    JD: f64,
+    app_long: f64,
+    app_long_with_nut: f64,
+    oblq_eclip: f64,
 ) -> (f64, f64, f64) {
-
-    let theta = angle::limit_to_360((JD - 2398220.0) * 360.0/25.38).to_radians();
+    let theta = angle::limit_to_360((JD - 2398220.0) * 360.0 / 25.38).to_radians();
     let I = 7.25_f64.to_radians();
-    let K = (73.6667 + 1.3958333*(JD - 2396758.0)/36525.0).to_radians();
+    let K = (73.6667 + 1.3958333 * (JD - 2396758.0) / 36525.0).to_radians();
 
     let z = app_long - K;
     let sin_z = z.sin();
@@ -223,17 +201,17 @@ pub fn ephemeris (
     let P = x + y;
 
     (P, B_0, L_0)
-
 }
 
 #[inline]
 fn magnitude_limited_to_less_than_PI(a: f64) -> f64 {
+    let PI_INTO_THREE_BY_TWO = std::f64::consts::PI * 3.0 / 2.0;
 
-    let PI_INTO_THREE_BY_TWO = std::f64::consts::PI * 3.0/2.0;
-
-    if a > PI_INTO_THREE_BY_TWO { a - angle::TWO_PI }
-    else                        { a }
-
+    if a > PI_INTO_THREE_BY_TWO {
+        a - angle::TWO_PI
+    } else {
+        a
+    }
 }
 
 /**
@@ -253,12 +231,9 @@ in error.
 * `C`: Carrington's synodic rotation number
 **/
 pub fn synodic_rot(C: i64) -> f64 {
+    let M = (281.96 + 26.882476 * (C as f64)).to_radians();
 
-    let M = (281.96 + 26.882476*(C as f64)).to_radians();
-
-    2398140.227 + 27.2752316*(C as f64)
-  + 0.1454 * M.sin()
-  - 0.0085 * (2.0 * M).sin()
-  - 0.0141 * (2.0 * M).cos()
-
+    2398140.227 + 27.2752316 * (C as f64) + 0.1454 * M.sin()
+        - 0.0085 * (2.0 * M).sin()
+        - 0.0141 * (2.0 * M).cos()
 }

@@ -40,12 +40,8 @@ Angle 1 may be right ascension or longitude.
 Angle 2 may be declination or latitude.
 **/
 #[inline]
-pub fn anglr_sepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64
-{
-    (
-          p1a2.sin() * p2a2.sin()
-        + p1a2.cos() * p2a2.cos() * (p1a1 - p2a1).cos()
-    ).acos()
+pub fn anglr_sepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
+    (p1a2.sin() * p2a2.sin() + p1a2.cos() * p2a2.cos() * (p1a1 - p2a1).cos()).acos()
 }
 
 /**
@@ -63,13 +59,14 @@ expressed in degrees, arcminutes and arcseconds
 * `sec`: Arcseconds
 **/
 #[inline]
-pub fn deg_frm_dms(deg: i64, min: i64, sec: f64) -> f64
-{
-    let (M, S) =
-        if deg < 0 { (-min.abs(), -sec.abs()) }
-        else       { (min, sec) };
+pub fn deg_frm_dms(deg: i64, min: i64, sec: f64) -> f64 {
+    let (M, S) = if deg < 0 {
+        (-min.abs(), -sec.abs())
+    } else {
+        (min, sec)
+    };
 
-    (deg as f64) + (M as f64)/60.0 + S/3600.0
+    (deg as f64) + (M as f64) / 60.0 + S / 3600.0
 }
 
 /**
@@ -89,8 +86,7 @@ arcseconds, from an angle in degrees with decimals
 * `deg`: Angle in degrees with decimals
 **/
 #[inline]
-pub fn dms_frm_deg(deg: f64) -> (i64, i64, f64)
-{
+pub fn dms_frm_deg(deg: f64) -> (i64, i64, f64) {
     let degree = deg as i64;
 
     let minutes = (deg - (degree as f64)) * 60.0;
@@ -112,9 +108,8 @@ expressed in hours, minutes and seconds
 * `sec`: Seconds
 **/
 #[inline]
-pub fn deg_frm_hms(hour: i64, min: i64, sec: f64) -> f64
-{
-    15.0 * ((hour as f64) + (min as f64)/60.0 + sec/3600.0)
+pub fn deg_frm_hms(hour: i64, min: i64, sec: f64) -> f64 {
+    15.0 * ((hour as f64) + (min as f64) / 60.0 + sec / 3600.0)
 }
 
 /**
@@ -134,8 +129,7 @@ seconds, from an angle in degrees with decimals
 * `deg`: Angle in degrees with decimals
 **/
 #[inline]
-pub fn hms_frm_deg(deg: f64) -> (i64, i64, f64)
-{
+pub fn hms_frm_deg(deg: f64) -> (i64, i64, f64) {
     let hours = deg / 15.0;
     let hour = hours as i64;
 
@@ -155,13 +149,15 @@ Computes the equivalent angle in [0, 360] degree range
 * `angl`: Angle *| in degrees*
 **/
 #[inline]
-pub fn limit_to_360(angl: f64) -> f64
-{
+pub fn limit_to_360(angl: f64) -> f64 {
     let n = (angl / 360.0) as i64;
     let limited_angl = angl - (360.0 * (n as f64));
 
-    if limited_angl < 0.0 { limited_angl + 360.0 }
-    else                  { limited_angl }
+    if limited_angl < 0.0 {
+        limited_angl + 360.0
+    } else {
+        limited_angl
+    }
 }
 
 /**
@@ -172,11 +168,13 @@ Computes the equivalent angle in [0, 2π] radian range
 * `angl`: Angle *| in radians*
 **/
 #[inline]
-pub fn limit_to_two_PI(angl: f64) -> f64
-{
+pub fn limit_to_two_PI(angl: f64) -> f64 {
     let n = (angl / TWO_PI) as i64;
     let limited_angl = angl - (TWO_PI * (n as f64));
 
-    if limited_angl < 0.0 { limited_angl + TWO_PI }
-    else                  { limited_angl }
+    if limited_angl < 0.0 {
+        limited_angl + TWO_PI
+    } else {
+        limited_angl
+    }
 }
