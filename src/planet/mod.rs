@@ -61,23 +61,30 @@ pub enum Planet {
     Neptune,
 }
 
-/// Computes the illuminated fraction of a planet's disk from it's phase
+/// Computes the illuminated fraction of a planet's disk from its phase
 /// angle
+///
+/// `k = (1 + cos i) / 2` (Meeus, eq. 41.1). The same expression holds for
+/// the Moon.
 ///
 /// # Returns
 ///
-/// * `illum_frac`: Illuminated fraction of the planet's disk
+/// * `illum_frac`: Illuminated fraction of the planet's disk, in `[0, 1]`
 ///
 /// # Arguments
 ///
-/// * `i`: Phase angle of the planet *| in radians*
+/// * `i`: Phase angle of the planet (the angle Sun-planet-Earth)
+///   *| in radians*
 #[inline]
 pub fn illum_frac_frm_phase_angl(i: f64) -> f64 {
     (1.0 + i.cos()) / 2.0
 }
 
-/// Computes the illuminated fraction of a planet's disk from it's distance
-/// to the Sun and Earth
+/// Computes the illuminated fraction of a planet's disk from its distances
+/// to the Sun and the Earth
+///
+/// `k = ((r + Δ)² − R²) / (4 r Δ)` (Meeus, eq. 41.2), which combines eq.
+/// 41.1 with the cosine rule for the phase angle.
 ///
 /// # Returns
 ///
@@ -95,11 +102,16 @@ pub fn illum_frac_frm_dist(r: f64, delta: f64, R: f64) -> f64 {
     (x * x - R * R) / (4.0 * r * delta)
 }
 
-/// Computes a planet's phase angle
+/// Computes a planet's phase angle from its distances to the Sun and the
+/// Earth
+///
+/// The phase angle `i` is the angle Sun-planet-Earth, found from the
+/// cosine rule `cos i = (r² + Δ² − R²) / (2 r Δ)` (Meeus, chapter 41).
 ///
 /// # Returns
 ///
-/// * `phase_angl`: Phase angle of the planet *| in radians*
+/// * `phase_angl`: Phase angle of the planet *| in radians*, in `[0, π]`
+///   (the cosine is clamped to `[−1, 1]` against rounding)
 ///
 /// # Arguments
 ///
@@ -108,16 +120,23 @@ pub fn illum_frac_frm_dist(r: f64, delta: f64, R: f64) -> f64 {
 /// * `R`    : Sun-Earth distance *| in AU*
 #[inline]
 pub fn phase_angl(r: f64, delta: f64, R: f64) -> f64 {
-    (r * r + delta * delta - R * R) / (2.0 * r * delta)
+    ((r * r + delta * delta - R * R) / (2.0 * r * delta))
+        .clamp(-1.0, 1.0)
+        .acos()
 }
 
 /// Computes the position angle of the bright limb of a planet
 ///
+/// The position angle `χ` of the midpoint of the illuminated limb, counted
+/// eastward from the north point of the disk (not from the planet's axis
+/// of rotation). Meeus gives the formula for the Moon (eq. 48.5) and notes
+/// that it holds for a planet too; use geocentric coordinates of the same
+/// date for both bodies.
+///
 /// # Returns
 ///
-/// * `pos_angl_of_bright_limb`: The position angle of the midpoint of
-///   the illuminated limb of a planet
-///   *| in radians*
+/// * `pos_angl_of_bright_limb`: Position angle of the midpoint of the
+///   illuminated limb *| in radians*, in `[0, 2π)`
 ///
 /// # Arguments
 ///
@@ -132,7 +151,12 @@ pub fn pos_angle_of_bright_limb(
     let d = sun_eq_point.dec.sin() * planet_eq_point.dec.cos()
         - planet_eq_point.dec.sin() * (sun_eq_point.asc - planet_eq_point.asc).cos() * a;
 
-    n.atan2(d)
+    let chi = n.atan2(d).rem_euclid(std::f64::consts::TAU);
+    if chi >= std::f64::consts::TAU {
+        0.0
+    } else {
+        chi
+    }
 }
 
 /// Computes a planet's equatorial semidiameter
@@ -574,23 +598,35 @@ pub fn heliocent_coords_frm_orb_elements(i: f64, sigma: f64, w: f64, v: f64, r: 
     (y.atan2(x), z.atan2((x * x + y * y).sqrt()))
 }
 
-/// Computes a planet's apparent magnitude using G. Muller's formulae
+/// Computes a planet's apparent visual magnitude using G. Müller's
+/// formulae
+///
+/// The expressions based on Müller's observations of 1877–1891 (Meeus,
+/// chapter 41): `m = m0 + 5 log10(r Δ) + f(i)`. The phase term `f` is
+/// evaluated with the phase angle in degrees; for Jupiter, Uranus and
+/// Neptune it is ignored. The results should not be quoted to better than
+/// about 0.1 magnitude.
 ///
 /// # Returns
 ///
-/// * `app_mag`: Apparent magnitude of the planet
+/// * `Ok(app_mag)`: Apparent visual magnitude of the planet
+/// * `Err(..)` for `Planet::Earth` (no formula) and for `Planet::Saturn`,
+///   whose magnitude depends on the ring: use
+///   [`saturn::apprnt_mag_muller`] instead.
 ///
 /// # Arguments
 ///
 /// * `planet`: Any variant of [Planet](./enum.Planet.html)
-/// * `i`     : Phase angle of the planet *| in radians*
+/// * `i`     : Phase angle of the planet *| in radians* (see
+///   [`phase_angl`])
 /// * `delta` : Planet-Earth distance *| in AU*
 /// * `r`     : Planet-Sun distance *| in AU*
-pub fn apprnt_mag_muller<'a>(planet: &Planet, i: f64, delta: f64, r: f64) -> Result<f64, &'a str> {
+pub fn apprnt_mag_muller(planet: &Planet, i: f64, delta: f64, r: f64) -> Result<f64, &'static str> {
     let x = 5.0 * (r * delta).log10();
+    let i = i.to_degrees();
 
     match *planet {
-        Planet::Mercury => Ok(x + 1.16 + (i - 50.0) * (0.02838 + (i - 50.0) * 0.000102)),
+        Planet::Mercury => Ok(x + 1.16 + (i - 50.0) * (0.02838 + (i - 50.0) * 0.0001023)),
         Planet::Venus => Ok(x - 4.0 + i * (0.01322 + i * i * 0.0000004247)),
         Planet::Earth => {
             Err("Planet::Earth was passed to the function planet::apprnt_mag_muller()")
@@ -605,21 +641,30 @@ pub fn apprnt_mag_muller<'a>(planet: &Planet, i: f64, delta: f64, r: f64) -> Res
     }
 }
 
-/// Computes a planet's apparent magnitude using the Astronomical
-/// Almanac's method adopted in 1984
+/// Computes a planet's apparent visual magnitude using the expressions of
+/// the *Astronomical Almanac* adopted in 1984
+///
+/// `m = m0 + 5 log10(r Δ) + f(i)` with the phase term `f` evaluated with
+/// the phase angle in degrees (Meeus, chapter 41); Uranus and Neptune have
+/// no phase term. For Pluto see [`crate::pluto::apprnt_mag_84`].
 ///
 /// # Returns
 ///
-/// * `app_mag`: Apparent magnitude of the planet
+/// * `Ok(app_mag)`: Apparent visual magnitude of the planet
+/// * `Err(..)` for `Planet::Earth` (no formula) and for `Planet::Saturn`,
+///   whose magnitude depends on the ring: use
+///   [`saturn::apprnt_mag_84`] instead.
 ///
 /// # Arguments
 ///
 /// * `planet`: Any variant of [Planet](./enum.Planet.html)
-/// * `i`     : Phase angle of the planet *| in radians*
+/// * `i`     : Phase angle of the planet *| in radians* (see
+///   [`phase_angl`])
 /// * `delta` : Planet-Earth distance *| in AU*
 /// * `r`     : Planet-Sun distance *| in AU*
-pub fn apprnt_mag_84<'a>(planet: &Planet, i: f64, delta: f64, r: f64) -> Result<f64, &'a str> {
+pub fn apprnt_mag_84(planet: &Planet, i: f64, delta: f64, r: f64) -> Result<f64, &'static str> {
     let x = 5.0 * (r * delta).log10();
+    let i = i.to_degrees();
 
     match *planet {
         Planet::Mercury => Ok(x - 0.42 + i * (0.0380 - i * (0.000273 - i * 0.00000200))),
