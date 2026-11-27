@@ -292,3 +292,18 @@ fn phases_agree_with_lunar_and_solar_theories() {
         }
     }
 }
+
+// A phase a few hours before a year boundary: the Full Moon of 2009 Dec 31
+// (19h13m UT, i.e. about 19h14m TD) is the one nearest to 2010 Jan 1.0.
+#[test]
+fn full_moon_at_the_end_of_2009() {
+    let jde = lunar::time_of_phase(&date(2010, Jan, 1.0), &Phase::Full);
+    let hours = (jde - support::jd(2009, Dec, 31.0)) * 24.0;
+    assert_close(hours, 19.0 + 14.0 / 60.0, 1.0 / 60.0);
+    let in_2009: Vec<_> =
+        phase::phases_between(support::jd(2009, Jan, 1.0), support::jd(2010, Jan, 1.0))
+            .filter(|e| e.phase == Phase::Full)
+            .collect();
+    assert_eq!(in_2009.len(), 13); // a "blue moon" year
+    assert_eq!(in_2009.last().unwrap().jde, jde);
+}
