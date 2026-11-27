@@ -115,14 +115,20 @@ pub enum Elongation {
 
 /// Which of the two stations in ecliptic longitude around an inferior
 /// conjunction or an opposition
+///
+/// Used as `Phenomenon::Station(Station::First)`. The variant and this type
+/// share their name, so import them by name rather than glob-importing both
+/// this module and `Phenomenon::*` (the compiler would report `Station` as
+/// ambiguous).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Station {
-    /// The station that precedes the inferior conjunction (Mercury, Venus)
-    /// or the opposition (Mars, Jupiter, Saturn): the planet stops and then
-    /// starts to move westward (retrograde) among the stars.
+    /// The station before the inferior conjunction (Mercury, Venus) or the
+    /// opposition (Mars, Jupiter, Saturn), where the geocentric longitude
+    /// stops increasing and the retrograde (westward) loop begins.
     First,
-    /// The station that follows the inferior conjunction or the opposition:
-    /// the planet resumes its direct (eastward) motion.
+    /// The station after the inferior conjunction or the opposition, where
+    /// the retrograde loop ends and the longitude increases again (direct
+    /// motion).
     Second,
 }
 
@@ -221,7 +227,12 @@ pub fn is_available(planet: &Planet, phenomenon: Phenomenon) -> bool {
 ///
 /// * `planet`    : Any variant of [`Planet`]
 /// * `phenomenon`: The [`Phenomenon`]
-/// * `year`      : Year with decimals, e.g. `1993.75` for 1993 October 1
+/// * `year`      : Year with decimals, e.g. `1993.75` for 1993 October 1,
+///   in astronomical numbering (`0` is 1 B.C., `-6` is 7 B.C.). It is
+///   turned into a Julian Ephemeris Day with Meeus' `365.2425·year +
+///   1721060`, i.e. in mean Gregorian years. A date of the Julian
+///   calendar (before 1582) can differ from that by up to a few weeks,
+///   which only matters for a date about halfway between two occurrences.
 pub fn approx_k(planet: &Planet, phenomenon: Phenomenon, year: f64) -> Option<f64> {
     let terms = terms(planet, phenomenon)?;
     Some((jde_frm_year(year) - terms.mean.a) / terms.mean.b)
@@ -239,21 +250,25 @@ pub fn approx_k(planet: &Planet, phenomenon: Phenomenon, year: f64) -> Option<f6
 /// # Returns
 ///
 /// `None` if the phenomenon is not available for the planet (see
-/// [`is_available`]), or if `year` is not finite.
+/// [`is_available`]), if `year` is not finite, or if it is so far from 2000
+/// (beyond about 10¹⁵ synodic periods) that `k` would not be exact.
 ///
 /// # Arguments
 ///
 /// * `planet`    : Any variant of [`Planet`]
 /// * `phenomenon`: The [`Phenomenon`]
-/// * `year`      : Year with decimals, e.g. `1993.75` for 1993 October 1
+/// * `year`      : Year with decimals, e.g. `1993.75` for 1993 October 1;
+///   see [`approx_k`]
 pub fn nearest_k(planet: &Planet, phenomenon: Phenomenon, year: f64) -> Option<i64> {
     let terms = terms(planet, phenomenon)?;
-    if !year.is_finite() {
-        return None;
-    }
     let target = jde_frm_year(year);
     let offset = terms.correction.constant[0];
-    let guess = ((target - terms.mean.a - offset) / terms.mean.b).round() as i64;
+    let guess = ((target - terms.mean.a - offset) / terms.mean.b).round();
+    // Within this bound k ± 1 is exact in f64.
+    if !guess.is_finite() || guess.abs() >= MAX_EXACT_K {
+        return None;
+    }
+    let guess = guess as i64;
 
     let mut best = guess;
     let mut best_dist = f64::INFINITY;
@@ -346,15 +361,14 @@ pub fn time_of_phenomenon(planet: &Planet, phenomenon: Phenomenon, k: i64) -> Op
 ///
 /// * `jde`: Instant of the phenomenon *| Julian Ephemeris Day*
 ///
-/// `None` if the phenomenon is not available for the planet (see
-/// [`is_available`]), or if `year` is not finite.
+/// `None` in the same cases as [`nearest_k`].
 ///
 /// # Arguments
 ///
 /// * `planet`    : Any variant of [`Planet`]
 /// * `phenomenon`: The [`Phenomenon`]
 /// * `year`      : Year with decimals, e.g. `2125.0` for the beginning of
-///   2125
+///   2125; see [`approx_k`]
 pub fn nearest_time_of_phenomenon(
     planet: &Planet,
     phenomenon: Phenomenon,
@@ -419,6 +433,10 @@ pub fn greatest_elongation(
 // ---------------------------------------------------------------------------
 // Implementation
 // ---------------------------------------------------------------------------
+
+/// Largest `|k|` accepted by [`nearest_k`]: 2⁵³, below which every integer
+/// and its neighbours are exactly representable as `f64`.
+const MAX_EXACT_K: f64 = 9_007_199_254_740_992.0;
 
 /// Julian Ephemeris Day of a year with decimals, as used in eq. 36.1
 #[inline]

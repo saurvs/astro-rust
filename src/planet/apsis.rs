@@ -43,7 +43,9 @@ THE SOFTWARE.
 //! maxima) a few years apart. [`accurate_passage`] returns the deepest one
 //! near the expected date, the true perihelion (or aphelion);
 //! [`rad_vec_extrema`] lists every local extremum in an interval, including
-//! the secondary ones that Meeus calls *perihelioid* and *apheloid*.
+//! the secondary ones: the shallow maximum between two minima near
+//! perihelion (Meeus' *apheloid*), the shallow minimum between two maxima
+//! near aphelion (his *perihelioid*), and the second minimum or maximum.
 //!
 //! All instants are Julian Ephemeris Days (dynamical time, TD).
 //!
@@ -63,7 +65,7 @@ THE SOFTWARE.
 //! use astro::planet::Planet;
 //! use astro::planet::apsis::{self, Apsis};
 //!
-//! let n = apsis::nearest_n(&Planet::Venus, Apsis::Perihelion, 1978.79);
+//! let n = apsis::nearest_n(&Planet::Venus, Apsis::Perihelion, 1978.79).unwrap();
 //! assert_eq!(n, -35);
 //!
 //! let jde = apsis::time_of_passage(&Planet::Venus, Apsis::Perihelion, n);
@@ -125,7 +127,8 @@ pub struct RadVecExtremum {
 /// # Arguments
 ///
 /// * `planet`: Any variant of [`Planet`]
-/// * `year`  : Year with decimals, e.g. `1978.79` for 1978 October 15
+/// * `year`  : Year with decimals, e.g. `1978.79` for 1978 October 15, in
+///   astronomical numbering (`0` is 1 B.C.)
 pub fn approx_k(planet: &Planet, year: f64) -> f64 {
     let (rate, epoch) = match planet {
         Planet::Mercury => (4.15201, 2000.12),
@@ -144,20 +147,24 @@ pub fn approx_k(planet: &Planet, year: f64) -> f64 {
 ///
 /// # Returns
 ///
-/// `n` such that [`time_of_passage`] is the passage closest in time to
-/// `year`; `0` if `year` is not finite.
+/// `Some(n)` such that [`time_of_passage`] is the passage closest in time to
+/// `year`. `None` if `year` is not finite, or so far from 2000 (beyond about
+/// 10¹⁵ orbital periods) that `n` would not be exact.
 ///
 /// # Arguments
 ///
 /// * `planet`: Any variant of [`Planet`]
 /// * `apsis` : Perihelion or aphelion
-/// * `year`  : Year with decimals, e.g. `2032.0` for the beginning of 2032
-pub fn nearest_n(planet: &Planet, apsis: Apsis, year: f64) -> i64 {
-    if !year.is_finite() {
-        return 0;
+/// * `year`  : Year with decimals, e.g. `2032.0` for the beginning of 2032,
+///   in astronomical numbering (`0` is 1 B.C.). It is read as a Julian
+///   epoch, `JDE = 2451545.0 + 365.25·(year − 2000)`.
+pub fn nearest_n(planet: &Planet, apsis: Apsis, year: f64) -> Option<i64> {
+    let guess = (approx_k(planet, year) - half(apsis)).round();
+    // Within this bound n ± 1 is exact in f64 (2⁵³).
+    if !guess.is_finite() || guess.abs() >= 9_007_199_254_740_992.0 {
+        return None;
     }
-    let k = approx_k(planet, year) - half(apsis);
-    let guess = k.round() as i64;
+    let guess = guess as i64;
     let target = 2451545.0 + (year - 2000.0) * 365.25;
 
     let mut best = guess;
@@ -169,7 +176,7 @@ pub fn nearest_n(planet: &Planet, apsis: Apsis, year: f64) -> i64 {
             best_dist = dist;
         }
     }
-    best
+    Some(best)
 }
 
 /// Computes the instant of a passage through perihelion or aphelion from
@@ -199,7 +206,7 @@ pub fn nearest_n(planet: &Planet, apsis: Apsis, year: f64) -> i64 {
 /// use astro::planet::apsis::{self, Apsis};
 ///
 /// // First aphelion of Mars in 2032 (Meeus, example 38.b, k = +16.5)
-/// let n = apsis::nearest_n(&Planet::Mars, Apsis::Aphelion, 2032.0);
+/// let n = apsis::nearest_n(&Planet::Mars, Apsis::Aphelion, 2032.0).unwrap();
 /// assert_eq!(n, 16);
 /// let jde = apsis::time_of_passage(&Planet::Mars, Apsis::Aphelion, n);
 /// assert!((jde - 2463530.456).abs() < 0.001); // 2032 October 24, 23h TD
@@ -213,10 +220,11 @@ pub fn time_of_passage(planet: &Planet, apsis: Apsis, n: i64) -> f64 {
 /// Computes the correction from the Earth–Moon barycentre to the Earth in
 /// the instant of a passage of the Earth through perihelion or aphelion
 ///
-/// The Moon makes the Earth itself reach its least or greatest distance
-/// from the Sun up to a couple of days away from the barycentre. This is
-/// Meeus' five-term correction; the corrected instants have a mean error of
-/// about 3 hours (6 hours at most).
+/// Because of the Moon, the centre of the Earth reaches its least or
+/// greatest distance from the Sun up to about a day and a half before or
+/// after the Earth–Moon barycentre does. This is Meeus' five-term
+/// correction (at most ±1.54 days); the corrected instants have a mean
+/// error of about 3 hours (6 hours at most).
 ///
 /// # Returns
 ///
@@ -386,7 +394,9 @@ fn search_passage(planet: &Planet, apsis: Apsis, guess: f64) -> Passage {
 /// # Returns
 ///
 /// The extrema in chronological order. The list is empty if
-/// `jde_end <= jde_start` or if either bound is not finite.
+/// `jde_end <= jde_start`, if either bound is not finite, or if the
+/// interval spans more than ten thousand orbital periods (ten million
+/// samples; about 2400 years for Mercury, 1.6 million for Neptune).
 ///
 /// # Arguments
 ///
