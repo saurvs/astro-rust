@@ -51,7 +51,8 @@ THE SOFTWARE.
 //! are computed from Cartesian components with `atan2`, which keeps them
 //! accurate near the poles of either system (where the textbook forms with
 //! `tan` and `asin` lose precision or divide by zero). Where a longitude-like
-//! angle is undefined (a point exactly at a pole), `0` is returned.
+//! angle is undefined (a direction exactly at a pole of the system, or the
+//! azimuth at the zenith), the value returned is finite but arbitrary.
 //!
 //! # Example
 //!
@@ -584,8 +585,9 @@ fn eq_vec_frm_hz(az: f64, alt: f64, observer_lat: f64) -> (f64, f64, f64) {
 /// # Returns
 ///
 /// * `az`: Azimuth, from the south towards the west, in `(−π, π]`
-///   (negative values are east of the meridian) *| in radians*. `0` is
-///   returned at the zenith and nadir, where the azimuth is undefined.
+///   (negative values are east of the meridian) *| in radians*. At the
+///   zenith and nadir, where the azimuth is undefined, the value is finite
+///   but arbitrary.
 ///
 /// # Arguments
 ///
@@ -674,8 +676,9 @@ macro_rules! loc_hz_frm_eq {
 ///
 /// # Returns
 ///
-/// * `hour_angle`: Local hour angle, in `(−π, π]` *| in radians*. `0` is
-///   returned for a direction exactly at a celestial pole.
+/// * `hour_angle`: Local hour angle, in `(−π, π]` *| in radians*. For a
+///   direction exactly at a celestial pole, where the hour angle is
+///   undefined, the value is finite but arbitrary.
 ///
 /// # Arguments
 ///
