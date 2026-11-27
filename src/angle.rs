@@ -40,9 +40,8 @@ THE SOFTWARE.
 //! let d = angle::anglr_sepr(arcturus.0, arcturus.1, spica.0, spica.1);
 //! assert!((d.to_degrees() - 32.7930).abs() < 5e-5);
 //!
-//! // Sexagesimal output, rounded to whole arcminutes: 32°48′
-//! let dms = angle::Dms::from_deg_rounded(d.to_degrees(), 0);
-//! assert_eq!((dms.deg, dms.min), (32, 47));
+//! // In sexagesimal notation, to the nearest arcsecond (the book quotes
+//! // 32°48′, to the nearest arcminute)
 //! assert_eq!(format!("{:.0}", angle::Dms::from_deg(d.to_degrees())), "32°47′35″");
 //! ```
 
@@ -192,8 +191,9 @@ pub fn anglr_sepr(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
 /// formula
 ///
 /// Meeus, ch. 17, eq. 17.5: `hav d = hav Δδ + cos δ₁ cos δ₂ hav Δα`. Very
-/// accurate for small separations; for separations within about 1e-8 rad of
-/// 180° it loses precision, so prefer [`anglr_sepr`] in general.
+/// accurate for small separations, but it loses precision towards 180°
+/// (errors up to about 1e-8 rad for antipodal points), so prefer
+/// [`anglr_sepr`] in general.
 ///
 /// # Returns
 ///
@@ -249,7 +249,8 @@ pub fn anglr_sepr_small(p1a1: f64, p1a2: f64, p2a1: f64, p2a2: f64) -> f64 {
 /// # Returns
 ///
 /// * `posn_angl`: Position angle of body 1 relative to body 2, in
-///   `[0, 2π)`. `0` if the two bodies coincide. *| in radians*
+///   `[0, 2π)` *| in radians*. Undefined (0 or π) if the two bodies
+///   coincide, and dependent on `asc2` if body 2 is at a pole.
 ///
 /// # Arguments
 ///
