@@ -225,8 +225,8 @@ pub fn refrac_frm_apprnt_alt_refined(apprnt_alt: f64) -> f64 {
 /// Sæmundsson's formula
 ///
 /// `R = 1.02′ / tan(h + 10.3° / (h + 5.11))`, with `h` in degrees (Meeus,
-/// eq. 16.4), as published. It is consistent with Bennett's formula
-/// ([`refrac_frm_apprnt_alt`]) to within 4″. At the zenith it gives −0.12″
+/// eq. 16.4), as published. It and Bennett's formula
+/// ([`refrac_frm_apprnt_alt`]) agree to 4″ or better. At the zenith it gives −0.12″
 /// instead of zero; add [`SAEMUNDSSON_ZENITH_CORR`] to remove that.
 ///
 /// Negative true altitudes are evaluated by the same formula; it still

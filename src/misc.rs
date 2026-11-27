@@ -160,8 +160,8 @@ pub fn angl_betwn_north_celes_and_eclip_poles(ecl_long: f64, ecl_lat: f64, oblq_
 /// ecliptic, the direction of increasing longitude points `−q₀` north of
 /// due east: near the vernal equinox (`q₀ = −ε`) the ecliptic climbs
 /// northwards towards the east, near the autumnal equinox (`q₀ = +ε`) it
-/// descends. Useful, for example, to draw the path of the Moon through
-/// the Earth's shadow in a lunar eclipse diagram.
+/// descends. A typical use is orienting the ecliptic in a chart of a
+/// lunar eclipse.
 ///
 /// # Returns
 ///
