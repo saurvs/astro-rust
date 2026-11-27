@@ -158,6 +158,40 @@ fn moon_topocentric_semidiameter_ch40_exercise() {
     assert_close(arcsec(s2), arcsec(s1), 0.1);
 }
 
+// The topocentric semidiameter from the equatorial ratio q (chapter 40,
+// eqs. 40.6-40.7) must equal the one that parallax::topocent_ecl derives
+// from the ecliptic form of the same correction: the ratio of topocentric to
+// geocentric distance does not depend on the coordinate frame.
+#[test]
+fn moon_topocentric_semidiameter_matches_parallax_module() {
+    let eps = 23.44_f64.to_radians();
+    for &d in &[356_400.0, 384_400.0, 406_700.0] {
+        let s = lunar::semidiameter(d);
+        let par = lunar::eq_hz_parllx(d);
+        for &(lam, bet, phi, theta) in &[
+            (181.77_f64, 2.29_f64, 50.09_f64, 209.77_f64),
+            (10.0, -5.1, -33.9, 300.0),
+            (275.0, 4.9, 78.0, 90.0),
+            (95.0, -0.3, 0.0, 95.0),
+        ] {
+            let (lam, bet, phi, theta) = (
+                lam.to_radians(),
+                bet.to_radians(),
+                phi.to_radians(),
+                theta.to_radians(),
+            );
+            let (rho_sin, rho_cos) = rho_sin_cos(phi);
+            let alpha = (lam.sin() * eps.cos() - bet.tan() * eps.sin()).atan2(lam.cos());
+            let delta = (bet.sin() * eps.cos() + bet.cos() * eps.sin() * lam.sin()).asin();
+            let s_eq = lunar::topocent_semidiameter(s, par, delta, theta - alpha, rho_sin, rho_cos);
+            let s_ecl =
+                astro::parallax::topocent_ecl(lam, bet, s, par, rho_sin, rho_cos, theta, eps)
+                    .semidiameter;
+            assert_close(s_eq, s_ecl, 1e-14);
+        }
+    }
+}
+
 #[test]
 fn moon_topocentric_semidiameter_limits() {
     for &d in &[356_400.0, 384_400.0, 406_700.0] {

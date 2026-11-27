@@ -257,3 +257,40 @@ fn apparent_position_bad_eccentricity_gives_nan() {
     el.eccentricity = 0.5;
     assert!(el.apparent_position(f64::NAN).separation.is_nan());
 }
+
+// Very eccentric orbits near periastron, where a simple Kepler iteration
+// fails: for a face-on orbit the position angle gives the true anomaly
+// directly (θ = Ω + ω + v), so the result can be checked against Kepler's
+// equation and the polar equation of the ellipse.
+#[test]
+fn apparent_position_very_eccentric_orbits() {
+    let mut el = eta_crb();
+    el.inclination = 0.0;
+    for &e in &[0.9, 0.97, 0.999] {
+        el.eccentricity = e;
+        for &dt in &[-0.3, -0.01, -1e-4, 1e-4, 0.002, 0.05, 1.0, 17.0] {
+            let t = el.time_of_periastron + dt;
+            let p = el.apparent_position(t);
+            let v = p.position_angle - el.asc_node_position_angle - el.periastron_longitude;
+            // r = a (1 - e²) / (1 + e cos v)
+            let r = el.semimajor_axis * (1.0 - e * e) / (1.0 + e * v.cos());
+            assert_close(p.separation, r, 1e-12);
+            // Back to the mean anomaly through E (Meeus, eqs. 30.1, 30.5).
+            let ecc_anom = 2.0 * (((1.0 - e) / (1.0 + e)).sqrt() * (v / 2.0).tan()).atan();
+            let m = ecc_anom - e * ecc_anom.sin();
+            let m_expected = (std::f64::consts::TAU * dt / el.period + std::f64::consts::PI)
+                .rem_euclid(std::f64::consts::TAU)
+                - std::f64::consts::PI;
+            assert_close(m, m_expected, 1e-9);
+        }
+    }
+    // e = 1 is not an ellipse; negative e is meaningless.
+    for &e in &[1.0, -0.1, f64::NAN] {
+        el.eccentricity = e;
+        let p = el.apparent_position(1980.0);
+        assert!(
+            p.separation.is_nan() && p.position_angle.is_nan(),
+            "e = {e}"
+        );
+    }
+}

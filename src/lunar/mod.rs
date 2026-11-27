@@ -20,7 +20,63 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-//! The Earth's moon
+//! The Moon: position, phases, apsides, nodes, declinations, illumination
+//! and physical ephemeris
+//!
+//! Algorithms of Meeus, *Astronomical Algorithms*, 2nd ed., chapters 47 to
+//! 53 and 55, one submodule per chapter:
+//!
+//! | Submodule        | Meeus  | Contents                                             |
+//! |------------------|--------|------------------------------------------------------|
+//! | [`position`]     | ch. 47 | geocentric and apparent position, nodes, perigee     |
+//! | [`illumination`] | ch. 48 | illuminated fraction, phase angle, bright limb       |
+//! | [`phase`]        | ch. 49 | New Moon, First Quarter, Full Moon, Last Quarter     |
+//! | [`apsis`]        | ch. 50 | perigee and apogee, with parallax and distance       |
+//! | [`node`]         | ch. 51 | passages through the ascending and descending nodes  |
+//! | [`declination`]  | ch. 52 | greatest northern and southern declinations          |
+//! | [`libration`]    | ch. 53 | librations, axis, selenographic Sun, lunar sunrise   |
+//!
+//! The functions defined directly in this module are the crate's original
+//! API (positions as tuples, the librations in pieces) and the
+//! semidiameters of chapter 55; most are thin wrappers around the
+//! submodules. The position, illumination and libration types and
+//! functions of chapters 47, 48 and 53 are re-exported here (e.g.
+//! [`geocentric_position`], [`Illumination`], [`physical_ephemeris`]), as
+//! are the original event functions [`time_of_phase`] and
+//! [`time_of_passage_through_nodes`] and the [`Phase`] enum. The newer
+//! event API of chapters 49–52 (nearest event, iterators over a time span)
+//! is used through its submodule, e.g. [`phase::nearest_phase`].
+//!
+//! # Conventions
+//!
+//! * Instants are Julian Ephemeris Days (Dynamical Time, TD) unless a
+//!   function says otherwise; the event functions of chapters 49–52 also
+//!   accept a plain Julian day to choose the nearest event.
+//! * Angles are in radians. Longitudes and right ascensions are in
+//!   `[0, 2π)`; librations in `(-π, π]`.
+//! * Earth–Moon distances are in kilometres, between the centres of the two
+//!   bodies.
+//! * The *geometric* ecliptic longitude of chapter 47 does not include the
+//!   nutation; [`apparent_position`] adds it.
+//!
+//! # Example
+//!
+//! ```
+//! use astro::lunar::{self, Phase};
+//!
+//! // Meeus, example 47.a: 1992 April 12, 0h TD
+//! let moon = lunar::geocentric_position(2448724.5);
+//! assert!((moon.long.to_degrees() - 133.162655).abs() < 1e-6);
+//! assert!((moon.dist - 368409.7).abs() < 0.1); // km
+//!
+//! // Its geocentric semidiameter, about 15′ 33″
+//! let s = lunar::semidiameter(moon.dist);
+//! assert!((s.to_degrees() * 3600.0 - 973.0).abs() < 0.5);
+//!
+//! // Meeus, example 49.a: the New Moon of 1977 February (lunation -283)
+//! let new_moon = lunar::phase::true_phase(-283, Phase::New);
+//! assert!((new_moon - 2443192.65118).abs() < 1e-5);
+//! ```
 
 pub mod apsis;
 pub mod declination;
@@ -61,7 +117,7 @@ use crate::time;
 ///   Moon *| in kilometers*
 #[inline]
 pub fn eq_hz_parllx(earth_moon_dist: f64) -> f64 {
-    (6378.14 / earth_moon_dist).asin()
+    position::eq_hz_parllx_frm_dist(earth_moon_dist)
 }
 
 /// Computes the geocentric semidiameter of the Moon
@@ -580,8 +636,9 @@ pub fn illum_frac_frm_ecl_coords(
 
 #[inline]
 fn illuminated_frac(moon_geocent_elong: f64, earth_moon_dist: f64, earth_sun_dist: f64) -> f64 {
-    let i = (earth_sun_dist * moon_geocent_elong.sin())
-        .atan2(earth_moon_dist - earth_sun_dist * moon_geocent_elong.cos());
-
-    (1.0 + i.cos()) / 2.0
+    illumination::illum_frac_frm_phase_angle(illumination::phase_angle(
+        moon_geocent_elong,
+        earth_moon_dist,
+        earth_sun_dist,
+    ))
 }
