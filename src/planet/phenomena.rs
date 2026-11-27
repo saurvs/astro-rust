@@ -51,7 +51,7 @@ THE SOFTWARE.
 //! All instants are Julian Ephemeris Days (dynamical time, TD). Subtract
 //! ΔT to get Universal Time.
 //!
-//! The coefficients are fitted to a modern theory and are meant for the years
+//! The periodic terms are empirical fits, meant for the years
 //! −2000 to +4000; do not use them outside that span. Near the ends of that
 //! span the errors grow, mostly for Jupiter and Saturn. Between A.D. 1800
 //! and 2200 Meeus gives the maximum error as under 1 hour for Mercury and
