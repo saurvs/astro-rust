@@ -20,6 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#![doc = include_str!("../README.md")]
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
 #![allow(clippy::too_many_arguments)]

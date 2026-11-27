@@ -1,174 +1,234 @@
-# astro-rust [![](http://meritbadge.herokuapp.com/astro)](https://crates.io/crates/astro) [![](https://travis-ci.org/saurvs/astro-rust.svg?branch=master)](https://travis-ci.org/saurvs/astro-rust) [![](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/saurvs/astro-rust/blob/master/LICENSE.md)
+# astro-rust
 
-**Contents**
+[![crates.io](https://img.shields.io/crates/v/astro.svg)](https://crates.io/crates/astro)
+[![docs.rs](https://docs.rs/astro/badge.svg)](https://docs.rs/astro)
+[![CI](https://github.com/saurvs/astro-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/saurvs/astro-rust/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
-[API Docs](https://saurvs.github.io/astro-rust/)
+`astro` is a library of astronomical algorithms for Rust: where the Sun,
+Moon, planets and their satellites are; when things rise, set, transit,
+change phase or eclipse; and the calendars, time scales and coordinate
+transformations needed to get there.
 
-* [About](#about)
-* [Usage](#usage)
-* [Contributing](#contributing)
-* [References](#references)
+It implements the algorithms of Jean Meeus' *Astronomical Algorithms*
+(2nd edition, Willmann-Bell, 1998) — every chapter, checked against the
+book's worked examples — and, where the book recommends it, the full
+theories behind them (the complete VSOP87 series for the planets, for
+example). It is pure Rust with no dependencies.
 
-## About
+* [API documentation](https://docs.rs/astro)
+* [Changelog](CHANGELOG.md)
 
-```astro-rust``` is a library of advanced astronomical algorithms for the Rust programming language.
+## What's inside
 
-Implemented algorithms include:
-
-* planetary and solar positioning by the complete set of elements of Bretagnon and Francou's VSP087 theory
-* lunar positioning by the principle elements of Chapront's ELP-2000/82 theory
-* satellite positioning for Saturn and Jupiter
-* finding Julian dates, sidereal time, dynamical time, equinoxes, rising and setting times, times of lunar phases
-* coordinate transformations
-* corrections for precession, nutation, parallax, aberration, atmospheric refraction
-* calculation of the physical ephemeris for Mars, Jupiter, and the rings of Saturn
-* finding position angles, illuminated fractions, visual magnitudes
-* and [much more](https://saurvs.github.io/astro-rust/).
+| Area | Modules |
+|------|---------|
+| Time and calendars: Julian Day, ΔT, sidereal time, Easter, Jewish and Islamic calendars | [`time`], [`calendar`] |
+| Observing from a place on Earth: altitude/azimuth, rising/transit/setting, twilight | [`observer`], [`transit`], [`atmos`], [`parallax`] |
+| Coordinates: equatorial, ecliptic, horizontal, galactic; precession, nutation, aberration, apparent places of stars | [`coords`], [`precess`], [`nutation`], [`aberr`], [`ecliptic`], [`star`] |
+| The Sun: position, equinoxes and solstices, equation of time, physical ephemeris | [`sun`], [`season`] |
+| The planets: positions (VSOP87), orbital elements, phenomena (oppositions, elongations, stations), perihelia, magnitudes, physical ephemerides of Mars and Jupiter, Saturn's rings, satellites of Jupiter and Saturn, Pluto | [`planet`], [`pluto`] |
+| Orbits: Kepler's equation, elliptic, parabolic and near-parabolic motion, node passages | [`orbit`], [`asteroid`] |
+| The Moon: position, phases, perigee and apogee, nodes, maximum declinations, illumination, librations | [`lunar`] |
+| Eclipses, stellar magnitudes, binary stars, sundials | [`eclipse`], [`star`], [`binary_star`], [`sundial`] |
+| Numerical tools: interpolation, curve fitting, root finding, angular separations, conjunctions | [`interpol`], [`fitting`], [`iteration`], [`angle`], [`conjunction`], [`geometry`] |
 
 ## Usage
 
-* Add the dependency ```astro``` in your ```Cargo.toml```
-  ```toml
-  [dependencies]
-  astro = "2.0.0"
-  ```
+```toml
+[dependencies]
+astro = "3"
+```
 
-* Include the crate ```astro``` in your code
-  ```rust
-  extern crate astro;
+### Sunrise and sunset
 
-  use astro::*;
-  ```
+```rust
+use astro::observer::{self, Body, Horizon, Observer};
 
-* Specify your time of interest using the [Julian day](http://quasar.as.utexas.edu/BillInfo/JulianDatesG.html)
-  ```rust
-  // for example, the time of the Apollo 11 moon landing
+// Greenwich, latitude 51.48° N, longitude 0.00° (east-positive, as on maps)
+let greenwich = Observer::from_degrees_east(51.4769, -0.0005, 0.0);
 
-  let day_of_month = time::DayOfMonth{day      : 20,
-				 			          hr       : 20,
-                                      min      : 18,
-                                      sec      : 4.0,
-                                      time_zone: 0.0};
+// The window to search: one day starting at 2024 June 21, 0h UT
+let jd = 2460482.5;
+let day = observer::rise_transit_set(Body::Sun, &greenwich, jd, Horizon::Standard);
 
-  let date = time::Date{year       : 1969,
-                        month      : 7, // July
-                        decimal_day: time::decimal_day(&day_of_month),
-                        cal_type   : time::CalType::Gregorian};
+let ut_hours = |t: f64| (t - jd) * 24.0;
+let rise = ut_hours(day.rise.unwrap()); // about 3.73 h UT (03:44)
+let set = ut_hours(day.set.unwrap()); // about 20.36 h UT (20:21)
+assert!((rise - 3.73).abs() < 0.05 && (set - 20.36).abs() < 0.05);
+```
 
-  let julian_day = time::julian_day(&date);
+Twilight works the same way with `Horizon::CivilTwilight`,
+`Horizon::NauticalTwilight` or `Horizon::AstronomicalTwilight`. Bodies that
+don't rise or set that day (the midnight Sun, circumpolar stars) are
+reported as such instead of producing nonsense. The runnable
+[`examples/sunset.rs`](examples/sunset.rs) prints a full table:
 
-  // for higher accuracy in specifying the time of interest,
-  // find the Julian Ephemeris day; this slightly differs from
-  // the Julian day by ΔT, which is usually a few seconds. you
-  // can get a reported value of it from the Astronomical
-  // Almanac, or calculate it using the built-in function
+```sh
+cargo run --example sunset -- 40.7128 -74.0060 2024 12 21 -5
+```
 
-  let delta_t = time::delta_t(date.year, date.month);
+### Where is a planet in the sky?
 
-  let julian_ephm_day = time::julian_ephemeris_day(julian_day, delta_t);
-  ```
+```rust
+use astro::observer::{self, Body, Observer};
 
-* Find the position of the Sun and the Moon with respect to the Earth
-  ```rust
+let place = Observer::from_degrees_east(51.4769, -0.0005, 0.0);
+let jd_ut = 2460482.5; // 2024 June 21, 0h UT
 
-  // geocentric ecliptic point and radius vector of the Sun
-  let (sun_ecl_point, rad_vec_sun) = sun::geocent_ecl_pos(julian_day);
+let jupiter = observer::topocentric_position(Body::Jupiter, &place, jd_ut);
+let azimuth = jupiter.azimuth_from_north.to_degrees(); // compass bearing
+let altitude = jupiter.apparent_altitude.to_degrees(); // includes refraction
+assert!((0.0..360.0).contains(&azimuth) && altitude.abs() <= 90.0);
+```
 
-  // sun_ecl_point.long    - ecliptic longitude (radians)
-  // sun_ecl_point.lat     - ecliptic latitude  (radians)
-  // rad_vec_sun - distance between the Sun and the Earth (AU)
+See [`examples/planet_altaz.rs`](examples/planet_altaz.rs) for every planet,
+the Sun and the Moon.
 
-  // and similarly for the Moon
-  let (moon_ecl_point, rad_vec_moon) = lunar::geocent_ecl_pos(julian_day);
+### Positions of the Sun, Moon and planets
 
-  ```
+```rust
+use astro::{lunar, planet, sun};
 
-* Find the position of a planet with respect to the Sun
-  ```rust
-  // the heliocentric point and radius vector of a planet, like Jupiter
-  let (jup_long, jup_lat, rad_vec) = planet::heliocent_coords(&planet::Planet::Jupiter, julian_day);
+// Apparent geocentric positions; JDE is a Julian Ephemeris Day (TT)
+let sun = sun::apparent_position(2448908.5); // 1992 October 13.0 TD
+assert!((sun.right_ascension.to_degrees() - 198.378).abs() < 0.01);
 
-  // or neptune
-  let (nep_long, nep_lat, rad_vec) = planet::heliocent_coords(&planet::Planet::Neptune, julian_day);
+let moon = lunar::apparent_position(2448724.5); // 1992 April 12.0 TD
+assert!((moon.asc.to_degrees() - 134.688).abs() < 0.001);
+assert!((moon.dist - 368_409.7).abs() < 1.0); // kilometres
 
-  // positioning for all the eight planets (and (the dwarf planet) Pluto) is supported
-  let (plut_long, plut_lat, rad_vec) = pluto::heliocent_coords(julian_day);
-  ```
+let venus = planet::geocent_apprnt_pos(&planet::Planet::Venus, 2448976.5).unwrap();
+assert!((venus.apprnt_dec.to_degrees() + 18.888).abs() < 0.001);
+```
 
-* Find the geodesic distance between two locations on Earth
-  ```rust
-	// geodesic distance between the Observatoire de Paris and
-    // the US Naval Observatory at Washington DC
+### Time
 
-    let paris = coords::GeographPoint{long: angle::deg_frm_dms(-2, 20, 14.0).to_radians(),
-                                      lat : angle::deg_frm_dms(48, 50, 11.0).to_radians()};
+```rust
+use astro::time::{self, CalType, Date, Month};
 
-    let washington = coords::GeographPoint{long: angle::deg_frm_dms(77,  3, 56.0).to_radians(),
-                                           lat : angle::deg_frm_dms(38, 55, 17.0).to_radians()};
+// Sputnik 1: 1957 October 4.81 UT
+let date = Date { year: 1957, month: Month::Oct, decimal_day: 4.81, cal_type: CalType::Gregorian };
+let jd = time::julian_day(&date);
+assert!((jd - 2436116.31).abs() < 1e-6);
 
-	// angle::deg_frm_dms() converts degrees expressed in degrees,
-	// minutes and seconds into a fractional degree
+// Terrestrial Time runs ahead of UT by ΔT (about 32 s in 1957)
+let jde = time::julian_ephemeris_day(jd, time::delta_t(1957, 10));
 
-    let distance = planet::earth::geodesic_dist(&paris, &washington); // in meters
-  ```
+assert!((jde - jd) * 86400.0 > 25.0);
 
-* Convert equatorial coordinates to ecliptic coordinates
-  ```rust
-	// equatorial coordinates of the star Pollux
+// Greenwich mean sidereal time, in radians in [0, 2π)
+let gmst = time::mn_sidr(jd);
+assert!((0.0..std::f64::consts::TAU).contains(&gmst));
+```
 
-    let right_ascension = 116.328942_f64.to_radians();
-    let declination = 28.026183_f64.to_radians();
+### Events
 
-    // mean obliquity of the ecliptic
+```rust
+use astro::{calendar, eclipse, lunar, season, time};
 
-    let oblq_eclip = 23.4392911_f64.to_radians();
+// The next solar eclipse after 2024 January 1: the total eclipse of April 8
+let e = eclipse::next_solar_eclipse(2460310.5).unwrap();
+assert_eq!(e.kind, eclipse::SolarEclipseKind::Total);
+assert!((e.jde - 2460409.26).abs() < 0.01);
 
-    // you can also get oblq_eclip from ecliptic::mn_oblq_IAU(julian_day)
-    // for the Julian day on which the coordinates of the star
-    // were observed
+// The March equinox of 2025 (March 20, about 09:01 UT)
+let equinox = season::instant(2025, season::Event::MarchEquinox);
+assert!((equinox - 2460754.877).abs() < 0.01);
 
-    // also make sure to type #[macro_use] before including the crate
-    // to use macros
+// The full Moon nearest to 2024 January 25 (17:54 UT)
+let full = lunar::phase::nearest_phase(2460335.0, lunar::Phase::Full);
+assert!((full.jde - 2460335.246).abs() < 0.01);
 
-    // now, convert equatorial coordinates to ecliptic coordinates
+// Easter Sunday 2025 (Gregorian calendar): April 20
+let easter = calendar::easter_gregorian(2025).unwrap();
+assert_eq!((easter.month, easter.decimal_day), (time::Month::Apr, 20.0));
+```
 
-    let (ecl_long, ecl_lat) = ecl_frm_eq!(right_ascension, declination, oblq_eclip);
-  ```
+## Conventions
 
-* Convert equatorial coordinates to galactic coordinates
-  ```rust
-	// equatorial coordinates of the Nova Serpentis 1978
+* **Angles are in radians** throughout the API (use `f64::to_degrees` and the
+  helpers in [`angle`] for display).
+* **Geographic longitude is positive west** of Greenwich, as in Meeus.
+  `Observer::from_degrees_east` and the helpers in [`coords`] convert from the
+  east-positive longitudes used on maps.
+* **Azimuth is measured from the south**, westward, as in Meeus; the
+  [`observer`] API also gives the compass azimuth (from north, eastward).
+* Times are Julian Days. Functions say whether they expect **JD** (Universal
+  Time) or **JDE** (Terrestrial/Dynamical Time); convert with
+  `time::julian_ephemeris_day` and `time::delta_t`.
+* Distances are in AU unless documented otherwise (the Moon: kilometres).
 
-    let right_ascension = angle::deg_frm_hms(17, 48, 59.74).to_radians();
-    let declination = angle::deg_frm_dms(-14, 43, 8.2).to_radians();
+## Accuracy
 
-    // convert to galactic coordinates
-
-    let (gal_long, gal_lat) = gal_frm_eq!(right_ascension, declination);
-  ```
-
-* Correct for nutation in different coordinate systems
-  ```rust
-  // nutation in ecliptic longitude and obliquity of the ecliptic
-  let (nut_in_long, nut_in_oblq) = nutation::nutation(julian_day);
-
-  // nutation in equatorial coordinates
-  let (nut_in_asc, nut_in_dec) = nutation::nutation_in_eq_coords(julian_day);
-  ```
+The algorithms are those of the book, so the accuracy is the book's: for
+example a few arcseconds for the Moon, better than an arcsecond for the
+planets (full VSOP87), and minutes of time for phenomena computed from
+series (eclipses, lunar phases). Each function documents its accuracy and
+valid time span where it matters. ΔT beyond the present is a prediction;
+pass an observed value when you need sub-second timing.
 
 ## Contributing
 
-Anyone interested to contribute in any way possible is encouraged to do so. Not all the algorithms in Meeus's book have been implemented yet. Documentation and tests need to be written for them as well. Refactored code and minor optimizations for the existing code are also welcome.
+Bug reports and pull requests are welcome. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for conventions and the checks CI runs.
 
-The end goal (of this project) is to build a modern, well-tested, well-documented library of algorithms for future use in astronomy. And Rust is very much the right choice for building that.
+## Thanks
 
-A fun suggestion is the addition of the recent [IAU 2000/2006 precession-nutation model](http://62.161.69.131/iers/conv2010/conv2010_c5.html). This method improves upon the existing model implemented here *"by taking into account the effect of mantle anelasticity, ocean tides, electromagnetic couplings produced between the fluid outer core and the mantle as well as between the solid inner core and fluid outer core"*.
+Thanks to everyone who has reported issues, sent fixes and suggested
+improvements:
+Oliver Schneider (@oli-obk), Liam Dawson (@liamdawson), manguluka
+(@bingX4devX), Manuel Hässig (@mhaessig), Ashley Blewer (@ablwr), Thomas
+Daniels (@thomas-daniels), Christopher H. Jordan (@cjordan), Laurent Valdes
+(@valdo404), @andresv, @emosenkis, @Razican, @meshula, @clangdo,
+@dean-shaff and @smroid.
 
 ## References
 
-The main reference used as the source of algorithms is the famous book *Astronomical Algorithms by Jean Meeus*, whose almost every chapter has been addressed here, with functions that are well-documented and tests that use example data from the book; in some cases, such as ΔT approximation and planetary heliocentric positioning, more accurate methods have been implemented.
+* Jean Meeus, *Astronomical Algorithms*, 2nd ed., Willmann-Bell, 1998 — the
+  source of nearly every algorithm here.
+* P. Bretagnon and G. Francou, *Planetary theories in rectangular and
+  spherical variables: VSOP87 solutions*, Astron. Astrophys. 202 (1988) —
+  planetary positions ([data](https://ftp.imcce.fr/pub/ephem/planets/vsop87/)).
+* M. Chapront-Touzé and J. Chapront, ELP-2000/82 — the lunar theory behind
+  the book's series for the Moon.
+* F. Espenak and J. Meeus, *Five Millennium Canon of Solar Eclipses*, NASA
+  (2006) — the polynomial expressions for ΔT
+  ([online](https://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html)).
+* IERS Conventions (2010) — for the more recent IAU 2000/2006
+  precession–nutation models, which are not implemented here
+  ([online](https://iers-conventions.obspm.fr/)).
 
-* Most algorithms: [Astronomical Algorithms, 2nd edition (Meeus)](http://www.willbell.com/math/mc1.htm)
-* Planetary heliocentric positioning: [VSOP87-D](http://cdsarc.u-strasbg.fr/viz-bin/qcat?VI/81/)
-* Approximating ΔT: [Five Millennium Canon of Solar Eclipses (Espenak and Meeus)](http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html)
-* Some physical constants: [World Geodetic System 1984](https://confluence.qps.nl/pages/viewpage.action?pageId=29855173)
+<!-- Module links: rustdoc and GitHub both resolve these to docs.rs. -->
+[`aberr`]: https://docs.rs/astro/latest/astro/aberr/
+[`angle`]: https://docs.rs/astro/latest/astro/angle/
+[`asteroid`]: https://docs.rs/astro/latest/astro/asteroid/
+[`atmos`]: https://docs.rs/astro/latest/astro/atmos/
+[`binary_star`]: https://docs.rs/astro/latest/astro/binary_star/
+[`calendar`]: https://docs.rs/astro/latest/astro/calendar/
+[`conjunction`]: https://docs.rs/astro/latest/astro/conjunction/
+[`coords`]: https://docs.rs/astro/latest/astro/coords/
+[`eclipse`]: https://docs.rs/astro/latest/astro/eclipse/
+[`ecliptic`]: https://docs.rs/astro/latest/astro/ecliptic/
+[`fitting`]: https://docs.rs/astro/latest/astro/fitting/
+[`geometry`]: https://docs.rs/astro/latest/astro/geometry/
+[`interpol`]: https://docs.rs/astro/latest/astro/interpol/
+[`iteration`]: https://docs.rs/astro/latest/astro/iteration/
+[`lunar`]: https://docs.rs/astro/latest/astro/lunar/
+[`nutation`]: https://docs.rs/astro/latest/astro/nutation/
+[`observer`]: https://docs.rs/astro/latest/astro/observer/
+[`orbit`]: https://docs.rs/astro/latest/astro/orbit/
+[`parallax`]: https://docs.rs/astro/latest/astro/parallax/
+[`planet`]: https://docs.rs/astro/latest/astro/planet/
+[`pluto`]: https://docs.rs/astro/latest/astro/pluto/
+[`precess`]: https://docs.rs/astro/latest/astro/precess/
+[`season`]: https://docs.rs/astro/latest/astro/season/
+[`star`]: https://docs.rs/astro/latest/astro/star/
+[`sun`]: https://docs.rs/astro/latest/astro/sun/
+[`sundial`]: https://docs.rs/astro/latest/astro/sundial/
+[`time`]: https://docs.rs/astro/latest/astro/time/
+[`transit`]: https://docs.rs/astro/latest/astro/transit/
+
+## License
+
+MIT — see [LICENSE.md](LICENSE.md).
