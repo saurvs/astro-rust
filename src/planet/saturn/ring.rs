@@ -98,7 +98,7 @@ const ABERRATION: f64 = 0.005_693;
 ///   [`time::julian_cent`]
 #[inline]
 pub fn inc(JC: f64) -> f64 {
-    (28.075216 - JC * (0.012998 + JC * 0.000004)).to_radians()
+    (28.075216 + JC * (-0.012998 + JC * 0.000004)).to_radians()
 }
 
 /// Computes the longitude of the ascending node of the plane of Saturn's
