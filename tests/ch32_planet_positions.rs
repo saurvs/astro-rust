@@ -24,6 +24,50 @@ fn arcsec(rad: f64) -> f64 {
     rad.to_degrees() * 3600.0
 }
 
+// The reference values distributed with VSOP87 by its authors (file
+// `vsop87.chk`, version D, IMCCE), for J2000.0, 1700 and 1100 (TDB): the
+// complete series must reproduce them to the 1e-10 printed. Together with
+// a term-by-term comparison of `src/planet/VSOPD_87` with the original
+// VSOP87D files (all 31 577 terms identical), this covers every planet and
+// every power of τ, which the book's examples cannot.
+#[test]
+fn heliocent_coords_match_vsop87_check_values() {
+    #[rustfmt::skip]
+    let cases = [
+        (Planet::Mercury, 2451545.0, 4.4293481036, -0.0527573409, 0.4664714751),
+        (Planet::Mercury, 2341970.0, 0.1910149587, -0.0682441256, 0.3381563139),
+        (Planet::Mercury, 2122820.0, 5.0128397764, -0.1143275808, 0.4352063237),
+        (Planet::Venus, 2451545.0, 3.1870221833, 0.0569782849, 0.7202129253),
+        (Planet::Venus, 2341970.0, 5.3115708036, -0.0455979904, 0.7283407528),
+        (Planet::Venus, 2122820.0, 3.3145399295, 0.0505016053, 0.7215819783),
+        (Planet::Earth, 2451545.0, 1.7519238681, -0.0000039656, 0.9833276819),
+        (Planet::Earth, 2341970.0, 1.7134419105, 0.0000025051, 0.9831498441),
+        (Planet::Earth, 2122820.0, 1.6367193623, -0.0000031292, 0.9830331815),
+        (Planet::Mars, 2451545.0, 6.2735389983, -0.0247779824, 1.3912076925),
+        (Planet::Mars, 2341970.0, 2.9166648690, 0.0280268149, 1.6584697082),
+        (Planet::Mars, 2122820.0, 2.7367104344, 0.0295522719, 1.6571002307),
+        (Planet::Jupiter, 2451545.0, 0.6334614186, -0.0205001039, 4.9653813154),
+        (Planet::Jupiter, 2341970.0, 4.8888943125, -0.0011098085, 5.1888133656),
+        (Planet::Jupiter, 2122820.0, 1.2695066546, -0.0075335740, 5.1193587362),
+        (Planet::Saturn, 2451545.0, 0.7980038761, -0.0401984149, 9.1838483715),
+        (Planet::Saturn, 2341970.0, 5.8113963637, -0.0291472787, 9.7629994924),
+        (Planet::Saturn, 2122820.0, 3.5570108069, 0.0435371139, 9.8669939498),
+        (Planet::Uranus, 2451545.0, 5.5225485803, -0.0119527838, 19.9240482667),
+        (Planet::Uranus, 2341970.0, 1.7242204720, 0.0059836565, 18.7966208854),
+        (Planet::Uranus, 2122820.0, 0.7007226224, -0.0065610611, 19.5612078271),
+        (Planet::Neptune, 2451545.0, 5.3045629252, 0.0042236789, 30.1205328392),
+        (Planet::Neptune, 2341970.0, 0.0815199679, -0.0260752533, 29.8685860491),
+        (Planet::Neptune, 2122820.0, 2.2124988267, 0.0027498093, 30.0653693610),
+    ];
+    for (planet, jd, l, b, r) in cases {
+        let (L, B, R) = planet::heliocent_coords(&planet, jd);
+        let dl = (L - l + PI).rem_euclid(TAU) - PI;
+        assert!(dl.abs() < 1.5e-10, "{planet:?} {jd}: L {L} vs {l}");
+        assert!((B - b).abs() < 1e-10, "{planet:?} {jd}: B {B} vs {b}");
+        assert!((R - r).abs() < 1e-10, "{planet:?} {jd}: R {R} vs {r}");
+    }
+}
+
 // Meeus, example 32.a: Venus on 1992 December 20 at 0h TD. The book uses the
 // abridged series of appendix III; the complete VSOP87 series used here
 // must agree to within the error of the abridged series (about 1").
