@@ -502,9 +502,10 @@ pub fn rho(geograph_lat: f64) -> f64 {
 /// Returns the rotational angular velocity of the Earth
 /// *| in radian per second*
 ///
-/// 7.292 114 992 × 10⁻⁵ rad/s, with respect to the stars (not to the moving
-/// equinox), at the epoch 1996.5 (Meeus, chapter 11). It decreases slowly
-/// as the Earth's rotation slows down.
+/// 7.292 114 992 × 10⁻⁵ rad/s (Meeus, chapter 11): the sidereal rate,
+/// measured against the fixed stars rather than the precessing equinox,
+/// as determined for 1996.5. The tidal braking of the Earth's spin makes
+/// it smaller over the centuries.
 #[inline(always)]
 pub fn rot_angular_velocity() -> f64 {
     0.00007292114992

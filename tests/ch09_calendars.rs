@@ -364,3 +364,28 @@ fn islamic_round_trip_and_range() {
         None
     );
 }
+
+// Review R1: the docs used to say that 1 Tishri always falls in September
+// or October; that is not so in many Julian years, nor in the far future.
+#[test]
+fn jewish_new_year_month_range() {
+    let mut august = 0;
+    for a in 3762_i16..=11800 {
+        let d = calendar::jewish_new_year(a).unwrap();
+        assert_eq!(d.year as i32, a as i32 - 3761);
+        match d.month {
+            Month::Aug => {
+                assert_eq!(d.cal_type, CalType::Julian, "{d:?}");
+                assert!(d.decimal_day >= 25.0, "{d:?}");
+                august += 1;
+            }
+            Month::Sept | Month::Oct => {}
+            _ => assert!(d.year > 8100, "{d:?}"),
+        }
+    }
+    assert!(august > 200);
+    assert_eq!(
+        calendar::jewish_new_year(5261).unwrap(),
+        jul(1500, Month::Aug, 25.0)
+    );
+}

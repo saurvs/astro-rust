@@ -284,7 +284,8 @@ pub fn east_long_frm_west_long(west_long: f64) -> f64 {
 /// Computes the local sidereal time from the sidereal time at Greenwich
 ///
 /// `θ = θ₀ − L`, with the longitude `L` positive **west** (Meeus,
-/// chapter 13).
+/// chapter 13). This is the same function as
+/// [`time::local_sidereal_time`](crate::time::local_sidereal_time).
 ///
 /// # Returns
 ///
@@ -297,7 +298,7 @@ pub fn east_long_frm_west_long(west_long: f64) -> f64 {
 ///   *| in radians*
 #[inline]
 pub fn loc_sidr_frm_green_sidr(green_sidreal: f64, observer_long: f64) -> f64 {
-    wrap_two_pi(green_sidreal - observer_long)
+    crate::time::local_sidereal_time(green_sidreal, observer_long)
 }
 
 /// Computes the hour angle from geographical longitude and Greenwich
@@ -470,9 +471,10 @@ pub fn ecl_lat_frm_eq(asc: f64, dec: f64, oblq_eclip: f64) -> f64 {
 #[macro_export]
 macro_rules! ecl_frm_eq {
     ($asc: expr_2021, $dec: expr_2021, $oblq_eclip: expr_2021) => {{
+        let (asc, dec, oblq_eclip): (f64, f64, f64) = ($asc, $dec, $oblq_eclip);
         (
-            $crate::coords::ecl_long_frm_eq($asc, $dec, $oblq_eclip),
-            $crate::coords::ecl_lat_frm_eq($asc, $dec, $oblq_eclip),
+            $crate::coords::ecl_long_frm_eq(asc, dec, oblq_eclip),
+            $crate::coords::ecl_lat_frm_eq(asc, dec, oblq_eclip),
         )
     }};
 }
@@ -538,9 +540,10 @@ pub fn dec_frm_ecl(ecl_long: f64, ecl_lat: f64, oblq_eclip: f64) -> f64 {
 #[macro_export]
 macro_rules! eq_frm_ecl {
     ($ecl_long: expr_2021, $ecl_lat: expr_2021, $oblq_eclip: expr_2021) => {{
+        let (ecl_long, ecl_lat, oblq_eclip): (f64, f64, f64) = ($ecl_long, $ecl_lat, $oblq_eclip);
         (
-            $crate::coords::asc_frm_ecl($ecl_long, $ecl_lat, $oblq_eclip),
-            $crate::coords::dec_frm_ecl($ecl_long, $ecl_lat, $oblq_eclip),
+            $crate::coords::asc_frm_ecl(ecl_long, ecl_lat, oblq_eclip),
+            $crate::coords::dec_frm_ecl(ecl_long, ecl_lat, oblq_eclip),
         )
     }};
 }
@@ -661,9 +664,10 @@ pub fn hz_frm_hr_angl_and_dec(hour_angle: f64, dec: f64, observer_lat: f64) -> H
 #[macro_export]
 macro_rules! loc_hz_frm_eq {
     ($hour_angle: expr_2021, $dec: expr_2021, $observer_lat: expr_2021) => {{
+        let (hour_angle, dec, observer_lat): (f64, f64, f64) = ($hour_angle, $dec, $observer_lat);
         (
-            $crate::coords::az_frm_eq($hour_angle, $dec, $observer_lat),
-            $crate::coords::alt_frm_eq($hour_angle, $dec, $observer_lat),
+            $crate::coords::az_frm_eq(hour_angle, dec, observer_lat),
+            $crate::coords::alt_frm_eq(hour_angle, dec, observer_lat),
         )
     }};
 }
@@ -910,9 +914,10 @@ pub fn gal_lat_frm_eq(asc: f64, dec: f64) -> f64 {
 #[macro_export]
 macro_rules! gal_frm_eq {
     ($asc: expr_2021, $dec: expr_2021) => {{
+        let (asc, dec): (f64, f64) = ($asc, $dec);
         (
-            $crate::coords::gal_long_frm_eq($asc, $dec),
-            $crate::coords::gal_lat_frm_eq($asc, $dec),
+            $crate::coords::gal_long_frm_eq(asc, dec),
+            $crate::coords::gal_lat_frm_eq(asc, dec),
         )
     }};
 }
@@ -974,9 +979,10 @@ pub fn dec_frm_gal(gal_long: f64, gal_lat: f64) -> f64 {
 #[macro_export]
 macro_rules! eq_frm_gal {
     ($gal_long: expr_2021, $gal_lat: expr_2021) => {{
+        let (gal_long, gal_lat): (f64, f64) = ($gal_long, $gal_lat);
         (
-            $crate::coords::asc_frm_gal($gal_long, $gal_lat),
-            $crate::coords::dec_frm_gal($gal_long, $gal_lat),
+            $crate::coords::asc_frm_gal(gal_long, gal_lat),
+            $crate::coords::dec_frm_gal(gal_long, gal_lat),
         )
     }};
 }

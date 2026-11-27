@@ -53,8 +53,9 @@ fn date_in_march(year: i16, day: i64, cal_type: CalType) -> Date {
 /// Computes the date of Easter Sunday in the Gregorian calendar
 ///
 /// Uses the method published by Spencer Jones (from Butcher's
-/// *Ecclesiastical Calendar*, 1876), which has no exceptions and is valid for
-/// every Gregorian year. Easter Sunday falls between March 22 and April 25.
+/// *Ecclesiastical Calendar*, 1876). It needs no special cases, unlike
+/// Gauss' rule, and works for any Gregorian year. Easter Sunday falls
+/// between March 22 and April 25.
 ///
 /// Returns `None` for years before 1583, the first full year of the
 /// Gregorian calendar.
@@ -191,9 +192,13 @@ fn jewish_new_year_jd(jewish_year: i16) -> Option<f64> {
 /// Computes the date of the Jewish New Year (1 Tishri)
 ///
 /// Returns the date of 1 Tishri of the Jewish year `jewish_year`, which
-/// falls in September or October of the civil year `jewish_year - 3761`.
-/// The date is in the Julian calendar before 1582 October 15 and in the
-/// Gregorian calendar from then on.
+/// falls in the civil year `jewish_year - 3761`. The date is in the Julian
+/// calendar before 1582 October 15 and in the Gregorian calendar from then
+/// on. It is in September or October for every Gregorian year up to about
+/// 8100 (the Jewish year is slightly longer than the Gregorian one, so the
+/// date drifts later, into November after that); in the Julian calendar it
+/// can be as early as August 25 (in many years from the 1st to the 16th
+/// century).
 ///
 /// Returns `None` if the civil year does not fit in an `i16`.
 ///

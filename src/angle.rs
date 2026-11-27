@@ -438,21 +438,34 @@ pub fn hms_frm_deg(deg: f64) -> (i64, i64, f64) {
 
 /// Rounds the seconds of a non-negative sexagesimal value to `decimals`
 /// decimals, carrying into minutes and whole units.
+///
+/// The seconds are taken in magnitude. A `NaN` or infinite value is
+/// returned as is (there is nothing to carry); the counters saturate
+/// instead of overflowing.
 fn round_sexagesimal(whole: u32, min: u32, sec: f64, decimals: u32) -> (u32, u32, f64) {
     let scale = 10_f64.powi(decimals.min(9) as i32);
-    let sec = (sec.abs() * scale).round() / scale;
+    let sec = sec.abs();
+    let scaled = sec * scale;
+    // Values too large to scale have no decimals left to round.
+    let sec = if scaled.is_finite() {
+        scaled.round() / scale
+    } else {
+        sec
+    };
+    if !sec.is_finite() {
+        return (whole, min, sec);
+    }
 
-    let carry = (sec / 60.0).floor();
-    let sec = sec - 60.0 * carry;
-    // Guard against a rounding residue below zero (keeps NaN as NaN)
-    let sec = if sec < 0.0 { 0.0 } else { sec };
-    let total_min = u64::from(min) + carry as u64;
-    let whole = u64::from(whole) + total_min / 60;
+    // The remainder is exact and in [0, 60); the carry is a whole number.
+    let rem = sec % 60.0;
+    let carry = ((sec - rem) / 60.0).round();
+    let total_min = u64::from(min).saturating_add(carry as u64);
+    let whole = u64::from(whole).saturating_add(total_min / 60);
 
     (
         u32::try_from(whole).unwrap_or(u32::MAX),
         (total_min % 60) as u32,
-        sec,
+        rem,
     )
 }
 
@@ -519,7 +532,7 @@ impl Dms {
             negative,
             deg,
             min,
-            sec,
+            sec: sec.abs(),
         }
     }
 
@@ -570,7 +583,7 @@ impl fmt::Display for Dms {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let a = match f.precision() {
             Some(p) => self.rounded(p as u32),
-            None => *self,
+            None => Self::new(self.negative, self.deg, self.min, self.sec),
         };
         let sign = if a.negative { "-" } else { "" };
         write!(f, "{sign}{}°{:02}′", a.deg, a.min)?;
@@ -619,7 +632,7 @@ impl Hms {
             negative,
             hour,
             min,
-            sec,
+            sec: sec.abs(),
         }
     }
 
@@ -666,7 +679,7 @@ impl fmt::Display for Hms {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let a = match f.precision() {
             Some(p) => self.rounded(p as u32),
-            None => *self,
+            None => Self::new(self.negative, self.hour, self.min, self.sec),
         };
         let sign = if a.negative { "-" } else { "" };
         write!(f, "{sign}{}h{:02}m", a.hour, a.min)?;
@@ -675,7 +688,7 @@ impl fmt::Display for Hms {
     }
 }
 
-/// Reduces `angl` to `[0, period)` exactly.
+/// Reduces `angl` to `[0, period)`, with a single rounding at most.
 #[inline]
 fn limit_to_period(angl: f64, period: f64) -> f64 {
     // `%` is the exact IEEE remainder with the sign of `angl`, so no
@@ -706,8 +719,10 @@ fn limit_to_half_period(angl: f64, period: f64) -> f64 {
 
 /// Computes the equivalent angle in the `[0, 360)` degree range
 ///
-/// Exact for every finite input (the reduction uses the exact floating
-/// point remainder). Before version 3 a tiny negative angle gave exactly
+/// Correct for every finite input: the reduction uses the exact floating
+/// point remainder, so the only rounding is that of adding 360 to a
+/// negative remainder (at most half a unit in the last place of the
+/// result). Before version 3 a tiny negative angle gave exactly
 /// 360 (outside the range), angles beyond about 10¹⁷ degrees were reduced
 /// wrongly, and angles beyond about 3·10²¹ degrees were not reduced at
 /// all. `NaN` and infinities give `NaN`.

@@ -87,7 +87,13 @@ pub fn parllc_angl(observer_lat: f64, hour_angle: f64, dec: f64) -> f64 {
     let (sin_d, cos_d) = dec.sin_cos();
     let (sin_p, cos_p) = observer_lat.sin_cos();
 
-    (sin_h * cos_p).atan2(sin_p * cos_d - cos_p * sin_d * cos_h)
+    let q = (sin_h * cos_p).atan2(sin_p * cos_d - cos_p * sin_d * cos_h);
+    // atan2(−0, x < 0) is −π; keep the result in (−π, π].
+    if q == -std::f64::consts::PI {
+        std::f64::consts::PI
+    } else {
+        q
+    }
 }
 
 /// Computes the parallactic angle of a celestial body on the
@@ -154,8 +160,8 @@ pub fn angl_betwn_north_celes_and_eclip_poles(ecl_long: f64, ecl_lat: f64, oblq_
 /// ecliptic, the direction of increasing longitude points `−q₀` north of
 /// due east: near the vernal equinox (`q₀ = −ε`) the ecliptic climbs
 /// northwards towards the east, near the autumnal equinox (`q₀ = +ε`) it
-/// descends. Useful, for example, to draw the path of the Moon through
-/// the Earth's shadow in a lunar eclipse diagram.
+/// descends. A typical use is orienting the ecliptic in a chart of a
+/// lunar eclipse.
 ///
 /// # Returns
 ///

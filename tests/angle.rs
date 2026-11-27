@@ -536,3 +536,43 @@ fn limit_to_pm180_and_pm_pi() {
         assert!((-PI..PI).contains(&r));
     }
 }
+
+// Review R1: rounding a Dms/Hms whose seconds are infinite or huge used to
+// overflow the minute counter (a panic in debug builds), and the carry
+// could leave seconds outside [0, 60).
+#[test]
+fn dms_rounding_extreme_seconds_does_not_panic() {
+    for sec in [
+        f64::INFINITY,
+        f64::NEG_INFINITY,
+        1e300,
+        -1e300,
+        1e20,
+        f64::NAN,
+    ] {
+        let r = Dms::new(false, 3, 59, sec).rounded(2);
+        assert!(r.sec.is_nan() || r.sec.is_infinite() || (0.0..60.0).contains(&r.sec));
+        let _ = format!("{:.1}", Dms::new(true, u32::MAX, 59, sec));
+        let h = Hms::new(false, 23, 59, sec).rounded(0);
+        assert!(h.sec.is_nan() || h.sec.is_infinite() || (0.0..60.0).contains(&h.sec));
+        let _ = format!("{:.3}", Hms::new(false, u32::MAX, 59, sec));
+    }
+    // Seconds beyond a minute carry exactly: 1°59′ + 3675″ = 3°00′15″.
+    let r = Dms::new(false, 1, 59, 3600.0 + 75.0).rounded(0);
+    assert_eq!(r, Dms::new(false, 3, 0, 15.0));
+}
+
+// Review R1: the sign of the seconds passed to `new` is documented as
+// ignored, but it was stored, so equal angles compared unequal and `{}`
+// printed "1°02′0-3″".
+#[test]
+fn dms_new_ignores_sign_of_seconds() {
+    assert_eq!(Dms::new(false, 1, 2, -3.0), Dms::new(false, 1, 2, 3.0));
+    assert_eq!(Hms::new(true, 1, 2, -3.5), Hms::new(true, 1, 2, 3.5));
+    assert_eq!(format!("{}", Dms::new(false, 1, 2, -3.0)), "1°02′03″");
+    assert_eq!(format!("{}", Hms::new(false, 1, 2, -3.5)), "1h02m03.5s");
+    // Even when the field is set directly
+    let mut a = Dms::new(false, 1, 2, 3.0);
+    a.sec = -3.0;
+    assert_eq!(format!("{a}"), "1°02′03″");
+}
