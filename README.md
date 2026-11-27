@@ -2,14 +2,14 @@
 
 [![crates.io](https://img.shields.io/crates/v/astro.svg)](https://crates.io/crates/astro)
 [![docs.rs](https://docs.rs/astro/badge.svg)](https://docs.rs/astro)
-[![CI](https://github.com/saurvs/astro-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/saurvs/astro-rust/actions/workflows/ci.yml)
+[![CI](https://github.com/sauravsc/astro-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/sauravsc/astro-rust/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
 
-**[▶ Live demo](https://saurvs.github.io/astro-rust-demo/)** — this crate compiled to WebAssembly,
+**[▶ Live demo](https://sauravsc.github.io/astro-rust-demo/)** — this crate compiled to WebAssembly,
 computing the sky, the solar system and planetary paths in your browser
-([source](https://github.com/saurvs/astro-rust-demo)).
+([source](https://github.com/sauravsc/astro-rust-demo)).
 
-[![The astro-rust live demo: a London evening sky, the rose of Venus and the solar system](https://raw.githubusercontent.com/saurvs/astro-rust-demo/main/media/demo.gif)](https://saurvs.github.io/astro-rust-demo/)
+[![The astro-rust live demo: a London evening sky, the rose of Venus and the solar system](https://raw.githubusercontent.com/sauravsc/astro-rust-demo/main/media/demo.gif)](https://sauravsc.github.io/astro-rust-demo/)
 
 `astro` is a library of astronomical algorithms for Rust: where the Sun,
 Moon, planets and their satellites are; when things rise, set, transit,
@@ -22,7 +22,7 @@ book's worked examples — and, where the book recommends it, the full
 theories behind them (the complete VSOP87 series for the planets, for
 example). It is pure Rust with no dependencies.
 
-* [Live demo](https://saurvs.github.io/astro-rust-demo/)
+* [Live demo](https://sauravsc.github.io/astro-rust-demo/)
 * [API documentation](https://docs.rs/astro)
 * [Changelog](CHANGELOG.md)
 
