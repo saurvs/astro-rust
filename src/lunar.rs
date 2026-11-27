@@ -1113,7 +1113,7 @@ pub fn time_of_phase(date: &time::Date, phase: &Phase) -> f64 {
         let W =
             0.00306
           - 0.00038 * E * M.cos()
-          + 0.00026 * M1.cos();
+          + 0.00026 * M1.cos()
           - 0.00002 * ((M1 - M).cos() - (M1 + M).cos() - (2.0 * F).cos());
 
         JD += match phase {
