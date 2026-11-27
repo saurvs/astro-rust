@@ -558,3 +558,18 @@ fn true_anomaly_and_radius_vector() {
     assert_close(elliptic::rad_vec_frm_ecc_anom(0.0, a, e), q, 1e-15);
     assert_close(elliptic::rad_vec_frm_ecc_anom(PI, a, e), 4.0, 1e-15);
 }
+
+#[test]
+fn ecc_anom_for_large_mean_anomalies() {
+    // many revolutions away from the epoch, in both directions
+    for &M in &[1e3, -1e3, 123456.789, -987654.321, 1e8] {
+        for &e in &[0.1, 0.9, 0.9999] {
+            let E = elliptic::ecc_anom_checked(M, e).unwrap();
+            // the reduction of M to [-π, π] costs about one ulp of M
+            assert!(residual(E, M, e).abs() <= 4.0 * f64::EPSILON * M.abs());
+            assert!((E - M).abs() <= e + 1e-6);
+            let bs = elliptic::ecc_anom_binary_search(M, e).unwrap();
+            assert_close(bs, E, 8.0 * f64::EPSILON * M.abs());
+        }
+    }
+}

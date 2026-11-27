@@ -22,7 +22,7 @@ THE SOFTWARE.
 //! Elliptic, parabolic and near-parabolic orbits
 //!
 //! Positions of minor planets and comets from their orbital elements
-//! (Meeus, *Astronomical Algorithms*, 2nd ed., chapters 30 and 33 to 35).
+//! (Meeus, *Astronomical Algorithms*, 2nd ed., chapters 30, 33 to 35 and 39).
 //!
 //! The submodules solve for the true anomaly and the radius vector in each
 //! kind of orbit: [`elliptic`] (Kepler's equation, `e < 1`), [`parabolic`]
@@ -252,8 +252,8 @@ pub struct GaussVectors {
 
 /// Computes the orientation vectors `P` and `Q` of an orbit
 ///
-/// Meeus, chapter 33 (the formulae following eq. 33.12 in the order of the
-/// text, an alternative to eqs. 33.7 and 33.8).
+/// Meeus, chapter 33 (the alternative to eqs. 33.7 and 33.8, given just
+/// before eq. 33.11).
 ///
 /// # Arguments
 ///

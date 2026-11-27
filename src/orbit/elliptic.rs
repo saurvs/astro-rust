@@ -95,7 +95,8 @@ fn split_revolutions(angl: f64) -> (f64, f64) {
 /// # Returns
 ///
 /// * `true_anom`: True anomaly of the body *| in radians*, in the range
-///   `(-π, π]`. It is `NaN` if `ecc > 1`.
+///   `[-π, π]`, whatever the revolution of `ecc_anom`. It is `NaN` if
+///   `ecc > 1`.
 ///
 /// # Arguments
 ///
@@ -115,7 +116,8 @@ pub fn true_anom(ecc_anom: f64, ecc: f64) -> f64 {
 /// # Returns
 ///
 /// * `ecc_anom`: Eccentric anomaly of the body *| in radians*, in the range
-///   `(-π, π]`. It is `NaN` if `ecc > 1`.
+///   `[-π, π]`, whatever the revolution of `true_anom`. It is `NaN` if
+///   `ecc > 1`.
 ///
 /// # Arguments
 ///

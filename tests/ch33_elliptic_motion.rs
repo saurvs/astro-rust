@@ -578,3 +578,35 @@ fn comet_magnitude() {
         1e-14,
     );
 }
+
+#[test]
+fn elliptic_motion_is_periodic_and_works_for_ancient_dates() {
+    // Comet Halley's perihelion of 240 B.C. (year -239, Julian calendar),
+    // with the 1986 orbit shape: the motion repeats after each period, also
+    // for negative Julian days
+    let T = time::julian_day(&time::Date {
+        year: -239,
+        month: time::Month::May,
+        decimal_day: 25.0,
+        cal_type: time::CalType::Julian,
+    });
+    assert!(T > 1_600_000.0 && T < 1_700_000.0);
+    let (a, e) = (17.9400782, 0.96727426);
+    let m = Motion::elliptic_frm_perih_time(a, e, T);
+    let period = 2.0 * PI / elliptic::mn_motion(a);
+    assert_close(period / 365.25, 75.99, 0.01);
+    for k in [-30.0, -1.0, 1.0, 5.0] {
+        for dt in [-100.0, 0.0, 17.0, 3000.0] {
+            let (v1, r1) = m.true_anom_and_rad_vec(T + dt).unwrap();
+            let (v2, r2) = m.true_anom_and_rad_vec(T + dt + k * period).unwrap();
+            common::assert_close_rad(v2, v1, 1e-9);
+            assert_close(r2, r1, 1e-9 * r1);
+        }
+    }
+    // a time with a negative Julian day
+    let t = T - 60.0 * period;
+    assert!(t < 0.0);
+    let (v, r) = m.true_anom_and_rad_vec(t).unwrap();
+    assert_close(v, 0.0, 1e-9);
+    assert_close(r, elliptic::perih_dist(a, e), 1e-9);
+}
