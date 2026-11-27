@@ -11,6 +11,19 @@ fn rad(deg: f64) -> f64 {
     deg.to_radians()
 }
 
+/// The two floating point neighbours of `x` (`f64::next_up` needs Rust
+/// 1.86, above the crate's MSRV).
+fn neighbours(x: f64) -> (f64, f64) {
+    if x == 0.0 {
+        (f64::from_bits(1), -f64::from_bits(1))
+    } else {
+        (
+            f64::from_bits(x.to_bits() + 1),
+            f64::from_bits(x.to_bits() - 1),
+        )
+    }
+}
+
 // ---------------------------------------------------------------------------
 // Angular separation
 // ---------------------------------------------------------------------------
@@ -481,7 +494,7 @@ fn limit_exact_multiples_and_signs() {
         assert_eq!(angle::limit_to_360(x), 0.0, "{x}");
         assert!(angle::limit_to_360(x).is_sign_positive());
         let x = TWO_PI * k as f64;
-        for &y in &[x, x.next_up(), x.next_down()] {
+        for &y in &[x, neighbours(x).0, neighbours(x).1] {
             let r = angle::limit_to_two_PI(y);
             assert!((0.0..TWO_PI).contains(&r), "{y} -> {r}");
         }

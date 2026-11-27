@@ -18,7 +18,7 @@
 //! Positions may be equatorial ([`EqPoint`](crate::coords::EqPoint)),
 //! ecliptic ([`EclPoint`](crate::coords::EclPoint)) or `(longitude,
 //! latitude)` tuples in radians; see
-//! [`SphericalPoint`](crate::angle::SphericalPoint). Both bodies must be
+//! [`SphericalPoint`]. Both bodies must be
 //! referred to the same equinox: for a planet's apparent place, use the
 //! star's apparent place too (chapter 23); for astrometric J2000 planet
 //! positions, the star's J2000 position corrected for proper motion only.
