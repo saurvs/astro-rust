@@ -106,6 +106,46 @@ pub fn true_anom(ecc_anom: f64, ecc: f64) -> f64 {
     2.0 * ((1.0 + ecc).sqrt() * (ecc_anom / 2.0).tan()).atan2((1.0 - ecc).sqrt())
 }
 
+/// Computes the eccentric anomaly of a body in an elliptic orbit from its
+/// true anomaly
+///
+/// Uses Meeus, eq. 39.1, `tan(E/2) = sqrt((1 - e)/(1 + e)) tan(v/2)`, the
+/// inverse of [`true_anom`].
+///
+/// # Returns
+///
+/// * `ecc_anom`: Eccentric anomaly of the body *| in radians*, in the range
+///   `(-π, π]`. It is `NaN` if `ecc > 1`.
+///
+/// # Arguments
+///
+/// * `true_anom`: True anomaly of the body *| in radians*
+/// * `ecc`      : Eccentricity of the orbit, `0 ≤ ecc < 1`
+#[inline]
+pub fn ecc_anom_frm_true_anom(true_anom: f64, ecc: f64) -> f64 {
+    2.0 * ((1.0 - ecc).sqrt() * (true_anom / 2.0).tan()).atan2((1.0 + ecc).sqrt())
+}
+
+/// Computes the mean anomaly of a body in an elliptic orbit from its
+/// eccentric anomaly
+///
+/// Uses Kepler's equation in the direct form `M = E - e sin(E)` (Meeus,
+/// eq. 39.2).
+///
+/// # Returns
+///
+/// * `mean_anom`: Mean anomaly of the body *| in radians*, in the same
+///   revolution as `ecc_anom`
+///
+/// # Arguments
+///
+/// * `ecc_anom`: Eccentric anomaly of the body *| in radians*
+/// * `ecc`     : Eccentricity of the orbit
+#[inline]
+pub fn mn_anom_frm_ecc_anom(ecc_anom: f64, ecc: f64) -> f64 {
+    ecc_anom - ecc * ecc_anom.sin()
+}
+
 /// Computes the radius vector of a body in an elliptic orbit from its
 /// eccentric anomaly
 ///
@@ -850,8 +890,8 @@ pub fn passage_through_node(
 }
 
 fn pass_through_node(v: f64, n: f64, a: f64, e: f64, T: f64) -> (f64, f64) {
-    let E = 2.0 * ((1.0 - e).sqrt() * (v / 2.0).tan()).atan2((1.0 + e).sqrt());
-    let M = E - e * E.sin();
+    let E = ecc_anom_frm_true_anom(v, e);
+    let M = mn_anom_frm_ecc_anom(E, e);
 
-    (T + M / n, a * (1.0 - e * E.cos()))
+    (T + M / n, rad_vec_frm_ecc_anom(E, a, e))
 }
