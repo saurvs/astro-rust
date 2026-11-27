@@ -126,9 +126,9 @@ pub fn julian_epoch_frm_jd(JD: f64) -> f64 {
 
 /// Computes the Julian Ephemeris Day of a Besselian epoch
 ///
-/// The Besselian year starts when the mean longitude of the Sun, affected
-/// by aberration and measured from the mean equinox of the date, is
-/// exactly 280°. This uses B1900.0 = JDE 2415020.31352 and a year of
+/// Besselian years were used for star catalogues before 1984; each one
+/// begins when the Sun's mean longitude (aberration included, from the
+/// mean equinox of the date) reaches 280°. This uses B1900.0 = JDE 2415020.31352 and a year of
 /// 365.242198781 days (the usual IAU convention), which reproduces Meeus'
 /// rounded values of B1900.0 and B1950.0.
 ///
@@ -406,8 +406,8 @@ pub fn fk4_equinox_correction(JD: f64) -> f64 {
 /// orbital elements from one mean equinox to another
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct EclPrecessAngles {
-    /// η: angle between the ecliptic of the starting epoch and the
-    /// ecliptic of the final epoch *| in radians*
+    /// η: inclination of the final ecliptic on the starting one
+    /// *| in radians*
     pub eta: f64,
     /// Π: longitude, on the starting ecliptic, of the ascending node of the
     /// final ecliptic *| in radians*
