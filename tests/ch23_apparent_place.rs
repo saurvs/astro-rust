@@ -81,6 +81,15 @@ fn example_23_a_aberration() {
         0.0005,
     );
     assert_close(to_asec(aberr::CONST_OF_ABERR), 20.49552, 1e-10);
+    // ☉ = 231.328° by the low accuracy method of chapter 25, which
+    // apparent_place uses
+    assert_close(
+        sun::low_accuracy_position(JD_2028)
+            .true_longitude
+            .to_degrees(),
+        231.328,
+        0.0005,
+    );
 
     let (da, dd) = aberr::annual_aberr_in_eq_coords(
         41.5472_f64.to_radians(),
@@ -264,11 +273,14 @@ fn example_23_a_apparent_place() {
 
     // Δα1, Δδ1 (nutation): 15.843", 6.218"; Δα2, Δδ2 (aberration):
     // 30.045", 6.697". Here the nutation is applied to the position already
-    // corrected for aberration, which changes Δα1 by 0.001".
+    // corrected for aberration, which changes Δα1 by 0.001". The aberration
+    // is applied as a vector (so that it holds at the poles), not by adding
+    // the first-order Δα2, Δδ2 to α and δ; the two differ by second-order
+    // terms, κ² tan δ ≈ 0.0012" here.
     assert_close(to_asec(p.nut_asc), 15.843, 0.002);
     assert_close(to_asec(p.nut_dec), 6.218, 0.002);
-    assert_close(to_asec(p.aberr_asc), 30.045, 0.001);
-    assert_close(to_asec(p.aberr_dec), 6.697, 0.001);
+    assert_close(to_asec(p.aberr_asc), 30.045, 0.002);
+    assert_close(to_asec(p.aberr_dec), 6.697, 0.002);
 
     // 2h46m14.390s, +49°21'07.45"
     let (h, m, s) = hms_of(p.asc);
@@ -288,20 +300,24 @@ fn example_23_b_apparent_place() {
     assert_close(p.asc_pm.to_degrees(), 41.0540613, 1e-7);
     assert_close(p.dec_pm.to_degrees(), 49.2277489, 1e-7);
 
-    assert_close(p.aberr_asc, 0.000145252, 1e-9);
-    assert_close(p.aberr_dec, 0.000032723, 1e-9);
+    // Book: 0.000145252, 0.000032723 rad from eq. 23.4. The aberration is
+    // applied as a vector, which differs from adding these first-order
+    // corrections by second-order terms of about 0.001" (5e-9 rad).
+    assert_close(p.aberr_asc, 0.000145252, 1e-8);
+    assert_close(p.aberr_dec, 0.000032723, 1e-8);
 
-    // After precession: 41.5555635°, +49.3503415°
-    assert_close(p.asc_mean.to_degrees(), 41.5555635, 1e-7);
-    assert_close(p.dec_mean.to_degrees(), 49.3503415, 1e-7);
+    // After precession: 41.5555635°, +49.3503415° (the same second-order
+    // difference, 3e-7°, carries over)
+    assert_close(p.asc_mean.to_degrees(), 41.5555635, 5e-7);
+    assert_close(p.dec_mean.to_degrees(), 49.3503415, 5e-7);
 
     // Nutation: 15.844", 6.217"
     assert_close(to_asec(p.nut_asc), 15.844, 0.001);
     assert_close(to_asec(p.nut_dec), 6.217, 0.001);
 
     // 41.5599646° = 2h46m14.392s, 49.3520685° = +49°21'07.45"
-    assert_close(p.asc.to_degrees(), 41.5599646, 2e-7);
-    assert_close(p.dec.to_degrees(), 49.3520685, 2e-7);
+    assert_close(p.asc.to_degrees(), 41.5599646, 5e-7);
+    assert_close(p.dec.to_degrees(), 49.3520685, 5e-7);
     let (h, m, s) = hms_of(p.asc);
     assert_eq!((h, m), (2, 46));
     assert_close(s, 14.392, 0.001);
@@ -421,4 +437,63 @@ fn apparent_place_of_polaris() {
     // aberration (≤ 20.5") and nutation (≤ about 20") together
     assert!(shift > 1.0 && shift < 45.0, "{shift}");
     assert_close_deg(p.dec.to_degrees(), 89.4, 0.1);
+}
+
+/// Direction of `u + v` for the unit vector `u` of (asc, dec): the
+/// aberration of a star for an observer moving with velocity `v` (in units
+/// of the speed of light), to first order, without the 1/cos(dec) of the
+/// formulae in right ascension.
+fn aberrate_by_vector(asc: f64, dec: f64, v: [f64; 3]) -> (f64, f64) {
+    let x = dec.cos() * asc.cos() + v[0];
+    let y = dec.cos() * asc.sin() + v[1];
+    let z = dec.sin() + v[2];
+    (y.atan2(x).rem_euclid(TAU), z.atan2(x.hypot(y)))
+}
+
+// Stars at and next to the celestial poles: the whole reduction, done
+// independently with the aberration applied as a vector, must agree with
+// `apparent_place` for both methods. Adding first-order corrections to α and
+// δ fails here (1/cos δ): before the fix the Ron–Vondrák result was 0.56″
+// off at δ = 89.9°, 5.6″ at 89.99° and about 20″ at the pole itself.
+#[test]
+fn apparent_place_at_the_celestial_poles() {
+    let c = 173.14463350; // speed of light, AU/day
+    for JD in [precess::J2000 + 100.0, JD_2028] {
+        let (dpsi, deps) = nutation::nutation(JD);
+        let eps0 = ecliptic::mn_oblq_IAU(JD);
+        for dec in [89.9_f64, 89.99, 89.999, 90.0, -89.95, -90.0] {
+            let s = star::MeanPlace {
+                asc: 1.0,
+                dec: dec.to_radians(),
+                pm_asc: 0.0,
+                pm_dec: 0.0,
+                epoch: precess::J2000,
+            };
+
+            // Ron–Vondrák: aberration in the J2000.0 frame, then precession
+            let (x, y, z) = aberr::earth_bary_vel(JD);
+            let (a, d) = aberrate_by_vector(s.asc, s.dec, [x / c, y / c, z / c]);
+            let (a, d) = precess::precess_eq_coords(a, d, precess::J2000, JD);
+            let (a, d) = nutation::nutate_eq_coords(a, d, dpsi, deps, eps0);
+            let p = star::apparent_place(&s, JD, star::AberrMethod::RonVondrak);
+            let err = sep_asec(a, d, p.asc, p.dec);
+            assert!(err < 0.001, "Ron–Vondrák, {JD} {dec}: {err}\"");
+
+            // Classical: precession, then the velocity of eq. 23.2 turned into
+            // equatorial coordinates of the date
+            let (a, d) = precess::precess_eq_coords(s.asc, s.dec, precess::J2000, JD);
+            let k = aberr::CONST_OF_ABERR;
+            let e = aberr::earth_orb_ecc(JD);
+            let pi = aberr::earth_perih_long(JD);
+            let sun = sun_long_low_accuracy(JD);
+            let vx = k * (sun.sin() - e * pi.sin());
+            let vy = k * (e * pi.cos() - sun.cos());
+            let (a, d) = aberrate_by_vector(a, d, [vx, vy * eps0.cos(), vy * eps0.sin()]);
+            let (a, d) = nutation::nutate_eq_coords(a, d, dpsi, deps, eps0);
+            let p = star::apparent_place(&s, JD, star::AberrMethod::Classical);
+            let err = sep_asec(a, d, p.asc, p.dec);
+            assert!(err < 0.001, "classical, {JD} {dec}: {err}\"");
+            assert!(p.dec.abs() <= FRAC_PI_2);
+        }
+    }
 }

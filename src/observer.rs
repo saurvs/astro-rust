@@ -112,7 +112,6 @@ use crate::{aberr, atmos};
 use std::f64::consts::{PI, TAU};
 
 const DEG: f64 = PI / 180.0;
-const ARCSEC: f64 = DEG / 3600.0;
 
 /// The astronomical unit in kilometres (IAU 2012).
 const AU_KM: f64 = 149_597_870.7;
@@ -843,28 +842,14 @@ fn star_position(asc: f64, dec: f64, jde: f64, nut: &Nutation) -> ApparentPositi
 ///
 /// Meeus' eq. 23.2 gives the first-order displacement caused by the Earth's
 /// orbital velocity (including the terms in the eccentricity of the orbit);
-/// it is applied here in vector form, `u' = u + v − (u·v) u`, with `v` the
-/// Earth's velocity in units of the speed of light, which is equivalent to
-/// 23.2 but has no singularity at the ecliptic poles.
+/// it is applied here in vector form (the direction of `u + v`, with `v`
+/// the Earth's velocity in units of the speed of light), which is
+/// equivalent to 23.2 to first order but has no singularity at the
+/// ecliptic poles.
 fn annual_aberration(long: f64, lat: f64, jde: f64) -> (f64, f64) {
-    let t = time::julian_cent(jde);
-    let kappa = 20.49552 * ARCSEC;
-    let e = 0.016708634 - t * (0.000042037 + t * 0.0000001267);
-    let perihelion = (102.93735 + t * (1.71946 + t * 0.00046)) * DEG;
     let (sun_ecl, _) = sun::geocent_ecl_pos(jde);
-    let sun_long = sun_ecl.long;
 
-    let v = [
-        kappa * (sun_long.sin() - e * perihelion.sin()),
-        kappa * (e * perihelion.cos() - sun_long.cos()),
-    ];
-    let u = [lat.cos() * long.cos(), lat.cos() * long.sin(), lat.sin()];
-    let uv = u[0] * v[0] + u[1] * v[1];
-    let x = u[0] + v[0] - uv * u[0];
-    let y = u[1] + v[1] - uv * u[1];
-    let z = u[2] - uv * u[2];
-
-    (y.atan2(x), z.atan2(x.hypot(y)))
+    aberr::aberrate(long, lat, aberr::earth_vel_classical(sun_ecl.long, jde))
 }
 
 fn from_ecliptic(

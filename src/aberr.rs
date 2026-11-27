@@ -63,6 +63,10 @@ const ASEC: f64 = PI / 648000.0;
 /// The constant of aberration κ = 20.49552″ *| in radians*
 pub const CONST_OF_ABERR: f64 = 20.49552 * ASEC;
 
+/// The speed of light in AU per day, in the units of [`earth_bary_vel`]
+/// (Meeus, chapter 23: 17 314 463 350 × 10⁻⁸ AU/day)
+pub(crate) const LIGHT_SPEED_AU_PER_DAY: f64 = 173.14463350;
+
 /// Computes solar aberration in ecliptic longitude
 ///
 /// Meeus, eq. 25.10: the aberration of the Sun, −20.4898″ / R. Add it
@@ -91,9 +95,7 @@ pub fn sol_aberr(R: f64) -> f64 {
 /// * `JD`: Julian Ephemeris Day
 #[inline]
 pub fn earth_orb_ecc(JD: f64) -> f64 {
-    let t = time::julian_cent(JD);
-
-    0.016708634 - t * (0.000042037 + 0.0000001267 * t)
+    crate::sun::earth_orbit_eccentricity(JD)
 }
 
 /// Computes the longitude of the perihelion of the Earth's orbit
@@ -116,19 +118,39 @@ pub fn earth_perih_long(JD: f64) -> f64 {
         .to_radians()
 }
 
-/// The Sun's geometric (true) longitude, referred to the mean equinox of
-/// the date, with the low accuracy method of Meeus, chapter 25 (about
-/// 0.01°). Good enough for the aberration, where it is multiplied by κ.
-pub(crate) fn sun_geom_long_low_accuracy(JD: f64) -> f64 {
-    let t = time::julian_cent(JD);
+/// The velocity of the Earth in its unperturbed elliptical orbit, in units
+/// of the speed of light, as `[x, y, z]` in the ecliptic frame of the date
+/// (x towards the mean equinox, z towards the north ecliptic pole).
+///
+/// This is the velocity behind eqs. 23.2 and 23.3: its magnitude is the
+/// constant of aberration κ, and the terms in `e` are the E-terms.
+/// `sun_tru_long` is the Sun's true geometric longitude.
+pub(crate) fn earth_vel_classical(sun_tru_long: f64, JD: f64) -> [f64; 3] {
+    let k = CONST_OF_ABERR;
+    let e = earth_orb_ecc(JD);
+    let (sin_p, cos_p) = earth_perih_long(JD).sin_cos();
+    let (sin_s, cos_s) = sun_tru_long.sin_cos();
 
-    let L0 = 280.46646 + t * (36000.76983 + 0.0003032 * t);
-    let M = (357.52911 + t * (35999.05029 - 0.0001537 * t)).to_radians();
-    let C = (1.914602 - t * (0.004817 + 0.000014 * t)) * M.sin()
-        + (0.019993 - 0.000101 * t) * (2.0 * M).sin()
-        + 0.000289 * (3.0 * M).sin();
+    [k * (sin_s - e * sin_p), k * (e * cos_p - cos_s), 0.0]
+}
 
-    (L0 + C).rem_euclid(360.0).to_radians()
+/// Displaces the direction `(lon, lat)` by the aberration for an observer
+/// moving with velocity `v` (in units of the speed of light, same frame):
+/// the apparent direction is that of `u + v`, `u` being the unit vector of
+/// the true direction.
+///
+/// To first order this is the same as eqs. 23.2–23.4, but it involves no
+/// `1/cos(lat)` and so holds at the poles too. Returns the longitude in
+/// `[0, 2π)` and the latitude.
+pub(crate) fn aberrate(lon: f64, lat: f64, v: [f64; 3]) -> (f64, f64) {
+    let (sin_b, cos_b) = lat.sin_cos();
+    let (sin_l, cos_l) = lon.sin_cos();
+    let x = cos_b * cos_l + v[0];
+    let y = cos_b * sin_l + v[1];
+    let z = sin_b + v[2];
+
+    let r = y.atan2(x).rem_euclid(2.0 * PI);
+    (if r >= 2.0 * PI { 0.0 } else { r }, z.atan2(x.hypot(y)))
 }
 
 /// The factors of κ in eq. 23.3 for a given longitude `l` (the Sun's or
@@ -630,8 +652,7 @@ pub fn earth_bary_vel(JD: f64) -> (f64, f64, f64) {
 pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
     let (x, y, z) = earth_bary_vel(JD);
 
-    // Speed of light in AU per day (Meeus: 17 314 463 350 in 1e-8 AU/day)
-    let c = 173.14463350;
+    let c = LIGHT_SPEED_AU_PER_DAY;
 
     let (sin_a, cos_a) = stell_eq_point.asc.sin_cos();
     let (sin_d, cos_d) = stell_eq_point.dec.sin_cos();
@@ -646,14 +667,30 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
 mod tests {
     use super::*;
 
-    // Meeus, example 23.a gives ☉ = 231.328° for 2028 November 13.19 TD,
-    // and example 25.a ☉ = 199.90988° for 1992 October 13.0 TD.
+    // Eqs. 23.2 are the first-order expansion of `aberrate` with the
+    // velocity of `earth_vel_classical`.
     #[test]
-    fn sun_geom_long_low_accuracy_examples() {
-        let d = sun_geom_long_low_accuracy(2462088.69).to_degrees();
-        assert!((d - 231.328).abs() < 0.0005, "{d}");
+    fn vector_form_matches_eq_23_2() {
+        let JD = 2462088.69;
+        let sun = 231.328_f64.to_radians(); // Meeus, example 23.a
+        for (l, b) in [(0.3, 0.2), (2.0, -1.0), (4.0, 1.3), (5.5, 0.0)] {
+            let (dl, db) = annual_aberr_in_ecl_coords(l, b, sun, JD);
+            let (l1, b1) = aberrate(l, b, earth_vel_classical(sun, JD));
+            let d_l = (l1 - l + PI).rem_euclid(2.0 * PI) - PI;
+            // second-order terms: κ² ≈ 1e-8 rad
+            assert!((d_l - dl).abs() * b.cos() < 2e-8, "{l} {b}");
+            assert!((b1 - b - db).abs() < 2e-8, "{l} {b}");
+        }
+    }
 
-        let d = sun_geom_long_low_accuracy(2448908.5).to_degrees();
-        assert!((d - 199.90988).abs() < 0.00001, "{d}");
+    #[test]
+    fn aberrate_at_the_pole() {
+        let v = [1e-4, -2e-4, 0.5e-4];
+        let (l, b) = aberrate(0.7, PI / 2.0, v);
+        assert!((0.0..2.0 * PI).contains(&l));
+        // displaced towards the tangential part of v, by about its length
+        let tangential = v[0].hypot(v[1]);
+        assert!((PI / 2.0 - b - tangential.atan2(1.0 + v[2])).abs() < 1e-15);
+        assert!((l - v[1].atan2(v[0]).rem_euclid(2.0 * PI)).abs() < 1e-12);
     }
 }
