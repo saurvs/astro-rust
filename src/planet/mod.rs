@@ -899,7 +899,7 @@ pub struct GeocentPos {
 }
 
 impl GeocentPos {
-    /// The apparent ecliptic position as an [`EclPoint`](../coords/struct.EclPoint.html)
+    /// The apparent ecliptic position as an [`EclPoint`](coords::EclPoint)
     pub fn apprnt_ecl_point(&self) -> coords::EclPoint {
         coords::EclPoint {
             long: self.apprnt_long,
@@ -907,7 +907,7 @@ impl GeocentPos {
         }
     }
 
-    /// The apparent equatorial position as an [`EqPoint`](../coords/struct.EqPoint.html)
+    /// The apparent equatorial position as an [`EqPoint`](coords::EqPoint)
     pub fn apprnt_eq_point(&self) -> coords::EqPoint {
         coords::EqPoint {
             asc: self.apprnt_asc,
