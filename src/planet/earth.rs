@@ -214,23 +214,52 @@ pub fn geograph_geocent_lat_diff(geograph_lat: f64) -> f64 {
         - angle::deg_frm_dms(0, 0, 1.16) * (4.0 * geograph_lat).sin()
 }
 
-/// Computes the equation of time *| in radians*
+/// Computes the equation of time from the Sun's apparent right ascension
+/// (Meeus, *Astronomical Algorithms*, 2nd ed., eq. 28.1)
+///
+/// The equation of time is apparent solar time minus mean solar time, that
+/// is the hour angle of the true Sun minus the hour angle of the mean Sun.
+/// It is positive when the true Sun crosses the meridian before the mean
+/// Sun. (Some almanacs and older books use the opposite sign.)
+///
+/// `E = L0 − 0.0057183° − α + Δψ cos ε`, where `L0` is the Sun's mean
+/// longitude from VSOP87 (eq. 28.2) and 0.0057183° is the mean aberration
+/// (−20.49552″) plus the FK5 correction (−0.09033″). The term `Δψ cos ε`
+/// refers `α` to the mean equinox of the date, like `L0`.
+///
+/// See [`crate::sun::equation_of_time`] to compute everything from the time
+/// only.
+///
+/// # Returns
+///
+/// * `E`: Equation of time *| in radians* of hour angle, reduced to
+///   `[-π, π)`. In practice `|E|` stays below 20 minutes of time
+///   (0.0873 rad); multiply `E.to_degrees()` by 4 to get minutes of time.
 ///
 /// # Arguments
 ///
-/// * `JD`      : Julian (Ephemeris) day
-/// * `sun_asc` : Right ascension of the Sun *| in radians*
-/// * `nut_log` : Nutation correction for longitude *| in radians*
-/// * `tru_oblq`: True obliquity of the ecliptic *| in radians*
+/// * `JD`      : Julian Ephemeris Day
+/// * `sun_asc` : Apparent right ascension of the Sun, including aberration
+///   and nutation *| in radians*
+/// * `nut_long`: Nutation in longitude `Δψ` *| in radians*
+/// * `tru_oblq`: True obliquity of the ecliptic `ε` *| in radians*
 pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> f64 {
     let t = time::julian_mill(JD);
+    // eq. 28.2; the τ² coefficient is 0.03032028 (it was 0.030328 here)
     let L = angle::limit_to_360(
         280.4664567
             + t * (360007.6982779
-                + t * (0.030328 + t * (1.0 / 49931.0 - t * (1.0 / 15300.0 + t / 2000000.0)))),
+                + t * (0.03032028 + t * (1.0 / 49931.0 - t * (1.0 / 15300.0 + t / 2000000.0)))),
     );
 
-    (L - 0.0057183 - sun_asc.to_degrees() + nut_long.to_degrees() * tru_oblq.cos()).to_radians()
+    let E = (L - 0.0057183 - sun_asc.to_degrees() + nut_long.to_degrees() * tru_oblq.cos())
+        .to_radians();
+
+    // L and α are each reduced to one turn, so near the March equinox their
+    // difference can be off by 2π: bring E back to [-π, π).
+    let tau = 2.0 * std::f64::consts::PI;
+    let r = (E + std::f64::consts::PI).rem_euclid(tau);
+    (if r >= tau { 0.0 } else { r }) - std::f64::consts::PI
 }
 
 /// Computes the angle between diurnal path and the horizon
