@@ -572,3 +572,73 @@ fn macros_evaluate_each_argument_once() {
         (coords::asc_frm_gal(1.0, 0.3), coords::dec_frm_gal(1.0, 0.3))
     );
 }
+
+/// Unit vector of (longitude, latitude).
+fn unit_vec(long: f64, lat: f64) -> [f64; 3] {
+    [lat.cos() * long.cos(), lat.cos() * long.sin(), lat.sin()]
+}
+
+fn dot3(a: [f64; 3], b: [f64; 3]) -> f64 {
+    a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
+}
+
+fn cross3(a: [f64; 3], b: [f64; 3]) -> [f64; 3] {
+    [
+        a[1] * b[2] - a[2] * b[1],
+        a[2] * b[0] - a[0] * b[2],
+        a[0] * b[1] - a[1] * b[0],
+    ]
+}
+
+// Review R1: eqs. 13.7 and 13.8 against a rotation built only from the
+// definition of the IAU 1959 system (Meeus, ch. 13): the north galactic
+// pole at α = 192.25°, δ = 27.4° (B1950.0), and the zero of galactic
+// longitude 33° along the galactic equator from its ascending node on the
+// equator, so that the node has galactic longitude 33°.
+#[test]
+fn galactic_matches_independent_rotation() {
+    let z_gal = unit_vec(rad(192.25), rad(27.4));
+    // Ascending node of the galactic equator on the celestial equator:
+    // along the line of intersection, the direction in which the galactic
+    // equator passes from south to north of the celestial equator.
+    let n = cross3([0.0, 0.0, 1.0], z_gal);
+    let len = dot3(n, n).sqrt();
+    let node = [n[0] / len, n[1] / len, n[2] / len];
+    let ninety = cross3(z_gal, node); // 90° further along the galactic equator
+    assert!(ninety[2] > 0.0, "the node must be ascending");
+    // Galactic longitude 0 lies 33° before the node.
+    let (s, c) = rad(33.0).sin_cos();
+    let x_gal = [
+        c * node[0] - s * ninety[0],
+        c * node[1] - s * ninety[1],
+        c * node[2] - s * ninety[2],
+    ];
+    let y_gal = cross3(z_gal, x_gal);
+
+    for &a in &angle_grid() {
+        for &d in &lat_grid() {
+            let v = unit_vec(rad(a), rad(d));
+            let (x, y, z) = (dot3(v, x_gal), dot3(v, y_gal), dot3(v, z_gal));
+            let l_ref = y.atan2(x).rem_euclid(TAU);
+            let b_ref = z.atan2(x.hypot(y));
+            let (l, b) = astro::gal_frm_eq!(rad(a), rad(d));
+            if b_ref.abs() < FRAC_PI_2 - 1e-6 {
+                assert_close_rad(l, l_ref, 1e-9);
+            }
+            assert_close(b, b_ref, 1e-12);
+
+            // and the inverse, from the same rotation
+            let lv = unit_vec(rad(a), rad(d) * 0.999);
+            let w = [
+                lv[0] * x_gal[0] + lv[1] * y_gal[0] + lv[2] * z_gal[0],
+                lv[0] * x_gal[1] + lv[1] * y_gal[1] + lv[2] * z_gal[1],
+                lv[0] * x_gal[2] + lv[1] * y_gal[2] + lv[2] * z_gal[2],
+            ];
+            let asc_ref = w[1].atan2(w[0]).rem_euclid(TAU);
+            let dec_ref = w[2].atan2(w[0].hypot(w[1]));
+            let (asc, dec) = astro::eq_frm_gal!(rad(a), rad(d) * 0.999);
+            assert_close_rad(asc, asc_ref, 1e-9);
+            assert_close(dec, dec_ref, 1e-12);
+        }
+    }
+}
