@@ -34,6 +34,6 @@ pub const FLATTENING: f64 = 1.0 / 298.257223563;
 /// Angular velocity of the Earth *| in radians / second*
 pub const ANGULAR_VELOCITY: f64 = 7.292115e-5;
 
-/// Gravitational constant (including the mass of the Earth's
+/// Geocentric gravitational constant GM (including the mass of the Earth's
 /// atmosphere) *| in meters^3 / second^2*
 pub const GRAV_CONST: f64 = 3.986004418e+14;

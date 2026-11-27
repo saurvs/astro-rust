@@ -20,8 +20,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+#![doc = include_str!("../README.md")]
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
+#![allow(clippy::too_many_arguments)]
 
 #[macro_use]
 pub mod util;
@@ -33,18 +35,27 @@ pub mod angle;
 pub mod asteroid;
 pub mod atmos;
 pub mod binary_star;
+pub mod calendar;
+pub mod conjunction;
 pub mod consts;
+pub mod eclipse;
 pub mod ecliptic;
+pub mod fitting;
+pub mod geometry;
 pub mod interpol;
+pub mod iteration;
 pub mod lunar;
 pub mod misc;
 pub mod nutation;
+pub mod observer;
 pub mod orbit;
 pub mod parallax;
 pub mod planet;
 pub mod pluto;
 pub mod precess;
+pub mod season;
 pub mod star;
 pub mod sun;
+pub mod sundial;
 pub mod time;
 pub mod transit;
