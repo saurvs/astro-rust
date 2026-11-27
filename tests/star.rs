@@ -29,7 +29,8 @@ fn eq_coords_frm_motion() {
         -16.716108_f64.to_radians(),
         2.64,
         -0.000007773,
-        (-0.03847 / 3600.0_f64).to_radians(),
+        // -0.03847 s of time per year, i.e. 15 times that in arcseconds
+        (-0.03847 * 15.0 / 3600.0_f64).to_radians(),
         (-1.20530 / 3600.0_f64).to_radians(),
         -1000.0,
     );

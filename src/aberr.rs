@@ -21,40 +21,276 @@ THE SOFTWARE.
 */
 
 //! Corrections for aberration
+//!
+//! Annual aberration of the stars (Meeus, *Astronomical Algorithms*,
+//! 2nd ed., chapter 23), by two methods:
+//!
+//! * the classical formulae 23.2 and 23.3, from the Sun's longitude and
+//!   the eccentricity and perihelion of the Earth's orbit, in the frame of
+//!   the date ([`annual_aberr_in_eq_coords`], [`annual_aberr_in_ecl_coords`],
+//!   and their FK4 variants without the E-terms);
+//! * the Ron–Vondrák expression for the velocity of the Earth relative to
+//!   the barycentre of the solar system (Table 23.A), which gives the
+//!   aberration in the fixed J2000.0 frame ([`stell_aberr_in_eq_coords`],
+//!   [`earth_bary_vel`]).
+//!
+//! Also the aberration of the Sun ([`sol_aberr`], chapter 25).
+//!
+//! # Example
+//!
+//! Meeus, example 23.b: θ Persei on 2028 November 13.19 TD, position
+//! referred to J2000.0 and corrected for proper motion.
+//!
+//! ```
+//! use astro::{aberr, coords};
+//!
+//! let star = coords::EqPoint {
+//!     asc: 41.0540613_f64.to_radians(),
+//!     dec: 49.2277489_f64.to_radians(),
+//! };
+//! let (d_asc, d_dec) = aberr::stell_aberr_in_eq_coords(&star, 2462088.69);
+//! assert!((d_asc - 0.000145252).abs() < 1e-9);
+//! assert!((d_dec - 0.000032723).abs() < 1e-9);
+//! ```
 
-use crate::angle;
 use crate::coords;
 use crate::time;
+use std::f64::consts::PI;
+
+/// One arcsecond in radians
+const ASEC: f64 = PI / 648000.0;
+
+/// The constant of aberration κ = 20.49552″ *| in radians*
+pub const CONST_OF_ABERR: f64 = 20.49552 * ASEC;
 
 /// Computes solar aberration in ecliptic longitude
+///
+/// Meeus, eq. 25.10: the aberration of the Sun, −20.4898″ / R. Add it
+/// to the Sun's geometric longitude to get its apparent longitude (with
+/// the nutation in longitude).
 ///
 /// # Returns
 ///
 /// * `abrr`: Solar aberration in ecliptic
-///   longitude *| in radians*
+///   longitude *| in radians* (negative)
 ///
 /// # Arguments
 ///
 /// * `R`: Sun-Earth distance *| in AU*
 #[inline(always)]
 pub fn sol_aberr(R: f64) -> f64 {
-    -angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R
+    -20.4898 * ASEC / R
 }
 
-/// Computes stellar aberration in equatorial coordinates
+/// Computes the eccentricity of the Earth's orbit
 ///
-/// # Returns
-///
-/// `(abrr_in_asc, abrr_in_dec)`
-///
-/// * `abrr_in_asc`: Aberration in right ascension *| in radians*
-/// * `abrr_in_dec`: Aberration in declination *| in radians*
+/// Meeus, chapter 23 (also eq. 25.4).
 ///
 /// # Arguments
 ///
-/// * `stell_eq_point`: Equatorial coordinates of the star *| in radians*
-/// * `JD`            : Julian (Ephemeris) day
-pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
+/// * `JD`: Julian Ephemeris Day
+#[inline]
+pub fn earth_orb_ecc(JD: f64) -> f64 {
+    let t = time::julian_cent(JD);
+
+    0.016708634 - t * (0.000042037 + 0.0000001267 * t)
+}
+
+/// Computes the longitude of the perihelion of the Earth's orbit
+///
+/// Meeus, chapter 23, referred to the mean equinox of the date.
+///
+/// # Returns
+///
+/// * `long`: Longitude of the perihelion *| in radians*, in `[0, 2π)`
+///
+/// # Arguments
+///
+/// * `JD`: Julian Ephemeris Day
+#[inline]
+pub fn earth_perih_long(JD: f64) -> f64 {
+    let t = time::julian_cent(JD);
+
+    (102.93735 + t * (1.71946 + 0.00046 * t))
+        .rem_euclid(360.0)
+        .to_radians()
+}
+
+/// The Sun's geometric (true) longitude, referred to the mean equinox of
+/// the date, with the low accuracy method of Meeus, chapter 25 (about
+/// 0.01°). Good enough for the aberration, where it is multiplied by κ.
+pub(crate) fn sun_geom_long_low_accuracy(JD: f64) -> f64 {
+    let t = time::julian_cent(JD);
+
+    let L0 = 280.46646 + t * (36000.76983 + 0.0003032 * t);
+    let M = (357.52911 + t * (35999.05029 - 0.0001537 * t)).to_radians();
+    let C = (1.914602 - t * (0.004817 + 0.000014 * t)) * M.sin()
+        + (0.019993 - 0.000101 * t) * (2.0 * M).sin()
+        + 0.000289 * (3.0 * M).sin();
+
+    (L0 + C).rem_euclid(360.0).to_radians()
+}
+
+/// The factors of κ in eq. 23.3 for a given longitude `l` (the Sun's or
+/// the perihelion's): (for Δα, for Δδ).
+fn aberr_eq_factors(asc: f64, dec: f64, l: f64, oblq: f64) -> (f64, f64) {
+    let (sin_a, cos_a) = asc.sin_cos();
+    let (sin_d, cos_d) = dec.sin_cos();
+    let (sin_l, cos_l) = l.sin_cos();
+    let (sin_e, cos_e) = oblq.sin_cos();
+
+    let f_asc = (cos_a * cos_l * cos_e + sin_a * sin_l) / cos_d;
+    let f_dec = cos_l * (sin_e * cos_d - cos_e * sin_a * sin_d) + cos_a * sin_d * sin_l;
+
+    (f_asc, f_dec)
+}
+
+/// Computes the annual aberration of a star in equatorial coordinates
+///
+/// Classical formulae of Meeus, eq. 23.3, including the terms in the
+/// eccentricity of the Earth's orbit (the E-terms). Use this for FK5
+/// positions (and catalogues based on the FK5); for FK4 positions use
+/// [`annual_aberr_in_eq_coords_fk4`]. The corrections are to be added to
+/// the right ascension and declination referred to the equinox of the
+/// date.
+///
+/// The right ascension correction contains `1/cos(dec)` and is not
+/// finite at the celestial poles.
+///
+/// # Returns
+///
+/// `(abrr_in_asc, abrr_in_dec)` *| in radians*
+///
+/// # Arguments
+///
+/// * `asc`         : Right ascension of the star *| in radians*
+/// * `dec`         : Declination of the star *| in radians*
+/// * `sun_tru_long`: True (geometric) longitude of the Sun, mean equinox
+///   of the date *| in radians*. An accuracy of 0.01° is enough.
+/// * `oblq`        : Obliquity of the ecliptic *| in radians*
+/// * `JD`          : Julian Ephemeris Day (for the eccentricity and the
+///   perihelion of the Earth's orbit)
+pub fn annual_aberr_in_eq_coords(
+    asc: f64,
+    dec: f64,
+    sun_tru_long: f64,
+    oblq: f64,
+    JD: f64,
+) -> (f64, f64) {
+    let k = CONST_OF_ABERR;
+    let e = earth_orb_ecc(JD);
+
+    let (sun_a, sun_d) = aberr_eq_factors(asc, dec, sun_tru_long, oblq);
+    let (per_a, per_d) = aberr_eq_factors(asc, dec, earth_perih_long(JD), oblq);
+
+    (-k * sun_a + e * k * per_a, -k * sun_d + e * k * per_d)
+}
+
+/// Computes the annual aberration of a star in equatorial coordinates,
+/// for positions referred to the FK4 system
+///
+/// Same as [`annual_aberr_in_eq_coords`] without the terms in the
+/// eccentricity of the Earth's orbit (the E-terms), which are already
+/// included in FK4 mean places (Meeus, chapters 21 and 23).
+///
+/// # Returns
+///
+/// `(abrr_in_asc, abrr_in_dec)` *| in radians*
+///
+/// # Arguments
+///
+/// * `asc`         : Right ascension of the star *| in radians*
+/// * `dec`         : Declination of the star *| in radians*
+/// * `sun_tru_long`: True (geometric) longitude of the Sun *| in radians*
+/// * `oblq`        : Obliquity of the ecliptic *| in radians*
+pub fn annual_aberr_in_eq_coords_fk4(
+    asc: f64,
+    dec: f64,
+    sun_tru_long: f64,
+    oblq: f64,
+) -> (f64, f64) {
+    let (sun_a, sun_d) = aberr_eq_factors(asc, dec, sun_tru_long, oblq);
+
+    (-CONST_OF_ABERR * sun_a, -CONST_OF_ABERR * sun_d)
+}
+
+/// Computes the annual aberration of a star in ecliptical coordinates
+///
+/// Meeus, eq. 23.2, including the E-terms (use
+/// [`annual_aberr_in_ecl_coords_fk4`] for FK4 positions). The latitude
+/// enters through `1/cos(lat)`; the longitude correction is not finite at
+/// the poles of the ecliptic.
+///
+/// # Returns
+///
+/// `(abrr_in_long, abrr_in_lat)` *| in radians*
+///
+/// # Arguments
+///
+/// * `ecl_long`    : Ecliptic longitude of the star *| in radians*
+/// * `ecl_lat`     : Ecliptic latitude of the star *| in radians*
+/// * `sun_tru_long`: True (geometric) longitude of the Sun *| in radians*
+/// * `JD`          : Julian Ephemeris Day
+pub fn annual_aberr_in_ecl_coords(
+    ecl_long: f64,
+    ecl_lat: f64,
+    sun_tru_long: f64,
+    JD: f64,
+) -> (f64, f64) {
+    let k = CONST_OF_ABERR;
+    let e = earth_orb_ecc(JD);
+    let per = earth_perih_long(JD);
+
+    let (sin_s, cos_s) = (sun_tru_long - ecl_long).sin_cos();
+    let (sin_p, cos_p) = (per - ecl_long).sin_cos();
+
+    (
+        (-k * cos_s + e * k * cos_p) / ecl_lat.cos(),
+        -k * ecl_lat.sin() * (sin_s - e * sin_p),
+    )
+}
+
+/// Computes the annual aberration of a star in ecliptical coordinates,
+/// for positions referred to the FK4 system
+///
+/// Same as [`annual_aberr_in_ecl_coords`] without the E-terms.
+///
+/// # Returns
+///
+/// `(abrr_in_long, abrr_in_lat)` *| in radians*
+///
+/// # Arguments
+///
+/// * `ecl_long`    : Ecliptic longitude of the star *| in radians*
+/// * `ecl_lat`     : Ecliptic latitude of the star *| in radians*
+/// * `sun_tru_long`: True (geometric) longitude of the Sun *| in radians*
+pub fn annual_aberr_in_ecl_coords_fk4(
+    ecl_long: f64,
+    ecl_lat: f64,
+    sun_tru_long: f64,
+) -> (f64, f64) {
+    let k = CONST_OF_ABERR;
+    let (sin_s, cos_s) = (sun_tru_long - ecl_long).sin_cos();
+
+    (-k * cos_s / ecl_lat.cos(), -k * ecl_lat.sin() * sin_s)
+}
+
+/// Computes the velocity of the Earth relative to the barycentre of the
+/// solar system
+///
+/// Ron–Vondrák expansion (Meeus, chapter 23, Table 23.A, 36 terms in the
+/// mean longitudes of Venus to Neptune, of the Earth and of the Moon).
+/// The components are in the equatorial frame of J2000.0 (FK5), not of
+/// the date.
+///
+/// # Returns
+///
+/// `(x, y, z)`: velocity components *| in AU per day*
+///
+/// # Arguments
+///
+/// * `JD`: Julian Ephemeris Day
+pub fn earth_bary_vel(JD: f64) -> (f64, f64, f64) {
     let t = time::julian_cent(JD);
 
     let l2 = 3.1761467 + 1021.3285546 * t;
@@ -363,12 +599,61 @@ pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f
     y += -5.0 * cosA;
     z += -2.0 * cosA;
 
-    let c = 17314463350.0;
+    // Table 23.A is in units of 1e-8 AU per day
+    (x * 1e-8, y * 1e-8, z * 1e-8)
+}
 
-    let (asc, dec) = (stell_eq_point.asc, stell_eq_point.dec);
+/// Computes stellar aberration in equatorial coordinates
+///
+/// Ron–Vondrák method (Meeus, eq. 23.4), from the velocity of the Earth
+/// relative to the barycentre of the solar system ([`earth_bary_vel`]).
+/// More accurate than [`annual_aberr_in_eq_coords`].
+///
+/// The star's position and the corrections are referred to the fixed
+/// equator and equinox of **J2000.0** (FK5), not to the equinox of the
+/// date. So apply them to the J2000.0 position (after proper motion) and
+/// *before* precession and nutation: FK5 position → proper motion →
+/// aberration → precession → nutation.
+///
+/// # Returns
+///
+/// `(abrr_in_asc, abrr_in_dec)`
+///
+/// * `abrr_in_asc`: Aberration in right ascension *| in radians*
+/// * `abrr_in_dec`: Aberration in declination *| in radians*
+///
+/// # Arguments
+///
+/// * `stell_eq_point`: Equatorial coordinates of the star, J2000.0
+///   *| in radians*
+/// * `JD`            : Julian Ephemeris Day
+pub fn stell_aberr_in_eq_coords(stell_eq_point: &coords::EqPoint, JD: f64) -> (f64, f64) {
+    let (x, y, z) = earth_bary_vel(JD);
 
-    let delta_asc = (y * asc.cos() - x * asc.sin()) / (c * dec.cos());
-    let delta_dec = -((x * asc.cos() + y * asc.sin()) * dec.sin() - z * dec.cos()) / c;
+    // Speed of light in AU per day (Meeus: 17 314 463 350 in 1e-8 AU/day)
+    let c = 173.14463350;
+
+    let (sin_a, cos_a) = stell_eq_point.asc.sin_cos();
+    let (sin_d, cos_d) = stell_eq_point.dec.sin_cos();
+
+    let delta_asc = (y * cos_a - x * sin_a) / (c * cos_d);
+    let delta_dec = -((x * cos_a + y * sin_a) * sin_d - z * cos_d) / c;
 
     (delta_asc, delta_dec)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // Meeus, example 23.a gives ☉ = 231.328° for 2028 November 13.19 TD,
+    // and example 25.a ☉ = 199.90988° for 1992 October 13.0 TD.
+    #[test]
+    fn sun_geom_long_low_accuracy_examples() {
+        let d = sun_geom_long_low_accuracy(2462088.69).to_degrees();
+        assert!((d - 231.328).abs() < 0.0005, "{d}");
+
+        let d = sun_geom_long_low_accuracy(2448908.5).to_degrees();
+        assert!((d - 199.90988).abs() < 0.00001, "{d}");
+    }
 }
