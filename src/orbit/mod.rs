@@ -582,7 +582,7 @@ impl Motion {
                 perih_time,
             } => {
                 let (v, r) =
-                    near_parabolic::true_anom_and_rad_vec(JD, perih_time, ecc, perih_dist, 1e-12)
+                    near_parabolic::true_anom_and_rad_vec(JD, perih_time, ecc, perih_dist, 1e-10)
                         .ok()?;
                 (v.is_finite() && r.is_finite()).then_some((v, r))
             }
