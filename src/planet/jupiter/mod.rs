@@ -595,8 +595,8 @@ fn compute_low_accuracy(jde: f64) -> LowAccuracySteps {
 
     // heliocentric longitude of Jupiter, equinox of J2000.0
     let lambda = 34.35 + 0.083_091 * d + 0.329 * sin(V) + B;
-    // 3.12° is the inclination of Jupiter's equator to its orbit, 2.22°
-    // that to the ecliptic and 1.30° that of the orbit to the ecliptic
+    // the amplitudes are tilts: equator on orbit (3.12°), equator on
+    // ecliptic (2.22°) and orbit on ecliptic (1.30°)
     let ds = 3.12 * sin(lambda + 42.8);
     let de = ds
         - 2.22 * sin(psi) * cos(lambda + 22.0)
