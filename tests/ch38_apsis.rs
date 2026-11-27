@@ -404,9 +404,23 @@ fn nearest_n_rejects_unusable_years() {
             assert_eq!(apsis::nearest_n(&Planet::Mars, ap, year), None, "{year}");
         }
     }
-    // Far, but still exact
-    let n = apsis::nearest_n(&Planet::Neptune, Apsis::Perihelion, 1e9).unwrap();
-    assert!((n as f64 - 0.00607 * (1e9 - 2047.5)).abs() < 2.0);
+}
+
+// nearest_n stays the nearest passage of the formula far from 2000, where
+// Meeus' rounded approx_k has drifted by up to three periods (Venus, Jupiter
+// and Saturn at ±100 000 years).
+#[test]
+fn nearest_n_far_from_2000() {
+    for p in &ALL_PLANETS {
+        for year in [-1e5, -3e4, 3e4, 1e5] {
+            for ap in [Apsis::Perihelion, Apsis::Aphelion] {
+                let n = apsis::nearest_n(p, ap, year).unwrap();
+                let target = 2451545.0 + (year - 2000.0) * 365.25;
+                let d = |n| (apsis::time_of_passage(p, ap, n) - target).abs();
+                assert!(d(n) <= d(n - 1) && d(n) <= d(n + 1), "{p:?} {ap:?} {year}");
+            }
+        }
+    }
 }
 
 // The quadratic coefficients of the formulas follow from the secular terms

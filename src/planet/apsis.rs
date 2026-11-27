@@ -122,7 +122,9 @@ pub struct RadVecExtremum {
 ///
 /// The integer nearest to the result numbers the nearest perihelion; an
 /// integer plus 0.5 numbers an aphelion (see the [module
-/// documentation](self)). [`nearest_n`] does the rounding.
+/// documentation](self)). These are Meeus' rounded linear expressions;
+/// [`nearest_n`] inverts the passage formulas instead, which stays exact
+/// farther from 2000.
 ///
 /// # Arguments
 ///
@@ -148,8 +150,10 @@ pub fn approx_k(planet: &Planet, year: f64) -> f64 {
 /// # Returns
 ///
 /// `Some(n)` such that [`time_of_passage`] is the passage closest in time to
-/// `year`. `None` if `year` is not finite, or so far from 2000 (beyond about
-/// 10¹⁵ orbital periods) that `n` would not be exact.
+/// `year` (like the formulas themselves, this is meaningful for some
+/// thousands of years around 2000). `None` if `year` is not finite, or so
+/// far from 2000 (beyond about 10¹⁵ orbital periods) that `n` would not be
+/// exact.
 ///
 /// # Arguments
 ///
@@ -159,13 +163,22 @@ pub fn approx_k(planet: &Planet, year: f64) -> f64 {
 ///   in astronomical numbering (`0` is 1 B.C.). It is read as a Julian
 ///   epoch, `JDE = 2451545.0 + 365.25·(year − 2000)`.
 pub fn nearest_n(planet: &Planet, apsis: Apsis, year: f64) -> Option<i64> {
-    let guess = (approx_k(planet, year) - half(apsis)).round();
+    let target = 2451545.0 + (year - 2000.0) * 365.25;
+    // Invert JDE = A + B·k + C·k² for k by fixed-point iteration (the k²
+    // term is a small correction wherever the formula means anything).
+    // This is closer than Meeus' rounded approx_k, which drifts by whole
+    // periods some tens of thousands of years from 2000.
+    let (a, b, c) = kepler_coeffs(planet);
+    let mut k = (target - a) / b;
+    for _ in 0..3 {
+        k = (target - a - c * k * k) / b;
+    }
+    let guess = (k - half(apsis)).round();
     // Within this bound n ± 1 is exact in f64 (2⁵³).
     if !guess.is_finite() || guess.abs() >= 9_007_199_254_740_992.0 {
         return None;
     }
     let guess = guess as i64;
-    let target = 2451545.0 + (year - 2000.0) * 365.25;
 
     let mut best = guess;
     let mut best_dist = f64::INFINITY;
