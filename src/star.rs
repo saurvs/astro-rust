@@ -91,13 +91,21 @@ pub fn abs_mag_frm_dist(d: f64, am: f64) -> f64 {
     am + 5.0 - 5.0 * d.log10()
 }
 
-/// Computes the angle between a vector from a star to the
-/// north celestial pole of the Earth and a vector from the
-/// same star to the north pole of the ecliptic
+/// Computes the angle, at a star, between the direction of the north
+/// celestial pole and the direction of the north pole of the ecliptic
+///
+/// Meeus, chapter 14 ("Ecliptic and equator"). The angle `q` is the
+/// position angle of the north ecliptic pole as seen from the star:
+/// measured from the direction of the north celestial pole, positive
+/// towards the east. For a star on the ecliptic (latitude 0) it reduces to
+/// `tan(q0) = -cos(eclip_long) tan(oblq_eclip)`, the angle between the
+/// ecliptic and the east-west direction at that point.
+///
+/// Up to astro 2.0.0 this function returned `q + π` (wrong quadrant).
 ///
 /// # Returns
 ///
-/// * `angle`: The desired angle *| in radians*
+/// * `angle`: The angle `q` *| in radians*, in `(-π, π]`
 ///
 /// # Arguments
 ///
@@ -110,23 +118,36 @@ pub fn angl_between_north_celes_and_eclip_pole(
     eclip_lat: f64,
     oblq_eclip: f64,
 ) -> f64 {
-    (eclip_long.cos() * oblq_eclip.tan())
-        .atan2(eclip_lat.sin() * eclip_long.sin() * oblq_eclip.tan() - eclip_lat.cos())
+    let tan_e = oblq_eclip.tan();
+
+    (-eclip_long.cos() * tan_e).atan2(eclip_lat.cos() - eclip_lat.sin() * eclip_long.sin() * tan_e)
 }
 
-/// Computes the equatorial coordinates of a star at
-/// at a different time from it's motion in space
+/// Computes the equatorial coordinates of a star at a different time,
+/// from its motion in space
 ///
-/// This function Computes the equatorial coordinates
-/// of a star at a different time by taking into account
-/// it's proper motion, distance and radial velocity.
+/// Meeus, chapter 21 ("Motion in space"). Instead of assuming a uniform
+/// proper motion, this combines the proper motion with the star's
+/// distance and radial velocity into a straight-line motion in space
+/// relative to the Sun. Over many millennia this is more accurate than
+/// a linear proper motion, provided the distance and radial velocity are
+/// well known. Precession is not included: the result stays in the
+/// reference frame of the initial position.
+///
+/// Useful conversions (Meeus): a radial velocity in km/s divided by
+/// 977 792 gives parsecs per year; a distance in light-years times
+/// 0.306 60 gives parsecs; a parallax of `p` arcseconds means a distance
+/// of `1/p` parsecs.
+///
+/// Up to astro 2.0.0 this function multiplied the proper motion in right
+/// ascension by 15, as if it had been given in seconds of time.
 ///
 /// # Returns
 ///
 /// `(new_asc, new_dec)`
 ///
 /// * `new_asc`: Right ascension at the different
-///   time *| in radians*
+///   time *| in radians*, in `[0, 2π)`
 /// * `new_dec`: Declination at the different
 ///   time *| in radians*
 ///
@@ -134,13 +155,15 @@ pub fn angl_between_north_celes_and_eclip_pole(
 ///
 /// * `asc0`: Right ascension of the star initially *| in radians*
 /// * `dec0`: Declination of the star initially *| in radians*
-/// * `r`: Distance of the star (*parsecs*)
-/// * `delta_r`: Radial velocity of the star (*parsecs/second*)
-/// * `proper_motion_asc`: Proper motion of the star in right ascension
-///   *| in radians*
-/// * `proper_motion_dec`: Proper motion of the star in declination
-///   *| in radians*
-/// * `t`: Decimal years from the inital time; negative in the past
+/// * `r`: Distance of the star *| in parsecs*
+/// * `delta_r`: Radial velocity of the star *| in parsecs per Julian
+///   year*, positive when receding
+/// * `proper_motion_asc`: Annual proper motion of the star in right
+///   ascension, dα/dt *| in radians per year* (not multiplied by
+///   `cos(dec0)`; one second of time per year is 15″ per year)
+/// * `proper_motion_dec`: Annual proper motion of the star in declination
+///   *| in radians per year*
+/// * `t`: Julian years from the initial time; negative in the past
 ///   and positive in the future
 pub fn eq_coords_frm_motion(
     asc0: f64,
@@ -151,27 +174,55 @@ pub fn eq_coords_frm_motion(
     proper_motion_dec: f64,
     t: f64,
 ) -> (f64, f64) {
-    let x = r * dec0.cos() * asc0.cos();
-    let y = r * dec0.cos() * asc0.sin();
-    let z = r * dec0.sin();
+    let (sin_a, cos_a) = asc0.sin_cos();
+    let (sin_d, cos_d) = dec0.sin_cos();
 
-    let delta_asc = 3600.0 * proper_motion_asc.to_degrees() / 13751.0;
-    let delta_dec = 3600.0 * proper_motion_dec.to_degrees() / 206265.0;
+    let x = r * cos_d * cos_a;
+    let y = r * cos_d * sin_a;
+    let z = r * sin_d;
 
-    let delta_x = (x / r) * delta_r - z * delta_dec * asc0.cos() - y * delta_asc;
-    let delta_y = (y / r) * delta_r - z * delta_dec * asc0.sin() + x * delta_asc;
-    let delta_z = (z / r) * delta_r + r * delta_dec * dec0.cos();
+    let delta_asc = proper_motion_asc;
+    let delta_dec = proper_motion_dec;
+
+    // (x/r), (y/r), (z/r) written without the division so that r = 0 works
+    let delta_x = cos_d * cos_a * delta_r - z * delta_dec * cos_a - y * delta_asc;
+    let delta_y = cos_d * sin_a * delta_r - z * delta_dec * sin_a + x * delta_asc;
+    let delta_z = sin_d * delta_r + r * delta_dec * cos_d;
 
     let x1 = x + t * delta_x;
     let y1 = y + t * delta_y;
     let z1 = z + t * delta_z;
 
-    let asc = y1.atan2(x1);
-    let dec = z1.atan2((x1 * x1 + y1 * y1).sqrt());
+    let asc = y1.atan2(x1).rem_euclid(std::f64::consts::TAU);
+    let dec = z1.atan2(x1.hypot(y1));
 
     (asc, dec)
 }
 
+/// Computes the proper motion of a star in ecliptical coordinates
+///
+/// Despite its name, this function converts a proper motion given in
+/// equatorial coordinates into ecliptical coordinates. See
+/// [`proper_motion_in_ecl_coords`](crate::precess::proper_motion_in_ecl_coords),
+/// which does not need the ecliptic latitude as an extra argument.
+///
+/// # Returns
+///
+/// `(pmotion_long, pmotion_lat)`: dλ/dt and dβ/dt *| in radians per unit
+/// time*
+///
+/// # Arguments
+///
+/// * `asc`: Right ascension of the star *| in radians*
+/// * `dec`: Declination of the star *| in radians*
+/// * `pmotion_asc`: Proper motion in right ascension, dα/dt *| in radians
+///   per unit time*
+/// * `pmotion_dec`: Proper motion in declination *| in radians per unit
+///   time*
+/// * `ecl_lat`: Ecliptic latitude of the star *| in radians*
+/// * `oblq_eclip`: Obliquity of the ecliptic *| in radians*
+#[deprecated(note = "converts to ecliptical, not equatorial, coordinates; use \
+            `precess::proper_motion_in_ecl_coords`")]
 pub fn proper_motion_in_eq_coords(
     asc: f64,
     dec: f64,
@@ -182,16 +233,17 @@ pub fn proper_motion_in_eq_coords(
 ) -> (f64, f64) {
     let ecl_lat_cos = ecl_lat.cos();
 
-    let pmotion_long = (pmotion_dec * oblq_eclip.sin() * asc.cos()
-        + pmotion_asc
-            * dec.cos()
-            * (oblq_eclip.cos() * dec.cos() + oblq_eclip.sin() * dec.sin() * asc.sin()))
+    let k = oblq_eclip.cos() * dec.cos() + oblq_eclip.sin() * dec.sin() * asc.sin();
+
+    let pmotion_long = (pmotion_dec * oblq_eclip.sin() * asc.cos() + pmotion_asc * dec.cos() * k)
         / (ecl_lat_cos * ecl_lat_cos);
 
-    let pmotion_lat = (pmotion_dec
-        * (oblq_eclip.cos() * dec.cos() + oblq_eclip.sin() * dec.sin() * asc.sin())
-        - pmotion_asc * oblq_eclip.sin() * asc.cos() * dec.cos())
-        / ecl_lat_cos;
+    let pmotion_lat =
+        (pmotion_dec * k - pmotion_asc * oblq_eclip.sin() * asc.cos() * dec.cos()) / ecl_lat_cos;
 
     (pmotion_long, pmotion_lat)
 }
+
+// Apparent place of a star (Meeus, chapter 23), kept in its own file.
+mod place;
+pub use place::{AberrMethod, ApparentPlace, MeanPlace, apparent_place};

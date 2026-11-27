@@ -29,6 +29,9 @@ use std::f64::consts::PI;
 /// Computes the mean obliquity of the ecliptic using
 /// J. Laskar's formula
 ///
+/// Meeus, eq. 22.3: a polynomial of degree 10 in U, the time in units of
+/// 10 000 Julian years from J2000.0.
+///
 /// # Returns
 ///
 /// * `mn_oblq`: Mean obliquity of the ecliptic *| in radians*
@@ -36,6 +39,12 @@ use std::f64::consts::PI;
 /// The accuracy of `mn_oblq` is estimated to be 0.01 arcseconds
 /// for 1000 years before and after 2000 AD, and a few arcseconds
 /// for 10000 years before and after 2000 AD.
+///
+/// The formula is only valid for |U| < 1, that is between the years
+/// −8000 and +12000 roughly. Outside that range the polynomial diverges
+/// quickly and the result is meaningless (it reaches 90° near
+/// U = +2.834), although it is still returned. Use
+/// [`mn_oblq_laskar_checked`] to get `None` outside the valid range.
 ///
 /// # Arguments
 ///
@@ -60,8 +69,33 @@ pub fn mn_oblq_laskar(JD: f64) -> f64 {
     .to_radians()
 }
 
+/// Computes the mean obliquity of the ecliptic using J. Laskar's
+/// formula, checking the time span
+///
+/// Same as [`mn_oblq_laskar`], but returns `None` when `JD` is more than
+/// 10 000 Julian years from J2000.0 (|U| > 1), where the formula is not
+/// valid, or when `JD` is not finite.
+///
+/// # Arguments
+///
+/// * `JD`: Julian (Ephemeris) day
+pub fn mn_oblq_laskar_checked(JD: f64) -> Option<f64> {
+    let u = time::julian_cent(JD) / 100.0;
+
+    if u.abs() <= 1.0 {
+        Some(mn_oblq_laskar(JD))
+    } else {
+        None
+    }
+}
+
 /// Computes the mean obliquity of the ecliptic using
 /// the IAU formula
+///
+/// Meeus, eq. 22.2 (IAU 1980), a cubic in T, the time in Julian
+/// centuries from J2000.0. This is the obliquity that goes with the
+/// IAU 1980 nutation of [`nutation::nutation`](crate::nutation::nutation)
+/// and the IAU 1976 precession.
 ///
 /// # Returns
 ///
@@ -69,11 +103,22 @@ pub fn mn_oblq_laskar(JD: f64) -> f64 {
 ///
 /// The error in `mn_oblq` reaches 1 arcsecond over a period of
 /// 2000 years from 2000 AD, and about 10 arcseconds over a period of
-/// 4000 years from 2000 AD.
+/// 4000 years from 2000 AD. For longer spans use [`mn_oblq_laskar`].
 ///
 /// # Arguments
 ///
 /// * `JD`: Julian (Ephemeris) day
+///
+/// # Example
+///
+/// Meeus, example 22.a: 1987 April 10, 0h TD.
+///
+/// ```
+/// use astro::ecliptic;
+///
+/// let eps0 = ecliptic::mn_oblq_IAU(2446895.5).to_degrees();
+/// assert!((eps0 - (23.0 + 26.0 / 60.0 + 27.407 / 3600.0)).abs() < 0.0005 / 3600.0);
+/// ```
 pub fn mn_oblq_IAU(JD: f64) -> f64 {
     // The IAU 1980 polynomial (Meeus, eq. 22.2) is in Julian centuries,
     // not in units of ten thousand years as Laskar's is.
@@ -87,6 +132,24 @@ pub fn mn_oblq_IAU(JD: f64) -> f64 {
         angle::deg_frm_dms(0, 0, 0.001813)
     )
     .to_radians()
+}
+
+/// Computes the true obliquity of the ecliptic
+///
+/// The true obliquity is the angle between the ecliptic and the true
+/// (instantaneous) equator: ε = ε0 + Δε, the mean obliquity of
+/// [`mn_oblq_IAU`] plus the nutation in obliquity of
+/// [`nutation::nutation`](crate::nutation::nutation) (Meeus, chapter 22).
+///
+/// # Returns
+///
+/// * `tru_oblq`: True obliquity of the ecliptic *| in radians*
+///
+/// # Arguments
+///
+/// * `JD`: Julian Ephemeris Day
+pub fn tru_oblq(JD: f64) -> f64 {
+    mn_oblq_IAU(JD) + crate::nutation::nutation(JD).1
 }
 
 /// Computes the longitudes of the two ecliptic points on
