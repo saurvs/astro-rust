@@ -27,7 +27,7 @@
 //! The perigee is much more strongly perturbed by the Sun than the apogee:
 //! the true perigee can be up to about 45 hours from the mean one (the
 //! apogee only about 13 hours), successive perigees are between about 24.7
-//! and 28.6 days apart (apogees between 26.98 and 27.90 days), and perigee
+//! and 28.5 days apart (apogees between 26.98 and 27.90 days), and perigee
 //! distances range over roughly 356 370–370 350 km against 404 050–406 720
 //! km for the apogee. The most extreme perigees and apogees occur around
 //! the northern winter, when the Earth is nearest the Sun.

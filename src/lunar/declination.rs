@@ -11,9 +11,10 @@
 //! # Numbering
 //!
 //! Each tropical month has one northern and one southern extreme with the
-//! same integer number `k`; `k = 0` is the month of January 2000 (southern
-//! extreme on January 5, northern on January 19). Earlier extremes have
-//! negative numbers. Unlike chapters 49–51, `k` is always an integer here.
+//! same integer number `k`, the southern one coming first; `k = 0` is the
+//! month of January 2000 (southern extreme on January 6, northern on
+//! January 19). Earlier extremes have negative numbers. Unlike chapters
+//! 49–51, `k` is always an integer here.
 //!
 //! # Time scale and accuracy
 //!
