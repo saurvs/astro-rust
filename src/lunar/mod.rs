@@ -22,6 +22,9 @@ THE SOFTWARE.
 
 //! The Earth's moon
 
+pub mod apsis;
+pub mod declination;
+
 use crate::angle;
 use crate::coords;
 use crate::time;

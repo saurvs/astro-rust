@@ -30,9 +30,11 @@ THE SOFTWARE.
 )]
 mod VSOPD_87;
 
+pub mod apsis;
 pub mod earth;
 pub mod jupiter;
 pub mod mars;
+pub mod phenomena;
 pub mod saturn;
 
 use crate::angle;

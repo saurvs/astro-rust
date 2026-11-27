@@ -1,14 +1,18 @@
 [package]
-
 name = "astro"
 version = "2.0.0"
 edition = "2024"
+rust-version = "1.85"
 authors = ["Saurav Sachidanand"]
-
 license = "MIT"
-
-repository = "https://www.github.com/saurvs/astro-rust"
-documentation = "https://saurvs.github.io/astro-rust"
-
+readme = "README.md"
+repository = "https://github.com/saurvs/astro-rust"
+documentation = "https://docs.rs/astro"
 description = "Advanced algorithms for astronomy"
 keywords = ["astronomy", "algorithms", "ephemeris", "planet", "solar"]
+categories = ["science", "mathematics", "algorithms"]
+exclude = ["/.github", "/progress"]
+
+[dependencies]
+
+[dev-dependencies]
