@@ -559,3 +559,43 @@ fn julian_day_extreme_years_are_finite() {
         }
     }
 }
+
+// Review R1: for Julian Days close to zero the fraction of the day is so
+// fine that adding it to the day of the month could round up to the next
+// day, giving -4713 December 32.0. The instant is now carried into the
+// next day instead, so the day stays within the month.
+#[test]
+fn from_julian_day_fraction_never_rounds_past_month_end() {
+    let just_before = f64::from_bits((-0.5_f64).to_bits() + 1); // -0.5000000000000001
+    assert!(just_before < -0.5);
+    for cal_type in [CalType::Julian, CalType::Gregorian] {
+        let d = Date::from_julian_day_in(just_before, cal_type).unwrap();
+        let dim = days_in_month(d.year, d.month, d.cal_type) as f64;
+        assert!(d.decimal_day < dim + 1.0, "{d:?}");
+        common::assert_close(time::julian_day(&d), just_before, 1e-15);
+    }
+    let d = Date::from_julian_day(just_before).unwrap();
+    assert_eq!(d, jul(-4712, Month::Jan, 1.0));
+
+    // Every instant within a few ulps of a day boundary near JD 0
+    let mut x = -40.5_f64;
+    while x < 40.0 {
+        for k in 1..4u64 {
+            let jd = if x < 0.0 {
+                f64::from_bits(x.to_bits() + k)
+            } else {
+                f64::from_bits(x.to_bits() - k)
+            };
+            let d = Date::from_julian_day(jd).unwrap();
+            let dim = days_in_month(d.year, d.month, d.cal_type) as f64;
+            assert!(
+                d.decimal_day >= 1.0 && d.decimal_day < dim + 1.0,
+                "{jd}: {d:?}"
+            );
+            // `decimal_day` (up to 32) resolves 7e-15 day, so instants a few
+            // ulps of JD from midnight are rounded to midnight.
+            common::assert_close(time::julian_day(&d), jd, 3e-14);
+        }
+        x += 1.0;
+    }
+}

@@ -275,7 +275,7 @@ fn date_frm_jd(jd: f64, cal_type: Option<CalType>) -> Option<Date> {
     let jd = jd + 0.5;
     let z = jd.floor();
     let f = jd - z;
-    let z = z as i64;
+    let mut z = z as i64;
 
     let cal_type = cal_type.unwrap_or(if z < 2299161 {
         CalType::Julian
@@ -283,6 +283,28 @@ fn date_frm_jd(jd: f64, cal_type: Option<CalType>) -> Option<Date> {
         CalType::Gregorian
     });
 
+    let (mut year, mut month, mut day) = civil_frm_day_number(z, cal_type);
+    let mut decimal_day = day as f64 + f;
+    if decimal_day >= (day + 1) as f64 {
+        // Near JD 0 the fraction is fine enough to round up to the next
+        // day when added to the day of the month (it would give, e.g.,
+        // December 32.0): take the next day at 0h instead.
+        z += 1;
+        (year, month, day) = civil_frm_day_number(z, cal_type);
+        decimal_day = day as f64;
+    }
+
+    Some(Date {
+        year: i16::try_from(year).ok()?,
+        month: Month::from_number(u8::try_from(month).ok()?)?,
+        decimal_day,
+        cal_type,
+    })
+}
+
+/// Year, month and day of the month of the civil day that begins at
+/// JD `z - 0.5`, in the given calendar (Meeus, chapter 7).
+fn civil_frm_day_number(z: i64, cal_type: CalType) -> (i64, i64, i64) {
     // Meeus' algorithm is stated for non-negative Julian Days. Earlier days
     // are moved forward by whole calendar cycles (4 Julian years = 1461 days,
     // 400 Gregorian years = 146097 days), and the year is moved back again.
@@ -310,16 +332,11 @@ fn date_frm_jd(jd: f64, cal_type: Option<CalType>) -> Option<Date> {
     let d = (365.25 * c as f64).floor() as i64;
     let e = ((b - d) as f64 / 30.6001).floor() as i64;
 
-    let day = (b - d - (30.6001 * e as f64).floor() as i64) as f64 + f;
+    let day = b - d - (30.6001 * e as f64).floor() as i64;
     let month = if e < 14 { e - 1 } else { e - 13 };
     let year = if month > 2 { c - 4716 } else { c - 4715 } - year_shift;
 
-    Some(Date {
-        year: i16::try_from(year).ok()?,
-        month: Month::from_number(u8::try_from(month).ok()?)?,
-        decimal_day: day,
-        cal_type,
-    })
+    (year, month, day)
 }
 
 /// Computes the day of the week of a date
@@ -848,6 +865,8 @@ pub fn mean_sidereal_time_0h(jd: f64) -> f64 {
 ///
 /// θ = θ₀ - L, where L is the observer's longitude, positive west of
 /// Greenwich. Works with mean and apparent sidereal time alike.
+/// [`coords::loc_sidr_frm_green_sidr`](crate::coords::loc_sidr_frm_green_sidr)
+/// is the same function.
 ///
 /// # Returns
 ///
@@ -879,8 +898,9 @@ fn poly(x: f64, coeffs: &[f64]) -> f64 {
 ///
 /// The polynomials are evaluated at the middle of the month, `y = year +
 /// (month - 0.5) / 12`; see [`delta_t_from_decimal_year`] for the valid time
-/// span and the accuracy. A `month` outside 1 - 12 simply shifts `y` by
-/// whole months.
+/// span and the accuracy, and for how to use an observed ΔT instead (the
+/// values from 2005 on are an extrapolation that is now several seconds
+/// too large). A `month` outside 1 - 12 simply shifts `y` by whole months.
 ///
 /// # Arguments
 ///
@@ -903,10 +923,35 @@ pub fn delta_t(year: i32, month: u8) -> f64 {
 ///   too; such values are rough extrapolations.
 /// - The uncertainty grows from below a second in the 20th century to
 ///   minutes in the Middle Ages and hours before 1000 B.C.
-/// - After 2005 the values are predictions; by the 2020s they exceed the
-///   observed ΔT by several seconds. Use observed values (IERS) for
-///   precise recent work.
+/// - From 2005 on the values are not observations but an extrapolation
+///   made by Espenak and Meeus in 2006–2007: the 2005–2050 piece passes
+///   through values extrapolated at the mean rates of 1995–2005 and of the
+///   20th century. The Earth's rotation has since sped up, so the
+///   polynomial overestimates the actual ΔT (by about 2 s in 2020 and 5 s
+///   in 2025) and the error keeps growing. Use it only when a few seconds
+///   do not matter.
 /// - The values assume a secular acceleration of the Moon of -26″/cy².
+///
+/// # Using an observed ΔT
+///
+/// For recent and near-future dates take ΔT from the IERS (Bulletin A
+/// gives `UT1 − UTC`; then ΔT = 32.184 s + (TAI − UTC) − (UT1 − UTC),
+/// where TAI − UTC is the number of leap seconds, 37 s since 2017) and pass
+/// it, in seconds, to the functions that take a ΔT argument instead of
+/// calling this function, e.g. [`julian_ephemeris_day`] and
+/// [`julian_day_from_ephemeris_day`]:
+///
+/// ```
+/// use astro::time;
+///
+/// // 2025 January 1, 0h UT, with UT1 − UTC = +0.04 s (IERS)
+/// let jd = 2460676.5;
+/// let observed = 32.184 + 37.0 - 0.04;
+/// let jde = time::julian_ephemeris_day(jd, observed);
+/// assert!(((jde - jd) * 86400.0 - 69.144).abs() < 1e-4);
+/// // The polynomial is about 5 s larger
+/// assert!(time::delta_t(2025, 1) - observed > 4.5);
+/// ```
 ///
 /// # Arguments
 ///

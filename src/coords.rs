@@ -284,7 +284,8 @@ pub fn east_long_frm_west_long(west_long: f64) -> f64 {
 /// Computes the local sidereal time from the sidereal time at Greenwich
 ///
 /// `θ = θ₀ − L`, with the longitude `L` positive **west** (Meeus,
-/// chapter 13).
+/// chapter 13). This is the same function as
+/// [`time::local_sidereal_time`](crate::time::local_sidereal_time).
 ///
 /// # Returns
 ///
@@ -297,7 +298,7 @@ pub fn east_long_frm_west_long(west_long: f64) -> f64 {
 ///   *| in radians*
 #[inline]
 pub fn loc_sidr_frm_green_sidr(green_sidreal: f64, observer_long: f64) -> f64 {
-    wrap_two_pi(green_sidreal - observer_long)
+    crate::time::local_sidereal_time(green_sidreal, observer_long)
 }
 
 /// Computes the hour angle from geographical longitude and Greenwich
