@@ -843,8 +843,8 @@ pub fn mn_sidr(JD: f64) -> f64 {
 ///
 /// Returns Θ₀, the mean sidereal time at 0h UT of the UT calendar day that
 /// contains `jd`, from Meeus' eq. 12.3 (which is only valid at 0h UT). The
-/// mean sidereal time at an instant `UT` hours later is Θ₀ plus
-/// [`SIDEREAL_RATE`] × UT, which agrees with [`mn_sidr`].
+/// mean sidereal time `UT` hours later is Θ₀ plus [`SIDEREAL_RATE`] × UT
+/// converted to an angle (15° per hour), which agrees with [`mn_sidr`].
 ///
 /// # Returns
 ///
