@@ -43,7 +43,7 @@ THE SOFTWARE.
 //!   [`Observer::from_degrees_east`] to avoid sign mistakes.
 //! * Times are Julian Days in UT (`jd_ut`) unless the argument is called
 //!   `jde` (Julian Ephemeris Day, Dynamical Time). Conversions between the two
-//!   use the crate's ΔT model, [`time::delta_t`].
+//!   use the crate's ΔT model, [`time::delta_t_from_decimal_year`].
 //! * Azimuths are given both in Meeus' convention (measured westward from the
 //!   south) and in the compass convention (measured eastward from the north).
 //!
@@ -367,7 +367,8 @@ pub fn geocentric_apparent_position(body: Body, jde: f64) -> ApparentPosition {
 /// the body ([`geocentric_apparent_position`]) at `jd_ut + ΔT`, the apparent
 /// sidereal time at Greenwich (Meeus, ch. 12), the topocentric correction
 /// for parallax (ch. 40), the local horizontal coordinates (ch. 13) and the
-/// atmospheric refraction (ch. 16). ΔT comes from [`time::delta_t`]; to use
+/// atmospheric refraction (ch. 16). ΔT comes from
+/// [`time::delta_t_from_decimal_year`]; to use
 /// your own value, call [`geocentric_apparent_position`] and
 /// [`topocentric_from_geocentric`] directly.
 ///
@@ -485,8 +486,7 @@ pub fn refracted_altitude(true_alt: f64, pressure: f64, temperature: f64) -> f64
         return true_alt;
     }
     let refraction = atmos::refrac_frm_true_alt(true_alt)
-        * atmos::refrac_by_pressr(pressure)
-        * atmos::refrac_by_temp(temperature + 273.15);
+        * atmos::refrac_pressr_temp_factor(pressure, temperature);
 
     true_alt + refraction.max(0.0)
 }
@@ -880,16 +880,15 @@ fn topocentric_distance_ratio(pos: &ApparentPosition, observer: &Observer, gast:
     (a * a + b * b + c * c).sqrt()
 }
 
-/// ΔT in seconds for a Julian Day, from [`time::delta_t`].
+/// ΔT in seconds for a Julian Day, from [`time::delta_t_from_decimal_year`]
+/// (the same model as [`time::delta_t`], evaluated at the instant itself so
+/// that it varies continuously).
 fn delta_t_secs(jd: f64) -> f64 {
     let year = 2000.0 + (jd - 2451544.5) / 365.2425;
     if !year.is_finite() {
         return 0.0;
     }
-    let y = year.floor();
-    let month = (((year - y) * 12.0) as u8).min(11) + 1;
-    // Clamp to the range of i32 (far outside any meaningful ΔT anyway).
-    time::delta_t(y.clamp(-2.0e9, 2.0e9) as i32, month)
+    time::delta_t_from_decimal_year(year)
 }
 
 /// Finds a zero of `f` between `a` and `b`, where `f(a)` and `f(b)` are on
