@@ -242,7 +242,7 @@ pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
     }
 }
 
-/// Return quantites used in the ephemeris for physical observations
+/// Computes quantities used in the ephemeris for physical observations
 /// of Jupiter
 ///
 /// The same algorithm as [`physical_ephemeris`] (Meeus, ch. 43, more

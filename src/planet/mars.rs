@@ -246,7 +246,7 @@ pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
     }
 }
 
-/// Computes quantites used in the ephemeris for physical observations of
+/// Computes quantities used in the ephemeris for physical observations of
 /// Mars
 ///
 /// The same algorithm as [`physical_ephemeris`] (Meeus, ch. 42), with the
@@ -255,7 +255,7 @@ pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
 ///
 /// # Returns
 ///
-/// * `ephemeris`: Mar's ephemeris. *All angles are in radians*
+/// * `ephemeris`: Mars's ephemeris. *All angles are in radians*
 ///
 /// # Arguments
 ///
