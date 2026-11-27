@@ -188,8 +188,10 @@ impl LowAccuracyPositions {
 /// low-accuracy method
 ///
 /// The method keeps only the largest periodic term of each satellite and
-/// neglects the inclinations of the orbits on Jupiter's equator, so `X` is
-/// good to a few hundredths and `Y` to a few tenths of a Jupiter radius.
+/// neglects the inclinations of the orbits on Jupiter's equator. Compared
+/// with the E5 theory of [`high_accuracy_positions`] over 1900–2100, `X`
+/// stays within about 0.04 (Io), 0.07 (Europa), 0.1 (Ganymede) and 0.2
+/// (Callisto) Jupiter radii, and `Y` within about 0.01, 0.09, 0.08 and 0.2.
 /// The positions of the Earth and Jupiter come from the short series of
 /// Meeus' chapter 43 ("lower accuracy"), so no planetary theory is needed.
 ///
@@ -352,7 +354,9 @@ impl SatelliteCoords {
 /// Each flag refers to the centre of the satellite (or of its shadow), so
 /// the moments when they change are the instants of central contact with
 /// Jupiter's limb. The disk is taken as an ellipse with the planet's
-/// flattening; the shadow is treated as a cylinder, without penumbra.
+/// flattening, and the Sun as a point: the shadow is the central one, so
+/// the penumbra and the slight narrowing of the umbra with distance are
+/// neglected.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Phenomena {
     /// The satellite is in front of Jupiter's disk, as seen from the Earth
@@ -385,10 +389,15 @@ pub struct MoonPosition {
     /// Apparent coordinates as seen from the Earth, corrected for
     /// differential light-time and perspective
     pub apparent: SatelliteCoords,
-    /// Coordinates as seen from the Sun, with the same corrections. They
-    /// refer to the same instant as `apparent`, so they tell where the
-    /// satellite's shadow is, or whether the satellite is eclipsed, as seen
-    /// from the Earth at the requested time.
+    /// Coordinates as seen from the Sun, with the perspective correction
+    /// and a differential light-time correction. They refer to the same
+    /// instant as `apparent`, so they tell where the satellite's shadow is,
+    /// or whether the satellite is eclipsed, as seen from the Earth at the
+    /// requested time. (The light-time correction takes the satellite
+    /// `|Z|/c` earlier than Jupiter's centre: the moment the sunlight that
+    /// casts the shadow passed it, or approximately the moment the light
+    /// of an eclipsed satellite left it. Its sign therefore differs from
+    /// Meeus' rule for the Earth view on the near half of the orbit.)
     pub shadow: SatelliteCoords,
 }
 
@@ -820,9 +829,37 @@ fn rotate(p: [f64; 3], f: &Frame, lambda0: f64, beta0: f64) -> [f64; 3] {
 /// satellite (Meeus, ch. 44)
 const LIGHT_TIME_K: [f64; 4] = [17295.0, 21819.0, 27558.0, 36548.0];
 
+/// Light-path difference used by the differential light-time correction
+/// of the view from the Earth: `|Z|` (Meeus, ch. 44).
+///
+/// The correction `path / K · √(1 − (X/R)²)` added to `X` is the shift of
+/// `X` when the satellite is taken `−Z / c` later than Jupiter's centre:
+/// on the near half of the orbit the light leaves later and the satellite
+/// moves towards +X, on the far half it leaves earlier and the satellite
+/// moves towards −X, so the shift is positive in both cases.
+fn earth_view_path(z: f64) -> f64 {
+    z.abs()
+}
+
+/// Light-path difference for the view from the Sun: the signed `Z`.
+///
+/// What the Earth sees at a given instant is decided by the satellite at
+/// an epoch *earlier* than Jupiter's centre's by `|Z| / c` in both cases:
+/// a shadow on the disk (`Z < 0`) was cast by sunlight that passed the
+/// satellite `|Z| / c` before reaching the cloud tops, and an eclipsed
+/// satellite (`Z > 0`) is seen with light that left it about `Z / c`
+/// earlier. An earlier epoch moves the satellite towards −X on the near
+/// half and towards +X on the far half, so the shift has the sign of `Z`
+/// (Meeus applies the Earth-view rule "in the same way", which gets the
+/// sign of the shadow case wrong by up to 0.0014 Jupiter radii).
+fn sun_view_path(z: f64) -> f64 {
+    z
+}
+
 /// Projects the four satellites on the sky of a viewer that sees Jupiter
 /// in the direction (lambda0, beta0) at the distance `dist` (AU), and
-/// applies the corrections for differential light-time and perspective.
+/// applies the corrections for differential light-time (with the light
+/// path difference `path(Z)`, in Jupiter radii) and perspective.
 fn sky_coords(
     sats: &[[f64; 3]; 4],
     radius: &[f64; 4],
@@ -830,6 +867,7 @@ fn sky_coords(
     lambda0: f64,
     beta0: f64,
     dist: f64,
+    path: fn(f64) -> f64,
 ) -> [SatelliteCoords; 4] {
     // A fictitious fifth satellite above Jupiter's north pole gives the
     // direction of the projected rotation axis.
@@ -845,7 +883,7 @@ fn sky_coords(
 
         // differential light-time
         let q = x / radius[k];
-        x += z.abs() / LIGHT_TIME_K[k] * (1.0 - q * q).max(0.0).sqrt();
+        x += path(z) / LIGHT_TIME_K[k] * (1.0 - q * q).max(0.0).sqrt();
 
         // perspective
         let w = dist / (dist + z / JUPITER_RADII_PER_AU);
@@ -882,7 +920,10 @@ fn rect(long: f64, lat: f64, r: f64) -> [f64; 3] {
 ///
 /// Lieske's E5 theory was fitted to observations of the 20th century and
 /// its accuracy degrades slowly for dates far from that period; Meeus gives
-/// no explicit limit. The results stay finite and smooth for any date.
+/// no explicit limit. The results are smooth functions of time over the
+/// span of the VSOP87 series (a few thousand years around J2000.0); far
+/// outside it the planetary positions lose their meaning, and for
+/// extreme dates (|JDE| of order 1e10) the result is NaN.
 ///
 /// Meeus, *Astronomical Algorithms*, 2nd ed., ch. 44 (second method),
 /// eqs. 44.1 to 44.3.
@@ -904,79 +945,25 @@ fn rect(long: f64, lat: f64, r: f64) -> [f64; 3] {
 /// assert!(!callisto.phenomena().transit);
 /// ```
 pub fn high_accuracy_positions(jde: f64) -> HighAccuracyPositions {
-    let (L0, B0, R0) = planet::heliocent_coords(&planet::Planet::Earth, jde);
-    let earth = rect(L0, B0, R0);
+    let g = Geometry::at(jde);
+    let e5 = e5_theory(jde - 2443000.5 - g.light_time);
+    let frame = g.frame(e5.psi);
+    let (longitude, sats) = satellite_rect(&e5, g.precession);
 
-    // Light-time iteration, starting with Δ = 5 AU. Only the sines and
-    // cosines of the planetary latitudes are used, so their normalisation
-    // does not matter here.
-    let mut tau = LIGHT_TIME_PER_AU * 5.0;
-    let mut jup = (0.0, 0.0, 0.0);
-    let mut geo = [0.0; 3];
-    let mut delta = 0.0;
-    for _ in 0..10 {
-        let (l, b, r) = planet::heliocent_coords(&planet::Planet::Jupiter, jde - tau);
-        let helio = rect(l, b, r);
-        geo = [
-            helio[0] - earth[0],
-            helio[1] - earth[1],
-            helio[2] - earth[2],
-        ];
-        delta = (geo[0] * geo[0] + geo[1] * geo[1] + geo[2] * geo[2]).sqrt();
-        jup = (l, b, r);
-        let new_tau = LIGHT_TIME_PER_AU * delta;
-        let done = (new_tau - tau).abs() < 1e-10;
-        tau = new_tau;
-        if done {
-            break;
-        }
-    }
-
-    let lambda0 = geo[1].atan2(geo[0]);
-    let beta0 = geo[2].atan2(geo[0].hypot(geo[1]));
-
-    let t = jde - 2443000.5 - tau;
-    let e5 = e5_theory(t);
-
-    // Precession from B1950.0 to the date
-    let T0 = (jde - 2433282.423) / 36525.0;
-    let P = (1.3966626 * T0 + 0.0003088 * T0 * T0).to_radians();
-
-    // Inclination of Jupiter's equator on its orbit; T in centuries from
-    // 1900.0
-    let T1900 = (jde - 2415020.0) / 36525.0;
-    let equator_incl = (3.120262 + 0.0006 * T1900).to_radians();
-
-    // Inclination and node of Jupiter's orbit, mean equinox of the date
-    // (Meeus, table 31.A)
-    let T = (jde - 2451545.0) / 36525.0;
-    let orbit_incl =
-        (1.303267 + T * (-0.0054965 + T * (0.00000466 - T * 0.000000002))).to_radians();
-    let orbit_node =
-        (100.464407 + T * (1.0209774 + T * (0.00040315 + T * 0.000000404))).to_radians();
-
-    let psi = e5.psi + P;
-    let frame = Frame {
-        equator_incl,
-        psi,
-        orbit_incl,
-        orbit_node,
-    };
-
-    let longitude: [f64; 4] = std::array::from_fn(|k| e5.longitude[k] + P);
-    let sats: [[f64; 3]; 4] = std::array::from_fn(|k| {
-        let (sin_b, cos_b) = e5.latitude[k].sin_cos();
-        let (sin_u, cos_u) = (longitude[k] - psi).sin_cos();
-        let r = e5.radius[k];
-        [r * cos_u * cos_b, r * sin_u * cos_b, r * sin_b]
-    });
-
-    let apparent = sky_coords(&sats, &e5.radius, &frame, lambda0, beta0, delta);
+    let apparent = sky_coords(
+        &sats,
+        &e5.radius,
+        &frame,
+        g.lambda0,
+        g.beta0,
+        g.earth_dist,
+        earth_view_path,
+    );
 
     // As seen from the Sun: Meeus' equations 44.1 with R = 0, i.e. the
     // heliocentric direction and distance of Jupiter.
-    let (l, b, r) = jup;
-    let shadow = sky_coords(&sats, &e5.radius, &frame, l, b, r);
+    let (l, b, r) = g.helio;
+    let shadow = sky_coords(&sats, &e5.radius, &frame, l, b, r, sun_view_path);
 
     let moons = std::array::from_fn(|k| MoonPosition {
         mean_longitude: norm(e5.mean_longitude[k]),
@@ -989,10 +976,115 @@ pub fn high_accuracy_positions(jde: f64) -> HighAccuracyPositions {
     });
 
     HighAccuracyPositions {
-        light_time: tau,
-        earth_dist: delta,
+        light_time: g.light_time,
+        earth_dist: g.earth_dist,
         moons,
     }
+}
+
+/// Jupiter's position and orientation needed by the high-accuracy method
+struct Geometry {
+    /// Light-time `τ` from Jupiter to the Earth, days
+    light_time: f64,
+    /// Earth-Jupiter distance `Δ`, AU
+    earth_dist: f64,
+    /// Geocentric longitude and latitude of Jupiter (light-time corrected)
+    lambda0: f64,
+    beta0: f64,
+    /// Heliocentric `(l, b, r)` of Jupiter at `jde − τ`
+    helio: (f64, f64, f64),
+    /// Precession `P` from B1950.0 to the date, radians
+    precession: f64,
+    /// Inclination `I` of Jupiter's equator on its orbit, radians
+    equator_incl: f64,
+    /// Inclination and node of Jupiter's orbit, of date, radians
+    orbit_incl: f64,
+    orbit_node: f64,
+}
+
+impl Geometry {
+    fn at(jde: f64) -> Geometry {
+        let (L0, B0, R0) = planet::heliocent_coords(&planet::Planet::Earth, jde);
+        let earth = rect(L0, B0, R0);
+
+        // Light-time iteration, starting with Δ = 5 AU.
+        let mut tau = LIGHT_TIME_PER_AU * 5.0;
+        let mut jup = (0.0, 0.0, 0.0);
+        let mut geo = [0.0; 3];
+        let mut delta = 0.0;
+        for _ in 0..10 {
+            let (l, b, r) = planet::heliocent_coords(&planet::Planet::Jupiter, jde - tau);
+            let helio = rect(l, b, r);
+            geo = [
+                helio[0] - earth[0],
+                helio[1] - earth[1],
+                helio[2] - earth[2],
+            ];
+            delta = (geo[0] * geo[0] + geo[1] * geo[1] + geo[2] * geo[2]).sqrt();
+            jup = (l, b, r);
+            let new_tau = LIGHT_TIME_PER_AU * delta;
+            let done = (new_tau - tau).abs() < 1e-10;
+            tau = new_tau;
+            if done {
+                break;
+            }
+        }
+
+        // Precession from B1950.0 to the date
+        let T0 = (jde - 2433282.423) / 36525.0;
+        let P = (1.3966626 * T0 + 0.0003088 * T0 * T0).to_radians();
+
+        // Inclination of Jupiter's equator on its orbit; T in centuries
+        // from 1900.0
+        let T1900 = (jde - 2415020.0) / 36525.0;
+        let equator_incl = (3.120262 + 0.0006 * T1900).to_radians();
+
+        // Inclination and node of Jupiter's orbit, mean equinox of the date
+        // (Meeus, table 31.A)
+        let T = (jde - 2451545.0) / 36525.0;
+        let orbit_incl =
+            (1.303267 + T * (-0.0054965 + T * (0.00000466 - T * 0.000000002))).to_radians();
+        let orbit_node =
+            (100.464407 + T * (1.0209774 + T * (0.00040315 + T * 0.000000404))).to_radians();
+
+        Geometry {
+            light_time: tau,
+            earth_dist: delta,
+            lambda0: geo[1].atan2(geo[0]),
+            beta0: geo[2].atan2(geo[0].hypot(geo[1])),
+            helio: jup,
+            precession: P,
+            equator_incl,
+            orbit_incl,
+            orbit_node,
+        }
+    }
+
+    /// The rotation frame, given the E5 node `ψ` of Jupiter's equator
+    /// (B1950.0), which is precessed to the date here
+    fn frame(&self, psi_b1950: f64) -> Frame {
+        Frame {
+            equator_incl: self.equator_incl,
+            psi: psi_b1950 + self.precession,
+            orbit_incl: self.orbit_incl,
+            orbit_node: self.orbit_node,
+        }
+    }
+}
+
+/// The satellites' longitudes of date (B1950.0 values plus the
+/// precession `P`) and their rectangular coordinates in Jupiter's
+/// equatorial frame, x towards the node of the equator on the ecliptic
+fn satellite_rect(e5: &E5, P: f64) -> ([f64; 4], [[f64; 3]; 4]) {
+    let psi = e5.psi + P;
+    let longitude: [f64; 4] = std::array::from_fn(|k| e5.longitude[k] + P);
+    let sats = std::array::from_fn(|k| {
+        let (sin_b, cos_b) = e5.latitude[k].sin_cos();
+        let (sin_u, cos_u) = (longitude[k] - psi).sin_cos();
+        let r = e5.radius[k];
+        [r * cos_u * cos_b, r * sin_u * cos_b, r * sin_b]
+    });
+    (longitude, sats)
 }
 
 /// Computes the apparent rectangular coordinates of a Galilean moon with
@@ -1092,6 +1184,11 @@ where
             let (mut lo, mut hi, mut flo) = (a, b, fa);
             while hi - lo > 1e-7 {
                 let mid = 0.5 * (lo + hi);
+                // Far from the present era adjacent f64 values can be more
+                // than 1e-7 apart; stop when the interval cannot shrink.
+                if mid <= lo || mid >= hi {
+                    break;
+                }
                 let fm = f(mid);
                 if fm == 0.0 {
                     lo = mid;
@@ -1242,6 +1339,69 @@ mod tests {
         // exact zero at an end point
         assert_eq!(find_zeros(0.0, 1.0, |t| t), vec![0.0]);
         assert_eq!(find_zeros(-1.0, 0.0, |t| t), vec![0.0]);
+    }
+
+    // Far from the present era the spacing of f64 values exceeds the
+    // bisection tolerance; the search must still terminate.
+    #[test]
+    fn find_zeros_terminates_for_huge_times() {
+        let t0 = 1e10;
+        let c = t0 + 0.0123;
+        // a step function never evaluates to exactly zero
+        let z = find_zeros(t0, t0 + 0.02, |t| if t < c { -1.0 } else { 1.0 });
+        assert_eq!(z.len(), 1);
+        assert!((z[0] - c).abs() < 1e-5);
+    }
+
+    fn no_path(_: f64) -> f64 {
+        0.0
+    }
+
+    // The differential light-time corrections must equal the shift of the
+    // satellite's position when it is taken at the epoch that matters: for
+    // the view from the Earth, Z/c earlier than Jupiter's centre (later on
+    // the near half); for the view from the Sun (shadows and eclipses),
+    // |Z|/c earlier in every case. The constants K assume mean orbital
+    // speeds, which leaves residuals of about 5e-6 radii; a wrong sign
+    // would give errors up to 1.4e-3.
+    #[test]
+    fn differential_light_time_matches_epoch_shift() {
+        // light-time across one Jupiter equatorial radius, in days
+        let radius_days = LIGHT_TIME_PER_AU / JUPITER_RADII_PER_AU;
+        for i in 0..40 {
+            let jde = 2448972.5 + i as f64 * 0.37;
+            let g = Geometry::at(jde);
+            let t = jde - 2443000.5 - g.light_time;
+            let (l, b, r) = g.helio;
+            let view = |dt: f64, lon: f64, lat: f64, dist: f64, path: fn(f64) -> f64| {
+                let e5 = e5_theory(t + dt);
+                let frame = g.frame(e5.psi);
+                let (_, sats) = satellite_rect(&e5, g.precession);
+                sky_coords(&sats, &e5.radius, &frame, lon, lat, dist, path)
+            };
+            let earth = view(0.0, g.lambda0, g.beta0, g.earth_dist, earth_view_path);
+            let sun = view(0.0, l, b, r, sun_view_path);
+            for k in 0..4 {
+                let dt = -earth[k].z * radius_days;
+                let expected = view(dt, g.lambda0, g.beta0, g.earth_dist, no_path)[k];
+                assert!(
+                    (earth[k].x - expected.x).abs() < 2e-5,
+                    "Earth view, satellite {}, {jde}: {} vs {}",
+                    k + 1,
+                    earth[k].x,
+                    expected.x
+                );
+                let dt = -sun[k].z.abs() * radius_days;
+                let expected = view(dt, l, b, r, no_path)[k];
+                assert!(
+                    (sun[k].x - expected.x).abs() < 2e-5,
+                    "Sun view, satellite {}, {jde}: {} vs {}",
+                    k + 1,
+                    sun[k].x,
+                    expected.x
+                );
+            }
+        }
     }
 
     #[test]
