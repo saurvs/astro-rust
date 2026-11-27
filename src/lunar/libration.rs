@@ -496,6 +496,11 @@ fn lunar_sun_event(JDE: f64, long: f64, lat: f64, rising: bool) -> Option<f64> {
             return None;
         }
         t += dt;
+        // Far from the start the event is not the one asked for (near the
+        // poles the Sun may stay up or down for months).
+        if (t - JDE).abs() > 20.0 {
+            return None;
+        }
         if dt.abs() < 1e-6 {
             return Some(t);
         }
@@ -519,7 +524,8 @@ fn lunar_sun_event(JDE: f64, long: f64, lat: f64, rising: bool) -> Option<f64> {
 /// # Arguments
 ///
 /// * `JDE` : Julian Ephemeris Day (TD) near the wanted sunrise. The
-///   sunrise found is the one within about half a lunation of `JDE`.
+///   sunrise found is normally the one within half a lunation of `JDE`;
+///   results more than 20 days away are rejected.
 /// * `long`: Selenographic longitude `η` of the point *| in radians*,
 ///   positive towards Mare Crisium
 /// * `lat` : Selenographic latitude `θ` of the point *| in radians*
@@ -635,8 +641,8 @@ pub fn topocent_librations(
 /// applying differential corrections to the geocentric values (Meeus,
 /// chapter 53, method b).
 ///
-/// The agreement with [`topocent_librations`] is of the order of a few
-/// thousandths of a degree.
+/// The agreement with [`topocent_librations`] is about 0.005° in the
+/// librations and 0.01° in the position angle.
 ///
 /// # Arguments
 ///

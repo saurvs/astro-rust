@@ -137,7 +137,8 @@ pub fn optical_libr(JD: f64, mn_ecl_long_moon: f64, apprnt_ecl_lat_moon: f64) ->
 /// * `physical_libr_in_lat`: The physical libration in
 ///   latitude `b″` *| in radians*
 ///
-/// Both are always smaller than about 0.04°.
+/// Both are small: at most about 0.045° in longitude and 0.065° in
+/// latitude.
 ///
 /// # Arguments
 ///
