@@ -111,9 +111,10 @@ fn high_accuracy_example_44b() {
         let s = p.moon(m);
         assert_close(s.longitude_perturbation.to_degrees(), sigma[k], 1e-5);
         // Meeus prints four decimals. Y of satellites II and IV comes out
-        // one unit of the last decimal lower than the book (0.27525 and
-        // 1.02897); every coefficient has been checked, so this is taken
-        // to be rounding in the book's own computation.
+        // 0.5 and 1.3 units of the last decimal lower than the book
+        // (0.27525 and 1.02897). Every coefficient and rotation has been
+        // checked against the book; the cause (probably the planetary
+        // positions behind the book's own computation) was not found.
         assert_close(s.apparent.x, x[k], 1e-4);
         assert_close(s.apparent.y, y[k], 1.5e-4);
         // all four satellites are in front of the planet's centre plane
@@ -149,7 +150,7 @@ fn high_accuracy_internal_consistency() {
                 let n = (c.x * c.x + c.y * c.y + c.z * c.z).sqrt();
                 assert!((n / s.radius - 1.0).abs() < 0.005, "{k} {n} {}", s.radius);
             }
-            // latitudes stay below 0.03°, 0.52°, 0.33°, 0.73° (Meeus)
+            // Meeus: the latitudes reach 0°03′, 0°31′, 0°20′ and 0°44′
             let max_lat = [0.06, 0.6, 0.4, 0.8][k];
             assert!(s.latitude.to_degrees().abs() < max_lat);
             // mean distances ± the periodic terms
