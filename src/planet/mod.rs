@@ -951,10 +951,12 @@ fn ecl_aberr(long: f64, lat: f64, sun_long: f64, JD: f64) -> (f64, f64) {
 /// longitude computed from the same Earth position.
 ///
 /// For Venus on 1992 December 20 (Meeus, example 33.a) the result agrees
-/// with the book's values from the complete VSOP87 theory to about
-/// 0.01 s in right ascension and 0.1″ in declination. The accuracy is
-/// limited by the theory (see [`heliocent_coords`]) and by the first-order
-/// treatment of aberration, i.e. a fraction of an arcsecond.
+/// with the book's values from the complete VSOP87 theory to 0.001 s in
+/// right ascension and 0.01″ in declination, and the positions of Mercury
+/// and Venus in Meeus' example 18.a (taken from an accurate ephemeris)
+/// are matched to the same level. Near J2000 the accuracy is thus a few
+/// hundredths of an arcsecond; far from it, it is limited by VSOP87 (see
+/// [`heliocent_coords`]) and by the nutation and obliquity models.
 ///
 /// # Returns
 ///
