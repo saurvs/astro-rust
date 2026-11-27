@@ -55,8 +55,7 @@ THE SOFTWARE.
 //! assert!(titan.z < 0.0); // in front of Saturn
 //! ```
 
-use std::f64::consts::TAU;
-
+use crate::angle;
 use crate::planet;
 use crate::precess;
 
@@ -124,7 +123,8 @@ impl Moon {
 pub struct MoonPosition {
     /// Longitude `λ` of the satellite *| in radians, in `[0, 2π)`*
     pub longitude: f64,
-    /// Inclination `γ` of the orbit on Saturn's equator *| in radians*
+    /// Inclination `γ` of the orbit on Saturn's equator *| in radians, in
+    /// `[0, π/2]`*
     pub inclination: f64,
     /// Longitude `Ω` of the ascending node of the orbit on Saturn's
     /// equator *| in radians, in `[0, 2π)`*
@@ -149,8 +149,10 @@ pub struct Positions {
     /// Distance `Δ` from the Earth to the light-time corrected position of
     /// Saturn *| in AU*
     pub earth_dist: f64,
-    /// Saturn's geocentric longitude `λ0`, referred to the mean ecliptic
-    /// and equinox of the date (geometric: no aberration or nutation)
+    /// Saturn's geocentric longitude `λ0`, referred to the VSOP87 mean
+    /// ecliptic and equinox of the date. It is corrected for light-time
+    /// only: neither aberration, nor nutation, nor the small FK5 offset is
+    /// applied (none of them changes the satellites' `X`, `Y`)
     /// *| in radians, in `[0, 2π)`*
     pub saturn_long: f64,
     /// Saturn's geocentric latitude `β0`, mean ecliptic of the date
@@ -186,9 +188,11 @@ const LIGHT_TIME_K: [f64; 8] = [
     20947.0, 23715.0, 26382.0, 29876.0, 35313.0, 53800.0, 59222.0, 91820.0,
 ];
 
+/// Reduces an angle to `[0, 2π)`. (`rem_euclid` alone can return 2π for a
+/// tiny negative angle.)
 #[inline]
-fn norm(angle: f64) -> f64 {
-    angle.rem_euclid(TAU)
+fn norm(angl: f64) -> f64 {
+    angle::limit_to_two_PI(angl)
 }
 
 /// The "times" and auxiliary angles of Meeus, ch. 46, for the instant `jde`
@@ -514,15 +518,25 @@ fn iapetus(w: &Args) -> EclipticElements {
                 + 0.00235 * (l + g1 + lT + gT + phi).cos()
                 + 0.00360 * (u2 + phi).cos())
             .to_radians(),
-        // The last term, +0.00650 sin(u5 + ψ), is printed with a plus sign
-        // and kept so. Example 46.a was evidently computed with a minus
-        // sign: that reproduces its λ' = 97.7552° and X, Y = −48.759, 4.136
-        // exactly, while the printed sign gives 97.7579° and −48.7604,
-        // 4.1372. The plus sign is the consistent one: the coefficient is
-        // 0.04204·tan(i'/2), the change (1 − cos i)·δΩ of the longitude that
-        // goes with the node term w' below (counted along the reference
-        // plane to the node, then along the orbit), so it must have the
-        // same sign as w', and the book's Ω(8) confirms w' is positive.
+        // The sign of the last term, +0.00650 sin(u5 + ψ), is a deliberate
+        // choice. The book prints "+", and "+" is used here, but its
+        // example 46.a was evidently computed with "−": only that sign
+        // reproduces the example's λ' = 97.7552° and X, Y = −48.759,
+        // +4.136, while "+" gives λ' = 97.7579° and X, Y = −48.7604,
+        // +4.1372 (a difference of 0.0015 Saturn radii, about 0.015″).
+        // "+" was kept because
+        // * it is what the formula prints;
+        // * it is the geometrically consistent sign: 0.00650 is
+        //   0.04204·tan(i'/2) for i' ≈ 17.6°, the (1 − cos i)·δΩ shift of
+        //   a longitude counted along the reference plane to the node and
+        //   then along the orbit, caused by the node term w' below; it must
+        //   therefore have the sign of w', which the example's
+        //   Ω(8) = 138.9121° confirms is "+";
+        // * an independent implementation of the chapter (the Go package
+        //   soniakeys/meeus, `saturnmoons`) also uses "+" and gets
+        //   X, Y = −48.760, +4.137, as this code does.
+        // If Dourneau's original theory turns out to have "−", flip the
+        // sign here and tighten the Iapetus tolerances of the tests.
         lambda1: mu
             + (-0.04299 * u2.sin()
                 - 0.00789 * u1.sin()
@@ -541,7 +555,11 @@ fn to_equatorial(el: &EclipticElements) -> EquatorialOrbit {
     let (s1, c1, _, _) = saturn_equator();
     let e = el.e;
     let M = el.lambda1 - el.p;
-    // equation of the centre, in radians
+    // Equation of the centre, in radians, as a series in e to e⁵ (the
+    // book's subroutine; Kepler's equation is not solved). For Hyperion,
+    // whose e reaches 0.13, the truncation error is at most about 2″ in
+    // the orbit, i.e. 3e-4 Saturn radii in X and Y; for the others it is
+    // far smaller.
     let C = (2.0 * e - 0.25 * e.powi(3) + 0.0520833333 * e.powi(5)) * M.sin()
         + (1.25 * e * e - 0.458333333 * e.powi(4)) * (2.0 * M).sin()
         + (1.083333333 * e.powi(3) - 0.671875 * e.powi(5)) * (3.0 * M).sin()
@@ -553,7 +571,9 @@ fn to_equatorial(el: &EclipticElements) -> EquatorialOrbit {
     let (sin_i, cos_i) = el.i.sin_cos();
     let a1 = sin_i * g.sin();
     let a2 = c1 * sin_i * g.cos() - s1 * cos_i;
-    let gamma = a1.hypot(a2).min(1.0).asin();
+    // `clamp` (unlike `min`) keeps a NaN, so bad input cannot turn into a
+    // plausible-looking γ = 90°.
+    let gamma = a1.hypot(a2).clamp(0.0, 1.0).asin();
     let u = a1.atan2(a2);
     let h = c1 * sin_i - s1 * cos_i * g.cos();
     let psi = (s1 * g.sin()).atan2(h);
@@ -623,8 +643,7 @@ fn saturn_geocentric(jde: f64) -> (f64, f64, f64, f64) {
     let (L0, B0, R0) = planet::heliocent_coords(&planet::Planet::Earth, jde);
     let earth = rect(L0, B0, R0);
 
-    // Light-time iteration starting from Δ = 9 AU. Only sines and cosines
-    // of the latitudes are used, so their normalisation does not matter.
+    // Light-time iteration starting from Δ = 9 AU, as Meeus suggests.
     let mut tau = LIGHT_TIME_PER_AU * 9.0;
     let mut geo = [0.0; 3];
     let mut delta = 0.0;
@@ -862,6 +881,30 @@ mod tests {
             13.0,
             1e-12,
         );
+    }
+
+    // `norm` must stay in [0, 2π): `rem_euclid` returns 2π for tiny
+    // negative angles.
+    #[test]
+    fn norm_range() {
+        assert_eq!(norm(-1e-20), 0.0);
+        assert_eq!(norm(std::f64::consts::TAU), 0.0);
+        close(norm(-0.5), std::f64::consts::TAU - 0.5, 1e-15);
+    }
+
+    // A NaN in the elements must not come out as a finite inclination
+    // (`f64::min` returns the other operand when one is NaN).
+    #[test]
+    fn nan_elements_give_nan_inclination() {
+        let el = EclipticElements {
+            e: 0.01,
+            a: 10.0,
+            node: f64::NAN,
+            i: 0.3,
+            lambda1: 2.0,
+            p: 0.5,
+        };
+        assert!(to_equatorial(&el).gamma.is_nan());
     }
 
     #[test]

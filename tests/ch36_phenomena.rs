@@ -318,6 +318,20 @@ fn non_finite_year() {
         phenomena::nearest_time_of_phenomenon(&p, ph, f64::NAN),
         None
     );
+    // So remote that k cannot be represented exactly: no answer, rather than
+    // k = i64::MAX and a meaningless instant.
+    for year in [1e20, -1e20, 1e306, f64::NEG_INFINITY] {
+        assert_eq!(phenomena::nearest_k(&p, ph, year), None, "{year}");
+        assert_eq!(
+            phenomena::nearest_time_of_phenomenon(&p, ph, year),
+            None,
+            "{year}"
+        );
+    }
+    // Far, but still exact
+    let k = phenomena::nearest_k(&p, ph, 1e9).unwrap();
+    let approx = phenomena::approx_k(&p, ph, 1e9).unwrap();
+    assert!((k as f64 - approx).abs() < 1.0);
 }
 
 // k = 0 is the first configuration after 2000 January 1 (for the mean
@@ -752,6 +766,40 @@ fn vsop87_geometry_at_the_computed_instants() {
 
     let jde = phenomena::time_of_phenomenon(&Planet::Jupiter, Phenomenon::Opposition, 10).unwrap();
     assert!((PI - vsop::elongation(&Planet::Jupiter, jde)).to_degrees() < 1.5);
+
+    // At each station the geocentric longitude moves by less than 1% of the
+    // planet's mean daily motion, and in opposite directions a week before
+    // and after (direct, then retrograde for station 1; the reverse for 2).
+    let daily_motion = |p: &Planet, t: f64| {
+        let lon = |t: f64| {
+            let u = vsop::directions(p, t).1;
+            u[1].atan2(u[0])
+        };
+        ((lon(t + 0.5) - lon(t - 0.5) + PI).rem_euclid(TAU) - PI).to_degrees()
+    };
+    for (p, k, mean_motion) in [
+        (Planet::Mercury, 12, 4.09),
+        (Planet::Venus, 3, 1.60),
+        (Planet::Mars, 5, 0.524),
+        (Planet::Jupiter, -30, 0.083),
+        (Planet::Saturn, 50, 0.033),
+    ] {
+        for (station, before) in [(Station::First, 1.0), (Station::Second, -1.0)] {
+            let jde = phenomena::time_of_phenomenon(&p, Phenomenon::Station(station), k).unwrap();
+            assert!(
+                daily_motion(&p, jde).abs() < 0.01 * mean_motion,
+                "{p:?} {station:?}"
+            );
+            assert!(
+                before * daily_motion(&p, jde - 7.0) > 0.0,
+                "{p:?} {station:?}"
+            );
+            assert!(
+                before * daily_motion(&p, jde + 7.0) < 0.0,
+                "{p:?} {station:?}"
+            );
+        }
+    }
 }
 
 /// Every occurrence over 1800-2200. Slow in debug builds; run with

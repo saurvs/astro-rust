@@ -26,6 +26,26 @@ fn illum_frac_frm_dist_example_41a() {
     assert_close(k, 0.647, 5e-4);
 }
 
+// Eq. 41.2 is clamped to [0, 1]: at opposition (Δ = r - R) and at
+// superior conjunction (Δ = r + R) rounding used to give 1 + 2e-16.
+#[test]
+fn illum_frac_frm_dist_in_unit_interval() {
+    let (r, R) = (16.89595034667551, 1.0006567157926494);
+    assert!(planet::illum_frac_frm_dist(r, r + R, R) <= 1.0);
+    for &(r, R) in &[
+        (0.39_f64, 0.99),
+        (0.72, 1.0),
+        (1.52, 1.01),
+        (5.2, 0.98),
+        (30.0, 1.0),
+    ] {
+        for delta in [r + R, (r - R).abs()] {
+            let k = planet::illum_frac_frm_dist(r, delta, R);
+            assert!((0.0..=1.0).contains(&k), "{r} {delta} {R}: {k}");
+        }
+    }
+}
+
 // Meeus, examples 41.a and 41.c: cos i = 0.29312, i = 72.96°. Before the
 // fix `phase_angl` returned cos i instead of i.
 #[test]

@@ -610,3 +610,33 @@ fn elliptic_motion_is_periodic_and_works_for_ancient_dates() {
     assert_close(v, 0.0, 1e-9);
     assert_close(r, elliptic::perih_dist(a, e), 1e-9);
 }
+
+#[test]
+fn motion_true_anomaly_range_is_the_same_for_every_kind() {
+    // API fix: before the perihelion the elliptic and parabolic motions
+    // gave a negative true anomaly but the near-parabolic one gave a value
+    // above π. All three now use [-π, π].
+    let (q, e) = (0.5871018, 0.9672746);
+    let motions = [
+        Motion::elliptic_frm_perih_time(elliptic::semimaj_axis(q, e), e, 0.0),
+        Motion::Parabolic {
+            perih_dist: q,
+            perih_time: 0.0,
+        },
+        Motion::NearParabolic {
+            perih_dist: q,
+            ecc: e,
+            perih_time: 0.0,
+        },
+    ];
+    for m in motions {
+        for t in [-40.0, -5.0, -1e-3] {
+            let (v, _) = m.true_anom_and_rad_vec(t).unwrap();
+            assert!(v < 0.0 && v > -PI, "{m:?} at {t}: {v}");
+        }
+        for t in [1e-3, 5.0, 40.0] {
+            let (v, _) = m.true_anom_and_rad_vec(t).unwrap();
+            assert!(v > 0.0 && v < PI, "{m:?} at {t}: {v}");
+        }
+    }
+}

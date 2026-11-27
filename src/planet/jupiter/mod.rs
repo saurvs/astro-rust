@@ -129,8 +129,8 @@ pub fn apprnt_pol_semidiameter(jup_earth_dist: f64, earth_lat: f64) -> f64 {
     (a / jup_earth_dist) * (1.0 - k * earth_lat.cos().powi(2)).sqrt()
 }
 
-/// Daily aberration constant used by Meeus for the planets, in degrees
-/// (about 20.49 arcseconds).
+/// The constant of annual aberration (about 20.49″), in degrees, as used
+/// by Meeus for the aberration of the planet in chapters 42, 43 and 45.
 const ABERRATION: f64 = 0.005_693;
 
 /// Holds Jupiter's ephemeris values for physical observations
@@ -253,8 +253,8 @@ pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
     let (nut_in_long, nut_in_oblq) = nutation::nutation(jde);
     let s = compute(
         jde,
-        helio(&planet::Planet::Earth, jde),
-        helio(&planet::Planet::Jupiter, jde),
+        planet::heliocent_coords(&planet::Planet::Earth, jde),
+        planet::heliocent_coords(&planet::Planet::Jupiter, jde),
         crate::ecliptic::mn_oblq_IAU(jde),
         nut_in_long,
         nut_in_oblq,
@@ -295,8 +295,8 @@ pub fn physical_ephemeris(jde: f64) -> PhysicalEphemeris {
 pub fn ephemeris(JD: f64, mn_oblq: f64, nut_in_long: f64, nut_in_oblq: f64) -> Ephemeris {
     let s = compute(
         JD,
-        helio(&planet::Planet::Earth, JD),
-        helio(&planet::Planet::Jupiter, JD),
+        planet::heliocent_coords(&planet::Planet::Earth, JD),
+        planet::heliocent_coords(&planet::Planet::Jupiter, JD),
         mn_oblq,
         nut_in_long,
         nut_in_oblq,
@@ -335,7 +335,7 @@ pub fn physical_ephemeris_low_accuracy(jde: f64) -> LowAccuracyEphemeris {
         illum_central_meridian_i: s.illum_omega1.to_radians(),
         illum_central_meridian_ii: s.illum_omega2.to_radians(),
         phase_angle: s.psi.to_radians(),
-        helio_long: wrap_360(s.lambda).to_radians(),
+        helio_long: angle::limit_to_360(s.lambda).to_radians(),
         earth_dist: s.delta,
         sun_dist: s.r,
         earth_sun_dist: s.R,
@@ -411,8 +411,8 @@ fn compute(
     let dec0 = (64.50 - 0.0164 * T1).to_radians();
 
     // Step 2
-    let w1_deg = wrap_360(17.710 + 877.900_035_39 * d);
-    let w2_deg = wrap_360(16.838 + 870.270_035_39 * d);
+    let w1_deg = angle::limit_to_360(17.710 + 877.900_035_39 * d);
+    let w2_deg = angle::limit_to_360(16.838 + 870.270_035_39 * d);
 
     // Steps 3-5
     let (l0, _, R) = earth;
@@ -452,10 +452,10 @@ fn compute(
     // (...) in radians.
     let phase_corr = ((2.0 * r * delta + R * R - r * r - delta * delta) / (4.0 * r * delta))
         .copysign((l - l0).sin());
-    let omega1 = wrap_two_pi(omega1_deg.to_radians());
-    let omega2 = wrap_two_pi(omega2_deg.to_radians());
-    let illum_omega1 = wrap_two_pi(omega1 + phase_corr);
-    let illum_omega2 = wrap_two_pi(omega2 + phase_corr);
+    let omega1 = angle::limit_to_two_PI(omega1_deg.to_radians());
+    let omega2 = angle::limit_to_two_PI(omega2_deg.to_radians());
+    let illum_omega1 = angle::limit_to_two_PI(omega1 + phase_corr);
+    let illum_omega2 = angle::limit_to_two_PI(omega2 + phase_corr);
 
     // Step 15
     let tru_oblq = mn_oblq + nut_in_oblq;
@@ -493,7 +493,7 @@ fn compute(
     let (asc0_app, dec0_app) = (asc0 + d_asc0, dec0 + d_dec0);
 
     // Step 18, eq. 42.4
-    let p = wrap_two_pi((dec0_app.cos() * (asc0_app - asc_app).sin()).atan2(
+    let p = angle::limit_to_two_PI((dec0_app.cos() * (asc0_app - asc_app).sin()).atan2(
         dec0_app.sin() * dec_app.cos()
             - dec0_app.cos() * dec_app.sin() * (asc0_app - asc_app).cos(),
     ));
@@ -585,18 +585,18 @@ fn compute_low_accuracy(jde: f64) -> LowAccuracySteps {
 
     // central meridians of the geometric disk; Δ/173 is the light-time
     let d_light = d - delta / 173.0;
-    let omega1 = wrap_360(210.98 + 877.816_908_8 * d_light + psi - B);
-    let omega2 = wrap_360(187.23 + 870.186_908_8 * d_light + psi - B);
+    let omega1 = angle::limit_to_360(210.98 + 877.816_908_8 * d_light + psi - B);
+    let omega2 = angle::limit_to_360(187.23 + 870.186_908_8 * d_light + psi - B);
 
     // correction for phase, with the sign opposite to that of sin K
     let phase_corr = (57.3 * sin(psi / 2.0).powi(2)).copysign(-sin(K));
-    let illum_omega1 = wrap_360(omega1 + phase_corr);
-    let illum_omega2 = wrap_360(omega2 + phase_corr);
+    let illum_omega1 = angle::limit_to_360(omega1 + phase_corr);
+    let illum_omega2 = angle::limit_to_360(omega2 + phase_corr);
 
     // heliocentric longitude of Jupiter, equinox of J2000.0
     let lambda = 34.35 + 0.083_091 * d + 0.329 * sin(V) + B;
-    // 3.12° is the inclination of Jupiter's equator to its orbit, 2.22°
-    // that to the ecliptic and 1.30° that of the orbit to the ecliptic
+    // the amplitudes are tilts: equator on orbit (3.12°), equator on
+    // ecliptic (2.22°) and orbit on ecliptic (1.30°)
     let ds = 3.12 * sin(lambda + 42.8);
     let de = ds
         - 2.22 * sin(psi) * cos(lambda + 22.0)
@@ -645,29 +645,6 @@ fn geocentric(earth: (f64, f64, f64), planet: (f64, f64, f64)) -> (f64, f64, f64
     let y = r * b.cos() * l.sin() - R * b0.cos() * l0.sin();
     let z = r * b.sin() - R * b0.sin();
     (x, y, z, (x * x + y * y + z * z).sqrt())
-}
-
-/// The crate's VSOP87 heliocentric coordinates, with the latitude reduced
-/// to `[-π, π)` (`planet::heliocent_coords` has been returning `[0, 2π)`;
-/// only trigonometric functions of it are used here, so this is purely
-/// defensive).
-fn helio(planet: &planet::Planet, jde: f64) -> (f64, f64, f64) {
-    use core::f64::consts::{PI, TAU};
-    let (l, b, r) = planet::heliocent_coords(planet, jde);
-    (l, (b + PI).rem_euclid(TAU) - PI, r)
-}
-
-/// Reduces an angle to `[0, 2π)`.
-fn wrap_two_pi(a: f64) -> f64 {
-    use core::f64::consts::TAU;
-    let x = a.rem_euclid(TAU);
-    if x < TAU { x } else { 0.0 }
-}
-
-/// Reduces an angle in degrees to `[0, 360)`.
-fn wrap_360(a: f64) -> f64 {
-    let x = a.rem_euclid(360.0);
-    if x < 360.0 { x } else { 0.0 }
 }
 
 #[cfg(test)]
@@ -795,13 +772,5 @@ mod tests {
         close_deg(s.lambda, -178.11, 0.005);
         close_val(s.ds, -2.194, 5e-4);
         close_val(s.de, -2.50, 0.005);
-    }
-
-    #[test]
-    fn wrap_ranges() {
-        assert_eq!(wrap_360(-1e-14), 0.0);
-        assert_eq!(wrap_360(360.0), 0.0);
-        assert_eq!(wrap_two_pi(-1e-20), 0.0);
-        close_val(wrap_360(-10.0), 350.0, 1e-12);
     }
 }

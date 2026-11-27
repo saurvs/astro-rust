@@ -79,12 +79,51 @@ fn sgn(x: f64) -> f64 {
     }
 }
 
-/// Splits `angl` into `(r, k)` with `angl = r + 2πk`, `r` in `[-π, π]` and
-/// `k` a whole number
+/// Splits `angl` into `(r, turns)` with `angl = r + turns`, `r` in
+/// `[-π, π]` and `turns` a whole number of revolutions (a multiple of 2π)
+///
+/// The remainder is computed exactly (`%` is exact for `f64`, and the
+/// shift by 2π is exact by Sterbenz's lemma), so `r` stays in `[-π, π]`
+/// however large `angl` is. Rounding `angl / 2π` to an integer `k` and
+/// subtracting `2πk` instead leaves a remainder that is off by about one
+/// ulp of `angl`, i.e. by several radians once `|angl|` exceeds 1e16.
 #[inline]
 fn split_revolutions(angl: f64) -> (f64, f64) {
-    let k = (angl / TAU).round();
-    (angl - k * TAU, k)
+    let mut r = angl % TAU;
+    if r > PI {
+        r -= TAU;
+    } else if r < -PI {
+        r += TAU;
+    }
+    (r, angl - r)
+}
+
+/// `E - e sin(E)` for `0 ≤ E ≤ π`, evaluated without the cancellation of
+/// the direct form when `E` is small and `e` is close to 1
+///
+/// For `E < 1` it is computed as `(1 - e) sin(E) + (E - sin(E))`, with
+/// `E - sin(E)` summed from its Taylor series; both parts are positive, so
+/// the result has a small relative error even when it is far smaller than
+/// `E` (for `e = 1 - 1e-10` and `M = 1e-14`, the direct form loses seven
+/// significant digits of `E`).
+#[inline]
+fn kepler_lhs(E: f64, ecc: f64) -> f64 {
+    if E >= 1.0 {
+        return E - ecc * E.sin();
+    }
+
+    // E - sin(E) = E³/3! - E⁵/5! + E⁷/7! - ...
+    let x2 = E * E;
+    let mut term = E * x2 / 6.0;
+    let mut e_minus_sin = 0.0;
+    let mut n = 3.0;
+    while term.abs() > f64::EPSILON * 1e-3 * e_minus_sin {
+        e_minus_sin += term;
+        term *= -x2 / ((n + 1.0) * (n + 2.0));
+        n += 2.0;
+    }
+
+    (1.0 - ecc) * E.sin() + e_minus_sin
 }
 
 /// Computes the true anomaly of a body in an elliptic orbit from its
@@ -229,7 +268,12 @@ pub fn ecc_anom(mean_anom: f64, ecc: f64, accuracy: f64) -> f64 {
 /// the input
 ///
 /// Same solver as [`ecc_anom`] (bracketed Newton iteration to full `f64`
-/// precision, valid for any `0 ≤ e < 1` and any `M`).
+/// precision, valid for any `0 ≤ e < 1` and any `M`). Close to the
+/// perihelion of a nearly parabolic orbit (`M` near 0, `e` near 1) the
+/// function `E - e sin(E)` is evaluated in a form free of cancellation, so
+/// `E` keeps its full relative precision there too. For a mean anomaly of
+/// many revolutions the reduction to `[-π, π]` is exact; the result is then
+/// limited only by the precision of `mean_anom` itself.
 ///
 /// # Returns
 ///
@@ -264,10 +308,10 @@ pub fn ecc_anom_checked(mean_anom: f64, ecc: f64) -> Option<f64> {
 
     // Kepler's equation is odd and 2π-periodic in the sense that
     // E(M + 2πk) = E(M) + 2πk and E(-M) = -E(M), so solve for M in [0, π].
-    let (r, k) = split_revolutions(mean_anom);
+    let (r, turns) = split_revolutions(mean_anom);
     let (sign, m) = if r < 0.0 { (-1.0, -r) } else { (1.0, r) };
     if m == 0.0 {
-        return Some(k * TAU);
+        return Some(turns);
     }
 
     // f(E) = E - e sin(E) - m is increasing, and f(m) ≤ 0 ≤ f(min(m + e, π)),
@@ -275,10 +319,10 @@ pub fn ecc_anom_checked(mean_anom: f64, ecc: f64) -> Option<f64> {
     let mut lo = m;
     let mut hi = (m + ecc).min(PI);
     // Starting value suggested by Danby, kept inside the bracket.
-    let mut E = (m + 0.85 * ecc).clamp(lo, hi);
+    let mut E = (m + 0.85 * ecc).min(hi).max(lo);
 
     for _ in 0..200 {
-        let f = E - ecc * E.sin() - m;
+        let f = kepler_lhs(E, ecc) - m;
         if f == 0.0 {
             break;
         }
@@ -288,7 +332,11 @@ pub fn ecc_anom_checked(mean_anom: f64, ecc: f64) -> Option<f64> {
             hi = E;
         }
 
-        let newton = E - f / (1.0 - ecc * E.cos());
+        // f'(E) = 1 - e cos(E), written so that it keeps its precision
+        // near E = 0 when e is close to 1
+        let half_sin = (0.5 * E).sin();
+        let deriv = (1.0 - ecc) + 2.0 * ecc * half_sin * half_sin;
+        let newton = E - f / deriv;
         let next = if newton > lo && newton < hi {
             newton
         } else {
@@ -302,7 +350,7 @@ pub fn ecc_anom_checked(mean_anom: f64, ecc: f64) -> Option<f64> {
         }
     }
 
-    Some(sign * E + k * TAU)
+    Some(sign * E + turns)
 }
 
 /// Computes one step of the fixed-point iteration for Kepler's equation
@@ -474,7 +522,11 @@ pub fn ecc_anom_newton(
 /// the mean anomaly is reduced to `[0, π]` using the symmetries of the
 /// equation, and `E` is found by halving an interval of `[0, π]` 53 times
 /// (one step per bit of an `f64` mantissa). It cannot fail for any
-/// `0 ≤ e < 1`, and gives `E` to about `1e-15` radians.
+/// `0 ≤ e < 1`, and gives `E` to about `1e-15` radians, except very close
+/// to the perihelion of a nearly parabolic orbit: there `E - e sin(E)` is
+/// evaluated as in the book, with a cancellation that limits the result to
+/// about `1e-13` radians for `e = 0.999999` and `1e-11` radians for
+/// `e = 1 - 1e-12` ([`ecc_anom_checked`] avoids it).
 ///
 /// # Returns
 ///
@@ -491,7 +543,7 @@ pub fn ecc_anom_binary_search(mean_anom: f64, ecc: f64) -> Option<f64> {
         return None;
     }
 
-    let (r, k) = split_revolutions(mean_anom);
+    let (r, turns) = split_revolutions(mean_anom);
     let (sign, m) = if r < 0.0 { (-1.0, -r) } else { (1.0, r) };
 
     let mut E = PI / 2.0;
@@ -502,7 +554,7 @@ pub fn ecc_anom_binary_search(mean_anom: f64, ecc: f64) -> Option<f64> {
         d /= 2.0;
     }
 
-    Some(sign * E + k * TAU)
+    Some(sign * E + turns)
 }
 
 /// Computes an approximate eccentric anomaly for a small eccentricity

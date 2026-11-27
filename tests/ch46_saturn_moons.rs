@@ -37,9 +37,11 @@ fn satellites_example_46a() {
     ];
     let y = [-0.204, 0.318, -1.061, -1.148, -3.123, 4.738, -5.328, 4.136];
     // The book prints three decimals. For Iapetus the book's run used the
-    // opposite sign for the term 0.00650 sin(u5 + ψ) of λ'; with the printed
-    // (and consistent) sign X and Y are −48.7604 and 4.1372. See the
-    // comments in the source and progress/G2.md.
+    // opposite sign for the term 0.00650 sin(u5 + ψ) of λ'; the code keeps
+    // the printed (and geometrically consistent) "+", with which X and Y
+    // are −48.7604 and 4.1372, as an independent Go implementation
+    // (soniakeys/meeus) also finds. See the comment in `iapetus()` in
+    // src/planet/saturn/moon.rs.
     let tol = [5e-4, 5e-4, 5e-4, 5e-4, 5e-4, 5e-4, 5e-4, 2e-3];
 
     let p = moon::positions(JDE_46);
@@ -203,6 +205,29 @@ fn far_dates_are_finite() {
         let p = moon::positions(jde);
         for s in p.moons.iter() {
             assert!(s.x.is_finite() && s.y.is_finite() && s.z.is_finite());
+        }
+    }
+}
+
+// Bad input must propagate as NaN, not panic or come out finite. Before
+// the fix the inclination of satellites V-VIII came out as exactly 90°.
+#[test]
+fn nan_and_infinite_dates() {
+    for jde in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+        let p = moon::positions(jde);
+        assert!(p.light_time.is_nan() && p.earth_dist.is_nan());
+        for m in Moon::ALL {
+            let s = p.moon(m);
+            assert!(s.x.is_nan() && s.y.is_nan() && s.z.is_nan(), "{m:?}");
+            assert!(s.longitude.is_nan() && s.node.is_nan(), "{m:?}");
+            // Tethys moves on a circle of fixed radius
+            if m != Moon::Tethys {
+                assert!(s.radius.is_nan(), "{m:?}");
+            }
+            // satellites I-IV have constant inclinations in this theory
+            if m.number() >= 5 {
+                assert!(s.inclination.is_nan(), "{m:?}: {}", s.inclination);
+            }
         }
     }
 }

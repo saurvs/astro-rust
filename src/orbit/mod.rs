@@ -537,8 +537,9 @@ impl Motion {
     ///
     /// # Returns
     ///
-    /// * `Some((true_anom, rad_vec))`: True anomaly *| in radians* and
-    ///   radius vector *| in AU*
+    /// * `Some((true_anom, rad_vec))`: True anomaly *| in radians*, in
+    ///   `[-π, π]` for every kind of motion (negative before the
+    ///   perihelion, positive after it), and radius vector *| in AU*
     /// * `None` if the elements are invalid (non-positive distance,
     ///   eccentricity out of range for the kind of motion, non-finite
     ///   values) or, for [`Motion::NearParabolic`], if Landgraf's method
@@ -584,6 +585,9 @@ impl Motion {
                 let (v, r) =
                     near_parabolic::true_anom_and_rad_vec(JD, perih_time, ecc, perih_dist, 1e-10)
                         .ok()?;
+                // Landgraf's method gives v in [0, 2π); use the same signed
+                // range as the elliptic and parabolic motions.
+                let v = if v > PI { v - TAU } else { v };
                 (v.is_finite() && r.is_finite()).then_some((v, r))
             }
         }

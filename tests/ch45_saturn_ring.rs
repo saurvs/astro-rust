@@ -72,6 +72,43 @@ fn example_45a_ring_plane() {
     assert_close(ring::ascend_node(0.0).to_degrees(), 169.508_47, 1e-12);
 }
 
+// Eq. 45.1 far from J2000.0, where the T² terms matter. The book prints
+// i = 28.075216° − 0.012998° T + 0.000004° T²; the code had −0.000004° T².
+// As an independent check, Dourneau's B1950.0 pole of the ring plane
+// (i = 28.0817°, Ω = 168.8112°) is precessed to the ecliptic of date with
+// the crate's chapter 21 rigorous method: eq. 45.1 follows it to 1.1e-4° at
+// T = ±10 (the wrong sign was off by 7e-4° and 9e-4°).
+#[test]
+fn ring_plane_far_from_j2000() {
+    for T in [-10.0_f64, 10.0] {
+        assert_close(
+            ring::inc(T).to_degrees(),
+            28.075_216 - 0.012_998 * T + 0.000_004 * T * T,
+            1e-9,
+        );
+        assert_close(
+            ring::ascend_node(T).to_degrees(),
+            169.508_47 + 1.394_681 * T + 0.000_412 * T * T,
+            1e-9,
+        );
+
+        let pole_long = (168.8112_f64 - 90.0).to_radians();
+        let pole_lat = (90.0_f64 - 28.0817).to_radians();
+        let (l, b) = precess::precess_ecl_coords(
+            pole_long,
+            pole_lat,
+            precess::jd_frm_besselian_epoch(1950.0),
+            2_451_545.0 + 36_525.0 * T,
+        );
+        assert_close(ring::inc(T).to_degrees(), 90.0 - b.to_degrees(), 2e-4);
+        assert_close_deg(
+            ring::ascend_node(T).to_degrees(),
+            l.to_degrees() + 90.0,
+            1e-3,
+        );
+    }
+}
+
 // The axes of the other ring edges are fixed fractions of those of the
 // outer edge (Meeus, ch. 45, step 6).
 #[test]

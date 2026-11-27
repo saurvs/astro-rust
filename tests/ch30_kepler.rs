@@ -573,3 +573,75 @@ fn ecc_anom_for_large_mean_anomalies() {
         }
     }
 }
+
+/// `E - e sin(E)` evaluated without cancellation, for checking solutions
+/// very close to the perihelion of a nearly parabolic orbit: written as
+/// `(1 - e) sin(E) + (E - sin(E))`, the last part from its Taylor series.
+fn accurate_mean_anom(E: f64, e: f64) -> f64 {
+    assert!(E.abs() < 0.5);
+    let x2 = E * E;
+    let (mut term, mut sum) = (E * x2 / 6.0, 0.0);
+    for n in (3..60).step_by(2) {
+        sum += term;
+        let n = n as f64;
+        term *= -x2 / ((n + 1.0) * (n + 2.0));
+    }
+    (1.0 - e) * E.sin() + sum
+}
+
+#[test]
+fn ecc_anom_full_precision_close_to_parabolic() {
+    // Bug fix: f(E) = E - e sin(E) - M was evaluated directly, which loses
+    // most of its digits when E is small and e close to 1 (E and e sin(E)
+    // nearly cancel). For e = 1 - 1e-10 and M = 1e-14 the eccentric anomaly
+    // was wrong by 1e-7 of its value although the docs promise full f64
+    // precision for any e < 1.
+    for &e in &[0.9999, 1.0 - 1e-6, 1.0 - 1e-8, 1.0 - 1e-10, 1.0 - 1e-12] {
+        for &M in &[1e-14, 1e-12, 1e-10, 1e-8, 1e-6, 1e-4, 1e-3] {
+            let E = elliptic::ecc_anom_checked(M, e).unwrap();
+            let rel = (accurate_mean_anom(E, e) - M) / M;
+            assert!(
+                rel.abs() < 1e-14,
+                "e = {e}, M = {M}: relative residual {rel:e}"
+            );
+            let E_neg = elliptic::ecc_anom_checked(-M, e).unwrap();
+            assert_eq!(E_neg, -E);
+        }
+    }
+}
+
+#[test]
+fn ecc_anom_huge_mean_anomaly_does_not_panic() {
+    // Bug fix: the mean anomaly was reduced with M - round(M / 2π) 2π,
+    // which for |M| above about 1e16 left a remainder outside [-π, π]; the
+    // bracket of the root was then empty and `f64::clamp` panicked (for
+    // example M = 1e16 or 1e18 with e = 0.5).
+    for &M in &[
+        1e15,
+        1e16,
+        1e18,
+        1e20,
+        -1e16,
+        -1e18,
+        1e300,
+        f64::MAX,
+        -f64::MAX,
+    ] {
+        for &e in &[0.0, 0.5, 0.999] {
+            let E = elliptic::ecc_anom_checked(M, e).unwrap();
+            assert!(E.is_finite());
+            // one ulp of M is far larger than the e sin(E) term
+            assert!((E - M).abs() <= e + 2.0 * f64::EPSILON * M.abs(), "M = {M}");
+            let bs = elliptic::ecc_anom_binary_search(M, e).unwrap();
+            assert!(
+                (bs - M).abs() <= e + 2.0 * f64::EPSILON * M.abs(),
+                "M = {M}"
+            );
+        }
+    }
+    // the reduction is exact: 2π-shifts of a moderately large M still give
+    // the same eccentric anomaly to within the precision of M itself
+    let (M, e) = (1e12 + 0.3, 0.7);
+    let E = elliptic::ecc_anom_checked(M, e).unwrap();
+    assert!(residual(E, M, e).abs() <= 2.0 * f64::EPSILON * M);
+}

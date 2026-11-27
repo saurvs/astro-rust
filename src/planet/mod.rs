@@ -62,6 +62,7 @@ pub mod mars;
 pub mod phenomena;
 pub mod saturn;
 
+use crate::aberr;
 use crate::angle;
 use crate::coords;
 use crate::ecliptic;
@@ -116,7 +117,9 @@ pub fn illum_frac_frm_phase_angl(i: f64) -> f64 {
 ///
 /// # Returns
 ///
-/// * `illum_frac`: Illuminated fraction of the planet's disk
+/// * `illum_frac`: Illuminated fraction of the planet's disk, in `[0, 1]`
+///   (clamped: when the planet is close to opposition or to superior
+///   conjunction, rounding can otherwise put it just above 1)
 ///
 /// # Arguments
 ///
@@ -127,7 +130,7 @@ pub fn illum_frac_frm_phase_angl(i: f64) -> f64 {
 pub fn illum_frac_frm_dist(r: f64, delta: f64, R: f64) -> f64 {
     let x = r + delta;
 
-    (x * x - R * R) / (4.0 * r * delta)
+    ((x * x - R * R) / (4.0 * r * delta)).clamp(0.0, 1.0)
 }
 
 /// Computes a planet's phase angle from its distances to the Sun and the
@@ -964,23 +967,6 @@ impl GeocentPos {
     }
 }
 
-/// Annual aberration in ecliptic coordinates (Meeus, eq. 23.2), including
-/// the terms in the eccentricity of the Earth's orbit.
-///
-/// `sun_long` is the Sun's true geometric longitude; returns
-/// `(Δλ, Δβ)` *| in radians*.
-fn ecl_aberr(long: f64, lat: f64, sun_long: f64, JD: f64) -> (f64, f64) {
-    let t = time::julian_cent(JD);
-    let kappa = angle::deg_frm_dms(0, 0, 20.49552).to_radians();
-    let e = 0.016708634 - t * (0.000042037 + t * 0.0000001267);
-    let perih = (102.93735 + t * (1.71946 + t * 0.00046)).to_radians();
-
-    let d_long = kappa * (-(sun_long - long).cos() + e * (perih - long).cos()) / lat.cos();
-    let d_lat = -kappa * lat.sin() * ((sun_long - long).sin() - e * (perih - long).sin());
-
-    (d_long, d_lat)
-}
-
 /// Computes a planet's apparent geocentric position
 ///
 /// Follows the first method of Meeus, *Astronomical Algorithms*, 2nd ed.,
@@ -1045,9 +1031,10 @@ pub fn geocent_apprnt_pos(planet: &Planet, JD: f64) -> Option<GeocentPos> {
     let (lt_long, lt_lat) = ecl_coords_frm_ecl_rect_coords(rect.0, rect.1, rect.2);
     let dist = dist_frm_ecl_rect_coords(rect.0, rect.1, rect.2);
 
-    // Aberration, with the Sun's geometric longitude (VSOP87 frame).
+    // Annual aberration (eq. 23.2, with the eccentricity terms), using the
+    // Sun's geometric longitude in the VSOP87 frame.
     let sun_long = L0 + std::f64::consts::PI;
-    let (d_long, d_lat) = ecl_aberr(lt_long, lt_lat, sun_long, JD);
+    let (d_long, d_lat) = aberr::annual_aberr_in_ecl_coords(lt_long, lt_lat, sun_long, JD);
 
     // FK5, then nutation in longitude.
     let (long_fk5, lat_fk5) = ecl_coords_to_FK5(JD, lt_long + d_long, lt_lat + d_lat);
@@ -1061,10 +1048,8 @@ pub fn geocent_apprnt_pos(planet: &Planet, JD: f64) -> Option<GeocentPos> {
     let apprnt_dec = coords::dec_frm_ecl(apprnt_long, apprnt_lat, true_oblq);
 
     // Sun's apparent longitude: FK5 offset, aberration, nutation.
-    let sun_apprnt_long = sun_long
-        - angle::deg_frm_dms(0, 0, 0.09033).to_radians()
-        - angle::deg_frm_dms(0, 0, 20.4898).to_radians() / R0
-        + nut_long;
+    let sun_apprnt_long =
+        sun_long - angle::deg_frm_dms(0, 0, 0.09033).to_radians() + aberr::sol_aberr(R0) + nut_long;
     let cos_elong = apprnt_lat.cos() * (apprnt_long - sun_apprnt_long).cos();
 
     Some(GeocentPos {

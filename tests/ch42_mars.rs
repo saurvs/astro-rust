@@ -89,6 +89,13 @@ fn example_42a_north_pole() {
     let pole = planet::mars::north_pol_ecl_coords(0.0);
     assert_close(pole.long.to_degrees(), 352.9065, 1e-12);
     assert_close(pole.lat.to_degrees(), 63.2818, 1e-12);
+
+    // The longitude passes 360° about A.D. 2600; it is reduced to [0, 2π).
+    for T in [-20.0, 6.0, 10.0, 20.0] {
+        let pole = planet::mars::north_pol_ecl_coords(T);
+        assert!((0.0..TAU).contains(&pole.long), "{T}: {}", pole.long);
+        assert_close_deg(pole.long.to_degrees(), 352.9065 + 1.1733 * T, 1e-9);
+    }
 }
 
 // The ecliptic pole of eq. 42.1 must agree with the IAU J2000.0 equatorial

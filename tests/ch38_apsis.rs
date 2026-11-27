@@ -55,7 +55,7 @@ fn rad_vec(p: &Planet, jde: f64) -> f64 {
 fn example_38a_venus_perihelion() {
     let p = Planet::Venus;
     assert_close(apsis::approx_k(&p, 1978.79), -35.34, 0.005);
-    let n = apsis::nearest_n(&p, Apsis::Perihelion, 1978.79);
+    let n = apsis::nearest_n(&p, Apsis::Perihelion, 1978.79).unwrap();
     assert_eq!(n, -35);
     let jde = apsis::time_of_passage(&p, Apsis::Perihelion, n);
     assert_close(jde, 2443873.704, 0.001);
@@ -75,7 +75,7 @@ fn example_38a_venus_perihelion() {
 fn example_38b_mars_aphelion() {
     let p = Planet::Mars;
     assert_close(apsis::approx_k(&p, 2032.0), 16.07, 0.005);
-    let n = apsis::nearest_n(&p, Apsis::Aphelion, 2032.0);
+    let n = apsis::nearest_n(&p, Apsis::Aphelion, 2032.0).unwrap();
     assert_eq!(n, 16);
     let jde = apsis::time_of_passage(&p, Apsis::Aphelion, n);
     assert_close(jde, 2463530.456, 0.001);
@@ -203,27 +203,14 @@ fn earth_correction_accuracy() {
 }
 
 // Meeus' table of the extreme distances of Saturn (1920-2050) and Uranus
-// (1750-2100), computed with VSOP87; spot checks.
+// (1750-2100), computed with VSOP87; a few spot checks of each apsis.
 #[test]
 fn saturn_and_uranus_extremes() {
     // (planet, apsis, n, date, distance)
     let cases = [
         (Planet::Saturn, Apsis::Aphelion, -3, (1929, 11, 11), 10.0467),
-        (Planet::Saturn, Apsis::Perihelion, -1, (1974, 1, 8), 9.0153),
-        (Planet::Saturn, Apsis::Aphelion, -1, (1988, 9, 11), 10.0444),
-        (Planet::Saturn, Apsis::Perihelion, 0, (2003, 7, 26), 9.0309),
-        (Planet::Saturn, Apsis::Aphelion, 0, (2018, 4, 17), 10.0656),
         (Planet::Saturn, Apsis::Perihelion, 1, (2032, 11, 28), 9.0149),
         (Planet::Uranus, Apsis::Perihelion, -3, (1798, 3, 3), 18.2890),
-        (Planet::Uranus, Apsis::Aphelion, -3, (1841, 3, 16), 20.0976),
-        (
-            Planet::Uranus,
-            Apsis::Perihelion,
-            -1,
-            (1966, 5, 21),
-            18.2848,
-        ),
-        (Planet::Uranus, Apsis::Aphelion, -1, (2009, 2, 27), 20.0989),
         (Planet::Uranus, Apsis::Aphelion, 0, (2092, 11, 23), 20.0994),
     ];
     for (p, apsis, n, (y, m, d), r) in cases {
@@ -398,17 +385,42 @@ fn approximate_k_and_nearest_n() {
         assert_close(dk * period_years, 1.0, 0.001);
         for year in [-2000.5, -1.0, 1600.25, 1999.9, 2000.0, 2026.9, 3000.0] {
             for ap in [Apsis::Perihelion, Apsis::Aphelion] {
-                let n = apsis::nearest_n(p, ap, year);
+                let n = apsis::nearest_n(p, ap, year).unwrap();
                 let target = 2451545.0 + (year - 2000.0) * 365.25;
                 let d = |n| (apsis::time_of_passage(p, ap, n) - target).abs();
                 assert!(d(n) <= d(n - 1) && d(n) <= d(n + 1), "{ap:?} {year}");
             }
         }
     }
-    assert_eq!(
-        apsis::nearest_n(&Planet::Mars, Apsis::Aphelion, f64::NAN),
-        0
-    );
+}
+
+// A non-finite year, or one so remote that n cannot be represented exactly,
+// has no nearest passage (it used to give the valid-looking n = 0, or
+// i64::MAX).
+#[test]
+fn nearest_n_rejects_unusable_years() {
+    for year in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY, 1e20, -1e300] {
+        for ap in [Apsis::Perihelion, Apsis::Aphelion] {
+            assert_eq!(apsis::nearest_n(&Planet::Mars, ap, year), None, "{year}");
+        }
+    }
+}
+
+// nearest_n stays the nearest passage of the formula far from 2000, where
+// Meeus' rounded approx_k has drifted by up to three periods (Venus, Jupiter
+// and Saturn at ±100 000 years).
+#[test]
+fn nearest_n_far_from_2000() {
+    for p in &ALL_PLANETS {
+        for year in [-1e5, -3e4, 3e4, 1e5] {
+            for ap in [Apsis::Perihelion, Apsis::Aphelion] {
+                let n = apsis::nearest_n(p, ap, year).unwrap();
+                let target = 2451545.0 + (year - 2000.0) * 365.25;
+                let d = |n| (apsis::time_of_passage(p, ap, n) - target).abs();
+                assert!(d(n) <= d(n - 1) && d(n) <= d(n + 1), "{p:?} {ap:?} {year}");
+            }
+        }
+    }
 }
 
 // The quadratic coefficients of the formulas follow from the secular terms

@@ -189,10 +189,11 @@ fn rect_coords_and_light_time_example_33a() {
 }
 
 // Meeus, example 33.a: aberration of Venus by eq. 23.2, with the Sun's
-// longitude L0 + 180° = 268.35704°.
+// longitude L0 + 180° = 268.35704°. `geocent_apprnt_pos` uses
+// `aberr::annual_aberr_in_ecl_coords` for this step.
 #[test]
 fn ecl_aberr_example_33a() {
-    let (d_long, d_lat) = ecl_aberr(
+    let (d_long, d_lat) = crate::aberr::annual_aberr_in_ecl_coords(
         313.08102_f64.to_radians(),
         -2.08474_f64.to_radians(),
         268.35704_f64.to_radians(),
