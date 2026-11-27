@@ -1047,7 +1047,7 @@ fn solar_equator_inclination() -> f64 {
     7.25_f64.to_radians()
 }
 
-/// Return quantites used in the ephemeris for physical observations of
+/// Computes the quantities used in the ephemeris for physical observations of
 /// the Sun, from given solar coordinates (Meeus, chapter 29)
 ///
 /// Carrington's elements are used: sidereal rotation period 25.38 days,
@@ -1071,10 +1071,10 @@ fn solar_equator_inclination() -> f64 {
 ///
 /// * `JD`      : Julian Ephemeris Day
 /// * `app_long`: Apparent longitude of the Sun *| in radians*,
-///   including the effect of abberation and *not* that
+///   including the effect of aberration and *not* that
 ///   of nutation
 /// * `app_long_with_nut`: Apparent longitude of the Sun *| in radians*,
-///   including the effect of abberation *and* that
+///   including the effect of aberration *and* that
 ///   of nutation
 /// * `oblq_eclip`: True obliquity of the ecliptic *| in radians*
 pub fn ephemeris(

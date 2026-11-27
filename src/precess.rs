@@ -374,8 +374,11 @@ pub fn precess_eq_coords_newcomb(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64)
 /// * `old_dec`: Declination in the old epoch *| in radians*, FK4
 /// * `JD1`    : Julian (Ephemeris) day corresponding to the old epoch
 /// * `JD2`    : Julian (Ephemeris) day corresponding to the new epoch
-#[deprecated(note = "this uses Newcomb's FK4 precession despite its name; use \
-            `precess_eq_coords_newcomb` (FK4) or `precess_eq_coords` (FK5)")]
+#[deprecated(
+    since = "3.0.0",
+    note = "this uses Newcomb's FK4 precession despite its name; use \
+            `precess_eq_coords_newcomb` (FK4) or `precess_eq_coords` (FK5)"
+)]
 pub fn precess_eq_coords_FK5(old_asc: f64, old_dec: f64, JD1: f64, JD2: f64) -> (f64, f64) {
     precess_eq_coords_newcomb(old_asc, old_dec, JD1, JD2)
 }

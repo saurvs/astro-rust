@@ -287,8 +287,11 @@ pub fn eq_coords_frm_motion(
 ///   time*
 /// * `ecl_lat`: Ecliptic latitude of the star *| in radians*
 /// * `oblq_eclip`: Obliquity of the ecliptic *| in radians*
-#[deprecated(note = "converts to ecliptical, not equatorial, coordinates; use \
-            `precess::proper_motion_in_ecl_coords`")]
+#[deprecated(
+    since = "3.0.0",
+    note = "converts to ecliptical, not equatorial, coordinates; use \
+            `precess::proper_motion_in_ecl_coords`"
+)]
 pub fn proper_motion_in_eq_coords(
     asc: f64,
     dec: f64,

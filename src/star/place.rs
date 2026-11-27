@@ -2,10 +2,10 @@
 //! chapter 23)
 
 use crate::aberr;
-use crate::coords;
 use crate::ecliptic;
 use crate::nutation;
 use crate::precess;
+use crate::sun;
 use std::f64::consts::{PI, TAU};
 
 #[inline]
@@ -46,11 +46,15 @@ pub struct MeanPlace {
 /// Method used for the annual aberration in [`apparent_place`]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum AberrMethod {
-    /// Ron–Vondrák expression (Meeus, eq. 23.4 and Table 23.A), applied
-    /// in the J2000.0 frame before precession. The more accurate method.
+    /// The Earth's velocity relative to the barycentre of the solar system
+    /// from the Ron–Vondrák expression (Meeus, Table 23.A, eq. 23.4),
+    /// applied in the J2000.0 frame before precession. The more accurate
+    /// method.
     RonVondrak,
-    /// Classical formulae (Meeus, eq. 23.3), applied to the mean place of
-    /// the date, with a low accuracy longitude of the Sun.
+    /// The Earth's velocity in an unperturbed elliptical orbit, as in the
+    /// classical formulae (Meeus, eqs. 23.2 and 23.3, with the E-terms),
+    /// applied to the mean place of the date, with a low accuracy longitude
+    /// of the Sun.
     Classical,
 }
 
@@ -66,10 +70,11 @@ pub struct ApparentPlace {
     /// Declination at the date after proper motion, still referred to the
     /// catalogue equinox
     pub dec_pm: f64,
-    /// Annual aberration in right ascension. With
-    /// [`AberrMethod::Classical`] it is computed at the mean place of the
-    /// date; with [`AberrMethod::RonVondrak`] in the J2000.0 frame, before
-    /// precession.
+    /// Annual aberration in right ascension: the change it makes to the
+    /// right ascension, in `(−π, π]` (it can be large very close to a
+    /// pole). With [`AberrMethod::Classical`] it is computed at the mean
+    /// place of the date; with [`AberrMethod::RonVondrak`] in the J2000.0
+    /// frame, before precession.
     pub aberr_asc: f64,
     /// Annual aberration in declination (see `aberr_asc`)
     pub aberr_dec: f64,
@@ -108,13 +113,20 @@ pub struct ApparentPlace {
 /// 1. proper motion, assumed uniform in right ascension and declination
 ///    (chapter 21);
 /// 2. precession with the IAU 1976 expressions (eqs. 21.2 and 21.4) and
-///    annual aberration, either with the Ron–Vondrák expression in the
-///    J2000.0 frame before precessing, or with the classical formulae
+///    annual aberration, either with the Ron–Vondrák velocity of the Earth
+///    in the J2000.0 frame before precessing, or with the classical one
 ///    after precessing (see [`AberrMethod`]);
 /// 3. nutation (IAU 1980, Table 22.A), applied as a rotation of the
 ///    coordinates (see
-///    [`nutation::nutate_eq_coords`](crate::nutation::nutate_eq_coords))
-///    so that stars close to the celestial poles are handled too.
+///    [`nutation::nutate_eq_coords`](crate::nutation::nutate_eq_coords)).
+///
+/// The aberration displaces the unit vector of the star by the Earth's
+/// velocity divided by the speed of light. To first order this is what
+/// eqs. 23.3 and 23.4 express in right ascension and declination, but it
+/// has no `1/cos δ`, so that, with the nutation applied as a rotation,
+/// stars at and near the celestial poles are reduced correctly. (Adding
+/// the first-order corrections to α and δ, as the book does, differs from
+/// this by second-order terms, about 0.001″ for θ Persei.)
 ///
 /// As in Meeus, the annual parallax and the deflection of light by the
 /// Sun are neglected (they are below 0.8″, and below 0.03″ more than 15°
@@ -157,32 +169,41 @@ pub fn apparent_place(star: &MeanPlace, JD: f64, method: AberrMethod) -> Apparen
     let (nut_in_long, nut_in_oblq) = nutation::nutation(JD);
     let mn_oblq = ecliptic::mn_oblq_IAU(JD);
 
+    // The aberration is applied as a displacement of the unit vector by the
+    // Earth's velocity (in units of the speed of light), which agrees with
+    // eqs. 23.3 and 23.4 to first order but, unlike them, has no 1/cos(dec)
+    // and so also holds at the celestial poles.
     let (asc_mean, dec_mean, aberr_asc, aberr_dec, asc_ab, dec_ab) = match method {
         AberrMethod::Classical => {
             let (asc, dec) = precess::precess_eq_coords(asc_pm, dec_pm, star.epoch, JD);
-            let sun = aberr::sun_geom_long_low_accuracy(JD);
-            let (d_asc, d_dec) = aberr::annual_aberr_in_eq_coords(asc, dec, sun, mn_oblq, JD);
+            let sun = sun::low_accuracy_position(JD).true_longitude;
+            // Velocity in the ecliptic frame of the date (no z component),
+            // turned into the mean equatorial frame of the date
+            let [vx, vy, _] = aberr::earth_vel_classical(sun, JD);
+            let v = [vx, vy * mn_oblq.cos(), vy * mn_oblq.sin()];
+            let (asc_ab, dec_ab) = aberr::aberrate(asc, dec, v);
 
-            (asc, dec, d_asc, d_dec, asc + d_asc, dec + d_dec)
+            (
+                asc,
+                dec,
+                wrap_pi(asc_ab - asc),
+                dec_ab - dec,
+                asc_ab,
+                dec_ab,
+            )
         }
         AberrMethod::RonVondrak => {
             // The Earth's velocity is given in the J2000.0 frame
             let (asc0, dec0) =
                 precess::precess_eq_coords(asc_pm, dec_pm, star.epoch, precess::J2000);
-            let (d_asc, d_dec) = aberr::stell_aberr_in_eq_coords(
-                &coords::EqPoint {
-                    asc: asc0,
-                    dec: dec0,
-                },
-                JD,
-            );
-            let (asc, dec) =
-                precess::precess_eq_coords(asc0 + d_asc, dec0 + d_dec, precess::J2000, JD);
+            let (x, y, z) = aberr::earth_bary_vel(JD);
+            let c = aberr::LIGHT_SPEED_AU_PER_DAY;
+            let (asc1, dec1) = aberr::aberrate(asc0, dec0, [x / c, y / c, z / c]);
+            let (asc, dec) = precess::precess_eq_coords(asc1, dec1, precess::J2000, JD);
 
-            (asc, dec, d_asc, d_dec, asc, dec)
+            (asc, dec, wrap_pi(asc1 - asc0), dec1 - dec0, asc, dec)
         }
     };
-
     let (asc, dec) = nutation::nutate_eq_coords(asc_ab, dec_ab, nut_in_long, nut_in_oblq, mn_oblq);
 
     ApparentPlace {

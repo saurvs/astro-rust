@@ -43,7 +43,7 @@ THE SOFTWARE.
 //!   [`Observer::from_degrees_east`] to avoid sign mistakes.
 //! * Times are Julian Days in UT (`jd_ut`) unless the argument is called
 //!   `jde` (Julian Ephemeris Day, Dynamical Time). Conversions between the two
-//!   use the crate's ΔT model, [`time::delta_t`].
+//!   use the crate's ΔT model, [`time::delta_t_from_decimal_year`].
 //! * Azimuths are given both in Meeus' convention (measured westward from the
 //!   south) and in the compass convention (measured eastward from the north).
 //!
@@ -112,7 +112,6 @@ use crate::{aberr, atmos};
 use std::f64::consts::{PI, TAU};
 
 const DEG: f64 = PI / 180.0;
-const ARCSEC: f64 = DEG / 3600.0;
 
 /// The astronomical unit in kilometres (IAU 2012).
 const AU_KM: f64 = 149_597_870.7;
@@ -313,14 +312,16 @@ pub enum HorizonStatus {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct RiseTransitSet {
     /// Julian Day (UT) at which the body rose above the altitude, if it did
-    /// during the day. For a twilight horizon this is dawn.
+    /// during the day (the first time, if it rose twice). For a twilight
+    /// horizon this is dawn.
     pub rise: Option<f64>,
     /// Julian Day (UT) of the upper transit (culmination across the local
-    /// meridian), if it happened during the day. Circumpolar bodies transit
-    /// too.
+    /// meridian), if it happened during the day (the first, if there were
+    /// two). Circumpolar bodies transit too.
     pub transit: Option<f64>,
     /// Julian Day (UT) at which the body set below the altitude, if it did
-    /// during the day. For a twilight horizon this is dusk.
+    /// during the day (the first time, if it set twice). For a twilight
+    /// horizon this is dusk.
     pub set: Option<f64>,
     /// Whether the body crossed the altitude, or stayed above or below it
     /// all day
@@ -368,7 +369,8 @@ pub fn geocentric_apparent_position(body: Body, jde: f64) -> ApparentPosition {
 /// the body ([`geocentric_apparent_position`]) at `jd_ut + ΔT`, the apparent
 /// sidereal time at Greenwich (Meeus, ch. 12), the topocentric correction
 /// for parallax (ch. 40), the local horizontal coordinates (ch. 13) and the
-/// atmospheric refraction (ch. 16). ΔT comes from [`time::delta_t`]; to use
+/// atmospheric refraction (ch. 16). ΔT comes from
+/// [`time::delta_t_from_decimal_year`]; to use
 /// your own value, call [`geocentric_apparent_position`] and
 /// [`topocentric_from_geocentric`] directly.
 ///
@@ -486,8 +488,7 @@ pub fn refracted_altitude(true_alt: f64, pressure: f64, temperature: f64) -> f64
         return true_alt;
     }
     let refraction = atmos::refrac_frm_true_alt(true_alt)
-        * atmos::refrac_by_pressr(pressure)
-        * atmos::refrac_by_temp(temperature + 273.15);
+        * atmos::refrac_pressr_temp_factor(pressure, temperature);
 
     true_alt + refraction.max(0.0)
 }
@@ -522,8 +523,12 @@ pub fn refracted_altitude(true_alt: f64, pressure: f64, temperature: f64) -> f64
 /// `[jd_start, jd_start + 1)`, each `None` if it did not happen then, and a
 /// status telling whether the body stayed above or below the altitude all
 /// day. Consecutive windows share no events, so iterating over days finds
-/// every event exactly once. Non-finite inputs give no events (and an
-/// unspecified status) rather than a panic.
+/// each event at most once. A star or a planet keeps sidereal time, about
+/// 4 minutes a day ahead of solar time, so about once a year it rises (and
+/// transits, and sets) twice within one window, a few minutes after the
+/// start and a few minutes before the end; only the first is reported, and
+/// the second is not reported in the next window either. Non-finite inputs
+/// give no events (and an unspecified status) rather than a panic.
 ///
 /// # Example
 ///
@@ -843,28 +848,14 @@ fn star_position(asc: f64, dec: f64, jde: f64, nut: &Nutation) -> ApparentPositi
 ///
 /// Meeus' eq. 23.2 gives the first-order displacement caused by the Earth's
 /// orbital velocity (including the terms in the eccentricity of the orbit);
-/// it is applied here in vector form, `u' = u + v − (u·v) u`, with `v` the
-/// Earth's velocity in units of the speed of light, which is equivalent to
-/// 23.2 but has no singularity at the ecliptic poles.
+/// it is applied here in vector form (the direction of `u + v`, with `v`
+/// the Earth's velocity in units of the speed of light), which is
+/// equivalent to 23.2 to first order but has no singularity at the
+/// ecliptic poles.
 fn annual_aberration(long: f64, lat: f64, jde: f64) -> (f64, f64) {
-    let t = time::julian_cent(jde);
-    let kappa = 20.49552 * ARCSEC;
-    let e = 0.016708634 - t * (0.000042037 + t * 0.0000001267);
-    let perihelion = (102.93735 + t * (1.71946 + t * 0.00046)) * DEG;
     let (sun_ecl, _) = sun::geocent_ecl_pos(jde);
-    let sun_long = sun_ecl.long;
 
-    let v = [
-        kappa * (sun_long.sin() - e * perihelion.sin()),
-        kappa * (e * perihelion.cos() - sun_long.cos()),
-    ];
-    let u = [lat.cos() * long.cos(), lat.cos() * long.sin(), lat.sin()];
-    let uv = u[0] * v[0] + u[1] * v[1];
-    let x = u[0] + v[0] - uv * u[0];
-    let y = u[1] + v[1] - uv * u[1];
-    let z = u[2] - uv * u[2];
-
-    (y.atan2(x), z.atan2(x.hypot(y)))
+    aberr::aberrate(long, lat, aberr::earth_vel_classical(sun_ecl.long, jde))
 }
 
 fn from_ecliptic(
@@ -895,16 +886,15 @@ fn topocentric_distance_ratio(pos: &ApparentPosition, observer: &Observer, gast:
     (a * a + b * b + c * c).sqrt()
 }
 
-/// ΔT in seconds for a Julian Day, from [`time::delta_t`].
+/// ΔT in seconds for a Julian Day, from [`time::delta_t_from_decimal_year`]
+/// (the same model as [`time::delta_t`], evaluated at the instant itself so
+/// that it varies continuously).
 fn delta_t_secs(jd: f64) -> f64 {
     let year = 2000.0 + (jd - 2451544.5) / 365.2425;
     if !year.is_finite() {
         return 0.0;
     }
-    let y = year.floor();
-    let month = (((year - y) * 12.0) as u8).min(11) + 1;
-    // Clamp to the range of i32 (far outside any meaningful ΔT anyway).
-    time::delta_t(y.clamp(-2.0e9, 2.0e9) as i32, month)
+    time::delta_t_from_decimal_year(year)
 }
 
 /// Finds a zero of `f` between `a` and `b`, where `f(a)` and `f(b)` are on
