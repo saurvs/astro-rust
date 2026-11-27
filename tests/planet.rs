@@ -30,14 +30,9 @@ fn heliocent_coords() {
     L = util::round_upto_digits(L.to_degrees(), 3);
     B = util::round_upto_digits(B.to_degrees(), 3);
     R = util::round_upto_digits(R, 5);
-    assert_eq!(
-        (L, B, R),
-        (
-            26.114,
-            util::round_upto_digits(angle::limit_to_360(-2.6207), 3),
-            0.72460
-        )
-    );
+    // Meeus, example 32.a. The latitude is south of the ecliptic and must
+    // stay negative (it used to be reduced to [0, 2π)).
+    assert_eq!((L, B, R), (26.114, -2.621, 0.72460));
 }
 
 #[test]
