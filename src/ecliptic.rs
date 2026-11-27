@@ -92,12 +92,18 @@ pub fn mn_oblq_IAU(JD: f64) -> f64 {
 /// Computes the longitudes of the two ecliptic points on
 /// a horizon on Earth
 ///
+/// Meeus, eq. 14.2. See also
+/// [`misc::eclip_hz_points`](crate::misc::eclip_hz_points), which returns
+/// the same values with named fields.
+///
 /// # Returns
 ///
-/// `(long_point_1, long_point_2)`
+/// `(long_point_1, long_point_2)`, 180° apart, each in `[0, 2π)`
 ///
-/// * `long_point_1`: Longitude of ecliptic point 1 *| in radians*
-/// * `long_point_2`: Longitude of ecliptic point 2 *| in radians*
+/// * `long_point_1`: Longitude of the ecliptic point on the **western**
+///   horizon (the setting point, or descendant) *| in radians*
+/// * `long_point_2`: Longitude of the ecliptic point on the **eastern**
+///   horizon (the rising point, or ascendant) *| in radians*
 ///
 /// # Arguments
 ///
@@ -105,18 +111,27 @@ pub fn mn_oblq_IAU(JD: f64) -> f64 {
 /// * `observer_lat`: The observer's geographical latitude *| in radians*
 /// * `loc_sidreal` : Local sidereal time *| in radians*
 pub fn eclip_points_on_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> (f64, f64) {
-    let p = (-loc_sidreal.cos())
-        .atan2(oblq_eclip.sin() * observer_lat.tan() + oblq_eclip.cos() * loc_sidreal.sin());
+    let west = crate::misc::descendant(oblq_eclip, observer_lat, loc_sidreal);
 
-    (p, p + PI)
+    (west, crate::coords::wrap_two_pi(west + PI))
 }
 
 /// Computes the angle between the ecliptic and a horizon
 /// on Earth
 ///
+/// Meeus, eq. 14.3: `cos I = cos ε sin φ − sin ε cos φ sin θ`. `I` is the
+/// angle between the north pole of the ecliptic and the zenith, so it is
+/// usually acute in the northern hemisphere and obtuse in the southern one
+/// (where `π − I` is the acute angle between the two circles). Over one
+/// sidereal day it swings between `90° − φ − ε` (at θ = 270°) and
+/// `90° − φ + ε` (at θ = 90°). It is not the angle the Sun's daily path
+/// makes with the horizon; for that see
+/// [`planet::earth::angl_betwn_diurnal_path_and_hz`](crate::planet::earth::angl_betwn_diurnal_path_and_hz).
+///
 /// # Returns
 ///
-/// * `angle`: Angle between the ecliptic and the horizon *| in radians*
+/// * `angle`: Angle between the ecliptic and the horizon, in `[0, π]`
+///   *| in radians*
 ///
 /// # Arguments
 ///
@@ -126,5 +141,6 @@ pub fn eclip_points_on_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) 
 pub fn angl_betwn_eclip_and_hz(oblq_eclip: f64, observer_lat: f64, loc_sidreal: f64) -> f64 {
     (oblq_eclip.cos() * observer_lat.sin()
         - oblq_eclip.sin() * observer_lat.cos() * loc_sidreal.sin())
+    .clamp(-1.0, 1.0)
     .acos()
 }

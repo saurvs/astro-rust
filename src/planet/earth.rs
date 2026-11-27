@@ -606,10 +606,21 @@ pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> 
 
 /// Computes the angle between diurnal path and the horizon
 ///
+/// The acute angle `J` at which a body's daily path (its parallel of
+/// declination) crosses the horizon when it rises or sets (Meeus,
+/// chapter 14): `B = tan δ tan φ`, `C = √(1 − B²)`,
+/// `tan J = C cos δ / |tan φ|`. The declination is taken as constant and
+/// refraction is ignored. On the equator `J = 90°`; for a body on the
+/// celestial equator `J = 90° − |φ|`. The result is the same for northern
+/// and southern observers at the same `|φ|`.
+///
+/// Earlier versions of this crate returned `π − J` for southern latitudes.
+///
 /// # Returns
 ///
 /// * `angl`: Angle between the diurnal path of a celestial
-///   body and the horizon *| in radians*
+///   body and the horizon, in `[0, π/2]` *| in radians*. `NaN` if the body
+///   never rises or never sets (`|tan δ tan φ| > 1`).
 ///
 /// # Arguments
 ///
@@ -618,10 +629,13 @@ pub fn equation_of_time(JD: f64, sun_asc: f64, nut_long: f64, tru_oblq: f64) -> 
 /// * `observer_lat`: Observer's geographic latitude
 ///   *| in radians*
 pub fn angl_betwn_diurnal_path_and_hz(dec: f64, observer_lat: f64) -> f64 {
+    // tan J = C cos δ / |tan φ|, multiplied through by |cos φ| (so the
+    // equator needs no special case): C cos δ |cos φ| / |sin φ|.
     let B = dec.tan() * observer_lat.tan();
     let C = (1.0 - B * B).sqrt();
+    let (sin_p, cos_p) = observer_lat.sin_cos();
 
-    (C * dec.cos()).atan2(observer_lat.tan())
+    (C * dec.cos() * cos_p.abs()).atan2(sin_p.abs())
 }
 
 #[cfg(test)]
