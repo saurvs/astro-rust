@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.0 — unreleased
+## 3.0.0 — unreleased (version bumped in `Cargo.toml`; not yet published)
 
 A complete overhaul. Every chapter of Meeus' *Astronomical Algorithms*
 (2nd ed.) was re-checked against the code, the crate was moved to modern
@@ -18,8 +18,10 @@ upgrading.
 - Exported macros use `$crate::` paths, so they work from other crates.
 - The VSOP87 tables are `static` data instead of being rebuilt on every
   call: clean builds are several times faster.
-- About 1000 tests (every worked example of the book, with intermediate
-  values, plus invariant and regression tests) and 90+ doctests.
+- More than 1000 tests (every worked example of the book, with
+  intermediate values, plus invariant, regression and cross-checks against
+  independent references such as the VSOP87 authors' test values and the
+  NASA eclipse canon) and 110+ doctests, including the README examples.
 
 ### New modules and APIs
 
@@ -122,6 +124,15 @@ Other fixes, by area:
 - **Stars, eclipses, semidiameters** — `star::combined_mag` was missing a
   logarithm; wrong term in the apparent eccentricity of binary orbits;
   asteroid diameter used the wrong logarithm base.
+- **Found in the final review** — wrong sign of the T² term of the
+  inclination of Saturn's ring; the Kepler solver could panic for huge mean
+  anomalies and lost precision near e = 1; wrong sign of the light-time
+  correction for the shadows of Jupiter's satellites; the apparent place of
+  a star was inaccurate within a degree of the celestial poles; ΔT in the
+  `observer` helpers changed in monthly steps; `coords` macros evaluated
+  their arguments twice; `Date::from_julian_day` could return day 32 just
+  before JD 0; panics on non-finite input in the sexagesimal formatting
+  helpers.
 
 ### Behaviour changes
 
