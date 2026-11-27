@@ -801,7 +801,8 @@ macro_rules! apprnt_sidr {
 ///
 /// This is the Greenwich hour angle of the mean vernal equinox, from the
 /// expression adopted by the IAU in 1982, valid for any instant (Meeus,
-/// eq. 12.4).
+/// eq. 12.4). The rounding of a present-day JD to an `f64` alone limits the
+/// precision to about 1e-7° (0.00003 s of time).
 ///
 /// # Returns
 ///
@@ -877,7 +878,9 @@ fn poly(x: f64, coeffs: &[f64]) -> f64 {
 /// [`delta_t_1800_1899`] and [`delta_t_1900_1997`]).
 ///
 /// The polynomials are evaluated at the middle of the month, `y = year +
-/// (month - 0.5) / 12`; see [`delta_t_from_decimal_year`].
+/// (month - 0.5) / 12`; see [`delta_t_from_decimal_year`] for the valid time
+/// span and the accuracy. A `month` outside 1 - 12 simply shifts `y` by
+/// whole months.
 ///
 /// # Arguments
 ///
