@@ -111,10 +111,10 @@ pub fn apprnt_rect_coords(JD: f64, moon: &Moon) -> (f64, f64) {
     }).to_radians();
 
     let r_moon = match moon {
-        &Moon::Io       => (5.9057  - 0.0244*(2.0*(u1 - u2)).cos()),
-        &Moon::Europa   => (9.3966  - 0.0882*(2.0*(u2 - u3)).cos()),
-        &Moon::Ganymede => (14.9883 - 0.0216*G.cos()),
-        &Moon::Callisto => (26.3627 - 0.1939*H.cos()),
+        &Moon::Io       => 5.9057  - 0.0244*(2.0*(u1 - u2)).cos(),
+        &Moon::Europa   => 9.3966  - 0.0882*(2.0*(u2 - u3)).cos(),
+        &Moon::Ganymede => 14.9883 - 0.0216*G.cos(),
+        &Moon::Callisto => 26.3627 - 0.1939*H.cos(),
     };
 
     let lambda = (34.35 + 0.083091*d + 0.329*V.sin()).to_radians() + B;

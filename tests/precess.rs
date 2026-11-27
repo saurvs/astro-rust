@@ -22,7 +22,6 @@ THE SOFTWARE.
 
 #![allow(non_snake_case)]
 
-extern crate astro;
 use astro::*;
 
 #[test]

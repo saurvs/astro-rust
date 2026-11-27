@@ -22,9 +22,9 @@ THE SOFTWARE.
 
 //! Corrections for nutation
 
-use angle;
-use time;
-use coords;
+use crate::angle;
+use crate::time;
+use crate::coords;
 
 /**
 Computes nutation in ecliptic longitude and obliquity

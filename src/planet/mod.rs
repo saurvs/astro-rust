@@ -29,9 +29,9 @@ pub mod mars;
 pub mod jupiter;
 pub mod saturn;
 
-use angle;
-use coords;
-use time;
+use crate::angle;
+use crate::coords;
+use crate::time;
 
 /// Represents a planet
 pub enum Planet {

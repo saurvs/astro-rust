@@ -48,7 +48,7 @@ Evaluates a polynomial using Horner's algorithm
 #[macro_export]
 macro_rules! Horner_eval
 {
-    ($x:expr, $c:expr, $($a:expr),*) =>
+    ($x:expr_2021, $c:expr_2021, $($a:expr_2021),*) =>
     {
         {
             let mut y = $c;

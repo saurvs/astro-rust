@@ -22,9 +22,9 @@ THE SOFTWARE.
 
 //! Eight moons of Saturn
 
-use planet;
-use precess;
-use time;
+use crate::planet;
+use crate::precess;
+use crate::time;
 
 /// Represents a moon of Saturn
 pub enum Moon {

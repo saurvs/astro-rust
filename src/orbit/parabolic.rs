@@ -23,7 +23,7 @@ THE SOFTWARE.
 //! Parabolic orbits
 
 use std;
-use orbit;
+use crate::orbit;
 
 /**
 Computes the true anomaly and radius vector of a body in a parabolic

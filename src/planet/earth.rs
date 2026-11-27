@@ -22,9 +22,9 @@ THE SOFTWARE.
 
 //! The Earth
 
-use coords;
-use angle;
-use time;
+use crate::coords;
+use crate::angle;
+use crate::time;
 
 /**
 Returns the flattening factor of the Earth

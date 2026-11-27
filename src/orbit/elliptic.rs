@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 //! Elliptic orbits
 
-use orbit;
+use crate::orbit;
 use std::f64::consts::PI;
 
 /**

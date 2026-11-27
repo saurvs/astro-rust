@@ -22,9 +22,9 @@ THE SOFTWARE.
 
 //! Time of rise, transit and set for a celestial body
 
-use angle;
-use coords;
-use interpol;
+use crate::angle;
+use crate::coords;
+use crate::interpol;
 
 /// Represents a celestial body in transit
 pub enum TransitBody {

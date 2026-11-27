@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 //! Corrections for atmospheric refraction
 
-use angle;
+use crate::angle;
 use std::f64::consts::PI;
 
 /**

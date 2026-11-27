@@ -22,9 +22,9 @@ THE SOFTWARE.
 
 //! Find topocentric coordinates
 
-use angle;
-use coords;
-use planet;
+use crate::angle;
+use crate::coords;
+use crate::planet;
 
 /**
 Computes the equatorial horizontal parallax of a celestial body

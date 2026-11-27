@@ -22,7 +22,6 @@ THE SOFTWARE.
 
 #![allow(non_snake_case)]
 
-extern crate astro;
 use astro::*;
 
 #[test]
@@ -67,13 +66,13 @@ fn passage_through_nodes() {
     let (ascen, r_a) = orbit::elliptic::passage_through_node (
         w, n, a, e, T, &orbit::Node::Ascend
     );
-    assert_eq!(util::round_upto_digits((T - ascen), 4), 92.2998);
+    assert_eq!(util::round_upto_digits(T - ascen, 4), 92.2998);
     assert_eq!(util::round_upto_digits(r_a, 4), 1.8045);
 
     let (descend, r_b) = orbit::elliptic::passage_through_node (
         w, n, a, e, T, &orbit::Node::Descend
     );
-    assert_eq!(util::round_upto_digits((T - descend), 4), -28.9105);
+    assert_eq!(util::round_upto_digits(T - descend, 4), -28.9105);
     assert_eq!(util::round_upto_digits(r_b, 4), 0.8493);
 
 }

@@ -22,9 +22,9 @@ THE SOFTWARE.
 
 //! The Earth's moon
 
-use angle;
-use coords;
-use time;
+use crate::angle;
+use crate::coords;
+use crate::time;
 
 /**
 Computes the equatorial horizontal parallax of the Moon
@@ -952,8 +952,7 @@ fn time_of_passage_through_node(k: f64, T: f64) -> f64 {
     let P = sigma + (272.75 - T*2.3).to_radians();
     let V = (299.75 + T*(132.85 - T*0.009173)).to_radians();
 
-    (
-        2451565.1619
+    2451565.1619
       + 27.212220817 * k
       + T * T * (
             0.0002762
@@ -983,7 +982,6 @@ fn time_of_passage_through_node(k: f64, T: f64) -> f64 {
           + V.sin()
           + P.sin()
         )
-    )
 
 }
 

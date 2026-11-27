@@ -22,10 +22,10 @@ THE SOFTWARE.
 
 //! The ring system of Saturn
 
-use angle;
-use coords;
-use planet;
-use time;
+use crate::angle;
+use crate::coords;
+use crate::planet;
+use crate::time;
 
 #[inline]
 pub fn inc(JC: f64) -> f64 {

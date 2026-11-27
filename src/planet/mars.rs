@@ -22,10 +22,10 @@ THE SOFTWARE.
 
 //! Mars
 
-use angle;
-use planet;
-use time;
-use coords;
+use crate::angle;
+use crate::planet;
+use crate::time;
+use crate::coords;
 
 /**
 Returns the equatorial coordinates of Mars's north pole for the epoch

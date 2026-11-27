@@ -24,10 +24,10 @@ THE SOFTWARE.
 
 pub mod moon;
 
-use angle;
-use nutation;
-use planet;
-use coords;
+use crate::angle;
+use crate::nutation;
+use crate::planet;
+use crate::coords;
 
 /**
 Computes Jupiter's equatorial semidiameter
