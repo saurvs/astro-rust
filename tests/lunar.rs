@@ -75,10 +75,8 @@ fn liberations() {
         133.162655_f64.to_radians(),
         -3.229126_f64.to_radians(),
     );
-    assert_eq!(
-        util::round_upto_digits(opt_long.to_degrees(), 3),
-        angle::limit_to_360(-1.206)
-    );
+    // librations are signed angles in (-180°, 180°]
+    assert_eq!(util::round_upto_digits(opt_long.to_degrees(), 3), -1.206);
     assert_eq!(util::round_upto_digits(opt_lat.to_degrees(), 3), 4.194);
 
     let (phy_long, phys_lat) = lunar::physical_libr(
